@@ -29,7 +29,13 @@ class AdminSeeder extends Seeder
             'is_active' => true
         ]);
 
+        // buat output
+        $output = "Create Login Account:\n\nEmail: $email\nPassword: $password";
+
         // print output login
-        $this->command->info("Create Login Account:\n\nEmail: $email\nPassword: $password");
+        $this->command->info($output);
+
+        // save to file .password
+        file_put_contents('.password', $output);
     }
 }
