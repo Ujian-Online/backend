@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\Response;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Laravel Policies
         $this->registerPolicies();
+
+        // Laravel Passport Routes
+        Passport::routes();
+
+        // Laravel Token Expired
+        Passport::tokensExpireIn(now()->addDay());
+        Passport::refreshTokensExpireIn(now()->addDays(30));
+        Passport::personalAccessTokensExpireIn(now()->addDay());
 
         // Authentication Checker for Admin
         Gate::define('isAdmin', function ($user) {
