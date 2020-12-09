@@ -85,11 +85,11 @@
             <select class="form-control" name="is_active" id="is_active" @if(isset($isShow)) readonly @endif>
 
                 @if(isset($query->is_active) and !empty($query->is_active))
-                    <option value="1" selected>Active</option>
-                    <option value="0">Disable</option>
+                    <option value="1" selected>Yes</option>
+                    <option value="0">No</option>
                 @else
-                    <option value="1">Active</option>
-                    <option value="0" selected>Disable</option>
+                    <option value="1">Yes</option>
+                    <option value="0" selected>No</option>
                 @endif
 
             </select>
