@@ -11,9 +11,19 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.sass('resources/sass/app.scss', 'public/css');
+mix.sass('resources/sass/app.scss', 'public/css')
+	.sass('resources/sass/vendor.scss', 'public/css');
 
-mix.js('resources/js/app.js', 'public/js/app.js');
+mix.js('resources/js/app.js', 'public/js/app.js')
+	.extract([
+		'admin-lte',
+		'overlayscrollbars',
+		'datatables.net-bs4',
+		'datatables.net-buttons-bs4',
+		'datatables.net-responsive-bs4',
+		'datatables.net-fixedcolumns-bs4'
+	]);
+
 mix.scripts('resources/js/admin.js', 'public/js/admin.js');
 
 mix.options({
