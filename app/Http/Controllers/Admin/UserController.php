@@ -135,11 +135,12 @@ class UserController extends Controller
     {
         // validate input
         $request->validate([
-            'name' => 'required|min:3|max:255',
-            'email' => 'required|max:255|email|unique:users,email,' . $id . ',uuid',
-            'newpassword' => 'nullable|min:6',
-            'role' => 'required|in:admin,editor',
-            'status' => 'required|boolean',
+            'name'          => 'required|min:3|max:255',
+            'email'         => 'required|max:255|email|unique:users,email,' . $id,
+            'newpassword'   => 'nullable|min:6',
+            'type'          => 'required|in:' . implode(',', config('options.user_type')),
+            'status'        => 'required|in:' . implode(',', config('options.user_status')),
+            'is_active'     => 'required|boolean',
         ]);
 
         // get form data
@@ -174,7 +175,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $query = User::where('uuid', $id)->firstOrFail();
+        $query = User::findOrFail($id);
         $query->delete();
 
         return response()->json(
