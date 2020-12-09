@@ -6,15 +6,15 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-                <h3>{{ $title }}</h3>
+            <h3>{{ $title }}</h3>
 
-                <div class="card">
-                    <div class="card-body">
-                        @include('layouts.alert')
+            <div class="card">
+                <div class="card-body">
+                    @include('layouts.alert')
 
-                        {!! $dataTable->table() !!}
-                    </div>
+                    {!! $dataTable->table() !!}
                 </div>
+            </div>
         </div>
     </div>
 </div>
