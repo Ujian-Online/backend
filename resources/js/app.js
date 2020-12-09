@@ -1,7 +1,9 @@
 require('./bootstrap');
+
+require('admin-lte');
+require('overlayscrollbars');
+
 require('datatables.net-bs4');
 require('datatables.net-buttons-bs4');
-
-$(function () {
-	$('[data-toggle="tooltip"]').tooltip();
-});
+require('datatables.net-responsive-bs4');
+require('datatables.net-fixedcolumns-bs4');
