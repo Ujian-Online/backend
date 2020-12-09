@@ -4,6 +4,9 @@
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}" href="{{ route('admin.user.index') }}">Users</a>
+        </li>
         {{-- <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.share.*') ? 'active' : '' }}" href="{{ route('admin.share.index') }}">Shares</a>
         </li>
