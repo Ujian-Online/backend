@@ -21,6 +21,15 @@ class UserDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('name', function ($query) {
+                return ucwords($query->name);
+            })
+            ->editColumn('type', function ($query) {
+                return ucfirst($query->type);
+            })
+            ->editColumn('status', function ($query) {
+                return ucfirst($query->status);
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->name,
@@ -65,8 +74,9 @@ class UserDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(5, 'desc')
+                    ->orderBy(4, 'desc')
                     ->buttons(
+                        Button::make('create'),
                         Button::make('export'),
                         Button::make('print'),
                         Button::make('reset'),
@@ -82,11 +92,15 @@ class UserDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('name'),
-            Column::make('email'),
+            Column::make('name')
+                ->width('35%'),
+            Column::make('email')
+                ->width('25%'),
             Column::make('type'),
             Column::make('status'),
-            Column::make('updated_at'),
+            Column::make('updated_at')
+                ->title('Update')
+                ->width('10%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
