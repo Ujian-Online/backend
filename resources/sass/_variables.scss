@@ -2,7 +2,7 @@
 $body-bg: #f8fafc;
 
 // Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
+$font-family-sans-serif: "Source Sans Pro", sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
@@ -23,3 +23,18 @@ $danger: #dc3545;
 $dark: #343a40;
 $secondary: #6c757d;
 $light: #f8f9fa;
+
+div.dt-buttons {
+    position: relative;
+    float: left;
+}
+div.dt-buttons.buttons-right {
+    float: right;
+}
+
+div.dataTables_layout_cell div.dt-buttons {
+    float: none;
+}
+div.dataTables_layout_cell div.dt-buttons.buttons-right {
+    float: none;
+}
