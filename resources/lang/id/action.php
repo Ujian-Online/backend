@@ -8,6 +8,6 @@
  */
 
 return [
-    'success'   => 'Berhasil menambahkan data :name ke siste.!',
+    'success'   => 'Berhasil menambahkan data :name ke sistem.!',
     'error'     => 'Gagal menambahkan data :name ke sistem.!'
 ];
