@@ -10,15 +10,19 @@
 
             <div class="card">
                 <div class="card-body">
+                    {{-- Form With Dynamic URL Action --}}
                     <form action="{{ $action }}" method="POST">
                         @csrf
 
+                        {{-- Method For Edit Page --}}
                         @if(isset($isEdit))
                             @method('PATCH')
                         @endif
 
-                        @include($pages)
+                        {{-- Include Form Dynamic --}}
+                        @yield('form')
 
+                        {{-- Button For Created Page --}}
                         @if(isset($isCreated))
                         <button type="submit" class="btn btn-primary m-auto">
                             <div class="row">
@@ -28,6 +32,8 @@
                                 <div class="col">Save</div>
                             </div>
                         </button>
+
+                        {{-- Button For Show Page --}}
                         @elseif(isset($isShow))
                         <a href="{{ $isShow }}" class="btn btn-warning m-auto">
                             <div class="row">
@@ -37,6 +43,8 @@
                                 <div class="col">Edit</div>
                             </div>
                         </a>
+
+                        {{-- Button For Edit Page --}}
                         @elseif(isset($isEdit) and !empty($isEdit))
                             <button type="submit" class="btn btn-success m-auto">
                                 <div class="row">
@@ -48,6 +56,7 @@
                             </button>
                         @endif
 
+                        {{-- Button For Back to Previous URL --}}
                         <a href="{{ url()->previous() }}" class="btn btn-secondary m-auto">
                             <div class="row">
                                 <div class="col-2">
