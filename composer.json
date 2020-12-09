@@ -10,8 +10,10 @@
     "require": {
         "php": "^7.2.5|^8.0",
         "barryvdh/laravel-snappy": "^0.4.8",
+        "darkaonline/l5-swagger": "6.*",
         "fideloper/proxy": "^4.4",
         "genealabs/laravel-model-caching": "0.7.4",
+        "laravel-lang/lang": "~5.0",
         "laravel/framework": "^6.20",
         "laravel/passport": "^9.4",
         "laravel/tinker": "^2.5",
