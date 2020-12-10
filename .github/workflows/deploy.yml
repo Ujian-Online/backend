@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Deploy master branch
+name: Deploy Master Branch
 
 on:
   push:
@@ -23,7 +23,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: check
-
     steps:
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
@@ -36,7 +35,7 @@ jobs:
             cd backend
             git pull
             composer install -q --no-interaction --no-dev
-            fixweb
+
   done:
     runs-on: ubuntu-latest
     needs: build
