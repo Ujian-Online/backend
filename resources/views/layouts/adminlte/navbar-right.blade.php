@@ -5,7 +5,7 @@
       <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-      <!-- User image -->
+      {{-- User image --}}
       <li class="user-header">
         <img src="{{ gravatar(Auth::user()->email) }}" class="img-circle elevation-2" alt="User Image">
 
@@ -15,12 +15,12 @@
         </p>
       </li>
 
-      <!-- Menu Footer-->
+      {{-- Menu Footer --}}
       <li class="user-footer">
         <a href="#" class="btn btn-default btn-flat">Profile</a>
         <a href="{{ route('logout') }}" class="btn btn-danger btn-flat float-right" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
           <i class="fas fa-sign-out-alt"></i>
-          {{ trans('sidebar.logout') }}
+          {{ trans('theme.logout') }}
         </a>
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST"
