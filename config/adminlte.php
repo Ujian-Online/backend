@@ -17,6 +17,14 @@ return [
     ],
 
     /**
+     * Auth Route Name or URL
+     */
+    'auth' => [
+        'login'     => 'login',
+        'logout'    => 'logout'
+    ],
+
+    /**
      * Sidebar Menu Based on User Type
      *
      * For Header Name, Just Use String Instead Array
