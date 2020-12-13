@@ -14,16 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::namespace('Api')
     ->name('api.')
     ->group(function () {
-        Route::post('login', 'UserController@login')->name('login');
+        Route::post('login', 'AuthController@login')->name('login');
+        Route::post('register', 'AuthController@register')->name('register');
 
-        Route::middleware('auth:api')
+        // verification route
+        Route::post('email/verify', 'VerificationController@verify')
+        ->name('verification.verify')->middleware('auth:api');
+        Route::post('email/resend', 'VerificationController@resend')
+        ->name('verification.resend')->middleware('auth:api');
+
+        Route::middleware(['auth:api', 'verified'])
             ->group(function () {
                 Route::get('me', 'UserController@me')->name('me');
             });
