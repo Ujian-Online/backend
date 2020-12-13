@@ -1,8 +1,8 @@
 <?php
 
 /**
-     * AdminLTE Configuration
-     */
+         * AdminLTE Configuration
+         */
 
 return [
 
@@ -79,24 +79,33 @@ return [
                 'route'     => 'home',
                 'active'    => 'home',
             ],
-            [
-                'title'     => 'Dashboard',
-                'icon'      => 'fas fa-tachometer-alt fa-fw',
-                'route'     => 'home',
-                'active'    => 'home',
-            ],
 
             // Header Name
             'User',
             [
                 'title'     => 'User',
+                'icon'      => 'fas fa-users',
+                'route'     => 'admin.user.index',
+                'active'    => 'admin.user.*',
+            ],
+            'Ujian',
+            [
+                'title'     => 'Jadwal Ujian',
                 'icon'      => 'fas fa-tachometer-alt fa-fw',
                 'active'    => 'home',
                 'sub_menu'  => [
-                    'title'     => 'Dashboard',
-                    'icon'      => 'fas fa-tachometer-alt fa-fw',
-                    'route'     => 'home',
-                    'active'    => 'home',
+                    [
+                        'title'     => 'Buat Jadwal',
+                        'icon'      => 'fas fa-tachometer-alt fa-fw',
+                        'route'     => 'home',
+                        'active'    => 'home',
+                    ],
+                    [
+                        'title'     => 'Buat Jadwal',
+                        'icon'      => 'fas fa-tachometer-alt fa-fw',
+                        'route'     => 'home',
+                        'active'    => 'home',
+                    ]
                 ]
             ]
         ],
