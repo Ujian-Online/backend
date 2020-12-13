@@ -12,6 +12,12 @@ use OpenApi\Annotations as OA;
 class UserController extends Controller
 {
     /**
+     * Menampilkan Detail User
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *
      * @OA\Get(
      *   path="/api/user/me",
      *   tags={"User"},
@@ -26,7 +32,17 @@ class UserController extends Controller
      */
     public function me(Request $request)
     {
+        // get user login detail
         $user = $request->user();
-        return response()->json(['data' => $user], 200);
+
+        // array response
+        $response = [
+            'code'      => 200,
+            'success'   => true,
+            'data'      => $user
+        ];
+
+        // return json response
+        return response()->json($response, $response['code']);
     }
 }
