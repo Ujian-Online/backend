@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Mail\EmailVerification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -30,7 +32,7 @@ class AuthController extends Controller
      * @param String $email
      * @param String $password
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Post(
      *     path="/api/login",
@@ -68,8 +70,8 @@ class AuthController extends Controller
     {
         // validate input request
         $request->validate([
-            'email'     => 'required|email',
-            'password'  => 'required|min:3|max:255'
+            'email'     => 'required|string|email',
+            'password'  => 'required|string|min:3|max:255'
         ]);
 
         // get data form input
@@ -111,7 +113,7 @@ class AuthController extends Controller
      * @param String $password Kata Sandi Akun
      * @param String $confirm_password Konfirmasi Kata Sandi Akun
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Post(
      *     path="/api/register",
@@ -159,10 +161,10 @@ class AuthController extends Controller
     {
         // validate form input
         $request->validate([
-            'name'              => 'required|max:255',
-            'email'             => 'required|email',
-            'password'          => 'required|max:255',
-            'confirm_password'  => 'required|max:255|same:password',
+            'name'              => 'required|string|max:255',
+            'email'             => 'required|string|email|unique:users|max:255',
+            'password'          => 'required|string|max:255',
+            'confirm_password'  => 'required|string|max:255|same:password',
         ]);
 
         // get data form input
@@ -178,6 +180,16 @@ class AuthController extends Controller
             'is_active' => false,
         ]);
 
+        // Generate User Token
+        $token = $user->createToken('Api')->accessToken;
+
+        // Check if user is verified or not
+        // If not, send email verification
+        if (!$user->hasVerifiedEmail()) {
+            // Send Email Verification to User
+            Mail::to($user->email)->queue(new EmailVerification($token, $user));
+        }
+
         // array response
         $response = [
             'code'      => 200,
@@ -185,8 +197,7 @@ class AuthController extends Controller
             'data'      => [
                 'name'  => $user->name,
                 'email' => $user->email,
-                // generate token
-                'token' => $user->createToken('Api')->accessToken,
+                'token' => $token,
             ]
         ];
 
