@@ -6,8 +6,12 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8000",
+            "url": "https://admin.lsp-mpsdm.com",
             "description": "Production API Server"
+        },
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Local Development API Server"
         }
     ],
     "paths": {
@@ -17,7 +21,7 @@
                     "Authentication"
                 ],
                 "summary": "Sign In",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::login",
+                "operationId": "App\\Http\\Controllers\\Api\\AuthController::login",
                 "requestBody": {
                     "description": "Login Credential",
                     "required": true,
@@ -26,11 +30,13 @@
                             "schema": {
                                 "properties": {
                                     "email": {
+                                        "description": "Login Function.",
                                         "type": "string",
                                         "format": "email",
-                                        "example": "test@example.com"
+                                        "example": "johndoe@example.com"
                                     },
                                     "password": {
+                                        "description": "Login Function.",
                                         "type": "string",
                                         "format": "password",
                                         "example": "pass1234"
@@ -48,13 +54,117 @@
                 }
             }
         },
-        "/api/me": {
-            "get": {
+        "/api/register": {
+            "post": {
                 "tags": [
                     "Authentication"
                 ],
+                "summary": "Register Account",
+                "operationId": "App\\Http\\Controllers\\Api\\AuthController::register",
+                "requestBody": {
+                    "description": "Register Account",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Login Function.",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "description": "Login Function.",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "johndoe@example.com"
+                                    },
+                                    "password": {
+                                        "description": "Login Function.",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "pass1234"
+                                    },
+                                    "confirm_password": {
+                                        "description": "Login Function.",
+                                        "type": "string",
+                                        "example": "pass1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/user/me": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
                 "summary": "Show User Detail",
                 "operationId": "App\\Http\\Controllers\\Api\\UserController::me",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/email/verify": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Email Verification",
+                "operationId": "App\\Http\\Controllers\\Api\\VerificationController::verify",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "hash": {
+                                        "description": "Verifikasi Email User",
+                                        "type": "string",
+                                        "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/email/resend": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Resend Email Verification",
+                "operationId": "App\\Http\\Controllers\\Api\\VerificationController::resend",
                 "responses": {
                     "200": {
                         "description": "OK"
