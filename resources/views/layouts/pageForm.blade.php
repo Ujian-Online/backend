@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.adminlte.page-blank')
 
 @section('title', $title)
 
@@ -6,8 +6,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h3>{{ $title }}</h3>
-
             <div class="card">
                 <div class="card-body">
                     {{-- Form With Dynamic URL Action --}}
