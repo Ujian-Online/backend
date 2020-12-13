@@ -42,7 +42,7 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -63,7 +63,6 @@ class UserController extends Controller
             'password',
             'type',
             'status',
-            'media_url',
             'is_active'
         ]);
 
@@ -73,15 +72,9 @@ class UserController extends Controller
         // redirect to index table
         return redirect()
             ->route('admin.user.index')
-            ->with(
-                'success',
-                trans(
-                    'action.success',
-                    [
-                        'name' => $dataInput['name']
-                    ]
-                )
-            );
+            ->with('success', trans('action.success', [
+                    'name' => $dataInput['name']
+            ]));
     }
 
     /**
@@ -129,7 +122,7 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
@@ -144,14 +137,22 @@ class UserController extends Controller
         ]);
 
         // get form data
-        $dataInput = $request->only(['name', 'email', 'newpassword', 'role', 'status']);
+        $dataInput = $request->only([
+            'name',
+            'email',
+            'newpassword',
+            'type',
+            'status',
+            'is_active'
+        ]);
 
-        // find by uuid and update
-        $query = User::where('uuid', $id)->firstOrFail();
+        // find by id and update
+        $query = User::findOrFail($id);
         $query->name = $dataInput['name'];
         $query->email = $dataInput['email'];
-        $query->role = $dataInput['role'];
+        $query->type = $dataInput['type'];
         $query->status = $dataInput['status'];
+        $query->is_active = $dataInput['is_active'];
 
         // update password if new password field not empty
         if (isset($dataInput['newpassword']) and !empty($dataInput['newpassword'])) {
@@ -164,26 +165,26 @@ class UserController extends Controller
         // redirect
         return redirect()
             ->route('admin.user.index')
-            ->with('success', 'Data berhasil diupdate.!');
+            ->with('success', trans('action.success_update', [
+                'name' => $dataInput['name']
+            ]));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $query = User::findOrFail($id);
         $query->delete();
 
-        return response()->json(
-            [
+        // return response json if success
+        return response()->json([
                 'code' => 200,
                 'success' => true,
-            ],
-            200
-        );
+        ], 200);
     }
 }

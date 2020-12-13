@@ -66,8 +66,13 @@ class UserDataTable extends DataTable
                             [10, 25, 50, -1],
                             ['10 rows', '25 rows', '50 rows', 'Show all']
                         ],
+                        'dom' => 'Bfrtip',
                         'buttons' => [
-                            'pageLength'
+                            'pageLength',
+                            [
+                                'text' => '<i class="fas fa-plus-circle"></i> ' . trans('table.create'),
+                                'action' => $this->createButton()
+                            ]
                         ],
                     ])
                     ->setTableId('user-table')
@@ -76,10 +81,8 @@ class UserDataTable extends DataTable
                     ->dom('Bfrtip')
                     ->orderBy(4, 'desc')
                     ->buttons(
-                        Button::make('create'),
                         Button::make('export'),
                         Button::make('print'),
-                        Button::make('reset'),
                         Button::make('reload')
                     );
     }
@@ -118,5 +121,19 @@ class UserDataTable extends DataTable
     protected function filename()
     {
         return 'User_' . date('YmdHis');
+    }
+
+    /**
+     * Custom Create Button Action
+     */
+    public function createButton()
+    {
+        // Create Route URL
+        $url = route('admin.user.create');
+
+        // return function redirect
+        return 'function (e, dt, button, config) {
+            window.location = "'. $url .'";
+        }';
     }
 }
