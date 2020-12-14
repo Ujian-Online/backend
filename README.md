@@ -8,6 +8,7 @@
     - [Install PHP 7.4](#install-php-74)
     - [Install Composer](#install-composer)
     - [Install Other Dependency](#install-other-dependency)
+    - [Install Passport](#install-passport)
   - [PDF Export Library](#pdf-export-library)
     - [Ubuntu 20.04](#ubuntu-2004)
   - [Fixed Permission](#fixed-permission)
@@ -68,12 +69,20 @@ php installer --install-dir=/usr/bin --filename=composer
 apt install nginx nano wget git -y
 ```
 
-```
+```bash
 git clone git@github.com:Ujian-Online/backend.git
 composer install
 php artisan migrate --seed
 ```
 - Setelah melakukan seeder, detail login akan di print pada terminal atau bisa cek dari file: **.password**
+
+### Install Passport
+
+Laravel Passport digunakan untuk authentikasi via API yang akan menghasilkan JWT Token ketika Login atau Register.
+
+```bash
+php artisan passport:install
+```
 
 ## PDF Export Library
 
