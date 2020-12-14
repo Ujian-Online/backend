@@ -129,23 +129,6 @@
                 ],
                 "summary": "Email Verification",
                 "operationId": "App\\Http\\Controllers\\Api\\VerificationController::verify",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "hash": {
-                                        "description": "Verifikasi Email User",
-                                        "type": "string",
-                                        "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "OK"

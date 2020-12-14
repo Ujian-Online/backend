@@ -29,19 +29,6 @@ class VerificationController extends Controller
      *     summary="Email Verification",
      *     security={{"passport":{}}},
      *
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="hash",
-     *                     type="string",
-     *                     example="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI"
-     *                 ),
-     *             ),
-     *         ),
-     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="OK"
@@ -50,30 +37,10 @@ class VerificationController extends Controller
      */
     public function verify(Request $request)
     {
-        // validate form input
-        $request->validate([
-            'hash' => 'required',
-        ]);
-
-        // get data form input
-        $getInput = $request->only(['hash']);
-
         try {
             // check if email has been verified or not
             if ($request->user()->hasVerifiedEmail()) {
                 throw new Exception('Email sudah di verifikasi.');
-            }
-
-            // parse hash
-            $decryptHash = decrypt($getInput['hash']);
-            $dateHash = Carbon::parse($decryptHash)->timestamp;
-
-            // get date now in timestamp
-            $dateNow = Carbon::now()->timestamp;
-
-            // validate and throw error if expired
-            if ($dateNow > $dateHash) {
-                throw new Exception('Hash tidak ditemukan.!');
             }
 
             // get user login
