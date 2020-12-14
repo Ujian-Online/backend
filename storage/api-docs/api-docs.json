@@ -10,6 +10,10 @@
             "description": "Production API Server"
         },
         {
+            "url": "https://admin-staging.lsp-mpsdm.com",
+            "description": "Staging API Server"
+        },
+        {
             "url": "http://127.0.0.1:8000",
             "description": "Local Development API Server"
         }

@@ -14,8 +14,13 @@ use Illuminate\Routing\Controller as BaseController;
  *  )
  *
  *  @OA\Server(
- *      url=L5_SWAGGER_CONST_HOST,
+ *      url="https://admin.lsp-mpsdm.com",
  *      description="Production API Server"
+ *  )
+ *
+ *  @OA\Server(
+ *      url="https://admin-staging.lsp-mpsdm.com",
+ *      description="Staging API Server"
  *  )
  *
  *  @OA\Server(
