@@ -1,3 +1,4 @@
+![Deploy Master Branch](https://github.com/Ujian-Online/backend/workflows/Deploy%20Master%20Branch/badge.svg)
 ![Deploy Staging Branch](https://github.com/Ujian-Online/backend/workflows/Deploy%20Staging%20Branch/badge.svg)
 
 - [Ujian Online Backend](#ujian-online-backend)
