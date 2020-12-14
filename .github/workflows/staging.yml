@@ -33,7 +33,9 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd backend_staging
-            git pull staging
+            git checkout staging
+            git branch -v
+            git pull origin staging
             composer install -q --no-interaction --no-dev
             find ${pwd} -type d ! -path "*bootstrap*" ! -path "*storage*" ! -path "*.git*" -print0 | xargs -0 chmod 0775
             find ${pwd} -type f ! -path "*bootstrap*" ! -path "*storage*" ! -path "*.git*" -print0 | xargs -0 chmod 0664
