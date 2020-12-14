@@ -17,6 +17,7 @@ jobs:
           body: |
             Commit telah kami terima, saat ini code terbaru akan di Deploy secara automatis ke:
             - Domain: **https://admin.lsp-mpsdm.com**
+            - Deploy Status: **https://github.com/Ujian-Online/backend/actions**
 
             Anda akan menerima notifikasi jika deploy telah selesai dilakukan, harap menunggu notifikasi selanjutnya.!
 
@@ -48,5 +49,6 @@ jobs:
           body: |
             Deploy sukses, anda bisa mengecek preview website di:
             - Domain: **https://admin.lsp-mpsdm.com**
+            - Deploy Status: **https://github.com/Ujian-Online/backend/actions**
 
             Jika ada kendala, jangan ragu untuk menghubungi team devops.!
