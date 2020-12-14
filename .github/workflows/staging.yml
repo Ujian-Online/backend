@@ -1,0 +1,52 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Deploy Staging Branch
+
+on:
+  push:
+    branches: [staging]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create commit comment
+        uses: peter-evans/commit-comment@v1
+        with:
+          body: |
+            Commit telah kami terima, saat ini code terbaru akan di Deploy secara automatis ke:
+            - Domain: **https://admin.lsp-mpsdm.com**
+
+            Anda akan menerima notifikasi jika deploy telah selesai dilakukan, harap menunggu notifikasi selanjutnya.!
+
+  build:
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd backend_staging
+            git pull staging
+            composer install -q --no-interaction --no-dev
+            find ${pwd} -type d ! -path "*bootstrap*" ! -path "*storage*" ! -path "*.git*" -print0 | xargs -0 chmod 0775
+            find ${pwd} -type f ! -path "*bootstrap*" ! -path "*storage*" ! -path "*.git*" -print0 | xargs -0 chmod 0664
+
+  done:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Create commit comment
+        uses: peter-evans/commit-comment@v1
+        with:
+          body: |
+            Deploy sukses, anda bisa mengecek preview website di:
+            - Domain: **https://admin.lsp-mpsdm.com**
+
+            Jika ada kendala, jangan ragu untuk menghubungi team devops.!
