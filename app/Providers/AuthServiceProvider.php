@@ -31,11 +31,6 @@ class AuthServiceProvider extends ServiceProvider
         // Laravel Passport Routes
         Passport::routes();
 
-        // Laravel Token Expired
-        Passport::tokensExpireIn(now()->addDay());
-        Passport::refreshTokensExpireIn(now()->addDays(30));
-        Passport::personalAccessTokensExpireIn(now()->addDay());
-
         // Authentication Checker for Admin
         Gate::define('isAdmin', function ($user) {
             return $user->type == 'admin'
