@@ -53,8 +53,7 @@ class EmailVerification extends Mailable
         return $this->markdown('email/EmailVerification')
                 ->with([
                     'url' => env('FRONTEND_URL') .
-                            '/verifikasi?hash=' . encrypt($expired) .
-                            '&token=' . $this->token
+                            '/verifikasi?&token=' . $this->token
                 ]);
     }
 }
