@@ -1,11 +1,11 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Deploy Master Branch
+name: Deploy Staging Branch
 
 on:
   push:
-    branches: [master]
+    branches: [staging]
 
 jobs:
   check:
@@ -16,7 +16,8 @@ jobs:
         with:
           body: |
             Commit telah kami terima, saat ini code terbaru akan di Deploy secara automatis ke:
-            - Domain: **https://admin.lsp-mpsdm.com**
+            - Domain: **https://admin-staging.lsp.mpsdm.com**
+            - Deploy Status: **https://github.com/Ujian-Online/backend/actions**
 
             Anda akan menerima notifikasi jika deploy telah selesai dilakukan, harap menunggu notifikasi selanjutnya.!
 
@@ -32,8 +33,10 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd backend
-            git pull
+            cd backend_staging
+            git checkout staging
+            git branch -v
+            git pull origin staging
             composer install -q --no-interaction --no-dev
             find ${pwd} -type d ! -path "*bootstrap*" ! -path "*storage*" ! -path "*.git*" -print0 | xargs -0 chmod 0775
             find ${pwd} -type f ! -path "*bootstrap*" ! -path "*storage*" ! -path "*.git*" -print0 | xargs -0 chmod 0664
@@ -47,6 +50,7 @@ jobs:
         with:
           body: |
             Deploy sukses, anda bisa mengecek preview website di:
-            - Domain: **https://admin.lsp-mpsdm.com**
+            - Domain: **https://admin-staging.lsp.mpsdm.com**
+            - Deploy Status: **https://github.com/Ujian-Online/backend/actions**
 
             Jika ada kendala, jangan ragu untuk menghubungi team devops.!

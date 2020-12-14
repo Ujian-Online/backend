@@ -1,3 +1,5 @@
+![Deploy Staging Branch](https://github.com/Ujian-Online/backend/workflows/Deploy%20Staging%20Branch/badge.svg)
+
 - [Ujian Online Backend](#ujian-online-backend)
   - [Install](#install)
     - [Install MySQL 5.7](#install-mysql-57)
