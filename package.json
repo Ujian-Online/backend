@@ -20,7 +20,7 @@
         "datatables.net-buttons-bs4": "^1.6.5",
         "datatables.net-responsive-bs4": "^2.2.6",
         "jquery": "^3.2",
-        "laravel-mix": "^5.0.1",
+        "laravel-mix": "^5.0.9",
         "lodash": "^4.17.19",
         "overlayscrollbars": "^1.13.0",
         "popper.js": "^1.12",
