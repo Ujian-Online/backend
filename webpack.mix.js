@@ -21,7 +21,8 @@ mix.js('resources/js/app.js', 'public/js/app.js')
 		'datatables.net-bs4',
 		'datatables.net-buttons-bs4',
 		'datatables.net-responsive-bs4',
-		'datatables.net-fixedcolumns-bs4'
+        'datatables.net-fixedcolumns-bs4',
+        'select2'
 	]);
 
 mix.scripts('resources/js/admin.js', 'public/js/admin.js');
