@@ -25,4 +25,5 @@ Route::middleware(['auth', 'can:isAdmin'])
     ->namespace('Admin')
     ->group(function () {
         Route::resource('user', 'UserController');
+        Route::resource('assesor', 'UserAssesorController');
     });
