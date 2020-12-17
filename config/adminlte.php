@@ -88,6 +88,12 @@ return [
                 'route'     => 'admin.user.index',
                 'active'    => 'admin.user.*',
             ],
+            [
+                'title'     => 'Assesor',
+                'icon'      => 'fas fa-user-tie',
+                'route'     => 'admin.assesor.index',
+                'active'    => 'admin.assesor.*',
+            ],
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
