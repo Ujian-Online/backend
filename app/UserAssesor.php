@@ -19,15 +19,6 @@ class UserAssesor extends Model
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'expired_date' => 'date',
-    ];
-
-    /**
      * Relation to Table User
      */
     public function User()
