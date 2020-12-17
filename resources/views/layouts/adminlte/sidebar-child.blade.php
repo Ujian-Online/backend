@@ -1,11 +1,11 @@
 @foreach($menus as $menu)
     @if(is_array($menu))
         <li class="nav-item">
-            <a href="{{ 
+            <a href="{{
                 isset($menu['route'])
                     ? route($menu['route'])
                     : (isset($menu['url']) ? $menu['url'] : '#')
-                }}" class="nav-link">
+                }}" class="nav-link {{ request()->routeIs($menu['active']) ? 'active' : '' }}">
                 <i class="nav-icon {{ $menu['icon'] ? $menu['icon'] : '' }}"></i>
                 <p>
                     {{ $menu['title'] }}
