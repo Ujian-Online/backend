@@ -1,0 +1,1 @@
+window.onload=function(){const a=localStorage.getItem("sidebar_collapse");1==a?$("body").addClass("sidebar-collapse"):0==a&&$("body").removeClass("sidebar-collapse")},$('[data-widget="pushmenu"]').on("click",function(){1==$("body").hasClass("sidebar-collapse")?localStorage.setItem("sidebar_collapse",0):localStorage.setItem("sidebar_collapse",1)});
