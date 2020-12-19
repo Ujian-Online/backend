@@ -49,6 +49,7 @@ class UserController extends Controller
         // validate input
         $request->validate([
             'name'      => 'required|min:3|max:255',
+            'username'  => 'required|max:255|unique:users,username',
             'email'     => 'required|max:255|email|unique:users,email',
             'password'  => 'required|min:6',
             'type'      => 'required|in:' . implode(',', config('options.user_type')),
@@ -59,12 +60,16 @@ class UserController extends Controller
         // get form data
         $dataInput = $request->only([
             'name',
+            'username',
             'email',
             'password',
             'type',
             'status',
             'is_active'
         ]);
+
+        // Hash Password
+        $dataInput['password'] = Hash::make($dataInput['password']);
 
         // save to database
         User::create($dataInput);
@@ -129,6 +134,7 @@ class UserController extends Controller
         // validate input
         $request->validate([
             'name'          => 'required|min:3|max:255',
+            'username'      => 'required|max:255|unique:users,username,' . $id,
             'email'         => 'required|max:255|email|unique:users,email,' . $id,
             'newpassword'   => 'nullable|min:6',
             'type'          => 'required|in:' . implode(',', config('options.user_type')),
@@ -148,11 +154,12 @@ class UserController extends Controller
 
         // find by id and update
         $query = User::findOrFail($id);
-        $query->name = $dataInput['name'];
-        $query->email = $dataInput['email'];
-        $query->type = $dataInput['type'];
-        $query->status = $dataInput['status'];
-        $query->is_active = $dataInput['is_active'];
+        $query->username    = $dataInput['username'];
+        $query->name        = $dataInput['name'];
+        $query->email       = $dataInput['email'];
+        $query->type        = $dataInput['type'];
+        $query->status      = $dataInput['status'];
+        $query->is_active   = $dataInput['is_active'];
 
         // update password if new password field not empty
         if (isset($dataInput['newpassword']) and !empty($dataInput['newpassword'])) {
