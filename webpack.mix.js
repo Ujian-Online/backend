@@ -26,6 +26,7 @@ mix.js('resources/js/app.js', 'public/js/app.js')
 	]);
 
 mix.scripts('resources/js/admin.js', 'public/js/admin.js');
+mix.scripts('resources/js/all.js', 'public/js/all.js');
 
 mix.options({
 	terser: {
