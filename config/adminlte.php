@@ -7,7 +7,7 @@
 return [
 
     'title' => env('APP_NAME', 'Laravel'),
-    'logo'  => 'logo.png',
+    'logo'  => 'logo-mini.png',
 
 
     'color' => [
