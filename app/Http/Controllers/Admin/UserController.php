@@ -72,11 +72,18 @@ class UserController extends Controller
         $dataInput['password'] = Hash::make($dataInput['password']);
 
         // save to database
-        User::create($dataInput);
+        $user = User::create($dataInput);
+
+        // set redirect url
+        $redirect_route = route('admin.user.index');
+
+        // check if user type is assesor or not
+        if ($dataInput['type'] == 'assesor') {
+            $redirect_route = route('admin.assesor.create', ['user_id' => $user->id]);
+        }
 
         // redirect to index table
-        return redirect()
-            ->route('admin.user.index')
+        return redirect($redirect_route)
             ->with('success', trans('action.success', [
                     'name' => $dataInput['name']
             ]));
