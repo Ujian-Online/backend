@@ -7,7 +7,7 @@
 
 return [
     'login_message' => 'Sign in to start your session',
-    'email' => 'E-Mail Address',
+    'email' => 'Username or E-Mail Address',
     'password' => 'Password',
     'remember_me' => 'Remember Me',
     'forgot_password' => 'I forgot my password',

@@ -46,13 +46,14 @@ class AuthController extends Controller
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     property="email",
+     *                     property="username",
+     *                     description="you can use username or email",
      *                     type="string",
-     *                     format="email",
      *                     example="johndoe@example.com"
      *                 ),
      *                 @OA\Property(
      *                     property="password",
+     *                     description="account password",
      *                     type="string",
      *                     format="password",
      *                     example="pass1234"
@@ -70,18 +71,27 @@ class AuthController extends Controller
     {
         // validate input request
         $request->validate([
-            'email'     => 'required|string|email',
+            'username'  => 'required|string',
             'password'  => 'required|string|min:3|max:255'
         ]);
 
         // get data form input
-        $getInput = $request->only(['name', 'email', 'password']);
+        $getInput = $request->only(['username', 'password']);
+
+        // check if username is email or just username
+        $loginType = filter_var(
+            $getInput['username'],
+            FILTER_VALIDATE_EMAIL
+        ) ? 'email' : 'username';
+
+        // set login array
+        $login = [
+            $loginType => $getInput['username'],
+            'password'  => $getInput['password'],
+        ];
 
         // Validate Email and Password Input
-        if (Auth::attempt([
-            'email'     => $getInput['email'],
-            'password'  => $getInput['password']
-        ])) {
+        if (Auth::attempt($login)) {
 
             // get user detail
             $user = Auth::user();
@@ -132,6 +142,11 @@ class AuthController extends Controller
      *                     example="John Doe"
      *                 ),
      *                 @OA\Property(
+     *                     property="username",
+     *                     type="string",
+     *                     example="johndoe"
+     *                 ),
+     *                 @OA\Property(
      *                     property="email",
      *                     type="string",
      *                     format="email",
@@ -162,17 +177,19 @@ class AuthController extends Controller
         // validate form input
         $request->validate([
             'name'              => 'required|string|max:255',
+            'username'          => 'required|string|unique:users|max:255',
             'email'             => 'required|string|email|unique:users|max:255',
             'password'          => 'required|string|max:255',
             'confirm_password'  => 'required|string|max:255|same:password',
         ]);
 
         // get data form input
-        $getInput = $request->only(['name', 'email', 'password']);
+        $getInput = $request->only(['name', 'username', 'email', 'password']);
 
         // save user to database
         $user = User::create([
             'name'      => $getInput['name'],
+            'username'  => $getInput['username'],
             'email'     => $getInput['email'],
             'password'  => Hash::make($getInput['password']),
             'type'      => 'asessi',
@@ -195,9 +212,10 @@ class AuthController extends Controller
             'code'      => 200,
             'success'   => true,
             'data'      => [
-                'name'  => $user->name,
-                'email' => $user->email,
-                'token' => $token,
+                'name'      => $user->name,
+                'username'  => $user->username,
+                'email'     => $user->email,
+                'token'     => $token,
             ]
         ];
 

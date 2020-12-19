@@ -20,13 +20,14 @@ class AdminSeeder extends Seeder
 
         // create user with admin access
         User::create([
-            'name' => 'Administrator',
-            'email' => $email,
+            'name'              => 'Administrator',
+            'username'          => 'admin',
+            'email'             => $email,
             'email_verified_at' => now(),
-            'password' => Hash::make($password),
-            'type' => 'admin',
-            'status' => 'active',
-            'is_active' => true
+            'password'          => Hash::make($password),
+            'type'              => 'admin',
+            'status'            => 'active',
+            'is_active'         => true
         ]);
 
         // buat output
