@@ -145,6 +145,7 @@ class UserController extends Controller
         // get form data
         $dataInput = $request->only([
             'name',
+            'username',
             'email',
             'newpassword',
             'type',
