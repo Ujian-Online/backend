@@ -89,6 +89,11 @@ return [
                 'active'    => 'admin.user.*',
             ],
             [
+                'title'     => 'Assesi',
+                'icon'      => 'fas fa-user',
+                'route'     => 'admin.assesi.index',
+                'active'    => 'admin.assesi.*',
+            ],
                 'title'     => 'Assesor',
                 'icon'      => 'fas fa-user-tie',
                 'route'     => 'admin.assesor.index',
