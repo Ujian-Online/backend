@@ -2,6 +2,49 @@
 
 @section('form')
     <div class="form-row">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="user_id">User ID</label>
+                <select class="form-control" name="user_id" id="user_id" @if(isset($isShow)) readonly @endif>
+
+                @foreach($users as $user)
+                    <option
+                        value="{{ $user->id }}"
+                        @if(isset($query->user_id) and $query->user_id == $user->id)
+                            selected
+                        @endif
+                    >
+                        {{ $user->id }} - {{ $user->email }}
+                    </option>
+                @endforeach
+
+                </select>
+                @error('user_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+        </div>
+
+        <div class="form-group col-md-12">
+                <label for="user_id_admin">User ID Admin</label>
+                <select class="form-control" name="user_id_admin" id="user_id_admin" @if(isset($isShow)) readonly @endif>
+
+                @foreach($users as $user)
+                    <option
+                        value="{{ $user->id }}"
+                        @if(isset($query->user_id_admin) and $query->user_id_admin == $user->id)
+                            selected
+                        @endif
+                    >
+                        {{ $user->id }} - {{ $user->email }}
+                    </option>
+                @endforeach
+
+                </select>
+                @error('user_id_admin')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+        </div>
+        
         <div class="form-group col-md-6">
             <label for="name">{{ trans('form.name') }}</label>
             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="{{ trans('form.name') }}" value="{{ $query->name ?? '' }}" @if(isset($isShow)) readonly @endif>
@@ -32,7 +75,7 @@
 
                 @foreach(config('options.user_assesi_gender') as $key_gender => $gender)
                     <option
-                        value="{{ $gender }}"
+                        value="{{ $key_gender }}"
                         @if(isset($query->gender) and $query->gender == $key_gender)
                             selected
                         @endif
@@ -48,7 +91,7 @@
         </div>
         <div class="form-group col-md-4">
             <label for="birth_date">{{ trans('form.birth_date') }}</label>
-            <input type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" id="birth_date" placeholder="{{ trans('form.birth_date') }}" value="{{ $query->birth_date ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <input type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" id="birth_date" placeholder="{{ trans('form.birth_date') }}" value="{{ isset($query->birth_date) ? date('Y-m-d', strtotime($query->birth_date)) : '' }}" @if(isset($isShow)) readonly @endif>
 
             @error('birth_date')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -88,7 +131,7 @@
 
                 @foreach(config('options.user_assesi_has_job') as $key_has_job => $has_job)
                     <option
-                        value="{{ $has_job }}"
+                        value="{{ $key_has_job }}"
                         @if(isset($query->has_job) and $query->has_job == $key_has_job)
                             selected
                         @endif
@@ -110,39 +153,37 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
         <div class="form-group col-md-12">
             <label for="job_address">{{ trans('form.job_address') }}</label>
-            <textarea class="form-control @error('job_address') is-invalid @enderror" name="job_address" id="job_address" cols="30" rows="3" @if(isset($isShow)) readonly @endif>{{ $query->job_address ?? '' }}</textarea>
+            <textarea class="form-control @error('job_address') is-invalid @enderror" name="job_address" id="job_address" cols="30" rows="3" placeholder="{{ trans('form.job_address') }}" @if(isset($isShow)) readonly @endif>{{ $query->job_address ?? '' }}</textarea>
 
-            @error('job_address')
+            @error('note_admin')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        {{-- <div class="form-group col-md-4">
-            <label for="inputStatus">Status</label>
-            <select class="form-control" name="status" id="inputStatus" @if(isset($isShow)) readonly @endif>
 
-                @foreach(config('options.user_status') as $status)
-                    <option
-                        value="{{ $status }}"
-                        @if(isset($query->status) and $query->status == $type)
-                            selected
-                        @endif
-                    >
-                        {{ ucfirst($status) }}
-                    </option>
-                @endforeach
+        <div class="form-group col-md-12">
+            <label for="note_admin">{{ trans('form.note_admin') }}</label>
+            <textarea class="form-control @error('note_admin') is-invalid @enderror" name="note_admin" id="note_admin" cols="30" rows="3" placeholder="{{ trans('form.note_admin') }}" @if(isset($isShow)) readonly @endif>{{ $query->note_admin ?? '' }}</textarea>
 
-            </select>
-            @error('status')
+            @error('note_admin')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="form-group col-md-4">
-            <label for="is_active">Is Active</label>
-            <select class="form-control" name="is_active" id="is_active" @if(isset($isShow)) readonly @endif>
+        <div class="form-group col-md-12">
+            <label for="verification_note">{{ trans('form.verification_note') }}</label>
+            <textarea class="form-control @error('verification_note') is-invalid @enderror" name="verification_note" id="verification_note" cols="30" rows="3" placeholder="{{ trans('form.verification_note') }}" @if(isset($isShow)) readonly @endif>{{ $query->verification_note ?? '' }}</textarea>
 
-                @if(isset($query->is_active) and !empty($query->is_active))
+            @error('verification_note')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group col-md-12">
+            <label for="is_verified">Is Verified</label>
+            <select class="form-control" name="is_verified" id="is_verified" @if(isset($isShow)) readonly @endif>
+
+                @if(isset($query->is_verified) and !empty($query->is_verified))
                     <option value="1" selected>Yes</option>
                     <option value="0">No</option>
                 @else
@@ -151,9 +192,27 @@
                 @endif
 
             </select>
-            @error('is_active')
+            @error('is_verified')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
-        </div> --}}
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="media_url_sign_user">{{ trans('form.media_url_sign_user') }}</label>
+            <input type="text" class="form-control @error('media_url_sign_user') is-invalid @enderror" name="media_url_sign_user" id="media_url_sign_user" placeholder="{{ trans('form.media_url_sign_user') }}" value="{{ $query->media_url_sign_user ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('media_url_sign_user')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="media_url_sign_admin">{{ trans('form.media_url_sign_admin') }}</label>
+            <input type="text" class="form-control @error('media_url_sign_admin') is-invalid @enderror" name="media_url_sign_admin" id="media_url_sign_admin" placeholder="{{ trans('form.media_url_sign_admin') }}" value="{{ $query->media_url_sign_admin ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('media_url_sign_admin')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
     </div>
 @endsection
