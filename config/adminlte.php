@@ -94,6 +94,12 @@ return [
                 'route'     => 'admin.assesor.index',
                 'active'    => 'admin.assesor.*',
             ],
+            [
+                'title'     => 'TUK',
+                'icon'      => 'fas fa-users-cog',
+                'route'     => 'admin.tuk.index',
+                'active'    => 'admin.tuk.*',
+            ],
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
