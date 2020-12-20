@@ -12,6 +12,7 @@
         "barryvdh/laravel-snappy": "^0.4.8",
         "darkaonline/l5-swagger": "6.*",
         "fideloper/proxy": "^4.4",
+        "fruitcake/laravel-cors": "^2.0",
         "genealabs/laravel-model-caching": "0.7.4",
         "laravel-lang/lang": "~5.0",
         "laravel/framework": "^6.20",

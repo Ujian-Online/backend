@@ -33,14 +33,13 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "email": {
-                                        "description": "Login Function.",
+                                    "username": {
+                                        "description": "you can use username or email",
                                         "type": "string",
-                                        "format": "email",
                                         "example": "johndoe@example.com"
                                     },
                                     "password": {
-                                        "description": "Login Function.",
+                                        "description": "account password",
                                         "type": "string",
                                         "format": "password",
                                         "example": "pass1234"
@@ -76,6 +75,11 @@
                                         "description": "Login Function.",
                                         "type": "string",
                                         "example": "John Doe"
+                                    },
+                                    "username": {
+                                        "description": "Login Function.",
+                                        "type": "string",
+                                        "example": "johndoe"
                                     },
                                     "email": {
                                         "description": "Login Function.",

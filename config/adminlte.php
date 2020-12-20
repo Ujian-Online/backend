@@ -7,7 +7,7 @@
 return [
 
     'title' => env('APP_NAME', 'Laravel'),
-    'logo'  => 'logo.png',
+    'logo'  => 'logo-mini.png',
 
 
     'color' => [
@@ -93,6 +93,17 @@ return [
                 'icon'      => 'fas fa-user',
                 'route'     => 'admin.assesi.index',
                 'active'    => 'admin.assesi.*',
+            ],
+                'title'     => 'Assesor',
+                'icon'      => 'fas fa-user-tie',
+                'route'     => 'admin.assesor.index',
+                'active'    => 'admin.assesor.*',
+            ],
+            [
+                'title'     => 'TUK',
+                'icon'      => 'fas fa-users-cog',
+                'route'     => 'admin.tuk.index',
+                'active'    => 'admin.tuk.*',
             ],
             'Ujian',
             [
