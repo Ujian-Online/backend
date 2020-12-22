@@ -30,9 +30,9 @@ class UserTukDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->id,
-                    'url_show' => route('admin.tuk.show', $query->id),
-                    'url_edit' => route('admin.tuk.edit', $query->id),
-                    'url_destroy' => route('admin.tuk.destroy', $query->id),
+                    'url_show' => route('admin.user.tuk.show', $query->id),
+                    'url_edit' => route('admin.user.tuk.edit', $query->id),
+                    'url_destroy' => route('admin.user.tuk.destroy', $query->id),
                 ]);
             });
     }
@@ -124,7 +124,7 @@ class UserTukDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.tuk.create');
+        $url = route('admin.user.tuk.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {
