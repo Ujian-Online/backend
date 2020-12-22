@@ -4,18 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\UserAssesi;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\DataTables\Admin\UserAssesiDataTable;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class UserAssesiController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param \App\DataTables\Admin\UserAssesiDataTable $dataTables
+     * @param UserAssesiDataTable $dataTables
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function index(UserAssesiDataTable $dataTables)
     {
@@ -28,40 +35,42 @@ class UserAssesiController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function create()
     {
         $users = User::orderBy('created_at', 'desc')->get();
+
         // return view template create
         return view('admin.assesi.form', [
             'title'     => 'Tambah Assesi Baru',
             'action'    => route('admin.assesi.store'),
             'isCreated' => true,
-            'users' => $users
+            'users'     => $users
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|integer',
-            'user_id_admin' => 'required|integer',
-            'name' => 'required|min:3|max:255',
-            'address' => 'required|min:3|max:255',
-            'gender' => 'required|boolean',
-            'birth_place' => 'required|min:3|max:225',
-            'birth_date' => 'required|date',
-            'no_ktp' => 'required|digits:16',
-            'pendidikan_terakhir' => 'required|in:' . implode(',', config('options.user_assesi_pendidikan_terakhir')),
-            'has_job' => 'required|boolean',
-            'is_verified' => 'required|boolean',
+            'user_id'               => 'required|integer',
+            'user_id_admin'         => 'required|integer',
+            'name'                  => 'required|min:3|max:255',
+            'address'               => 'required|min:3|max:255',
+            'gender'                => 'required|boolean',
+            'birth_place'           => 'required|min:3|max:225',
+            'birth_date'            => 'required|date',
+            'no_ktp'                => 'required|digits:16',
+            'pendidikan_terakhir'   => 'required|in:' . implode(',', config('options.user_assesi_pendidikan_terakhir')),
+            'has_job'               => 'required|boolean',
+            'is_verified'           => 'required|boolean',
         ]);
 
         // get form data
@@ -80,9 +89,7 @@ class UserAssesiController extends Controller
             'job_address',
             'verification_note',
             'note_admin',
-            'is_verified',
-            'media_url_sign_user',
-            'media_url_sign_admin'
+            'is_verified'
         ]);
 
         UserAssesi::create($dataInput);
@@ -97,10 +104,11 @@ class UserAssesiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Application|Factory|Response|View
      */
-    public function show($id)
+    public function show(int $id)
     {
         $users = User::orderBy('created_at', 'desc')->get();
         $query = UserAssesi::findOrFail($id);
@@ -118,10 +126,11 @@ class UserAssesiController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Application|Factory|Response|View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $users = User::orderBy('created_at', 'desc')->get();
         $query = UserAssesi::findOrFail($id);
@@ -138,24 +147,25 @@ class UserAssesiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $request->validate([
-            'user_id' => 'required|integer',
-            'user_id_admin' => 'required|integer',
-            'name' => 'required|min:3|max:255',
-            'address' => 'required|min:3|max:255',
-            'gender' => 'required|boolean',
-            'birth_place' => 'required|min:3|max:225',
-            'birth_date' => 'required|date',
-            'no_ktp' => 'required|digits:16',
-            'pendidikan_terakhir' => 'required|in:' . implode(',', config('options.user_assesi_pendidikan_terakhir')),
-            'has_job' => 'required|boolean',
-            'is_verified' => 'required|boolean',
+            'user_id'               => 'required|integer',
+            'user_id_admin'         => 'required|integer',
+            'name'                  => 'required|min:3|max:255',
+            'address'               => 'required|min:3|max:255',
+            'gender'                => 'required|boolean',
+            'birth_place'           => 'required|min:3|max:225',
+            'birth_date'            => 'required|date',
+            'no_ktp'                => 'required|digits:16',
+            'pendidikan_terakhir'   => 'required|in:' . implode(',', config('options.user_assesi_pendidikan_terakhir')),
+            'has_job'               => 'required|boolean',
+            'is_verified'           => 'required|boolean',
         ]);
 
         // get form data
@@ -174,31 +184,11 @@ class UserAssesiController extends Controller
             'job_address',
             'verification_note',
             'note_admin',
-            'is_verified',
-            'media_url_sign_user',
-            'media_url_sign_admin'
+            'is_verified'
         ]);
 
         $query = UserAssesi::findOrFail($id);
-        $query->user_id = $dataInput['user_id'];
-        $query->user_id_admin = $dataInput['user_id_admin'];
-        $query->name = $dataInput['name'];
-        $query->address = $dataInput['address'];
-        $query->gender = $dataInput['gender'];
-        $query->birth_place = $dataInput['birth_place'];
-        $query->birth_date = $dataInput['birth_date'];
-        $query->no_ktp = $dataInput['no_ktp'];
-        $query->pendidikan_terakhir = $dataInput['pendidikan_terakhir'];
-        $query->has_job = $dataInput['has_job'];
-        $query->job_title = $dataInput['job_title'];
-        $query->job_address = $dataInput['job_address'];
-        $query->verification_note = $dataInput['verification_note'];
-        $query->note_admin = $dataInput['note_admin'];
-        $query->is_verified = $dataInput['is_verified'];
-        $query->media_url_sign_user = $dataInput['media_url_sign_user'];
-        $query->media_url_sign_admin = $dataInput['media_url_sign_admin'];
-
-        $query->update();
+        $query->update($dataInput);
 
         return redirect()
             ->route('admin.assesi.index')
@@ -210,10 +200,12 @@ class UserAssesiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $query = UserAssesi::findOrFail($id);
         $query->delete();
@@ -222,6 +214,6 @@ class UserAssesiController extends Controller
         return response()->json([
                 'code' => 200,
                 'success' => true,
-        ], 200);
+        ]);
     }
 }

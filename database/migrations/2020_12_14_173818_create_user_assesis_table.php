@@ -26,9 +26,7 @@ class CreateUserAssesisTable extends Migration
             $table->boolean('has_job'); // true = bekerja, false = tidak bekerja
             $table->string('job_title')->nullable();
             $table->text('job_address')->nullable();
-            $table->string('media_url_sign_admin')->nullable(); // url gambar/canvas untuk ttd admin yang approve
             $table->bigInteger('user_id_admin')->nullable();
-            $table->string('media_url_sign_user')->nullable();; // url gambar/canvas untuk ttd assesi
             $table->text('note_admin')->nullable();
             $table->boolean('is_verified');
             $table->text('verification_note')->nullable();
