@@ -3,17 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\DataTables\Admin\UserDataTable;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param UserDataTable $dataTables
+     *
+     * @return mixed
      */
     public function index(UserDataTable $dataTables)
     {
@@ -26,7 +35,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function create()
     {
@@ -41,15 +50,14 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
         // validate input
         $request->validate([
-            'name'      => 'required|min:3|max:255',
-            'username'  => 'required|max:255|unique:users,username',
             'email'     => 'required|max:255|email|unique:users,email',
             'password'  => 'required|min:6',
             'type'      => 'required|in:' . implode(',', config('options.user_type')),
@@ -59,8 +67,6 @@ class UserController extends Controller
 
         // get form data
         $dataInput = $request->only([
-            'name',
-            'username',
             'email',
             'password',
             'type',
@@ -85,17 +91,18 @@ class UserController extends Controller
         // redirect to index table
         return redirect($redirect_route)
             ->with('success', trans('action.success', [
-                    'name' => $dataInput['name']
+                    'name' => $dataInput['email']
             ]));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Application|Factory|Response|View
      */
-    public function show($id)
+    public function show(int $id)
     {
         // Find User by ID
         $query = User::findOrFail($id);
@@ -112,10 +119,11 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Application|Factory|Response|View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         // Find User by ID
         $query = User::findOrFail($id);
@@ -132,16 +140,15 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         // validate input
         $request->validate([
-            'name'          => 'required|min:3|max:255',
-            'username'      => 'required|max:255|unique:users,username,' . $id,
             'email'         => 'required|max:255|email|unique:users,email,' . $id,
             'newpassword'   => 'nullable|min:6',
             'type'          => 'required|in:' . implode(',', config('options.user_type')),
@@ -151,8 +158,6 @@ class UserController extends Controller
 
         // get form data
         $dataInput = $request->only([
-            'name',
-            'username',
             'email',
             'newpassword',
             'type',
@@ -162,8 +167,6 @@ class UserController extends Controller
 
         // find by id and update
         $query = User::findOrFail($id);
-        $query->username    = $dataInput['username'];
-        $query->name        = $dataInput['name'];
         $query->email       = $dataInput['email'];
         $query->type        = $dataInput['type'];
         $query->status      = $dataInput['status'];
@@ -181,17 +184,19 @@ class UserController extends Controller
         return redirect()
             ->route('admin.user.index')
             ->with('success', trans('action.success_update', [
-                'name' => $dataInput['name']
+                'name' => $dataInput['email']
             ]));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param int $id
+     *
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
         $query = User::findOrFail($id);
         $query->delete();
@@ -200,6 +205,6 @@ class UserController extends Controller
         return response()->json([
                 'code' => 200,
                 'success' => true,
-        ], 200);
+        ]);
     }
 }

@@ -15,7 +15,6 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -23,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('status'); // config('options.user_status')
             $table->string('media_url')->nullable();
             $table->boolean('is_active');
+            $table->string('media_url_sign_user')->nullable(); // url
+            // gambar/canvas untuk ttd assesi atau admin approve
             $table->rememberToken();
             $table->timestamps();
         });

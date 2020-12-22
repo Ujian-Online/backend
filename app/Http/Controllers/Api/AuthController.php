@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Mail\EmailVerification;
 use App\Http\Controllers\Controller;
@@ -20,19 +21,15 @@ class AuthController extends Controller
      * Controller ini berfungsi untuk authentikasi melalui API seperti:
      * - Login
      * - Register
-     * - Verifikasi Email Pendaftar
-     * - Re-Send Verifikasi Email Pendaftar
      */
 
 
     /**
      * Login Function.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param String $email
-     * @param String $password
+     * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      *
      * @OA\Post(
      *     path="/api/login",
@@ -46,8 +43,8 @@ class AuthController extends Controller
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     property="username",
-     *                     description="you can use username or email",
+     *                     property="email",
+     *                     description="account email",
      *                     type="string",
      *                     example="johndoe@example.com"
      *                 ),
@@ -67,31 +64,19 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         // validate input request
         $request->validate([
-            'username'  => 'required|string',
+            'email'     => 'required|email|string',
             'password'  => 'required|string|min:3|max:255'
         ]);
 
         // get data form input
         $getInput = $request->only(['username', 'password']);
 
-        // check if username is email or just username
-        $loginType = filter_var(
-            $getInput['username'],
-            FILTER_VALIDATE_EMAIL
-        ) ? 'email' : 'username';
-
-        // set login array
-        $login = [
-            $loginType => $getInput['username'],
-            'password'  => $getInput['password'],
-        ];
-
         // Validate Email and Password Input
-        if (Auth::attempt($login)) {
+        if (Auth::attempt(['email' => $getInput['email'], 'password' => $getInput['password']])) {
 
             // get user detail
             $user = Auth::user();
@@ -117,13 +102,9 @@ class AuthController extends Controller
     /**
      * Login Function.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param String $name Nama Akun
-     * @param String $email Alamat Email
-     * @param String $password Kata Sandi Akun
-     * @param String $confirm_password Konfirmasi Kata Sandi Akun
+     * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      *
      * @OA\Post(
      *     path="/api/register",
@@ -137,16 +118,6 @@ class AuthController extends Controller
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     property="name",
-     *                     type="string",
-     *                     example="John Doe"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="username",
-     *                     type="string",
-     *                     example="johndoe"
-     *                 ),
-     *                 @OA\Property(
      *                     property="email",
      *                     type="string",
      *                     format="email",
@@ -158,11 +129,6 @@ class AuthController extends Controller
      *                     format="password",
      *                     example="pass1234"
      *                 ),
-     *                 @OA\Property(
-     *                     property="confirm_password",
-     *                     type="string",
-     *                     example="pass1234"
-     *                 ),
      *             ),
      *         ),
      *     ),
@@ -172,24 +138,19 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         // validate form input
         $request->validate([
-            'name'              => 'required|string|max:255',
-            'username'          => 'required|string|unique:users|max:255',
             'email'             => 'required|string|email|unique:users|max:255',
             'password'          => 'required|string|max:255',
-            'confirm_password'  => 'required|string|max:255|same:password',
         ]);
 
         // get data form input
-        $getInput = $request->only(['name', 'username', 'email', 'password']);
+        $getInput = $request->only(['email', 'password']);
 
         // save user to database
         $user = User::create([
-            'name'      => $getInput['name'],
-            'username'  => $getInput['username'],
             'email'     => $getInput['email'],
             'password'  => Hash::make($getInput['password']),
             'type'      => 'asessi',
@@ -212,8 +173,6 @@ class AuthController extends Controller
             'code'      => 200,
             'success'   => true,
             'data'      => [
-                'name'      => $user->name,
-                'username'  => $user->username,
                 'email'     => $user->email,
                 'token'     => $token,
             ]

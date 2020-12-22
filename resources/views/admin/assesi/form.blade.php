@@ -2,41 +2,45 @@
 
 @section('form')
     <div class="form-row">
-        <div class="form-row">
-            <div class="form-group col-md-12">
-                <label for="user_id">User ID</label>
-                <select class="form-control" name="user_id" id="user_id" @if(isset($isShow)) readonly @endif>
+        <div class="form-group col-md-6">
+            <label for="user_id">User ID</label>
+            <select class="form-control" name="user_id" id="user_id" @if(isset($isShow)) readonly @endif>
 
-                @foreach($users as $user)
+            @foreach($users as $user)
+                @if($user->type == 'asessi')
                     <option
                         value="{{ $user->id }}"
                         @if(isset($query->user_id) and $query->user_id == $user->id)
                             selected
                         @endif
                     >
-                        {{ $user->id }} - {{ $user->email }}
+                        ID: {{ $user->id }} - {{ $user->email }}
                     </option>
-                @endforeach
+                @endif
+            @endforeach
 
-                </select>
-                @error('user_id')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+            </select>
+            @error('user_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
 
-        <div class="form-group col-md-12">
+        <div class="form-group col-md-6">
                 <label for="user_id_admin">User ID Admin</label>
                 <select class="form-control" name="user_id_admin" id="user_id_admin" @if(isset($isShow)) readonly @endif>
 
                 @foreach($users as $user)
-                    <option
-                        value="{{ $user->id }}"
-                        @if(isset($query->user_id_admin) and $query->user_id_admin == $user->id)
-                            selected
-                        @endif
-                    >
-                        {{ $user->id }} - {{ $user->email }}
-                    </option>
+                    @if($user->type != 'asessi')
+                        <option
+                            value="{{ $user->id }}"
+                            @if(isset($query->user_id_admin) and $query->user_id_admin == $user->id)
+                                selected
+                            @endif
+                        >
+                            ID: {{ $user->id }} - {{ $user->email }} [{{ ucfirst
+                            ($user->type) }}]
+                        </option>
+                    @endif
                 @endforeach
 
                 </select>
@@ -44,7 +48,7 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
         </div>
-        
+
         <div class="form-group col-md-6">
             <label for="name">{{ trans('form.name') }}</label>
             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="{{ trans('form.name') }}" value="{{ $query->name ?? '' }}" @if(isset($isShow)) readonly @endif>
@@ -196,23 +200,14 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-
-        <div class="form-group col-md-6">
-            <label for="media_url_sign_user">{{ trans('form.media_url_sign_user') }}</label>
-            <input type="text" class="form-control @error('media_url_sign_user') is-invalid @enderror" name="media_url_sign_user" id="media_url_sign_user" placeholder="{{ trans('form.media_url_sign_user') }}" value="{{ $query->media_url_sign_user ?? '' }}" @if(isset($isShow)) readonly @endif>
-
-            @error('media_url_sign_user')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group col-md-6">
-            <label for="media_url_sign_admin">{{ trans('form.media_url_sign_admin') }}</label>
-            <input type="text" class="form-control @error('media_url_sign_admin') is-invalid @enderror" name="media_url_sign_admin" id="media_url_sign_admin" placeholder="{{ trans('form.media_url_sign_admin') }}" value="{{ $query->media_url_sign_admin ?? '' }}" @if(isset($isShow)) readonly @endif>
-
-            @error('media_url_sign_admin')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        $('select').select2({
+            theme: 'bootstrap4',
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
+        });
+    </script>
 @endsection

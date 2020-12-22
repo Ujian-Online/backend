@@ -21,6 +21,12 @@ class UserAssesiDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('gender', function ($query) {
+                return config('options.user_assesi_gender')[$query->gender];
+            })
+            ->editColumn('is_verified', function ($query) {
+                return $query->is_verified == true ? 'YES' : 'NO';
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->name,
