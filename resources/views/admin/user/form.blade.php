@@ -5,22 +5,6 @@
 
     <div class="form-row">
         <div class="form-group col-md-6">
-            <label for="name">Name</label>
-            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Name" value="{{ old('name') ?? $query->name ?? '' }}" @if(isset($isShow)) readonly @endif>
-
-            @error('name')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group col-md-6">
-            <label for="username">Username</label>
-            <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="username" placeholder="Username" value="{{ old('username') ?? $query->username ?? '' }}" @if(isset($isShow)) readonly @endif>
-
-            @error('username')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group col-md-6">
             <label for="email">Email</label>
             <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Email" value="{{ old('email') ?? $query->email ?? '' }}" @if(isset($isShow)) readonly @endif>
 
