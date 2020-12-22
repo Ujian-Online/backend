@@ -22,10 +22,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::middleware(['auth', 'can:isAdmin'])
     ->prefix('admin')
     ->name('admin.')
-    ->namespace('Admin')
     ->group(function () {
-        Route::resource('user', 'UserController');
-        Route::resource('assesi', 'UserAssesiController');
-        Route::resource('assesor', 'UserAssesorController');
-        Route::resource('tuk', 'UserTukController');
+        Route::resource('user', 'Admin\UserController');
+        Route::resource('assesi', 'Admin\UserAssesiController');
+        Route::resource('assesor', 'Admin\UserAssesorController');
+        Route::resource('tuk', 'Admin\UserTukController');
     });
