@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserAssesorsTable extends Migration
+class CreateUserAsesorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserAssesorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_assesors', function (Blueprint $table) {
+        Schema::create('user_asesors', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->string('met');
@@ -31,6 +31,6 @@ class CreateUserAssesorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_assesors');
+        Schema::dropIfExists('user_asesors');
     }
 }
