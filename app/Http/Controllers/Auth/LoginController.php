@@ -48,30 +48,30 @@ class LoginController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function login(Request $request)
-    {
-        // validate input request
-        $request->validate([
-            'username'  => 'required|string',
-            'password'  => 'required|string|min:3|max:255'
-        ]);
-
-        // check if username is email or just username
-        $loginType = filter_var(
-            $request->username,
-            FILTER_VALIDATE_EMAIL
-        ) ? 'email' : 'username';
-
-        // set login array
-        $login = [
-            $loginType  => $request->username,
-            'password'  => $request->password,
-        ];
-
-        if (Auth::attempt($login)) {
-            return redirect($this->redirectTo);
-        } else {
-            return redirect()->route('login')->with(['error' => trans('auth.failed')]);
-        }
-    }
+//    public function login(Request $request)
+//    {
+//        // validate input request
+//        $request->validate([
+//            'username'  => 'required|string',
+//            'password'  => 'required|string|min:3|max:255'
+//        ]);
+//
+//        // check if username is email or just username
+//        $loginType = filter_var(
+//            $request->username,
+//            FILTER_VALIDATE_EMAIL
+//        ) ? 'email' : 'username';
+//
+//        // set login array
+//        $login = [
+//            $loginType  => $request->username,
+//            'password'  => $request->password,
+//        ];
+//
+//        if (Auth::attempt($login)) {
+//            return redirect($this->redirectTo);
+//        } else {
+//            return redirect()->route('login')->with(['error' => trans('auth.failed')]);
+//        }
+//    }
 }
