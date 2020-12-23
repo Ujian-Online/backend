@@ -45,9 +45,9 @@ return [
         'upload_pdf'
     ],
     'tuk_type' => [
-        'tukmandiri',
-        'sewaktu',
-        'jarakjauh',
+        'tukmandiri' => 'Tuk Mandiri',
+        'sewaktu' => 'Sewaktu',
+        'jarakjauh' => 'Jarak Jauh',
     ],
     'tuk_bank_name' => [
         'Mandiri',

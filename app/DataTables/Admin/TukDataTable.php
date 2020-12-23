@@ -2,14 +2,14 @@
 
 namespace App\DataTables\Admin;
 
-use App\UserTuk;
+use App\Tuk;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UserTukDataTable extends DataTable
+class TukDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,18 +21,15 @@ class UserTukDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('user_email', function ($query) {
-                return isset($query->user) ? $query->user->email : '';
-            })
-            ->addColumn('tuk_title', function ($query) {
-                return isset($query->tuk) ? $query->tuk->title : '';
+            ->editColumn('type', function ($query) {
+                return config('options.tuk_type')[$query->type];
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
-                    'title' => $query->id,
-                    'url_show' => route('admin.user.tuk.show', $query->id),
-                    'url_edit' => route('admin.user.tuk.edit', $query->id),
-                    'url_destroy' => route('admin.user.tuk.destroy', $query->id),
+                    'title' => $query->title,
+                    'url_show' => route('admin.tuk.show', $query->id),
+                    'url_edit' => route('admin.tuk.edit', $query->id),
+                    'url_destroy' => route('admin.tuk.destroy', $query->id),
                 ]);
             });
     }
@@ -40,12 +37,12 @@ class UserTukDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\UserTuk $model
+     * @param \App\Tuk $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(UserTuk $model)
+    public function query(Tuk $model)
     {
-        return $model::with(['user', 'tuk']);
+        return $model->newQuery();
     }
 
     /**
@@ -72,11 +69,11 @@ class UserTukDataTable extends DataTable
                             ]
                         ],
                     ])
-                    ->setTableId('usertuk-table')
+                    ->setTableId('tuk-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(4, 'desc')
+                    ->orderBy(5, 'desc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
@@ -93,13 +90,10 @@ class UserTukDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::computed('email')
-                ->data('user_email'),
-            Column::make('tuk_id')
-                ->title('TUK ID'),
-            Column::computed('tuk')
-                ->data('tuk_title')
-                ->title('TUK'),
+            Column::make('code'),
+            Column::make('title'),
+            Column::make('telp'),
+            Column::make('type'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
@@ -119,7 +113,7 @@ class UserTukDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'UserTuk_' . date('YmdHis');
+        return 'Tuk_' . date('YmdHis');
     }
 
     /**
@@ -128,7 +122,7 @@ class UserTukDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.user.tuk.create');
+        $url = route('admin.tuk.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {

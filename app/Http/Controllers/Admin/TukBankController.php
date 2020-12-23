@@ -2,54 +2,51 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Tuk;
-use App\User;
-use App\UserTuk;
+use App\DataTables\Admin\TukBankDataTable;
 use App\Http\Controllers\Controller;
-use App\DataTables\Admin\UserTukDataTable;
+use App\Tuk;
+use App\TukBank;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class UserTukController extends Controller
+class TukBankController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param UserTukDataTable $dataTables
+     * @param TukBankDataTable $dataTables
      *
      * @return mixed
      */
-    public function index(UserTukDataTable $dataTables)
+    public function index(TukBankDataTable $dataTables)
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'User TUK Lists'
+            'title' => 'TUK Bank Lists'
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|Factory|View
+     * @return Application|Factory|Response|View
      */
     public function create()
     {
-        // get user lists
-        $users  = User::orderBy('created_at', 'desc')->get();
         // get tuk lists
         $tuks   = Tuk::orderBy('created_at', 'desc')->get();
 
         // return view template create
-        return view('admin.tuk.form', [
-            'title'     => 'Tambah User TUK',
-            'action'    => route('admin.user.tuk.store'),
+        return view('admin.tuk.bank-form', [
+            'title'     => 'Tambah TUK Bank Baru',
+            'action'    => route('admin.tuk.bank.store'),
             'isCreated' => true,
-            'users'     => $users,
             'tuks'      => $tuks,
         ]);
     }
@@ -65,35 +62,28 @@ class UserTukController extends Controller
     {
         // validate input
         $request->validate([
-            'user_id'       => 'required',
-            'tuk_id'        => 'required',
+            'tuk_id'            => 'required',
+            'bank_name'         => 'required',
+            'account_number'    => 'required',
+            'account_name'      => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'user_id',
             'tuk_id',
+            'bank_name',
+            'account_number',
+            'account_name',
         ]);
 
-        // validasi apakah user tuk sudah di assign ke tuk lain?
-        $user_tuk = UserTuk::where('user_id', $dataInput['user_id'])
-            ->where('tuk_id', $dataInput['tuk_id'])
-            ->count();
-
-        if($user_tuk > 0) {
-            return redirect()->back()->withErrors(trans('action.error_user_tuk', [
-                'id' => $dataInput['user_id']
-            ]));
-        }
-
         // save to database
-        UserTuk::create($dataInput);
+        TukBank::create($dataInput);
 
         // redirect to index table
         return redirect()
-            ->route('admin.user.tuk.index')
+            ->route('admin.tuk.bank.index')
             ->with('success', trans('action.success', [
-                    'name' => $dataInput['user_id']
+                'name' => 'Bank ' . $dataInput['bank_name'] . ' - ' . $dataInput['account_name']
             ]));
     }
 
@@ -101,24 +91,23 @@ class UserTukController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return Application|Factory|View
+     *
+     * @return Application|Factory|Response|View
      */
     public function show(int $id)
     {
         // Find User by ID
-        $query = UserTuk::findOrFail($id);
-        // get user lists
-        $users = User::orderBy('created_at', 'desc')->get();
+        $query = TukBank::findOrFail($id);
         // get tuk lists
         $tuks   = Tuk::orderBy('created_at', 'desc')->get();
 
         // return data to view
-        return view('admin.tuk.form', [
-            'title'     => 'Tampilkan Detail: ' . $query->id,
+        return view('admin.tuk.bank-form', [
+            'title'     => 'Tampilkan Detail: ' . $query->bank_name . ': ' .
+                $query->account_name,
             'action'    => '#',
-            'isShow'    => route('admin.user.tuk.edit', $id),
+            'isShow'    => route('admin.tuk.bank.edit', $id),
             'query'     => $query,
-            'users'     => $users,
             'tuks'      => $tuks,
         ]);
     }
@@ -127,24 +116,23 @@ class UserTukController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return Application|Factory|View
+     *
+     * @return Application|Factory|Response|View
      */
     public function edit(int $id)
     {
         // Find User by ID
-        $query = UserTuk::findOrFail($id);
-        // get user lists
-        $users = User::orderBy('created_at', 'desc')->get();
+        $query = TukBank::findOrFail($id);
         // get tuk lists
         $tuks   = Tuk::orderBy('created_at', 'desc')->get();
 
         // return data to view
-        return view('admin.tuk.form', [
-            'title'     => 'Ubah Data: ' . $query->id,
-            'action'    => route('admin.user.tuk.update', $id),
+        return view('admin.tuk.bank-form', [
+            'title'     => 'Ubah Data: ' . $query->bank_name . ': ' .
+                $query->account_name,
+            'action'    => route('admin.tuk.bank.update', $id),
             'isEdit'    => true,
             'query'     => $query,
-            'users'     => $users,
             'tuks'      => $tuks,
         ]);
     }
@@ -153,34 +141,39 @@ class UserTukController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param int $id
+     * @param int     $id
+     *
      * @return RedirectResponse
      */
     public function update(Request $request, int $id)
     {
         // validate input
         $request->validate([
-            'user_id'       => 'required',
-            'tuk_id'        => 'required',
+            'tuk_id'            => 'required',
+            'bank_name'         => 'required',
+            'account_number'    => 'required',
+            'account_name'      => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'user_id',
             'tuk_id',
+            'bank_name',
+            'account_number',
+            'account_name',
         ]);
 
-        // find by id
-        $query = UserTuk::findOrFail($id);
-
+        // find by id and update
+        $query = TukBank::findOrFail($id);
         // update data
         $query->update($dataInput);
 
         // redirect
         return redirect()
-            ->route('admin.user.tuk.index')
+            ->route('admin.tuk.bank.index')
             ->with('success', trans('action.success_update', [
-                'name' => $dataInput['user_id']
+                'name' => 'Bank ' . $dataInput['bank_name'] . ' - ' .
+                    $dataInput['account_name']
             ]));
     }
 
@@ -188,18 +181,19 @@ class UserTukController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
+     *
      * @return JsonResponse
      * @throws Exception
      */
     public function destroy(int $id): JsonResponse
     {
-        $query = UserTuk::findOrFail($id);
+        $query = TukBank::findOrFail($id);
         $query->delete();
 
         // return response json if success
         return response()->json([
-                'code' => 200,
-                'success' => true,
+            'code' => 200,
+            'success' => true,
         ]);
     }
 }

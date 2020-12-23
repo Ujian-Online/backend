@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class TukBank extends Model
 {
@@ -17,4 +18,14 @@ class TukBank extends Model
         'account_number',
         'account_name',
     ];
+
+    /**
+     * Relation to Table TUK
+     *
+     * @return HasOne
+     */
+    public function Tuk()
+    {
+        return $this->hasOne('App\Tuk', 'id', 'tuk_id');
+    }
 }

@@ -16,4 +16,5 @@ return [
     'edit'              => 'Ubah',
     'update'            => 'Perbarui',
     'back'              => 'Kembali',
+    'error_user_tuk'    => 'User ID: :id telah dipilih oleh TUK lain.!',
 ];
