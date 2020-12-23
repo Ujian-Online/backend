@@ -289,6 +289,7 @@ namespace App{
  * @property string $account_name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Tuk|null $Tuk
  * @method static \Illuminate\Database\Eloquent\Builder|TukBank newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TukBank newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TukBank query()
@@ -482,6 +483,7 @@ namespace App{
  * @property int $tuk_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Tuk|null $Tuk
  * @property-read \App\User|null $User
  * @method static \Illuminate\Database\Eloquent\Builder|UserTuk newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserTuk newQuery()
