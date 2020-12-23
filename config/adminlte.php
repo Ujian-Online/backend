@@ -116,7 +116,18 @@ return [
                 'title'     => 'TUK',
                 'icon'      => 'fas fa-house-user',
                 'route'     => 'admin.tuk.index',
-                'active'    => 'admin.tuk.*',
+                'active'    => [
+                    'admin.tuk.index',
+                    'admin.tuk.create',
+                    'admin.tuk.show',
+                    'admin.tuk.update',
+                ],
+            ],
+            [
+                'title'     => 'Bank',
+                'icon'      => 'fas fa-money-check-alt',
+                'route'     => 'admin.tuk.bank.index',
+                'active'    => 'admin.tuk.bank.*',
             ],
             'Ujian',
             [
