@@ -21,11 +21,11 @@ class UserTukDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('user_name', function ($query) {
-                return isset($query->user) ? $query->user->name : '';
-            })
             ->addColumn('user_email', function ($query) {
                 return isset($query->user) ? $query->user->email : '';
+            })
+            ->addColumn('tuk_title', function ($query) {
+                return isset($query->tuk) ? $query->tuk->title : '';
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
@@ -45,7 +45,7 @@ class UserTukDataTable extends DataTable
      */
     public function query(UserTuk $model)
     {
-        return $model::with('user');
+        return $model::with(['user', 'tuk']);
     }
 
     /**
@@ -93,9 +93,13 @@ class UserTukDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::computed('name')->data('user_name'),
-            Column::computed('email')->data('user_email'),
-            Column::make('tuk_id'),
+            Column::computed('email')
+                ->data('user_email'),
+            Column::make('tuk_id')
+                ->title('TUK ID'),
+            Column::computed('tuk')
+                ->data('tuk_title')
+                ->title('TUK'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
