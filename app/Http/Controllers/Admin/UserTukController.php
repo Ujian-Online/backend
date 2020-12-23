@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Tuk;
 use App\User;
 use App\UserTuk;
 use App\Http\Controllers\Controller;
@@ -39,14 +40,17 @@ class UserTukController extends Controller
     public function create()
     {
         // get user lists
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users  = User::orderBy('created_at', 'desc')->get();
+        // get tuk lists
+        $tuks   = Tuk::orderBy('created_at', 'desc')->get();
 
         // return view template create
         return view('admin.tuk.form', [
             'title'     => 'Tambah User TUK',
-            'action'    => route('admin.tuk.store'),
+            'action'    => route('admin.user.tuk.store'),
             'isCreated' => true,
             'users'     => $users,
+            'tuks'      => $tuks,
         ]);
     }
 
@@ -71,14 +75,25 @@ class UserTukController extends Controller
             'tuk_id',
         ]);
 
+        // validasi apakah user tuk sudah di assign ke tuk lain?
+        $user_tuk = UserTuk::where('user_id', $dataInput['user_id'])
+            ->where('tuk_id', $dataInput['tuk_id'])
+            ->count();
+
+        if($user_tuk > 0) {
+            return redirect()->back()->withErrors(trans('action.error_user_tuk', [
+                'id' => $dataInput['user_id']
+            ]));
+        }
+
         // save to database
         UserTuk::create($dataInput);
 
         // redirect to index table
         return redirect()
-            ->route('admin.tuk.index')
+            ->route('admin.user.tuk.index')
             ->with('success', trans('action.success', [
-                    'name' => $dataInput['id']
+                    'name' => $dataInput['user_id']
             ]));
     }
 
@@ -94,14 +109,17 @@ class UserTukController extends Controller
         $query = UserTuk::findOrFail($id);
         // get user lists
         $users = User::orderBy('created_at', 'desc')->get();
+        // get tuk lists
+        $tuks   = Tuk::orderBy('created_at', 'desc')->get();
 
         // return data to view
         return view('admin.tuk.form', [
-            'title'     => 'Show Detail: ' . $query->id,
+            'title'     => 'Tampilkan Detail: ' . $query->id,
             'action'    => '#',
-            'isShow'    => route('admin.tuk.edit', $id),
+            'isShow'    => route('admin.user.tuk.edit', $id),
             'query'     => $query,
             'users'     => $users,
+            'tuks'      => $tuks,
         ]);
     }
 
@@ -117,14 +135,17 @@ class UserTukController extends Controller
         $query = UserTuk::findOrFail($id);
         // get user lists
         $users = User::orderBy('created_at', 'desc')->get();
+        // get tuk lists
+        $tuks   = Tuk::orderBy('created_at', 'desc')->get();
 
         // return data to view
         return view('admin.tuk.form', [
-            'title'     => 'Edit Data: ' . $query->id,
-            'action'    => route('admin.tuk.update', $id),
+            'title'     => 'Ubah Data: ' . $query->id,
+            'action'    => route('admin.user.tuk.update', $id),
             'isEdit'    => true,
             'query'     => $query,
             'users'     => $users,
+            'tuks'      => $tuks,
         ]);
     }
 
@@ -149,7 +170,7 @@ class UserTukController extends Controller
             'tuk_id',
         ]);
 
-        // find by id and update
+        // find by id
         $query = UserTuk::findOrFail($id);
 
         // update data
@@ -157,9 +178,9 @@ class UserTukController extends Controller
 
         // redirect
         return redirect()
-            ->route('admin.tuk.index')
+            ->route('admin.user.tuk.index')
             ->with('success', trans('action.success_update', [
-                'name' => $dataInput['id']
+                'name' => $dataInput['user_id']
             ]));
     }
 
@@ -170,7 +191,7 @@ class UserTukController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $query = UserTuk::findOrFail($id);
         $query->delete();
