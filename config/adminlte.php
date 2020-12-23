@@ -111,6 +111,13 @@ return [
                 'route'     => 'admin.user.tuk.index',
                 'active'    => 'admin.user.tuk.*',
             ],
+            'TUK',
+            [
+                'title'     => 'TUK',
+                'icon'      => 'fas fa-house-user',
+                'route'     => 'admin.tuk.index',
+                'active'    => 'admin.tuk.*',
+            ],
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
