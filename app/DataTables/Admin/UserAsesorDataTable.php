@@ -2,14 +2,14 @@
 
 namespace App\DataTables\Admin;
 
-use App\UserAssesi;
+use App\UserAsesor;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UserAssesiDataTable extends DataTable
+class UserAsesorDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,18 +21,12 @@ class UserAssesiDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('gender', function ($query) {
-                return config('options.user_assesi_gender')[$query->gender];
-            })
-            ->editColumn('is_verified', function ($query) {
-                return $query->is_verified == true ? 'YES' : 'NO';
-            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->name,
-                    'url_show' => route('admin.assesi.show', $query->id),
-                    'url_edit' => route('admin.assesi.edit', $query->id),
-                    'url_destroy' => route('admin.assesi.destroy', $query->id),
+                    'url_show' => route('admin.user.asesor.show', $query->id),
+                    'url_edit' => route('admin.user.asesor.edit', $query->id),
+                    'url_destroy' => route('admin.user.asesor.destroy', $query->id),
                 ]);
             });
     }
@@ -40,10 +34,11 @@ class UserAssesiDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\UserAssesi $model
+     * @param \App\UserAsesor $model
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(UserAssesi $model)
+    public function query(UserAsesor $model)
     {
         return $model->newQuery();
     }
@@ -72,11 +67,11 @@ class UserAssesiDataTable extends DataTable
                             ]
                         ],
                     ])
-                    ->setTableId('userassesi-table')
+                    ->setTableId('userasesor-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(4, 'desc')
+                    ->orderBy(1, 'asc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
@@ -92,10 +87,10 @@ class UserAssesiDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('name')->title('Nama'),
-            Column::make('gender')->title('Jenis Kelamin'),
-            Column::make('no_ktp'),
-            Column::make('is_verified')->title('Verifikasi'),
+            Column::make('id'),
+            Column::make('name'),
+            Column::make('met'),
+            Column::make('expired_date'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
@@ -115,7 +110,7 @@ class UserAssesiDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'UserAssesi_' . date('YmdHis');
+        return 'UserAsesor_' . date('YmdHis');
     }
 
     /**
@@ -124,7 +119,7 @@ class UserAssesiDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.assesi.create');
+        $url = route('admin.user.asesor.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {

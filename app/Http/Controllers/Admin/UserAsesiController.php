@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
-use App\UserAssesi;
+use App\UserAsesi;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -11,24 +11,24 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\DataTables\Admin\UserAssesiDataTable;
+use App\DataTables\Admin\UserAsesiDataTable;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class UserAssesiController extends Controller
+class UserAsesiController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param UserAssesiDataTable $dataTables
+     * @param UserAsesiDataTable $dataTables
      *
      * @return mixed
      */
-    public function index(UserAssesiDataTable $dataTables)
+    public function index(UserAsesiDataTable $dataTables)
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Assesi'
+            'title' => 'Asesi Lists'
         ]);
     }
 
@@ -43,8 +43,8 @@ class UserAssesiController extends Controller
 
         // return view template create
         return view('admin.assesi.form', [
-            'title'     => 'Tambah Assesi Baru',
-            'action'    => route('admin.assesi.store'),
+            'title'     => 'Tambah Asesi Baru',
+            'action'    => route('admin.user.asesi.store'),
             'isCreated' => true,
             'users'     => $users
         ]);
@@ -92,10 +92,10 @@ class UserAssesiController extends Controller
             'is_verified'
         ]);
 
-        UserAssesi::create($dataInput);
+        UserAsesi::create($dataInput);
 
         return redirect()
-            ->route('admin.assesi.index')
+            ->route('admin.user.asesi.index')
             ->with('success', trans('action.success', [
                     'name' => $dataInput['name']
             ]));
@@ -111,13 +111,13 @@ class UserAssesiController extends Controller
     public function show(int $id)
     {
         $users = User::orderBy('created_at', 'desc')->get();
-        $query = UserAssesi::findOrFail($id);
+        $query = UserAsesi::findOrFail($id);
 
         // return data to view
         return view('admin.assesi.form', [
             'title'     => 'Show Detail: ' . $query->name,
             'action'    => '#',
-            'isShow'    => route('admin.assesi.edit', $id),
+            'isShow'    => route('admin.user.asesi.edit', $id),
             'query'     => $query,
             'users'     => $users
         ]);
@@ -133,11 +133,11 @@ class UserAssesiController extends Controller
     public function edit(int $id)
     {
         $users = User::orderBy('created_at', 'desc')->get();
-        $query = UserAssesi::findOrFail($id);
+        $query = UserAsesi::findOrFail($id);
 
         return view('admin.assesi.form', [
             'title'     => 'Edit Data: ' . $query->name,
-            'action'    => route('admin.assesi.update', $id),
+            'action'    => route('admin.user.asesi.update', $id),
             'isEdit'    => true,
             'query'     => $query,
             'users'     => $users
@@ -187,11 +187,11 @@ class UserAssesiController extends Controller
             'is_verified'
         ]);
 
-        $query = UserAssesi::findOrFail($id);
+        $query = UserAsesi::findOrFail($id);
         $query->update($dataInput);
 
         return redirect()
-            ->route('admin.assesi.index')
+            ->route('admin.user.asesi.index')
             ->with('success', trans('action.success_update', [
                 'name' => $dataInput['name']
             ]));
@@ -207,7 +207,7 @@ class UserAssesiController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $query = UserAssesi::findOrFail($id);
+        $query = UserAsesi::findOrFail($id);
         $query->delete();
 
         // return response json if success

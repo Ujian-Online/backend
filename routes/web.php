@@ -23,8 +23,8 @@ Route::middleware(['auth', 'can:isAdmin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+        Route::resource('user/asesi', 'Admin\UserAsesiController', ['as' => 'user']);
+        Route::resource('user/asesor', 'Admin\UserAsesorController', ['as' => 'user']);
+        Route::resource('user/tuk', 'Admin\UserTukController', ['as' => 'user']);
         Route::resource('user', 'Admin\UserController');
-        Route::resource('assesi', 'Admin\UserAssesiController');
-        Route::resource('assesor', 'Admin\UserAssesorController');
-        Route::resource('tuk', 'Admin\UserTukController');
     });

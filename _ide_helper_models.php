@@ -12,11 +12,275 @@
 
 namespace App{
 /**
+ * App\AsesiCustomData
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiCustomData newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiCustomData newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiCustomData query()
+ */
+	class AsesiCustomData extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\AsesiSertifikasiUnitKompetensiElement
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiSertifikasiUnitKompetensiElement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiSertifikasiUnitKompetensiElement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiSertifikasiUnitKompetensiElement query()
+ */
+	class AsesiSertifikasiUnitKompetensiElement extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\AsesiUnitKompetensiDokumen
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen query()
+ */
+	class AsesiUnitKompetensiDokumen extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Order
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ */
+	class Order extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Sertifikasi
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi query()
+ */
+	class Sertifikasi extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SertifikasiTuk
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiTuk newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiTuk newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiTuk query()
+ */
+	class SertifikasiTuk extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SertifikasiUnitKompentensi
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi query()
+ */
+	class SertifikasiUnitKompentensi extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SertifikasiUnitKompetensiElement
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement query()
+ */
+	class SertifikasiUnitKompetensiElement extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Soal
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Soal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Soal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Soal query()
+ */
+	class Soal extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SoalPaket
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket query()
+ */
+	class SoalPaket extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SoalPaketItem
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPaketItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPaketItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPaketItem query()
+ */
+	class SoalPaketItem extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SoalPilihanGanda
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPilihanGanda newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPilihanGanda newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalPilihanGanda query()
+ */
+	class SoalPilihanGanda extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SoalUnitKompetensi
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalUnitKompetensi newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalUnitKompetensi newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SoalUnitKompetensi query()
+ */
+	class SoalUnitKompetensi extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Tuk
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Tuk newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tuk newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tuk query()
+ */
+	class Tuk extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\TukBank
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|TukBank newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TukBank newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TukBank query()
+ */
+	class TukBank extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\UjianAsesiAsesor
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor query()
+ */
+	class UjianAsesiAsesor extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\UjianAsesiJawaban
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban query()
+ */
+	class UjianAsesiJawaban extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\UjianAsesiJawabanPilihan
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan query()
+ */
+	class UjianAsesiJawabanPilihan extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\UjianJadwal
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianJadwal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianJadwal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UjianJadwal query()
+ */
+	class UjianJadwal extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\User
  *
  * @property int $id
- * @property string $name
- * @property string $username
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
@@ -24,6 +288,7 @@ namespace App{
  * @property string $status
  * @property string|null $media_url
  * @property bool $is_active
+ * @property string|null $media_url_sign_user
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -42,7 +307,7 @@ namespace App{
 
 namespace App{
 /**
- * App\UserAssesi
+ * App\UserAsesi
  *
  * @property int $id
  * @property int $user_id
@@ -56,24 +321,37 @@ namespace App{
  * @property bool $has_job
  * @property string|null $job_title
  * @property string|null $job_address
- * @property string|null $media_url_sign_admin
  * @property int|null $user_id_admin
- * @property string $media_url_sign_user
  * @property string|null $note_admin
  * @property bool $is_verified
  * @property string|null $verification_note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|UserAssesi newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UserAssesi newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UserAssesi query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi query()
  */
-	class UserAssesi extends \Eloquent {}
+	class UserAsesi extends \Eloquent {}
 }
 
 namespace App{
 /**
- * App\UserAssesor
+ * App\UserAsesiCustomData
+ *
+ * @property int $id
+ * @property int $user_asesi_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesiCustomData newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesiCustomData newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesiCustomData query()
+ */
+	class UserAsesiCustomData extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\UserAsesor
  *
  * @property int $id
  * @property int $user_id
@@ -84,11 +362,11 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\User|null $User
- * @method static \Illuminate\Database\Eloquent\Builder|UserAssesor newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UserAssesor newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UserAssesor query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesor newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesor newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserAsesor query()
  */
-	class UserAssesor extends \Eloquent {}
+	class UserAsesor extends \Eloquent {}
 }
 
 namespace App{
