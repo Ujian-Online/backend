@@ -1,1 +1,17 @@
-div.dt-buttons{position:relative;float:left}div.dt-buttons.buttons-right{float:right}div.dataTables_layout_cell div.dt-buttons,div.dataTables_layout_cell div.dt-buttons.buttons-right{float:none}
+div.dt-buttons {
+    position: relative;
+    float: left;
+}
+
+div.dt-buttons.buttons-right {
+    float: right;
+}
+
+div.dataTables_layout_cell div.dt-buttons,
+div.dataTables_layout_cell div.dt-buttons.buttons-right {
+    float: none
+}
+
+.sub-menu {
+    transition: all 0.3s;
+}

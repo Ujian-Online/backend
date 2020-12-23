@@ -99,13 +99,8 @@ return [
                 'title'     => 'Jadwal Ujian',
                 'icon'      => 'fas fa-tachometer-alt fa-fw',
                 'active'    => 'home',
+                'url'     => 'jadwalUjian',
                 'sub_menu'  => [
-                    [
-                        'title'     => 'Buat Jadwal',
-                        'icon'      => 'fas fa-tachometer-alt fa-fw',
-                        'route'     => 'home',
-                        'active'    => 'home',
-                    ],
                     [
                         'title'     => 'Buat Jadwal',
                         'icon'      => 'fas fa-tachometer-alt fa-fw',
