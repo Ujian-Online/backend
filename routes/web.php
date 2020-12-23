@@ -27,4 +27,6 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('user/asesor', 'Admin\UserAsesorController', ['as' => 'user']);
         Route::resource('user/tuk', 'Admin\UserTukController', ['as' => 'user']);
         Route::resource('user', 'Admin\UserController');
+
+        Route::resource('tuk', 'Admin\TukController');
     });

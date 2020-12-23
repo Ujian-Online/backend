@@ -85,7 +85,13 @@ class UserController extends Controller
 
         // check if user type is assesor or not
         if ($dataInput['type'] == 'assesor') {
-            $redirect_route = route('admin.assesor.create', ['user_id' => $user->id]);
+            $redirect_route = route('admin.user.assesor.create', [
+                'user_id' => $user->id
+            ]);
+        } elseif ($dataInput['type'] == 'tuk') {
+            $redirect_route = route('admin.user.tuk.create', [
+                'user_id' => $user->id
+            ]);
         }
 
         // redirect to index table
