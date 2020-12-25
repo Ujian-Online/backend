@@ -30,4 +30,6 @@ Route::middleware(['auth', 'can:isAdmin'])
 
         Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
         Route::resource('tuk', 'Admin\TukController');
+
+        Route::resource('sertifikasi', 'Admin\SertifikasiController');
     });
