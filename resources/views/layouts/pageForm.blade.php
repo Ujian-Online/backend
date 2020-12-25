@@ -20,6 +20,20 @@
                         {{-- Include Form Dynamic --}}
                         @yield('form')
 
+                        {{-- Waktu Pembuatan --}}
+                        @if(!isset($isCreated))
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="">Tanggal Pembuatan</label>
+                                    <input type="text" class="form-control" value="{{ $query->created_at }}" readonly>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">Tanggal Perubahan</label>
+                                    <input type="text" class="form-control" value="{{ $query->updated_at }}" readonly>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- Button For Created Page --}}
                         @if(isset($isCreated))
                         <button type="submit" class="btn btn-primary m-auto">
