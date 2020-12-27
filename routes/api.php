@@ -26,8 +26,12 @@ Route::namespace('Api')
         Route::post('email/resend', 'VerificationController@resend')
         ->name('verification.resend')->middleware('auth:api');
 
+        // List Sertifikasi
+        Route::get('sertifikasi', 'SertifikasiController@index')->name('sertifikasi');
+
         Route::middleware(['auth:api', 'verified'])
             ->group(function () {
                 Route::get('me', 'UserController@me')->name('me');
+
             });
     });
