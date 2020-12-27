@@ -2,14 +2,14 @@
 
 namespace App\DataTables\Admin;
 
-use App\Sertifikasi;
+use App\SertifikasiTuk;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class SertifikasiDataTable extends DataTable
+class SertifikasiTukDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,15 +21,15 @@ class SertifikasiDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('original_price_baru', function($query) {
-                return number_format($query->original_price_baru, 0, ',', '.');
+            ->editColumn('tuk_price_baru', function($query) {
+                return number_format($query->tuk_price_baru, 0, ',', '.');
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
-                    'title' => $query->title,
-                    'url_show' => route('admin.sertifikasi.show', $query->id),
-                    'url_edit' => route('admin.sertifikasi.edit', $query->id),
-                    'url_destroy' => route('admin.sertifikasi.destroy', $query->id),
+                    'title' => $query->id,
+                    'url_show' => route('admin.sertifikasi.tuk.show', $query->id),
+                    'url_edit' => route('admin.sertifikasi.tuk.edit', $query->id),
+                    'url_destroy' => route('admin.sertifikasi.tuk.destroy', $query->id),
                 ]);
             });
     }
@@ -37,12 +37,12 @@ class SertifikasiDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Sertifikasi $model
+     * @param \App\SertifikasiTuk $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Sertifikasi $model)
+    public function query(SertifikasiTuk $model)
     {
-        return $model->newQuery();
+        return $model::with('sertifikasi');
     }
 
     /**
@@ -69,11 +69,11 @@ class SertifikasiDataTable extends DataTable
                             ]
                         ],
                     ])
-                    ->setTableId('sertifikasi-table')
+                    ->setTableId('sertifikasituk-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(0, 'asc')
+                    ->orderBy(4, 'desc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
@@ -89,12 +89,16 @@ class SertifikasiDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('nomor_skema'),
-            Column::make('title'),
-            Column::make('jenis_sertifikasi')
-                ->title('Jenis'),
-            Column::make('original_price_baru')
-                ->title('Harga Baru'),
+            Column::computed('sertifikasi')
+                ->title('Nomor Skema')
+                ->data('sertifikasi.nomor_skema'),
+            Column::computed('sertifikasi')
+                ->data('sertifikasi.title'),
+            Column::computed('sertifikasi')
+                ->title('Jenis')
+                ->data('sertifikasi.jenis_sertifikasi'),
+            Column::make('tuk_price_baru')
+                ->title('Harga Baru TUK'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
@@ -114,7 +118,7 @@ class SertifikasiDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Sertifikasi_' . date('YmdHis');
+        return 'SertifikasiTuk_' . date('YmdHis');
     }
 
     /**
@@ -123,7 +127,7 @@ class SertifikasiDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.sertifikasi.create');
+        $url = route('admin.sertifikasi.tuk.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {
