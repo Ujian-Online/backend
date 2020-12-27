@@ -96,6 +96,20 @@
                 }
             }
         },
+        "/api/sertifikasi": {
+            "get": {
+                "tags": [
+                    "Sertifikasi"
+                ],
+                "summary": "Sertifikasi Lists",
+                "operationId": "App\\Http\\Controllers\\Api\\SertifikasiController::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/user/me": {
             "get": {
                 "tags": [
