@@ -17,8 +17,8 @@ class CreateSertifikasiTuksTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('sertifikasi_id');
             $table->bigInteger('tuk_id');
-            $table->float('tuk_price_baru');
-            $table->float('tuk_price_perpanjang');
+            $table->decimal('tuk_price_baru', 12);
+            $table->decimal('tuk_price_perpanjang', 12);
             $table->timestamps();
         });
     }
