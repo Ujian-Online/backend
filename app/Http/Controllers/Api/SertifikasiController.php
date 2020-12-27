@@ -13,6 +13,17 @@ class SertifikasiController extends Controller
      * Menampilkan List Sertifikasi
      *
      * @return Sertifikasi[]|Collection
+     *
+     * * @OA\Get(
+     *   path="/api/sertifikasi",
+     *   tags={"Sertifikasi"},
+     *   summary="Sertifikasi Lists",
+     *
+     *   @OA\Response(
+     *      response="200",
+     *      description="OK"
+     *   )
+     * )
      */
     public function index()
     {
