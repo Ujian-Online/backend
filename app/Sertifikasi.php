@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Sertifikasi extends Model
 {
@@ -19,4 +20,14 @@ class Sertifikasi extends Model
         'jenis_sertifikasi',
         'is_active',
     ];
+
+    /**
+     * Relation Table to SertifikasiTuk
+     *
+     * @return BelongsToMany
+     */
+    public function SertifikasiTuk()
+    {
+        return $this->hasMany('App\SertifikasiTuk');
+    }
 }
