@@ -129,6 +129,24 @@ return [
                 'route'     => 'admin.tuk.bank.index',
                 'active'    => 'admin.tuk.bank.*',
             ],
+            'Sertifikasi',
+            [
+                'title'     => 'Sertifikasi',
+                'icon'      => 'fas fa-list-ul',
+                'route'     => 'admin.sertifikasi.index',
+                'active'    => [
+                    'admin.sertifikasi.index',
+                    'admin.sertifikasi.create',
+                    'admin.sertifikasi.show',
+                    'admin.sertifikasi.update',
+                ],
+            ],
+            [
+                'title'     => 'TUK',
+                'icon'      => 'fas fa-list-ul',
+                'route'     => 'admin.sertifikasi.tuk.index',
+                'active'    => 'admin.sertifikasi.tuk.*',
+            ],
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
