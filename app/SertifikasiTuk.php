@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class SertifikasiTuk extends Model
 {
@@ -17,4 +18,14 @@ class SertifikasiTuk extends Model
         'tuk_price_baru',
         'tuk_price_perpanjang',
     ];
+
+    /**
+     * Relation to Table Sertifikasi
+     *
+     * @return HasOne
+     */
+    public function Sertifikasi()
+    {
+        return $this->hasOne('App\Sertifikasi', 'id', 'sertifikasi_id');
+    }
 }
