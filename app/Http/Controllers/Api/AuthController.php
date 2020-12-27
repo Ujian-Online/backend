@@ -73,7 +73,7 @@ class AuthController extends Controller
         ]);
 
         // get data form input
-        $getInput = $request->only(['username', 'password']);
+        $getInput = $request->only(['email', 'password']);
 
         // Validate Email and Password Input
         if (Auth::attempt(['email' => $getInput['email'], 'password' => $getInput['password']])) {
