@@ -12,7 +12,7 @@ class AsesiUnitKompetensiDokumen extends Model
      * @var array
      */
     protected $fillable = [
-        'user_asesi_id',
+        'asesi_id',
         'unit_kompetensi_id',
         'order',
         'sertifikasi_id',

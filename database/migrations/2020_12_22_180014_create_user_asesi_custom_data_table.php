@@ -15,7 +15,7 @@ class CreateUserAsesiCustomDataTable extends Migration
     {
         Schema::create('user_asesi_custom_data', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_asesi_id');
+            $table->bigInteger('asesi_id');
             $table->string('title');
             $table->string('input_type');
             $table->text('value');
