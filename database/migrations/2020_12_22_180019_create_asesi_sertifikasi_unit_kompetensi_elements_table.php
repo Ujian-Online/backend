@@ -15,7 +15,7 @@ class CreateAsesiSertifikasiUnitKompetensiElementsTable extends Migration
     {
         Schema::create('asesi_sertifikasi_unit_kompetensi_elements', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_asesi_id');
+            $table->bigInteger('asesi_id');
             $table->bigInteger('unit_kompetensi_id');
             $table->text('desc');
             $table->text('upload_instruction');
