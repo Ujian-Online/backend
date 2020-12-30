@@ -19,8 +19,6 @@ class CreateSertifikasisTable extends Migration
             $table->string('title');
             $table->decimal('original_price_baru', 12);
             $table->decimal('original_price_perpanjang', 12);
-            $table->string('jenis_sertifikasi'); // @see config('options
-            //.sertifikasis_jenis_sertifikasi')
             $table->boolean('is_active');
             $table->timestamps();
         });

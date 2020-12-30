@@ -24,6 +24,9 @@ class SertifikasiTukDataTable extends DataTable
             ->editColumn('tuk_price_baru', function($query) {
                 return number_format($query->tuk_price_baru, 0, ',', '.');
             })
+            ->editColumn('tuk_price_perpanjang', function($query) {
+                return number_format($query->tuk_price_perpanjang, 0, ',', '.');
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->id,
@@ -94,11 +97,10 @@ class SertifikasiTukDataTable extends DataTable
                 ->data('sertifikasi.nomor_skema'),
             Column::computed('sertifikasi')
                 ->data('sertifikasi.title'),
-            Column::computed('sertifikasi')
-                ->title('Jenis')
-                ->data('sertifikasi.jenis_sertifikasi'),
             Column::make('tuk_price_baru')
                 ->title('Harga Baru TUK'),
+            Column::make('tuk_price_perpanjang')
+                ->title('Harga Perpanjang TUK'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),

@@ -12,7 +12,7 @@ class UserAsesiCustomData extends Model
      * @var array
      */
     protected $fillable = [
-        'user_asesi_id',
+        'asesi_id',
         'title',
         'input_type',
         'value',
