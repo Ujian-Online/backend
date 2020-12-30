@@ -16,8 +16,14 @@
             {{-- Password Field For Created Page --}}
             @if(isset($isCreated))
                 <label for="password">Password</label>
-                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password" value="{{ $query->password ?? '' }}" @if(isset($isShow)) readonly @endif>
-
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="showPassword(this, 'password', event)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password" value="{{ $query->password ?? '' }}" @if(isset($isShow)) readonly @endif>
+                </div>
                 @error('password')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
@@ -26,7 +32,14 @@
             {{-- New Password For Edit Page --}}
             @if(isset($isEdit))
                 <label for="newpassword">New Password</label>
-                <input type="password" class="form-control @error('newpassword') is-invalid @enderror" name="newpassword" id="newpassword" placeholder="New Password" autocomplete="new-password">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="showPassword(this, 'newpassword', event)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <input type="password" class="form-control @error('newpassword') is-invalid @enderror" name="newpassword" id="newpassword" placeholder="New Password" autocomplete="new-password">
+                </div>
                 <small id="helpNewPassword" class="text-muted">Kosongkan Form Jika Tidak Ingin Mengganti Password</small>
 
                 @error('newpassword')
@@ -34,7 +47,7 @@
                 @enderror
             @endif
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label for="type">Type</label>
             <select class="form-control" name="type" id="type" @if(isset($isShow)) readonly @endif>
 
@@ -57,7 +70,7 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label for="inputStatus">Status</label>
             <select class="form-control" name="status" id="inputStatus" @if(isset($isShow)) readonly @endif>
 
@@ -80,22 +93,37 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="form-group col-md-4">
-            <label for="is_active">Is Active</label>
-            <select class="form-control" name="is_active" id="is_active" @if(isset($isShow)) readonly @endif>
-
-                @if(old('is_active') == 1 or !empty($query->is_active) == 1))
-                    <option value="1" selected>Yes</option>
-                    <option value="0">No</option>
-                @else
-                    <option value="1">Yes</option>
-                    <option value="0" selected>No</option>
-                @endif
-
-            </select>
-            @error('is_active')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        $('select').select2({
+            theme: 'bootstrap4',
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
+        });
+
+        // password show hide
+        function showPassword(element, id, event) {
+            event.preventDefault();
+
+            // get input
+            let inputPassword = document.getElementById(id);
+
+            // check input type
+            if (inputPassword.type === "password") {
+                // update button click
+                element.innerHTML = '<i class="fas fa-eye-slash"></i>';
+
+                // change input type
+                inputPassword.type = "text";
+            } else {
+                // update button click
+                element.innerHTML = '<i class="fas fa-eye"></i>';
+
+                // change input type
+                inputPassword.type = "password";
+            }
+        }
+    </script>
 @endsection
