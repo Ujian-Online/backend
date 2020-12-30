@@ -24,6 +24,9 @@ class SertifikasiDataTable extends DataTable
             ->editColumn('original_price_baru', function($query) {
                 return number_format($query->original_price_baru, 0, ',', '.');
             })
+            ->editColumn('original_price_perpanjang', function($query) {
+                return number_format($query->original_price_perpanjang, 0, ',', '.');
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
@@ -91,10 +94,10 @@ class SertifikasiDataTable extends DataTable
         return [
             Column::make('nomor_skema'),
             Column::make('title'),
-            Column::make('jenis_sertifikasi')
-                ->title('Jenis'),
             Column::make('original_price_baru')
                 ->title('Harga Baru'),
+            Column::make('original_price_perpanjang')
+                ->title('Harga Perpanjang'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),

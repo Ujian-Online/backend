@@ -42,33 +42,6 @@
         </div>
 
         <div class="form-group col-md-6">
-            <label for="jenis_sertifikasi">Jenis Sertifikasi</label>
-            <select class="form-control" name="jenis_sertifikasi" id="jenis_sertifikasi" @if(isset
-            ($isShow)) readonly @endif>
-
-                @foreach(config('options.sertifikasis_jenis_sertifikasi') as $jenis_sertifikasi)
-                    <option
-                        value="{{ $jenis_sertifikasi }}"
-
-                        @if(old('jenis_sertifikasi') == $jenis_sertifikasi)
-                            {{ __('selected') }}
-                        @elseif(isset($query->jenis_sertifikasi) and !empty($query->jenis_sertifikasi) and
-                         $query->jenis_sertifikasi == $jenis_sertifikasi)
-                            {{ __('selected') }}
-                        @endif
-                    >
-                        {{ ucwords($jenis_sertifikasi) }}
-                    </option>
-                @endforeach
-
-            </select>
-
-            @error('jenis_sertifikasi')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group col-md-6">
             <label for="is_active">Is Active</label>
             <select class="form-control" name="is_active" id="is_active" @if(isset($isShow)) readonly @endif>
 

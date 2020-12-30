@@ -17,7 +17,6 @@ class Sertifikasi extends Model
         'title',
         'original_price_baru',
         'original_price_perpanjang',
-        'jenis_sertifikasi',
         'is_active',
     ];
 

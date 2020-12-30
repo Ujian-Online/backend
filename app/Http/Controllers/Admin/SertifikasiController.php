@@ -61,7 +61,6 @@ class SertifikasiController extends Controller
             'title'                     => 'required',
             'original_price_baru'       => 'required',
             'original_price_perpanjang' => 'required',
-            'jenis_sertifikasi'         => 'required',
             'is_active'                 => 'required|boolean',
         ]);
 
@@ -71,7 +70,6 @@ class SertifikasiController extends Controller
             'title',
             'original_price_baru',
             'original_price_perpanjang',
-            'jenis_sertifikasi',
             'is_active',
         ]);
 
@@ -144,7 +142,6 @@ class SertifikasiController extends Controller
             'title'                     => 'required',
             'original_price_baru'       => 'required',
             'original_price_perpanjang' => 'required',
-            'jenis_sertifikasi'         => 'required',
             'is_active'                 => 'required|boolean',
         ]);
 
@@ -154,7 +151,6 @@ class SertifikasiController extends Controller
             'title',
             'original_price_baru',
             'original_price_perpanjang',
-            'jenis_sertifikasi',
             'is_active',
         ]);
 
