@@ -62,7 +62,6 @@ class UserController extends Controller
             'password'  => 'required|min:6',
             'type'      => 'required|in:' . implode(',', config('options.user_type')),
             'status'    => 'required|in:' . implode(',', config('options.user_status')),
-            'is_active' => 'required|boolean',
         ]);
 
         // get form data
@@ -71,7 +70,6 @@ class UserController extends Controller
             'password',
             'type',
             'status',
-            'is_active'
         ]);
 
         // Hash Password
@@ -159,7 +157,6 @@ class UserController extends Controller
             'newpassword'   => 'nullable|min:6',
             'type'          => 'required|in:' . implode(',', config('options.user_type')),
             'status'        => 'required|in:' . implode(',', config('options.user_status')),
-            'is_active'     => 'required|boolean',
         ]);
 
         // get form data
@@ -168,7 +165,6 @@ class UserController extends Controller
             'newpassword',
             'type',
             'status',
-            'is_active'
         ]);
 
         // find by id and update
@@ -176,7 +172,6 @@ class UserController extends Controller
         $query->email       = $dataInput['email'];
         $query->type        = $dataInput['type'];
         $query->status      = $dataInput['status'];
-        $query->is_active   = $dataInput['is_active'];
 
         // update password if new password field not empty
         if (isset($dataInput['newpassword']) and !empty($dataInput['newpassword'])) {
