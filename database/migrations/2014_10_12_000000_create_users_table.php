@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->string('type'); // config('options.user_type')
             $table->string('status'); // config('options.user_status')
             $table->string('media_url')->nullable();
-            $table->boolean('is_active');
             $table->string('media_url_sign_user')->nullable(); // url
             // gambar/canvas untuk ttd assesi atau admin approve
             $table->rememberToken();

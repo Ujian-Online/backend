@@ -20,7 +20,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password', 'type', 'status', 'media_url', 'is_active', 'media_url_sign_user'
+        'email',
+        'password',
+        'type',
+        'status',
+        'media_url', // profile picture
+        'media_url_sign_user', // signature
     ];
 
     /**
