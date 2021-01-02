@@ -147,6 +147,12 @@ return [
                 'route'     => 'admin.sertifikasi.tuk.index',
                 'active'    => 'admin.sertifikasi.tuk.*',
             ],
+            [
+                'title'     => 'Unit Kompetensi Element',
+                'icon'      => 'fas fa-list-ul',
+                'route'     => 'admin.sertifikasi.ukelement.index',
+                'active'    => 'admin.sertifikasi.ukelement.*',
+            ],
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
