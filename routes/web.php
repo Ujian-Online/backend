@@ -38,4 +38,5 @@ Route::middleware(['auth', 'can:isAdmin'])
 
         Route::resource('asesi/customdata', 'Admin\UserAsesiCustomDataController', ['as' => 'asesi']);
         Route::resource('asesi/apl01', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
+        Route::resource('asesi/apl02', 'Admin\AsesiUnitKompetensiDokumenController', ['as' => 'asesi']);
     });
