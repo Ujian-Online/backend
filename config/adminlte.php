@@ -159,13 +159,18 @@ return [
                 'route'     => 'admin.sertifikasi.ukelement.index',
                 'active'    => 'admin.sertifikasi.ukelement.*',
             ],
-
             'Asesi',
             [
                 'title'     => 'Custom Data',
                 'icon'      => 'fas fa-list-ol',
                 'route'     => 'admin.asesi.customdata.index',
                 'active'    => 'admin.asesi.customdata.*',
+            ],
+            [
+                'title'     => 'APL-01',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.apl01.index',
+                'active'    => 'admin.asesi.apl01.*',
             ],
             'Ujian',
             [
