@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UserAsesiCustomData extends Model
 {
@@ -28,4 +29,14 @@ class UserAsesiCustomData extends Model
     protected $casts = [
         'is_verified' => 'boolean'
     ];
+
+    /**
+     * Relation to Table User Asesi
+     *
+     * @return HasOne
+     */
+    public function Asesi()
+    {
+        return $this->hasOne('App\UserAsesi', 'id', 'asesi_id');
+    }
 }
