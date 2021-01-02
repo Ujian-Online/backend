@@ -15,6 +15,7 @@ class UserAsesi extends Model
         'user_id',
         'name',
         'address',
+        'phone_number',
         'gender',
         'birth_place',
         'birth_date',
