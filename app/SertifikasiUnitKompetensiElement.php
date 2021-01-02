@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class SertifikasiUnitKompetensiElement extends Model
 {
@@ -16,4 +17,14 @@ class SertifikasiUnitKompetensiElement extends Model
         'desc',
         'upload_instruction',
     ];
+
+    /**
+     * Relation to Table Sertifikasi Unit Kompentensi
+     *
+     * @return HasOne
+     */
+    public function UnitKompetensi()
+    {
+        return $this->hasOne('App\SertifikasiUnitKompentensi', 'id', 'unit_kompetensi_id');
+    }
 }
