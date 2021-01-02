@@ -35,4 +35,6 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController', ['as' => 'sertifikasi']);
         Route::resource('sertifikasi/ukelement', 'Admin\SertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);
         Route::resource('sertifikasi', 'Admin\SertifikasiController');
+
+        Route::resource('asesi/customdata', 'Admin\UserAsesiCustomDataController', ['as' => 'asesi']);
     });
