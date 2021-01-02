@@ -33,6 +33,6 @@ Route::middleware(['auth', 'can:isAdmin'])
 
         Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi']);
         Route::resource('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController', ['as' => 'sertifikasi']);
-        Route::resource('sertifikasi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);
+        Route::resource('sertifikasi/ukelement', 'Admin\SertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);
         Route::resource('sertifikasi', 'Admin\SertifikasiController');
     });
