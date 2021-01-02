@@ -24,9 +24,9 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_show' => route('admin.sertifikasi.ukelement.show', $query->id),
-                    'url_edit' => route('admin.sertifikasi.ukelement.edit', $query->id),
-                    'url_destroy' => route('admin.sertifikasi.ukelement.destroy', $query->id),
+                    'url_show' => route('admin.asesi.ukelement.show', $query->id),
+                    'url_edit' => route('admin.asesi.ukelement.edit', $query->id),
+                    'url_destroy' => route('admin.asesi.ukelement.destroy', $query->id),
                 ]);
             });
     }
@@ -116,7 +116,7 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.sertifikasi.ukelement.create');
+        $url = route('admin.asesi.ukelement.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {
