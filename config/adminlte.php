@@ -159,6 +159,14 @@ return [
                 'route'     => 'admin.sertifikasi.ukelement.index',
                 'active'    => 'admin.sertifikasi.ukelement.*',
             ],
+
+            'Asesi',
+            [
+                'title'     => 'Custom Data',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.customdata.index',
+                'active'    => 'admin.asesi.customdata.*',
+            ],
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
