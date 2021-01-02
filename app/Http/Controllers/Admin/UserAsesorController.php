@@ -40,7 +40,8 @@ class UserAsesorController extends Controller
     public function create()
     {
         // get user lists
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::where('type', 'assesor')
+            ->orderBy('created_at', 'desc')->get();
 
         // return view template create
         return view('admin.assesor.form', [
@@ -110,7 +111,8 @@ class UserAsesorController extends Controller
         // Find User by ID
         $query = UserAsesor::findOrFail($id);
         // get user lists
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::where('type', 'assesor')
+            ->orderBy('created_at', 'desc')->get();
 
         // return data to view
         return view('admin.assesor.form', [
@@ -134,7 +136,8 @@ class UserAsesorController extends Controller
         // Find User by ID
         $query = UserAsesor::findOrFail($id);
         // get user lists
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::where('type', 'assesor')
+            ->orderBy('created_at', 'desc')->get();
 
         // return data to view
         return view('admin.assesor.form', [
