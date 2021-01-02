@@ -172,6 +172,12 @@ return [
                 'route'     => 'admin.asesi.apl01.index',
                 'active'    => 'admin.asesi.apl01.*',
             ],
+            [
+                'title'     => 'APL-02',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.apl02.index',
+                'active'    => 'admin.asesi.apl02.*',
+            ],
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
