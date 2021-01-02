@@ -8,8 +8,8 @@
  */
 
 return [
-    'success'           => 'Successfully added data :name to the system.!',
-    'success_update'    => 'Successfully changed data :name on the system.!',
+    'success'           => 'Successfully added data: :name to the system.!',
+    'success_update'    => 'Successfully changed data: :name on the system.!',
     'error'             => 'Failed to add data :name to the system.!',
     'error_assesor'     => 'User ID: :id has been chosen by another Assessor.!',
     'save'              => 'Save',

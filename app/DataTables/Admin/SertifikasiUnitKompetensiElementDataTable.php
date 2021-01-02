@@ -2,14 +2,14 @@
 
 namespace App\DataTables\Admin;
 
-use App\AsesiSertifikasiUnitKompetensiElement;
+use App\SertifikasiUnitKompetensiElement;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
+class SertifikasiUnitKompetensiElementDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,12 +21,15 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('title', function($query) {
+                return $query->unitkompetensi ? $query->unitkompetensi->title : '';
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_show' => route('admin.asesi.ukelement.show', $query->id),
-                    'url_edit' => route('admin.asesi.ukelement.edit', $query->id),
-                    'url_destroy' => route('admin.asesi.ukelement.destroy', $query->id),
+                    'url_show' => route('admin.sertifikasi.ukelement.show', $query->id),
+                    'url_edit' => route('admin.sertifikasi.ukelement.edit', $query->id),
+                    'url_destroy' => route('admin.sertifikasi.ukelement.destroy', $query->id),
                 ]);
             });
     }
@@ -34,12 +37,12 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\AsesiSertifikasiUnitKompetensiElement $model
+     * @param \App\SertifikasiUnitKompetensiElement $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(AsesiSertifikasiUnitKompetensiElement $model)
+    public function query(SertifikasiUnitKompetensiElement $model)
     {
-        return $model->newQuery();
+        return $model->with('unitkompetensi');
     }
 
     /**
@@ -66,11 +69,11 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
                             ]
                         ],
                     ])
-                    ->setTableId('asesisertifikasiukelement-table')
+                    ->setTableId('sertifikasiunitkompetensielement-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(2, 'desc')
+                    ->orderBy(3, 'desc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
@@ -86,8 +89,11 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('upload_instruction'),
+            Column::computed('title')
+                ->title('Title')
+                ->data('title'),
             Column::make('desc'),
+            Column::make('upload_instruction'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
@@ -107,7 +113,7 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'AsesiSertifikasiUKElement_' . date('YmdHis');
+        return 'SertifikasiUnitKompetensiElement_' . date('YmdHis');
     }
 
     /**
@@ -116,11 +122,11 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.asesi.ukelement.create');
+        $url = route('admin.sertifikasi.ukelement.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {
-                window.location = "'. $url .'";
-            }';
+            window.location = "'. $url .'";
+        }';
     }
 }

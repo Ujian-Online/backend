@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class SertifikasiUnitKompentensi extends Model
 {
@@ -18,4 +19,14 @@ class SertifikasiUnitKompentensi extends Model
         'title',
         'sub_title',
     ];
+
+    /**
+     * Relation to Table Sertifikasi
+     *
+     * @return HasOne
+     */
+    public function Sertifikasi()
+    {
+        return $this->hasOne('App\Sertifikasi');
+    }
 }

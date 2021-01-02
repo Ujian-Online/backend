@@ -32,17 +32,22 @@ class AsesiSertifikasiUnitKompetensiElement extends Model
     ];
 
     /**
-     * Relation to Table Asesi
+     * Relation to Table User Asesi
      *
      * @return HasOne
      */
-    public function asesi()
+    public function Asesi()
     {
-        return $this->hasOne('App\Asesi');
+        return $this->hasOne('App\UserAsesi', 'id', 'asesi_id');
     }
 
-    public function unitkompentensi()
+    /**
+     * Relation to Table Sertifikasi Unit Kompentensi
+     *
+     * @return HasOne
+     */
+    public function UnitKompentensi()
     {
-
+        return $this->hasOne('App\SertifikasiUnitKompentensi', 'id', 'unit_kompetensi_id');
     }
 }

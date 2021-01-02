@@ -148,10 +148,41 @@ return [
                 'active'    => 'admin.sertifikasi.tuk.*',
             ],
             [
+                'title'     => 'Unit Kompetensi',
+                'icon'      => 'fas fa-list-ul',
+                'route'     => 'admin.sertifikasi.uk.index',
+                'active'    => 'admin.sertifikasi.uk.*',
+            ],
+            [
                 'title'     => 'Unit Kompetensi Element',
                 'icon'      => 'fas fa-list-ul',
                 'route'     => 'admin.sertifikasi.ukelement.index',
                 'active'    => 'admin.sertifikasi.ukelement.*',
+            ],
+            'Asesi',
+            [
+                'title'     => 'Custom Data',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.customdata.index',
+                'active'    => 'admin.asesi.customdata.*',
+            ],
+            [
+                'title'     => 'APL-01',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.apl01.index',
+                'active'    => 'admin.asesi.apl01.*',
+            ],
+            [
+                'title'     => 'APL-02',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.apl02.index',
+                'active'    => 'admin.asesi.apl02.*',
+            ],
+            [
+                'title'     => 'Unit Kompetensi Element',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.ukelement.index',
+                'active'    => 'admin.asesi.ukelement.*',
             ],
             'Ujian',
             [
