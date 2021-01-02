@@ -47,7 +47,7 @@ class AsesiUnitKompetensiDokumen extends Model
      *
      * @return HasOne
      */
-    public function UnitKompetensi()
+    public function UnitKompentensi()
     {
         return $this->hasOne('App\SertifikasiUnitKompentensi', 'id', 'unit_kompetensi_id');
     }
