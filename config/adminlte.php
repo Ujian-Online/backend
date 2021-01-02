@@ -148,6 +148,12 @@ return [
                 'active'    => 'admin.sertifikasi.tuk.*',
             ],
             [
+                'title'     => 'Unit Kompetensi',
+                'icon'      => 'fas fa-list-ul',
+                'route'     => 'admin.sertifikasi.uk.index',
+                'active'    => 'admin.sertifikasi.uk.*',
+            ],
+            [
                 'title'     => 'Unit Kompetensi Element',
                 'icon'      => 'fas fa-list-ul',
                 'route'     => 'admin.sertifikasi.ukelement.index',
