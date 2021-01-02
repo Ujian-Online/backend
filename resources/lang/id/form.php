@@ -19,5 +19,6 @@ return [
     "note_admin" => "Catatan Admin",
     "verification_note" => "Catatan Verifikasi",
     "media_url_sign_user" => "Tanda Tangan User",
-    "media_url_sign_admin" => "Tanda Tangan Admin"
+    "media_url_sign_admin" => "Tanda Tangan Admin",
+    "phone_number" => "No. Telphone"
 ];

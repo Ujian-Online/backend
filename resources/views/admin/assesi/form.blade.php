@@ -73,6 +73,16 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
+        <div class="form-group col-md-12">
+            <label for="phone_number">{{ trans('form.phone_number') }}</label>
+            <input type="number" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" id="phone_number" placeholder="{{ trans('form.phone_number') }}" value="{{ $query->phone_number ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('phone_number')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
         <div class="form-group col-md-4">
             <label for="gender">{{ trans('form.gender') }}</label>
             <select class="form-control" name="gender" id="gender" @if(isset($isShow)) readonly @endif>
