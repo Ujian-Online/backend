@@ -37,4 +37,5 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('sertifikasi', 'Admin\SertifikasiController');
 
         Route::resource('asesi/customdata', 'Admin\UserAsesiCustomDataController', ['as' => 'asesi']);
+        Route::resource('asesi/apl01', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
     });
