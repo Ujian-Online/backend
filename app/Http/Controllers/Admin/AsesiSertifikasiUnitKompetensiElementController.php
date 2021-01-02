@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\AsesiSertifikasiUnitKompetensiElement;
 use App\DataTables\Admin\AsesiSertifikasiUnitKompetensiElementDataTable;
 use App\Http\Controllers\Controller;
-use App\Sertifikasi;
+use App\SertifikasiUnitKompentensi;
 use App\UserAsesi;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -29,7 +29,7 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Sertifikasi UK Element Lists'
+            'title' => 'Asesi Sertifikasi Unit Kompentensi Element Lists'
         ]);
     }
 
@@ -42,16 +42,16 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
     {
         // get asesi lists
         $asesis = UserAsesi::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
+        // get unit kompetensi lists
+        $unitkompentensis = SertifikasiUnitKompentensi::all();
 
         // return view template create
-        return view('admin.sertifikasi-uk.element-form', [
-            'title'         => 'Tambah Sertifikasi Unit Kompetensi Element Baru',
-            'action'        => route('admin.sertifikasi.ukelement.store'),
-            'isCreated'     => true,
-            'asesis'        => $asesis,
-            'sertifikasis'  => $sertifikasis,
+        return view('admin.assesi.element-form', [
+            'title'             => 'Tambah Asesi Sertifikasi Unit Kompetensi Element Baru',
+            'action'            => route('admin.asesi.ukelement.store'),
+            'isCreated'         => true,
+            'asesis'            => $asesis,
+            'unitkompentensis'  => $unitkompentensis,
         ]);
     }
 
@@ -70,9 +70,7 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
             'unit_kompetensi_id'    => 'required',
             'desc'                  => 'required',
             'upload_instruction'    => 'required',
-            'media_url'             => 'required',
             'is_verified'           => 'required|boolean',
-            'verification_note'     => 'required',
         ]);
 
         // get form data
@@ -87,13 +85,13 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
         ]);
 
         // save to database
-        AsesiSertifikasiUnitKompetensiElement::create($dataInput);
+        $query = AsesiSertifikasiUnitKompetensiElement::create($dataInput);
 
         // redirect to index table
         return redirect()
-            ->route('admin.sertifikasi.ukelement.index')
+            ->route('admin.asesi.ukelement.index')
             ->with('success', trans('action.success', [
-                'name' => $dataInput['upload_instruction']
+                'name' => $query->id
             ]));
     }
 
@@ -107,14 +105,20 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = Sertifikasi::findOrFail($id);
+        $query = AsesiSertifikasiUnitKompetensiElement::findOrFail($id);
+        // get asesi lists
+        $asesis = UserAsesi::all();
+        // get unit kompetensi lists
+        $unitkompentensis = SertifikasiUnitKompentensi::all();
 
         // return data to view
-        return view('admin.sertifikasi.sertifikasi-form', [
-            'title'     => 'Tampilkan Detail: ' . $query->title,
-            'action'    => '#',
-            'isShow'    => route('admin.sertifikasi.edit', $id),
-            'query'     => $query,
+        return view('admin.assesi.element-form', [
+            'title'             => 'Tampilkan Detail: ' . $query->id,
+            'action'            => '#',
+            'isShow'            => route('admin.asesi.ukelement.edit', $id),
+            'query'             => $query,
+            'asesis'            => $asesis,
+            'unitkompentensis'  => $unitkompentensis,
         ]);
     }
 
@@ -128,14 +132,20 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = Sertifikasi::findOrFail($id);
+        $query = AsesiSertifikasiUnitKompetensiElement::findOrFail($id);
+        // get asesi lists
+        $asesis = UserAsesi::all();
+        // get unit kompetensi lists
+        $unitkompentensis = SertifikasiUnitKompentensi::all();
 
         // return data to view
-        return view('admin.sertifikasi.sertifikasi-form', [
-            'title'     => 'Ubah Data: ' . $query->title,
-            'action'    => route('admin.sertifikasi.update', $id),
-            'isEdit'    => true,
-            'query'     => $query,
+        return view('admin.assesi.element-form', [
+            'title'             => 'Ubah Data: ' . $query->id,
+            'action'            => route('admin.asesi.ukelement.update', $id),
+            'isEdit'            => true,
+            'query'             => $query,
+            'asesis'            => $asesis,
+            'unitkompentensis'  => $unitkompentensis,
         ]);
     }
 
@@ -151,32 +161,34 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
     {
         // validate input
         $request->validate([
-            'nomor_skema'               => 'required',
-            'title'                     => 'required',
-            'original_price_baru'       => 'required',
-            'original_price_perpanjang' => 'required',
-            'is_active'                 => 'required|boolean',
+            'asesi_id'              => 'required',
+            'unit_kompetensi_id'    => 'required',
+            'desc'                  => 'required',
+            'upload_instruction'    => 'required',
+            'is_verified'           => 'required|boolean',
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'nomor_skema',
-            'title',
-            'original_price_baru',
-            'original_price_perpanjang',
-            'is_active',
+            'asesi_id',
+            'unit_kompetensi_id',
+            'desc',
+            'upload_instruction',
+            'media_url',
+            'is_verified',
+            'verification_note',
         ]);
 
         // find by id and update
-        $query = Sertifikasi::findOrFail($id);
+        $query = AsesiSertifikasiUnitKompetensiElement::findOrFail($id);
         // update data
         $query->update($dataInput);
 
         // redirect
         return redirect()
-            ->route('admin.sertifikasi.index')
+            ->route('admin.asesi.ukelement.index')
             ->with('success', trans('action.success_update', [
-                'name' => $dataInput['title']
+                'name' => $query->id
             ]));
     }
 
@@ -190,7 +202,7 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $query = Sertifikasi::findOrFail($id);
+        $query = AsesiSertifikasiUnitKompetensiElement::findOrFail($id);
         $query->delete();
 
         // return response json if success
