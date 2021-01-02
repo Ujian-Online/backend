@@ -13,12 +13,11 @@
                 @foreach($asesis as $asesi)
                     <option
                         value="{{ $asesi->id }}"
-                    @if(!empty(request()->query('asesi_id')) and request()
-                    ->query('asesi_id') == $asesi->id)
-                        {{  __('selected') }}
-                        @elseif(isset($query->asesi_id) and $query->asesi_id ==
-                        $asesi->id)
-                        {{  __('selected') }}
+
+                        @if(!empty(request()->query('asesi_id')) and request()->query('asesi_id') == $asesi->id)
+                            {{  __('selected') }}
+                        @elseif(isset($query->asesi_id) and $query->asesi_id == $asesi->id)
+                            {{  __('selected') }}
                         @endif
                     >
                         [ID: {{ $asesi->id }}] - {{ $asesi->name }}
@@ -26,6 +25,10 @@
                 @endforeach
 
             </select>
+
+            @error('asesi_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
 
 
@@ -38,11 +41,10 @@
                     <option
                         value="{{ $unitkompentensi->id }}"
 
-                    @if(!empty(request()->query('unit_kompetensi_id')) and request()->query('unit_kompetensi_id') == $unitkompentensi->id)
-                        {{  __('selected') }}
-                        @elseif(isset($query->unit_kompetensi_id) and $query->unit_kompetensi_id ==
-                        $unitkompentensi->id)
-                        {{  __('selected') }}
+                        @if(!empty(request()->query('unit_kompetensi_id')) and request()->query('unit_kompetensi_id') == $unitkompentensi->id)
+                            {{  __('selected') }}
+                        @elseif(isset($query->unit_kompetensi_id) and $query->unit_kompetensi_id == $unitkompentensi->id)
+                            {{  __('selected') }}
                         @endif
                     >
                         [ID: {{ $unitkompentensi->id }}] - {{ $unitkompentensi->title }} (Kode: {{ $unitkompentensi->kode_unit_kompetensi }})
@@ -50,6 +52,10 @@
                 @endforeach
 
             </select>
+
+            @error('unit_kompetensi_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="form-group col-md-12">
@@ -72,6 +78,10 @@
                 @endforeach
 
             </select>
+
+            @error('sertifikasi_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="form-group col-md-6">
@@ -79,7 +89,7 @@
             <input type="text" class="form-control @error('kode_unit_kompetensi') is-invalid @enderror" name="kode_unit_kompetensi" id="kode_unit_kompetensi" placeholder="Kode Unit Kompentensi" value="{{ old('kode_unit_kompetensi') ?? $query->kode_unit_kompetensi ?? '' }}" @if(isset($isShow)) readonly @endif>
 
             @error('kode_unit_kompetensi')
-            <div class="alert alert-danger">{{ $message }}</div>
+                <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
 
