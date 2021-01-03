@@ -43,4 +43,5 @@ Route::middleware(['auth', 'can:isAdmin'])
 
         Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
         Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian']);
+        Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian']);
     });
