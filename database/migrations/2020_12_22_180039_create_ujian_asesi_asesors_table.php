@@ -21,9 +21,9 @@ class CreateUjianAsesiAsesorsTable extends Migration
             $table->bigInteger('sertifikasi_id');
             $table->bigInteger('order_id');
             $table->string('status'); // @see config('options.ujian_asesi_asesors_status')
-            $table->boolean('is_kompeten'); // @see config('options
+            $table->boolean('is_kompeten')->nullable(); // @see config('options
             //.ujian_asesi_is_kompeten')
-            $table->integer('final_score_percentage');
+            $table->integer('final_score_percentage')->nullable();
             $table->timestamps();
         });
     }

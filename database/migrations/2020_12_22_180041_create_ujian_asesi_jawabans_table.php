@@ -16,6 +16,7 @@ class CreateUjianAsesiJawabansTable extends Migration
         Schema::create('ujian_asesi_jawabans', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('soal_id');
+            $table->bigInteger('asesi_id');
             $table->text('question');
             $table->string('question_type'); // @see config('options.ujian_asesi_jawabans_question_type')
             $table->text('answer_essay')->nullable();

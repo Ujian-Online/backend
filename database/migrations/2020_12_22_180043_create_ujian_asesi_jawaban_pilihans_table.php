@@ -15,6 +15,8 @@ class CreateUjianAsesiJawabanPilihansTable extends Migration
     {
         Schema::create('ujian_asesi_jawaban_pilihans', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('soal_id');
+            $table->bigInteger('asesi_id');
             $table->string('option');
             $table->string('label'); // @see config('options.ujian_asesi_jawaban_pilihans_label')
             $table->timestamps();
