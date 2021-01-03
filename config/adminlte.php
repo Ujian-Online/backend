@@ -188,21 +188,8 @@ return [
             [
                 'title'     => 'Jadwal Ujian',
                 'icon'      => 'fas fa-tachometer-alt fa-fw',
-                'active'    => 'home',
-                'sub_menu'  => [
-                    [
-                        'title'     => 'Buat Jadwal',
-                        'icon'      => 'fas fa-tachometer-alt fa-fw',
-                        'route'     => 'home',
-                        'active'    => 'home',
-                    ],
-                    [
-                        'title'     => 'Buat Jadwal',
-                        'icon'      => 'fas fa-tachometer-alt fa-fw',
-                        'route'     => 'home',
-                        'active'    => 'home',
-                    ]
-                ]
+                'route'     => 'admin.ujian.jadwal.index',
+                'active'    => 'admin.ujian.jadwal.*',
             ]
         ],
         'tuk' => [],
