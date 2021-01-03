@@ -187,10 +187,16 @@ return [
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
-                'icon'      => 'fas fa-tachometer-alt fa-fw',
+                'icon'      => 'fas fa-book',
                 'route'     => 'admin.ujian.jadwal.index',
                 'active'    => 'admin.ujian.jadwal.*',
-            ]
+            ],
+            [
+                'title'     => 'Jadwal Ujian Asesi',
+                'icon'      => 'fas fa-book-reader',
+                'route'     => 'admin.ujian.asesi.index',
+                'active'    => 'admin.ujian.asesi.*',
+            ],
         ],
         'tuk' => [],
         'assesor' => [],
