@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UjianAsesiJawaban extends Model
 {
@@ -13,6 +14,7 @@ class UjianAsesiJawaban extends Model
      */
     protected $fillable = [
         'soal_id',
+        'asesi_id',
         'question',
         'question_type',
         'answer_essay',
@@ -23,4 +25,24 @@ class UjianAsesiJawaban extends Model
         'max_score',
         'final_score',
     ];
+
+    /**
+     * Relation to Table Soal
+     *
+     * @return HasOne
+     */
+    public function Soal()
+    {
+        return $this->hasOne('App\Soal', 'id', 'soal_id');
+    }
+
+    /**
+     * Relation to Table User Asesi
+     *
+     * @return HasOne
+     */
+    public function Asesi()
+    {
+        return $this->hasOne('App\UserAsesi', 'id', 'asesi_id');
+    }
 }
