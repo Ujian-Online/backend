@@ -82,7 +82,7 @@ return [
         'penilaian',
         'selesai'
     ],
-    'ujian_asesi_is_kompeten' > [
+    'ujian_asesi_is_kompeten' => [
         0 => 'Tidak Kompeten',
         1 => 'Kompeten',
     ],
