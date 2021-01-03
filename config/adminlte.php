@@ -197,6 +197,12 @@ return [
                 'route'     => 'admin.ujian.asesi.index',
                 'active'    => 'admin.ujian.asesi.*',
             ],
+            [
+                'title'     => 'Ujian Asesi Jawaban',
+                'icon'      => 'fas fa-book-open',
+                'route'     => 'admin.ujian.jawaban.index',
+                'active'    => 'admin.ujian.jawaban.*',
+            ],
         ],
         'tuk' => [],
         'assesor' => [],
