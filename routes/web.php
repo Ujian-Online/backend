@@ -42,4 +42,5 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('asesi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'asesi']);
 
         Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
+        Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian']);
     });
