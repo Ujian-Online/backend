@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\AsesiSertifikasiUnitKompetensiElement;
-use App\DataTables\Admin\AsesiSertifikasiUnitKompetensiElementDataTable;
+use App\AsesiUnitKompetensiDokumen;
+use App\DataTables\Admin\AsesiUnitKompetensiDokumenDataTable;
 use App\Http\Controllers\Controller;
+use App\Sertifikasi;
 use App\SertifikasiUnitKompentensi;
 use App\UserAsesi;
 use Exception;
@@ -16,20 +17,20 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class AsesiSertifikasiUnitKompetensiElementController extends Controller
+class AsesiUnitKompetensiDokumenController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param AsesiSertifikasiUnitKompetensiElementDataTable $dataTables
+     * @param AsesiUnitKompetensiDokumenDataTable $dataTables
      *
      * @return mixed
      */
-    public function index(AsesiSertifikasiUnitKompetensiElementDataTable $dataTables)
+    public function index(AsesiUnitKompetensiDokumenDataTable $dataTables)
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi Sertifikasi Unit Kompentensi Element Lists'
+            'title' => 'Asesi Custom Data Lists'
         ]);
     }
 
@@ -44,14 +45,17 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
         $asesis = UserAsesi::all();
         // get unit kompetensi lists
         $unitkompentensis = SertifikasiUnitKompentensi::all();
+        // get sertifikasi lists
+        $sertifikasis = Sertifikasi::all();
 
         // return view template create
-        return view('admin.assesi.element-form', [
-            'title'             => 'Tambah Asesi Sertifikasi Unit Kompetensi Element Baru',
-            'action'            => route('admin.asesi.ukelement.store'),
+        return view('admin.assesi.apl02-form', [
+            'title'             => 'Tambah Asesi APL02 Baru',
+            'action'            => route('admin.asesi.apl02.store'),
             'isCreated'         => true,
             'asesis'            => $asesis,
             'unitkompentensis'  => $unitkompentensis,
+            'sertifikasis'      => $sertifikasis,
         ]);
     }
 
@@ -68,30 +72,32 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
         $request->validate([
             'asesi_id'              => 'required',
             'unit_kompetensi_id'    => 'required',
-            'desc'                  => 'required',
-            'upload_instruction'    => 'required',
-            'is_verified'           => 'required|boolean',
+            'order'                 => 'required',
+            'sertifikasi_id'        => 'required',
+            'kode_unit_kompetensi'  => 'required',
+            'title'                 => 'required',
+            'sub_title'             => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'asesi_id',
             'unit_kompetensi_id',
-            'desc',
-            'upload_instruction',
-            'media_url',
-            'is_verified',
-            'verification_note',
+            'order',
+            'sertifikasi_id',
+            'kode_unit_kompetensi',
+            'title',
+            'sub_title',
         ]);
 
         // save to database
-        $query = AsesiSertifikasiUnitKompetensiElement::create($dataInput);
+        $query = AsesiUnitKompetensiDokumen::create($dataInput);
 
         // redirect to index table
         return redirect()
-            ->route('admin.asesi.ukelement.index')
+            ->route('admin.asesi.apl02.index')
             ->with('success', trans('action.success', [
-                'name' => $query->id
+                'name' => $query->title
             ]));
     }
 
@@ -105,20 +111,23 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = AsesiSertifikasiUnitKompetensiElement::findOrFail($id);
+        $query = AsesiUnitKompetensiDokumen::findOrFail($id);
         // get asesi lists
         $asesis = UserAsesi::all();
         // get unit kompetensi lists
         $unitkompentensis = SertifikasiUnitKompentensi::all();
+        // get sertifikasi lists
+        $sertifikasis = Sertifikasi::all();
 
         // return data to view
-        return view('admin.assesi.element-form', [
-            'title'             => 'Tampilkan Detail: ' . $query->id,
+        return view('admin.assesi.apl02-form', [
+            'title'             => 'Tampilkan Detail: ' . $query->title,
             'action'            => '#',
-            'isShow'            => route('admin.asesi.ukelement.edit', $id),
+            'isShow'            => route('admin.asesi.apl02.edit', $id),
             'query'             => $query,
             'asesis'            => $asesis,
             'unitkompentensis'  => $unitkompentensis,
+            'sertifikasis'      => $sertifikasis,
         ]);
     }
 
@@ -132,20 +141,23 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = AsesiSertifikasiUnitKompetensiElement::findOrFail($id);
+        $query = AsesiUnitKompetensiDokumen::findOrFail($id);
         // get asesi lists
         $asesis = UserAsesi::all();
         // get unit kompetensi lists
         $unitkompentensis = SertifikasiUnitKompentensi::all();
+        // get sertifikasi lists
+        $sertifikasis = Sertifikasi::all();
 
         // return data to view
-        return view('admin.assesi.element-form', [
+        return view('admin.assesi.apl02-form', [
             'title'             => 'Ubah Data: ' . $query->id,
-            'action'            => route('admin.asesi.ukelement.update', $id),
+            'action'            => route('admin.asesi.apl02.update', $id),
             'isEdit'            => true,
             'query'             => $query,
             'asesis'            => $asesis,
             'unitkompentensis'  => $unitkompentensis,
+            'sertifikasis'      => $sertifikasis,
         ]);
     }
 
@@ -163,32 +175,34 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
         $request->validate([
             'asesi_id'              => 'required',
             'unit_kompetensi_id'    => 'required',
-            'desc'                  => 'required',
-            'upload_instruction'    => 'required',
-            'is_verified'           => 'required|boolean',
+            'order'                 => 'required',
+            'sertifikasi_id'        => 'required',
+            'kode_unit_kompetensi'  => 'required',
+            'title'                 => 'required',
+            'sub_title'             => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'asesi_id',
             'unit_kompetensi_id',
-            'desc',
-            'upload_instruction',
-            'media_url',
-            'is_verified',
-            'verification_note',
+            'order',
+            'sertifikasi_id',
+            'kode_unit_kompetensi',
+            'title',
+            'sub_title',
         ]);
 
         // find by id and update
-        $query = AsesiSertifikasiUnitKompetensiElement::findOrFail($id);
+        $query = AsesiUnitKompetensiDokumen::findOrFail($id);
         // update data
         $query->update($dataInput);
 
         // redirect
         return redirect()
-            ->route('admin.asesi.ukelement.index')
+            ->route('admin.asesi.apl02.index')
             ->with('success', trans('action.success_update', [
-                'name' => $query->id
+                'name' => $query->title
             ]));
     }
 
@@ -202,7 +216,7 @@ class AsesiSertifikasiUnitKompetensiElementController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $query = AsesiSertifikasiUnitKompetensiElement::findOrFail($id);
+        $query = AsesiUnitKompetensiDokumen::findOrFail($id);
         $query->delete();
 
         // return response json if success

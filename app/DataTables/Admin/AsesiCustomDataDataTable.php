@@ -2,14 +2,14 @@
 
 namespace App\DataTables\Admin;
 
-use App\AsesiSertifikasiUnitKompetensiElement;
+use App\AsesiCustomData;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
+class AsesiCustomDataDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -24,9 +24,9 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_show' => route('admin.asesi.ukelement.show', $query->id),
-                    'url_edit' => route('admin.asesi.ukelement.edit', $query->id),
-                    'url_destroy' => route('admin.asesi.ukelement.destroy', $query->id),
+                    'url_show' => route('admin.asesi.apl01.show', $query->id),
+                    'url_edit' => route('admin.asesi.apl01.edit', $query->id),
+                    'url_destroy' => route('admin.asesi.apl01.destroy', $query->id),
                 ]);
             });
     }
@@ -34,10 +34,10 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\AsesiSertifikasiUnitKompetensiElement $model
+     * @param \App\AsesiCustomData $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(AsesiSertifikasiUnitKompetensiElement $model)
+    public function query(AsesiCustomData $model)
     {
         return $model->newQuery();
     }
@@ -66,11 +66,11 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
                             ]
                         ],
                     ])
-                    ->setTableId('asesisertifikasiukelement-table')
+                    ->setTableId('asesicustomdata-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(2, 'desc')
+                    ->orderBy(1, 'desc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
@@ -86,8 +86,7 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('upload_instruction'),
-            Column::make('desc'),
+            Column::make('title'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
@@ -107,7 +106,7 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'AsesiSertifikasiUKElement_' . date('YmdHis');
+        return 'AsesiCustomData_' . date('YmdHis');
     }
 
     /**
@@ -116,11 +115,11 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.asesi.ukelement.create');
+        $url = route('admin.asesi.apl01.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {
-                window.location = "'. $url .'";
-            }';
+            window.location = "'. $url .'";
+        }';
     }
 }

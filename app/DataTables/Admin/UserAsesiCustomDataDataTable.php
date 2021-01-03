@@ -2,14 +2,14 @@
 
 namespace App\DataTables\Admin;
 
-use App\AsesiSertifikasiUnitKompetensiElement;
+use App\UserAsesiCustomData;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
+class UserAsesiCustomDataDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,12 +21,15 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('is_verified', function($query) {
+                return $query->is_verified ? 'YES' : 'NO';
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_show' => route('admin.asesi.ukelement.show', $query->id),
-                    'url_edit' => route('admin.asesi.ukelement.edit', $query->id),
-                    'url_destroy' => route('admin.asesi.ukelement.destroy', $query->id),
+                    'url_show' => route('admin.asesi.customdata.show', $query->id),
+                    'url_edit' => route('admin.asesi.customdata.edit', $query->id),
+                    'url_destroy' => route('admin.asesi.customdata.destroy', $query->id),
                 ]);
             });
     }
@@ -34,12 +37,12 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\AsesiSertifikasiUnitKompetensiElement $model
+     * @param \App\UserAsesiCustomData $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(AsesiSertifikasiUnitKompetensiElement $model)
+    public function query(UserAsesiCustomData $model)
     {
-        return $model->newQuery();
+        return $model->with('asesi');
     }
 
     /**
@@ -66,11 +69,11 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
                             ]
                         ],
                     ])
-                    ->setTableId('asesisertifikasiukelement-table')
+                    ->setTableId('userasesicustomdata-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(2, 'desc')
+                    ->orderBy(3, 'desc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
@@ -86,8 +89,12 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('upload_instruction'),
-            Column::make('desc'),
+            Column::computed('asesi')
+                ->title('Asesi')
+                ->data('asesi.name'),
+            Column::make('title'),
+            Column::make('is_verified')
+                ->title('Verified'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
@@ -107,7 +114,7 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'AsesiSertifikasiUKElement_' . date('YmdHis');
+        return 'UserAsesiCustomData_' . date('YmdHis');
     }
 
     /**
@@ -116,11 +123,11 @@ class AsesiSertifikasiUnitKompetensiElementDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.asesi.ukelement.create');
+        $url = route('admin.asesi.customdata.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {
-                window.location = "'. $url .'";
-            }';
+            window.location = "'. $url .'";
+        }';
     }
 }
