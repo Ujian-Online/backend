@@ -7,7 +7,7 @@
 
         <div class="form-group col-md-12">
             <label for="soal_id">Soal ID</label>
-            <select class="form-control @error('asesi_id') is-invalid @enderror" name="soal_id" id="soal_id">
+            <select class="form-control @error('soal_id') is-invalid @enderror" name="soal_id" id="soal_id">
 
                 @foreach($soals as $soals)
                     <option
@@ -39,10 +39,10 @@
                     <option
                         value="{{ $asesi->id }}"
 
-                    @if(!empty(request()->query('asesi_id')) and request()->query('asesi_id') == $asesi->id)
-                        {{  __('selected') }}
+                        @if(!empty(request()->query('asesi_id')) and request()->query('asesi_id') == $asesi->id)
+                            {{  __('selected') }}
                         @elseif(isset($query->asesi_id) and $query->asesi_id == $asesi->id)
-                        {{  __('selected') }}
+                            {{  __('selected') }}
                         @endif
                     >
                         [ID: {{ $asesi->id }}] - {{ $asesi->name }}
