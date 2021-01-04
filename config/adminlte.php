@@ -209,6 +209,13 @@ return [
                 'route'     => 'admin.ujian.jawabanpilihan.index',
                 'active'    => 'admin.ujian.jawabanpilihan.*',
             ],
+            'Soal',
+            [
+                'title'     => 'Pilihan Ganda',
+                'icon'      => 'fas fa-tasks',
+                'route'     => 'admin.soal.pilihanganda.index',
+                'active'    => 'admin.soal.pilihanganda.*',
+            ],
         ],
         'tuk' => [],
         'assesor' => [],
