@@ -40,4 +40,9 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('asesi/apl01', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
         Route::resource('asesi/apl02', 'Admin\AsesiUnitKompetensiDokumenController', ['as' => 'asesi']);
         Route::resource('asesi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'asesi']);
+
+        Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
+        Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian']);
+        Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian']);
+        Route::resource('ujian/jawabanpilihan', 'Admin\UjianAsesiJawabanPilihanController', ['as' => 'ujian']);
     });

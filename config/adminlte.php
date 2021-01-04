@@ -187,23 +187,28 @@ return [
             'Ujian',
             [
                 'title'     => 'Jadwal Ujian',
-                'icon'      => 'fas fa-tachometer-alt fa-fw',
-                'active'    => 'home',
-                'sub_menu'  => [
-                    [
-                        'title'     => 'Buat Jadwal',
-                        'icon'      => 'fas fa-tachometer-alt fa-fw',
-                        'route'     => 'home',
-                        'active'    => 'home',
-                    ],
-                    [
-                        'title'     => 'Buat Jadwal',
-                        'icon'      => 'fas fa-tachometer-alt fa-fw',
-                        'route'     => 'home',
-                        'active'    => 'home',
-                    ]
-                ]
-            ]
+                'icon'      => 'fas fa-book',
+                'route'     => 'admin.ujian.jadwal.index',
+                'active'    => 'admin.ujian.jadwal.*',
+            ],
+            [
+                'title'     => 'Jadwal Ujian Asesi',
+                'icon'      => 'fas fa-book-reader',
+                'route'     => 'admin.ujian.asesi.index',
+                'active'    => 'admin.ujian.asesi.*',
+            ],
+            [
+                'title'     => 'Ujian Asesi Jawaban',
+                'icon'      => 'fas fa-book-open',
+                'route'     => 'admin.ujian.jawaban.index',
+                'active'    => 'admin.ujian.jawaban.*',
+            ],
+            [
+                'title'     => 'Ujian Asesi Jawaban Pilihan',
+                'icon'      => 'fas fa-list',
+                'route'     => 'admin.ujian.jawabanpilihan.index',
+                'active'    => 'admin.ujian.jawabanpilihan.*',
+            ],
         ],
         'tuk' => [],
         'assesor' => [],
