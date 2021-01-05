@@ -48,5 +48,5 @@ Route::middleware(['auth', 'can:isAdmin'])
 
         Route::resource('soal/pilihanganda', 'Admin\SoalPilihanGandaController', ['as' => 'soal']);
         Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
-
+        Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
     });
