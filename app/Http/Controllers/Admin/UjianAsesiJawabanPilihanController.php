@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\Admin\UjianAsesiJawabanPilihanDataTable;
 use App\Http\Controllers\Controller;
+use App\Soal;
 use App\UjianAsesiJawabanPilihan;
+use App\UserAsesi;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
