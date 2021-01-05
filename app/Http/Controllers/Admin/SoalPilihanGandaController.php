@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\Admin\UjianAsesiJawabanPilihanDataTable;
+use App\DataTables\Admin\SoalPilihanGandaDataTable;
 use App\Http\Controllers\Controller;
 use App\Soal;
-use App\UjianAsesiJawabanPilihan;
-use App\UserAsesi;
+use App\SoalPilihanGanda;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -16,20 +15,20 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class UjianAsesiJawabanPilihanController extends Controller
+class SoalPilihanGandaController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param UjianAsesiJawabanPilihanDataTable $dataTables
+     * @param SoalPilihanGandaDataTable $dataTables
      *
      * @return mixed
      */
-    public function index(UjianAsesiJawabanPilihanDataTable $dataTables)
+    public function index(SoalPilihanGandaDataTable $dataTables)
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Ujian Asesi Jawaban Pilihan Lists'
+            'title' => 'Soal Pilihan Ganda Lists'
         ]);
     }
 
@@ -42,16 +41,13 @@ class UjianAsesiJawabanPilihanController extends Controller
     {
         // get soal lists
         $soals = Soal::all();
-        // get asesi lists
-        $asesis = UserAsesi::all();
 
         // return view template create
-        return view('admin.ujian.jawabanpilihan-form', [
-            'title'     => 'Tambah Ujian Asesi Jawaban Pilihan Baru',
-            'action'    => route('admin.ujian.jawaban.store'),
+        return view('admin.soal.pilihanganda-form', [
+            'title'     => 'Tambah Pilihan Ganda Baru',
+            'action'    => route('admin.soal.pilihanganda.store'),
             'isCreated' => true,
-            'soals'     => $soals,
-            'asesis'    => $asesis,
+            'soals'     => $soals
         ]);
     }
 
@@ -67,25 +63,23 @@ class UjianAsesiJawabanPilihanController extends Controller
         // validate input
         $request->validate([
             'soal_id'   => 'required',
-            'asesi_id'  => 'required',
             'option'    => 'required',
-            'label'     => 'required|in:' . implode(',', config('options.ujian_asesi_jawaban_pilihans_label')),
+            'label'     => 'required|in:' . implode(',', config('options.soal_pilihan_gandas_label')),
         ]);
 
         // get form data
         $dataInput = $request->only([
             'soal_id',
-            'asesi_id',
             'option',
             'label',
         ]);
 
         // save to database
-        $query = UjianAsesiJawabanPilihan::create($dataInput);
+        $query = SoalPilihanGanda::create($dataInput);
 
         // redirect to index table
         return redirect()
-            ->route('admin.ujian.jawabanpilihan.index')
+            ->route('admin.soal.pilihanganda.index')
             ->with('success', trans('action.success', [
                 'name' => $query->id
             ]));
@@ -101,20 +95,17 @@ class UjianAsesiJawabanPilihanController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = UjianAsesiJawabanPilihan::findOrFail($id);
+        $query = SoalPilihanGanda::findOrFail($id);
         // get soal lists
         $soals = Soal::all();
-        // get asesi lists
-        $asesis = UserAsesi::all();
 
         // return data to view
-        return view('admin.ujian.jawabanpilihan-form', [
-            'title'     => 'Tampilkan Detail: ' . $query->question,
+        return view('admin.soal.pilihanganda-form', [
+            'title'     => 'Tampilkan Detail: ' . $query->id,
             'action'    => '#',
-            'isShow'    => route('admin.ujian.jawabanpilihan.edit', $id),
+            'isShow'    => route('admin.soal.pilihanganda.edit', $id),
             'query'     => $query,
             'soals'     => $soals,
-            'asesis'    => $asesis,
         ]);
     }
 
@@ -128,20 +119,17 @@ class UjianAsesiJawabanPilihanController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = UjianAsesiJawabanPilihan::findOrFail($id);
+        $query = SoalPilihanGanda::findOrFail($id);
         // get soal lists
         $soals = Soal::all();
-        // get asesi lists
-        $asesis = UserAsesi::all();
 
         // return data to view
-        return view('admin.ujian.jawabanpilihan-form', [
+        return view('admin.soal.pilihanganda-form', [
             'title'     => 'Ubah Data: ' . $query->id,
-            'action'    => route('admin.ujian.jawabanpilihan.update', $id),
+            'action'    => route('admin.soal.pilihanganda.update', $id),
             'isEdit'    => true,
             'query'     => $query,
             'soals'     => $soals,
-            'asesis'    => $asesis,
         ]);
     }
 
@@ -158,28 +146,26 @@ class UjianAsesiJawabanPilihanController extends Controller
         // validate input
         $request->validate([
             'soal_id'   => 'required',
-            'asesi_id'  => 'required',
             'option'    => 'required',
-            'label'     => 'required|in:' . implode(',', config('options.ujian_asesi_jawaban_pilihans_label')),
+            'label'     => 'required|in:' . implode(',', config('options.soal_pilihan_gandas_label')),
         ]);
 
         // get form data
         $dataInput = $request->only([
             'soal_id',
-            'asesi_id',
             'option',
             'label',
         ]);
 
         // find by id and update
-        $query = UjianAsesiJawabanPilihan::findOrFail($id);
+        $query = SoalPilihanGanda::findOrFail($id);
         // update data
         $query->update($dataInput);
 
         // redirect
         return redirect()
-            ->route('admin.ujian.jawabanpilihan.index')
-            ->with('success', trans('action.success', [
+            ->route('admin.soal.pilihanganda.index')
+            ->with('success', trans('action.success_update', [
                 'name' => $query->id
             ]));
     }
@@ -194,7 +180,7 @@ class UjianAsesiJawabanPilihanController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $query = UjianAsesiJawabanPilihan::findOrFail($id);
+        $query = SoalPilihanGanda::findOrFail($id);
         $query->delete();
 
         // return response json if success
