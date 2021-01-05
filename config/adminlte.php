@@ -216,6 +216,12 @@ return [
                 'route'     => 'admin.soal.pilihanganda.index',
                 'active'    => 'admin.soal.pilihanganda.*',
             ],
+            [
+                'title'     => 'Paket',
+                'icon'      => 'fas fa-cubes',
+                'route'     => 'admin.soal.paket.index',
+                'active'    => 'admin.soal.paket.*',
+            ],
         ],
         'tuk' => [],
         'assesor' => [],
