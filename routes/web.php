@@ -47,4 +47,6 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('ujian/jawabanpilihan', 'Admin\UjianAsesiJawabanPilihanController', ['as' => 'ujian']);
 
         Route::resource('soal/pilihanganda', 'Admin\SoalPilihanGandaController', ['as' => 'soal']);
+        Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
+
     });
