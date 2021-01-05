@@ -218,9 +218,15 @@ return [
             ],
             [
                 'title'     => 'Paket',
-                'icon'      => 'fas fa-cubes',
+                'icon'      => 'fas fa-cube',
                 'route'     => 'admin.soal.paket.index',
                 'active'    => 'admin.soal.paket.*',
+            ],
+            [
+                'title'     => 'Paket Item',
+                'icon'      => 'fas fa-cubes',
+                'route'     => 'admin.soal.paketitem.index',
+                'active'    => 'admin.soal.paketitem.*',
             ],
         ],
         'tuk' => [],
