@@ -17,6 +17,7 @@ class SertifikasiTuk extends Model
         'tuk_id',
         'tuk_price_baru',
         'tuk_price_perpanjang',
+        'tuk_price_training',
     ];
 
     /**
@@ -27,5 +28,15 @@ class SertifikasiTuk extends Model
     public function Sertifikasi()
     {
         return $this->hasOne('App\Sertifikasi', 'id', 'sertifikasi_id');
+    }
+
+    /**
+     * Relation to Table TUK
+     *
+     * @return HasOne
+     */
+    public function Tuk()
+    {
+        return $this->hasOne('App\Tuk', 'id', 'tuk_id');
     }
 }

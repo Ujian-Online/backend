@@ -67,6 +67,15 @@
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
+        <div class="form-group col-md-6">
+            <label for="tuk_price_training">Harga Training TUK</label>
+            <input type="number" class="form-control @error('tuk_price_training') is-invalid @enderror" name="tuk_price_training" id="tuk_price_training" placeholder="Harga Training TUK" value="{{ old('tuk_price_training') ?? $query->tuk_price_training ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('tuk_price_training')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
     </div>
 @endsection
 

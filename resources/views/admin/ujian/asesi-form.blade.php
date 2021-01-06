@@ -142,9 +142,9 @@
                     <option
                         value="{{ $status }}"
 
-                        @if(old('bank') == $status)
+                        @if(old('status') == $status)
                             {{ __('selected') }}
-                        @elseif(isset($query->status) and !empty($query->status) and $query->bank_name == $status)
+                        @elseif(isset($query->status) and !empty($query->status) and $query->status == $status)
                             {{ __('selected') }}
                         @endif
                     >

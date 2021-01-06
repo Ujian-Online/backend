@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\Admin\SertifikasiTukDataTable;
+use App\DataTables\Admin\OrderDataTable;
 use App\Http\Controllers\Controller;
+use App\Order;
 use App\Sertifikasi;
-use App\SertifikasiTuk;
 use App\Tuk;
+use App\UserAsesi;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -16,20 +17,20 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class SertifikasiTukController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param SertifikasiTukDataTable $dataTables
+     * @param OrderDataTable $dataTables
      *
      * @return mixed
      */
-    public function index(SertifikasiTukDataTable $dataTables)
+    public function index(OrderDataTable $dataTables)
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Sertifikasi TUK Lists'
+            'title' => 'Order Lists'
         ]);
     }
 
@@ -40,16 +41,19 @@ class SertifikasiTukController extends Controller
      */
     public function create()
     {
+        // get asesi lists
+        $asesis = UserAsesi::all();
         // get sertifikasi lists
         $sertifikasis = Sertifikasi::all();
         // get tuk lists
         $tuks = Tuk::all();
 
         // return view template create
-        return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
-            'title'         => 'Tambah Sertifikasi TUK Baru',
-            'action'        => route('admin.sertifikasi.tuk.store'),
+        return view('admin.order.form', [
+            'title'         => 'Tambah Order Baru',
+            'action'        => route('admin.order.store'),
             'isCreated'     => true,
+            'asesis'        => $asesis,
             'sertifikasis'  => $sertifikasis,
             'tuks'          => $tuks,
         ]);
@@ -66,27 +70,49 @@ class SertifikasiTukController extends Controller
     {
         // validate input
         $request->validate([
-            'sertifikasi_id'        => 'required',
-            'tuk_id'                => 'required',
-            'tuk_price_baru'        => 'required',
-            'tuk_price_perpanjang'  => 'required',
+            'asesi_id'                  => 'required',
+            'sertifikasi_id'            => 'required',
+            'tuk_id'                    => 'required',
+            'tipe_sertifikasi'          => 'required|in:' . implode(',', config('options.orders_tipe_sertifikasi')),
+            'original_price'            => 'required',
+            'tuk_price'                 => 'required',
+            'status'                    => 'required|in:' . implode(',', config('options.orders_status')),
+            'transfer_to_bank_name'     => 'required',
+            'transfer_to_bank_account'  => 'required',
+            'transfer_to_bank_number'   => 'required',
+            'expired_date'              => 'required|date',
         ]);
 
         // get form data
         $dataInput = $request->only([
+            'asesi_id',
             'sertifikasi_id',
             'tuk_id',
-            'tuk_price_baru',
-            'tuk_price_perpanjang',
+            'tipe_sertifikasi',
+            'kode_sertifikat',
+            'original_price',
+            'tuk_price',
             'tuk_price_training',
+            'status',
+            'comment_rejected',
+            'comment_verification',
+            'transfer_from_bank_name',
+            'transfer_from_bank_account',
+            'transfer_from_bank_number',
+            'transfer_to_bank_name',
+            'transfer_to_bank_account',
+            'transfer_to_bank_number',
+            'transfer_date',
+            'media_url_bukti_transfer',
+            'expired_date',
         ]);
 
         // save to database
-        $query = SertifikasiTuk::create($dataInput);
+        $query = Order::create($dataInput);
 
         // redirect to index table
         return redirect()
-            ->route('admin.sertifikasi.tuk.index')
+            ->route('admin.order.index')
             ->with('success', trans('action.success', [
                 'name' => $query->id
             ]));
@@ -102,18 +128,21 @@ class SertifikasiTukController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = SertifikasiTuk::findOrFail($id);
+        $query = Order::findOrFail($id);
+        // get asesi lists
+        $asesis = UserAsesi::where('id', $query->asesi_id)->get();
         // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
+        $sertifikasis = Sertifikasi::where('id', $query->sertifikasi_id)->get();
         // get tuk lists
-        $tuks = Tuk::all();
+        $tuks = Tuk::where('id', $query->tuk_id)->get();
 
         // return data to view
-        return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
+        return view('admin.order.form', [
             'title'         => 'Tampilkan Detail: ' . $query->id,
             'action'        => '#',
-            'isShow'        => route('admin.sertifikasi.tuk.edit', $id),
+            'isShow'        => route('admin.order.edit', $id),
             'query'         => $query,
+            'asesis'        => $asesis,
             'sertifikasis'  => $sertifikasis,
             'tuks'          => $tuks,
         ]);
@@ -129,18 +158,21 @@ class SertifikasiTukController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = SertifikasiTuk::findOrFail($id);
+        $query = Order::findOrFail($id);
+        // get asesi lists
+        $asesis = UserAsesi::all();
         // get sertifikasi lists
         $sertifikasis = Sertifikasi::all();
         // get tuk lists
         $tuks = Tuk::all();
 
         // return data to view
-        return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
+        return view('admin.order.form', [
             'title'         => 'Ubah Data: ' . $query->id,
-            'action'        => route('admin.sertifikasi.tuk.update', $id),
+            'action'        => route('admin.order.update', $id),
             'isEdit'        => true,
             'query'         => $query,
+            'asesis'        => $asesis,
             'sertifikasis'  => $sertifikasis,
             'tuks'          => $tuks,
         ]);
@@ -158,29 +190,51 @@ class SertifikasiTukController extends Controller
     {
         // validate input
         $request->validate([
-            'sertifikasi_id'        => 'required',
-            'tuk_id'                => 'required',
-            'tuk_price_baru'        => 'required',
-            'tuk_price_perpanjang'  => 'required',
+            'asesi_id'                  => 'required',
+            'sertifikasi_id'            => 'required',
+            'tuk_id'                    => 'required',
+            'tipe_sertifikasi'          => 'required|in:' . implode(',', config('options.orders_tipe_sertifikasi')),
+            'original_price'            => 'required',
+            'tuk_price'                 => 'required',
+            'status'                    => 'required|in:' . implode(',', config('options.orders_status')),
+            'transfer_to_bank_name'     => 'required',
+            'transfer_to_bank_account'  => 'required',
+            'transfer_to_bank_number'   => 'required',
+            'expired_date'              => 'required|date',
         ]);
 
         // get form data
         $dataInput = $request->only([
+            'asesi_id',
             'sertifikasi_id',
             'tuk_id',
-            'tuk_price_baru',
-            'tuk_price_perpanjang',
+            'tipe_sertifikasi',
+            'kode_sertifikat',
+            'original_price',
+            'tuk_price',
             'tuk_price_training',
+            'status',
+            'comment_rejected',
+            'comment_verification',
+            'transfer_from_bank_name',
+            'transfer_from_bank_account',
+            'transfer_from_bank_number',
+            'transfer_to_bank_name',
+            'transfer_to_bank_account',
+            'transfer_to_bank_number',
+            'transfer_date',
+            'media_url_bukti_transfer',
+            'expired_date',
         ]);
 
         // find by id and update
-        $query = SertifikasiTuk::findOrFail($id);
+        $query = Order::findOrFail($id);
         // update data
         $query->update($dataInput);
 
         // redirect
         return redirect()
-            ->route('admin.sertifikasi.tuk.index')
+            ->route('admin.order.index')
             ->with('success', trans('action.success_update', [
                 'name' => $query->id
             ]));
@@ -196,7 +250,7 @@ class SertifikasiTukController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $query = SertifikasiTuk::findOrFail($id);
+        $query = Order::findOrFail($id);
         $query->delete();
 
         // return response json if success

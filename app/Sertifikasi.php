@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sertifikasi extends Model
 {
@@ -21,12 +21,31 @@ class Sertifikasi extends Model
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean'
+    ];
+
+    /**
      * Relation Table to SertifikasiTuk
      *
-     * @return BelongsToMany
+     * @return HasMany
      */
     public function SertifikasiTuk()
     {
         return $this->hasMany('App\SertifikasiTuk');
+    }
+
+    /**
+     * Relation to Table Sertifikasi Unit Kompentensi
+     *
+     * @return HasMany
+     */
+    public function UnitKompentensi()
+    {
+        return $this->hasMany('App\SertifikasiUnitKompentensi');
     }
 }
