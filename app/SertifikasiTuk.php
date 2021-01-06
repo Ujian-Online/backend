@@ -29,4 +29,14 @@ class SertifikasiTuk extends Model
     {
         return $this->hasOne('App\Sertifikasi', 'id', 'sertifikasi_id');
     }
+
+    /**
+     * Relation to Table TUK
+     *
+     * @return HasOne
+     */
+    public function Tuk()
+    {
+        return $this->hasOne('App\Tuk', 'id', 'tuk_id');
+    }
 }
