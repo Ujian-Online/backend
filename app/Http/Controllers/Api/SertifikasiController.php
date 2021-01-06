@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Sertifikasi;
 
@@ -12,7 +12,7 @@ class SertifikasiController extends Controller
     /**
      * Menampilkan List Sertifikasi
      *
-     * @return Sertifikasi[]|Collection
+     * @return JsonResponse
      *
      * * @OA\Get(
      *   path="/api/sertifikasi",
@@ -27,6 +27,16 @@ class SertifikasiController extends Controller
      */
     public function index()
     {
-        return Sertifikasi::with('sertifikasituk')->get();
+        $query = Sertifikasi::with(
+            [
+                'sertifikasituk',
+                'sertifikasituk.tuk',
+                'unitkompentensi'
+            ]
+        )->where('is_active', 1);
+
+        return datatables()
+            ->eloquent($query)
+            ->toJson();
     }
 }
