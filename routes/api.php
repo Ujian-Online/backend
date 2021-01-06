@@ -28,6 +28,7 @@ Route::namespace('Api')
 
         // List Sertifikasi
         Route::get('sertifikasi', 'SertifikasiController@index')->name('sertifikasi');
+        Route::get('sertifikasi/{id}', 'SertifikasiController@show')->name('sertifikasi.show');
 
         Route::middleware(['auth:api', 'verified'])
             ->group(function () {
