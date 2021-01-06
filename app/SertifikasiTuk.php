@@ -17,6 +17,7 @@ class SertifikasiTuk extends Model
         'tuk_id',
         'tuk_price_baru',
         'tuk_price_perpanjang',
+        'tuk_price_training',
     ];
 
     /**
