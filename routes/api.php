@@ -31,7 +31,7 @@ Route::namespace('Api')
 
         Route::middleware(['auth:api', 'verified'])
             ->group(function () {
-                Route::get('me', 'UserController@me')->name('me');
+                Route::get('user/me', 'UserController@me')->name('me');
 
             });
     });
