@@ -78,6 +78,7 @@ class SertifikasiTukController extends Controller
             'tuk_id',
             'tuk_price_baru',
             'tuk_price_perpanjang',
+            'tuk_price_training',
         ]);
 
         // save to database
@@ -169,6 +170,7 @@ class SertifikasiTukController extends Controller
             'tuk_id',
             'tuk_price_baru',
             'tuk_price_perpanjang',
+            'tuk_price_training',
         ]);
 
         // find by id and update
