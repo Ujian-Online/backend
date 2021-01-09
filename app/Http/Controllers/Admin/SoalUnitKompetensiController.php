@@ -29,7 +29,7 @@ class SoalUnitKompetensiController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Soal Lists'
+            'title' => 'Soal Unit Kompetensi Lists'
         ]);
     }
 
