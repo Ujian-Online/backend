@@ -43,7 +43,7 @@ class SoalPilihanGandaController extends Controller
         $soals = Soal::all();
 
         // return view template create
-        return view('admin.soal.unitkompetensi-form', [
+        return view('admin.soal.pilihanganda-form', [
             'title'     => 'Tambah Pilihan Ganda Baru',
             'action'    => route('admin.soal.pilihanganda.store'),
             'isCreated' => true,
@@ -100,7 +100,7 @@ class SoalPilihanGandaController extends Controller
         $soals = Soal::all();
 
         // return data to view
-        return view('admin.soal.unitkompetensi-form', [
+        return view('admin.soal.pilihanganda-form', [
             'title'     => 'Tampilkan Detail: ' . $query->id,
             'action'    => '#',
             'isShow'    => route('admin.soal.pilihanganda.edit', $id),
@@ -124,7 +124,7 @@ class SoalPilihanGandaController extends Controller
         $soals = Soal::all();
 
         // return data to view
-        return view('admin.soal.unitkompetensi-form', [
+        return view('admin.soal.pilihanganda-form', [
             'title'     => 'Ubah Data: ' . $query->id,
             'action'    => route('admin.soal.pilihanganda.update', $id),
             'isEdit'    => true,

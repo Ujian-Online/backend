@@ -234,12 +234,6 @@ return [
                 'route'     => 'admin.soal.paketitem.index',
                 'active'    => 'admin.soal.paketitem.*',
             ],
-            [
-                'title'     => 'Unit Kompetensi',
-                'icon'      => 'far fa-bookmark',
-                'route'     => 'admin.soal.unitkompetensi.index',
-                'active'    => 'admin.soal.unitkompetensi.*'
-            ],
             'Order',
             [
                 'title'     => 'List Order',
