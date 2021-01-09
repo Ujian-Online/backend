@@ -211,6 +211,12 @@ return [
             ],
             'Soal',
             [
+                'title'     => 'Daftar Soal',
+                'icon'      => 'fa fa-book-open',
+                'route'     => 'admin.soal.daftar.index',
+                'active'    => 'admin.soal.daftar'
+            ],
+            [
                 'title'     => 'Pilihan Ganda',
                 'icon'      => 'fas fa-tasks',
                 'route'     => 'admin.soal.pilihanganda.index',

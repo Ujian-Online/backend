@@ -115,4 +115,14 @@ return [
         'canceled',
         'completed',
     ],
+    'question_type' => [
+        'essay',
+        'multiple_option'
+    ],
+    'answer_option' => [
+        'A',
+        'B',
+        'C',
+        'D'
+    ]
 ];

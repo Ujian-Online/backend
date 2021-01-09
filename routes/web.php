@@ -50,6 +50,7 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
         Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
         Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
+        Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal']);
 
         Route::resource('order', 'Admin\OrderController');
     });
