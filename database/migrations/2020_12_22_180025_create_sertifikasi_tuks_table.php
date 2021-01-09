@@ -19,6 +19,7 @@ class CreateSertifikasiTuksTable extends Migration
             $table->bigInteger('tuk_id');
             $table->decimal('tuk_price_baru', 12);
             $table->decimal('tuk_price_perpanjang', 12);
+            $table->decimal('tuk_price_training')->nullable();
             $table->timestamps();
         });
     }

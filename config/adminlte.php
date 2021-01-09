@@ -234,6 +234,13 @@ return [
                 'route'     => 'admin.soal.paketitem.index',
                 'active'    => 'admin.soal.paketitem.*',
             ],
+            'Order',
+            [
+                'title'     => 'List Order',
+                'icon'      => 'fas fa-cart-plus',
+                'route'     => 'admin.order.index',
+                'active'    => 'admin.order.*',
+            ],
         ],
         'tuk' => [],
         'assesor' => [],
