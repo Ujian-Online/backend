@@ -211,6 +211,12 @@ return [
             ],
             'Soal',
             [
+                'title'     => 'Daftar Soal',
+                'icon'      => 'fa fa-book-open',
+                'route'     => 'admin.soal.daftar.index',
+                'active'    => 'admin.soal.daftar'
+            ],
+            [
                 'title'     => 'Pilihan Ganda',
                 'icon'      => 'fas fa-tasks',
                 'route'     => 'admin.soal.pilihanganda.index',
@@ -227,6 +233,19 @@ return [
                 'icon'      => 'fas fa-cubes',
                 'route'     => 'admin.soal.paketitem.index',
                 'active'    => 'admin.soal.paketitem.*',
+            ],
+            [
+                'title'     => 'Unit Kompetensi',
+                'icon'      => 'far fa-bookmark',
+                'route'     => 'admin.soal.unitkompetensi.index',
+                'active'    => 'admin.soal.unitkompetensi.*'
+            ],
+            'Order',
+            [
+                'title'     => 'List Order',
+                'icon'      => 'fas fa-cart-plus',
+                'route'     => 'admin.order.index',
+                'active'    => 'admin.order.*',
             ],
         ],
         'tuk' => [],

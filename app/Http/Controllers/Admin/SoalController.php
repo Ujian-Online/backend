@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\Admin\SertifikasiTukDataTable;
+use App\DataTables\Admin\SoalDataTable;
 use App\Http\Controllers\Controller;
 use App\Sertifikasi;
-use App\SertifikasiTuk;
-use App\Tuk;
+use App\Soal;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -16,20 +15,20 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class SertifikasiTukController extends Controller
+class SoalController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param SertifikasiTukDataTable $dataTables
+     * @param SoalDataTable $dataTables
      *
      * @return mixed
      */
-    public function index(SertifikasiTukDataTable $dataTables)
+    public function index(SoalDataTable $dataTables)
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Sertifikasi TUK Lists'
+            'title' => 'Soal Lists'
         ]);
     }
 
@@ -40,18 +39,11 @@ class SertifikasiTukController extends Controller
      */
     public function create()
     {
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get tuk lists
-        $tuks = Tuk::all();
 
-        // return view template create
-        return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
-            'title'         => 'Tambah Sertifikasi TUK Baru',
-            'action'        => route('admin.sertifikasi.tuk.store'),
+        return view('admin.soal.form', [
+            'title'         => 'Tambah Soal Paket Baru',
+            'action'        => route('admin.soal.daftar.store'),
             'isCreated'     => true,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
         ]);
     }
 
@@ -66,29 +58,28 @@ class SertifikasiTukController extends Controller
     {
         // validate input
         $request->validate([
-            'sertifikasi_id'        => 'required',
-            'tuk_id'                => 'required',
-            'tuk_price_baru'        => 'required',
-            'tuk_price_perpanjang'  => 'required',
+            'question'         => 'required',
+            'question_type'    => 'required',
+            'max_score'        => 'required|numeric',
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'sertifikasi_id',
-            'tuk_id',
-            'tuk_price_baru',
-            'tuk_price_perpanjang',
-            'tuk_price_training',
+            'question',
+            'question_type',
+            'max_score',
+            'answer_essay',
+            'answer_option'
         ]);
 
         // save to database
-        $query = SertifikasiTuk::create($dataInput);
+        $query = Soal::create($dataInput);
 
         // redirect to index table
         return redirect()
-            ->route('admin.sertifikasi.tuk.index')
+            ->route('admin.soal.daftar.index')
             ->with('success', trans('action.success', [
-                'name' => $query->id
+                'name' => $query->title
             ]));
     }
 
@@ -102,20 +93,14 @@ class SertifikasiTukController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = SertifikasiTuk::findOrFail($id);
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get tuk lists
-        $tuks = Tuk::all();
+        $query = Soal::findOrFail($id);
 
         // return data to view
-        return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
-            'title'         => 'Tampilkan Detail: ' . $query->id,
+        return view('admin.soal.form', [
+            'title'         => 'Tampilkan Detail: Pertanyaan ' . $query->id,
             'action'        => '#',
-            'isShow'        => route('admin.sertifikasi.tuk.edit', $id),
+            'isShow'        => route('admin.soal.daftar.edit', $id),
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
         ]);
     }
 
@@ -129,20 +114,14 @@ class SertifikasiTukController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = SertifikasiTuk::findOrFail($id);
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get tuk lists
-        $tuks = Tuk::all();
+        $query = Soal::findOrFail($id);
 
         // return data to view
-        return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
-            'title'         => 'Ubah Data: ' . $query->id,
-            'action'        => route('admin.sertifikasi.tuk.update', $id),
+        return view('admin.soal.form', [
+            'title'         => 'Ubah Data: ' . $query->title,
+            'action'        => route('admin.soal.daftar.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
         ]);
     }
 
@@ -158,29 +137,28 @@ class SertifikasiTukController extends Controller
     {
         // validate input
         $request->validate([
-            'sertifikasi_id'        => 'required',
-            'tuk_id'                => 'required',
-            'tuk_price_baru'        => 'required',
-            'tuk_price_perpanjang'  => 'required',
+            'question'         => 'required',
+            'question_type'    => 'required',
+            'max_score'        => 'required|numeric',
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'sertifikasi_id',
-            'tuk_id',
-            'tuk_price_baru',
-            'tuk_price_perpanjang',
-            'tuk_price_training',
+            'question',
+            'question_type',
+            'max_score',
+            'answer_essay',
+            'answer_option'
         ]);
 
         // find by id and update
-        $query = SertifikasiTuk::findOrFail($id);
+        $query = Soal::findOrFail($id);
         // update data
         $query->update($dataInput);
 
         // redirect
         return redirect()
-            ->route('admin.sertifikasi.tuk.index')
+            ->route('admin.soal.daftar.index')
             ->with('success', trans('action.success_update', [
                 'name' => $query->id
             ]));
@@ -196,7 +174,7 @@ class SertifikasiTukController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $query = SertifikasiTuk::findOrFail($id);
+        $query = Soal::findOrFail($id);
         $query->delete();
 
         // return response json if success

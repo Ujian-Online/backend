@@ -110,6 +110,31 @@
                 }
             }
         },
+        "/api/sertifikasi/{id}": {
+            "get": {
+                "tags": [
+                    "Sertifikasi"
+                ],
+                "summary": "Sertifikasi Detail By ID",
+                "operationId": "App\\Http\\Controllers\\Api\\SertifikasiController::show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sertifikasi id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/user/me": {
             "get": {
                 "tags": [

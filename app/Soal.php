@@ -14,8 +14,8 @@ class Soal extends Model
     protected $fillable = [
         'question',
         'question_type',
-        'answer_essay',
-        'answer_option',
         'max_score',
+        'answer_essay',
+        'answer_option'
     ];
 }
