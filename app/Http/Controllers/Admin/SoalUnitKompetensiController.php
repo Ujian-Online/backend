@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\Admin\SoalPilihanGandaDataTable;
+use App\DataTables\Admin\SoalUnitKompetensiDataTable;
 use App\Http\Controllers\Controller;
+use App\SoalUnitKompetensi;
 use App\Soal;
-use App\SoalPilihanGanda;
+use App\SertifikasiUnitKompentensi;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -15,20 +16,20 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class SoalPilihanGandaController extends Controller
+class SoalUnitKompetensiController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param SoalPilihanGandaDataTable $dataTables
+     * @param SoalUnitKompetensiDataTable $dataTables
      *
      * @return mixed
      */
-    public function index(SoalPilihanGandaDataTable $dataTables)
+    public function index(SoalUnitKompetensiDataTable $dataTables)
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Soal Pilihan Ganda Lists'
+            'title' => 'Soal Lists'
         ]);
     }
 
@@ -41,13 +42,14 @@ class SoalPilihanGandaController extends Controller
     {
         // get soal lists
         $soals = Soal::all();
+        $unit_kompetensis = SertifikasiUnitKompentensi::all();
 
-        // return view template create
         return view('admin.soal.unitkompetensi-form', [
-            'title'     => 'Tambah Pilihan Ganda Baru',
-            'action'    => route('admin.soal.pilihanganda.store'),
-            'isCreated' => true,
-            'soals'     => $soals
+            'title'             => 'Tambah Soal Unit Kompetensi Baru',
+            'action'            => route('admin.soal.unitkompetensi.store'),
+            'isCreated'         => true,
+            'soals'             => $soals,
+            'unit_kompetensis'  => $unit_kompetensis
         ]);
     }
 
@@ -62,26 +64,24 @@ class SoalPilihanGandaController extends Controller
     {
         // validate input
         $request->validate([
-            'soal_id'   => 'required',
-            'option'    => 'required',
-            'label'     => 'required|in:' . implode(',', config('options.soal_pilihan_gandas_label')),
+            'soal_id'         => 'required',
+            'unit_kompetensi_id'    => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'soal_id',
-            'option',
-            'label',
+            'unit_kompetensi_id',
         ]);
 
         // save to database
-        $query = SoalPilihanGanda::create($dataInput);
+        $query = SoalUnitKompetensi::create($dataInput);
 
         // redirect to index table
         return redirect()
-            ->route('admin.soal.pilihanganda.index')
+            ->route('admin.soal.unitkompetensi.index')
             ->with('success', trans('action.success', [
-                'name' => $query->id
+                'name' => $query->title
             ]));
     }
 
@@ -95,17 +95,19 @@ class SoalPilihanGandaController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = SoalPilihanGanda::findOrFail($id);
-        // get soal lists
+        $query = SoalUnitKompetensi::findOrFail($id);
+
         $soals = Soal::all();
+        $unit_kompetensis = SertifikasiUnitKompentensi::all();
 
         // return data to view
         return view('admin.soal.unitkompetensi-form', [
-            'title'     => 'Tampilkan Detail: ' . $query->id,
-            'action'    => '#',
-            'isShow'    => route('admin.soal.pilihanganda.edit', $id),
-            'query'     => $query,
-            'soals'     => $soals,
+            'title'             => 'Tampilkan Detail: Soal Unit Komptensi ' . $query->id,
+            'action'            => '#',
+            'isShow'            => route('admin.soal.unitkompetensi.edit', $id),
+            'query'             => $query,
+            'soals'             => $soals,
+            'unit_kompetensis'  => $unit_kompetensis
         ]);
     }
 
@@ -119,17 +121,19 @@ class SoalPilihanGandaController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = SoalPilihanGanda::findOrFail($id);
-        // get soal lists
+        $query = SoalUnitKompetensi::findOrFail($id);
+
         $soals = Soal::all();
+        $unit_kompetensis = SertifikasiUnitKompentensi::all();
 
         // return data to view
         return view('admin.soal.unitkompetensi-form', [
-            'title'     => 'Ubah Data: ' . $query->id,
-            'action'    => route('admin.soal.pilihanganda.update', $id),
-            'isEdit'    => true,
-            'query'     => $query,
-            'soals'     => $soals,
+            'title'             => 'Ubah Data: Soal Unit Kompetensi' . $query->id,
+            'action'            => route('admin.soal.unitkompetensi.update', $id),
+            'isEdit'            => true,
+            'query'             => $query,
+            'soals'             => $soals,
+            'unit_kompetensis'  => $unit_kompetensis
         ]);
     }
 
@@ -145,26 +149,24 @@ class SoalPilihanGandaController extends Controller
     {
         // validate input
         $request->validate([
-            'soal_id'   => 'required',
-            'option'    => 'required',
-            'label'     => 'required|in:' . implode(',', config('options.soal_pilihan_gandas_label')),
+            'soal_id'         => 'required',
+            'unit_kompetensi_id'    => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'soal_id',
-            'option',
-            'label',
+            'unit_kompetensi_id',
         ]);
 
         // find by id and update
-        $query = SoalPilihanGanda::findOrFail($id);
+        $query = SoalUnitKompetensi::findOrFail($id);
         // update data
         $query->update($dataInput);
 
         // redirect
         return redirect()
-            ->route('admin.soal.pilihanganda.index')
+            ->route('admin.soal.unitkompetensi.index')
             ->with('success', trans('action.success_update', [
                 'name' => $query->id
             ]));
@@ -180,7 +182,7 @@ class SoalPilihanGandaController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $query = SoalPilihanGanda::findOrFail($id);
+        $query = SoalUnitKompetensi::findOrFail($id);
         $query->delete();
 
         // return response json if success
