@@ -20,9 +20,9 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('tuk_id');
             $table->string('tipe_sertifikasi'); // @see config('options.orders_tipe_sertifikasi')
             $table->string('kode_sertifikat')->nullable();
-            $table->decimal('original_price');
-            $table->decimal('tuk_price');
-            $table->decimal('tuk_price_training')->nullable();
+            $table->float('original_price');
+            $table->float('tuk_price');
+            $table->float('tuk_price_training')->nullable();
             $table->string('status'); // @see config('options.orders_status')
             $table->text('comment_rejected')->nullable();
             $table->text('comment_verification')->nullable();
