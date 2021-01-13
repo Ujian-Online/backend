@@ -17,8 +17,8 @@ class CreateSertifikasisTable extends Migration
             $table->bigIncrements('id');
             $table->string('nomor_skema');
             $table->string('title');
-            $table->decimal('original_price_baru', 12);
-            $table->decimal('original_price_perpanjang', 12);
+            $table->float('original_price_baru', 12);
+            $table->float('original_price_perpanjang', 12);
             $table->boolean('is_active');
             $table->timestamps();
         });
