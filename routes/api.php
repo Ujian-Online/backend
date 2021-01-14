@@ -19,6 +19,9 @@ Route::name('api.')
         Route::post('login', 'Api\AuthController@login')->name('login');
         Route::post('register', 'Api\AuthController@register')->name('register');
 
+        // reset password route
+        Route::post('password/reset', 'Api\PasswordController@reset')->name('reset');
+
         // verification route
         Route::post('email/verify', 'Api\VerificationController@verify')
         ->name('verification.verify')->middleware('auth:api');
