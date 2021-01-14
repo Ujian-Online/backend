@@ -21,6 +21,7 @@ Route::name('api.')
 
         // reset password route
         Route::post('password/reset', 'Api\PasswordController@reset')->name('reset');
+        Route::post('password/change', 'Api\PasswordController@change')->name('change')->middleware('auth:api');
 
         // verification route
         Route::post('email/verify', 'Api\VerificationController@verify')
