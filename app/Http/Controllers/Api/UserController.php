@@ -7,10 +7,18 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use OpenApi\Annotations as OA;
 
 class UserController extends Controller
 {
+
+    /**
+     * Apply Middleware Verified in All Function
+     */
+    public function __construct()
+    {
+        $this->middleware('verified');
+    }
+
     /**
      * Menampilkan Detail User
      *

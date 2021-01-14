@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailVerification extends Mailable
+class PasswordReset extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -47,13 +47,10 @@ class EmailVerification extends Mailable
      */
     public function build()
     {
-        // generate expired url
-        $expired = now()->addDay()->timestamp;
-
-        return $this->markdown('email/EmailVerification')
+        return $this->markdown('email/PasswordReset')
                 ->with([
                     'url' => env('FRONTEND_URL') .
-                            '/email/verification?token=' . $this->token
+                            '/password/reset?token=' . $this->token
                 ]);
     }
 }

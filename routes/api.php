@@ -14,25 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::namespace('Api')
-    ->name('api.')
+Route::name('api.')
     ->group(function () {
-        Route::post('login', 'AuthController@login')->name('login');
-        Route::post('register', 'AuthController@register')->name('register');
+        Route::post('login', 'Api\AuthController@login')->name('login');
+        Route::post('register', 'Api\AuthController@register')->name('register');
+
+        // reset password route
+        Route::post('password/reset', 'Api\PasswordController@reset')->name('reset');
+        Route::post('password/change', 'Api\PasswordController@change')->name('change')->middleware('auth:api');
 
         // verification route
-        Route::post('email/verify', 'VerificationController@verify')
+        Route::post('email/verify', 'Api\VerificationController@verify')
         ->name('verification.verify')->middleware('auth:api');
-        Route::post('email/resend', 'VerificationController@resend')
+        Route::post('email/resend', 'Api\VerificationController@resend')
         ->name('verification.resend')->middleware('auth:api');
 
         // List Sertifikasi
-        Route::get('sertifikasi', 'SertifikasiController@index')->name('sertifikasi');
-        Route::get('sertifikasi/{id}', 'SertifikasiController@show')->name('sertifikasi.show');
+        Route::get('sertifikasi', 'Api\SertifikasiController@index')->name('sertifikasi');
+        Route::get('sertifikasi/{id}', 'Api\SertifikasiController@show')->name('sertifikasi.show');
 
-        Route::middleware(['auth:api', 'verified'])
+        Route::middleware(['auth:api'])
             ->group(function () {
-                Route::get('user/me', 'UserController@me')->name('me');
-
+                Route::get('user/me', 'Api\UserController@me')->name('me');
             });
     });
