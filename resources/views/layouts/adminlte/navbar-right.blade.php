@@ -2,7 +2,6 @@
   <li class="nav-item dropdown user-menu">
     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
       <img src="{{ gravatar(Auth::user()->email) }}" class="user-image img-circle bg-white elevation-2" alt="User Image">
-      <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
       {{-- User image --}}
@@ -10,7 +9,7 @@
         <img src="{{ gravatar(Auth::user()->email) }}" class="img-circle elevation-2" alt="User Image">
 
         <p>
-          {{ Auth::user()->name }}
+          {{ strtolower(Auth::user()->email) }}
           <small>{{ ucfirst(Auth::user()->type) }}</small>
         </p>
       </li>

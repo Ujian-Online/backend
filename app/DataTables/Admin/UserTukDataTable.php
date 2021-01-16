@@ -2,14 +2,14 @@
 
 namespace App\DataTables\Admin;
 
-use App\UserAssesor;
+use App\UserTuk;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UserAssesorDataTable extends DataTable
+class UserTukDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,12 +21,18 @@ class UserAssesorDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->addColumn('user_email', function ($query) {
+                return isset($query->user) ? $query->user->email : '';
+            })
+            ->addColumn('tuk_title', function ($query) {
+                return isset($query->tuk) ? $query->tuk->title : '';
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
-                    'title' => $query->name,
-                    'url_show' => route('admin.assesor.show', $query->id),
-                    'url_edit' => route('admin.assesor.edit', $query->id),
-                    'url_destroy' => route('admin.assesor.destroy', $query->id),
+                    'title' => $query->id,
+                    'url_show' => route('admin.user.tuk.show', $query->id),
+                    'url_edit' => route('admin.user.tuk.edit', $query->id),
+                    'url_destroy' => route('admin.user.tuk.destroy', $query->id),
                 ]);
             });
     }
@@ -34,12 +40,12 @@ class UserAssesorDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\UserAssesor $model
+     * @param \App\UserTuk $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(UserAssesor $model)
+    public function query(UserTuk $model)
     {
-        return $model->newQuery();
+        return $model::with(['user', 'tuk']);
     }
 
     /**
@@ -66,11 +72,11 @@ class UserAssesorDataTable extends DataTable
                             ]
                         ],
                     ])
-                    ->setTableId('userassesor-table')
+                    ->setTableId('usertuk-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(1, 'asc')
+                    ->orderBy(4, 'desc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
@@ -87,9 +93,13 @@ class UserAssesorDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('name'),
-            Column::make('met'),
-            Column::make('expired_date'),
+            Column::computed('email')
+                ->data('user_email'),
+            Column::make('tuk_id')
+                ->title('TUK ID'),
+            Column::computed('tuk')
+                ->data('tuk_title')
+                ->title('TUK'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
@@ -109,7 +119,7 @@ class UserAssesorDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'UserAssesor_' . date('YmdHis');
+        return 'UserTuk_' . date('YmdHis');
     }
 
     /**
@@ -118,7 +128,7 @@ class UserAssesorDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.assesor.create');
+        $url = route('admin.user.tuk.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {

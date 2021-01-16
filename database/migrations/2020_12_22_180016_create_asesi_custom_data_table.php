@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserAssesorsTable extends Migration
+class CreateAsesiCustomDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateUserAssesorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_assesors', function (Blueprint $table) {
+        Schema::create('asesi_custom_data', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->string('met');
-            $table->string('name');
-            $table->date('expired_date');
-            $table->string('address');
+            $table->string('title');
+            $table->string('input_type'); // @see config('option
+            //.asesi_custom_data_input_type)
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateUserAssesorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_assesors');
+        Schema::dropIfExists('asesi_custom_data');
     }
 }

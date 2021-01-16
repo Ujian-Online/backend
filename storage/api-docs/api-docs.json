@@ -34,13 +34,12 @@
                             "schema": {
                                 "properties": {
                                     "email": {
-                                        "description": "Login Function.",
+                                        "description": "account email",
                                         "type": "string",
-                                        "format": "email",
                                         "example": "johndoe@example.com"
                                     },
                                     "password": {
-                                        "description": "Login Function.",
+                                        "description": "account password",
                                         "type": "string",
                                         "format": "password",
                                         "example": "pass1234"
@@ -72,11 +71,6 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "name": {
-                                        "description": "Login Function.",
-                                        "type": "string",
-                                        "example": "John Doe"
-                                    },
                                     "email": {
                                         "description": "Login Function.",
                                         "type": "string",
@@ -88,11 +82,6 @@
                                         "type": "string",
                                         "format": "password",
                                         "example": "pass1234"
-                                    },
-                                    "confirm_password": {
-                                        "description": "Login Function.",
-                                        "type": "string",
-                                        "example": "pass1234"
                                     }
                                 },
                                 "type": "object"
@@ -100,6 +89,239 @@
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/order": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Order Index",
+                "operationId": "App\\Http\\Controllers\\Api\\OrderController::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/order/{id}": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Order Detail by ID",
+                "operationId": "App\\Http\\Controllers\\Api\\OrderController::show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Order id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Update Order by ID",
+                "operationId": "App\\Http\\Controllers\\Api\\OrderController::update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Order id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update Order Data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "transfer_from_bank_name": {
+                                        "description": "Transfer dari Bank (Nama Bank)",
+                                        "type": "string",
+                                        "example": "bri"
+                                    },
+                                    "transfer_from_bank_account": {
+                                        "description": "Transfer dari Bank (Nama Akun Bank)",
+                                        "type": "string",
+                                        "example": "john doe"
+                                    },
+                                    "transfer_from_bank_number": {
+                                        "description": "Transfer dari Bank (Nomor Akun Bank)",
+                                        "type": "string",
+                                        "example": "3322114456"
+                                    },
+                                    "bukti_transfer": {
+                                        "description": "Bukti Transfer Ekstensi: JPG, JPEG, PNG atau PDF",
+                                        "type": "file",
+                                        "example": "bukti_transfer.pdf"
+                                    },
+                                    "bank_id": {
+                                        "description": "TUK Bank ID Tujuan Transfer",
+                                        "type": "int",
+                                        "example": "1"
+                                    },
+                                    "transfer_date": {
+                                        "description": "Tanggal Transfer",
+                                        "type": "datetime",
+                                        "example": "2020-10-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/password/reset": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Reset Password",
+                "operationId": "App\\Http\\Controllers\\Api\\PasswordController::reset",
+                "requestBody": {
+                    "description": "Request Reset Password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "account email",
+                                        "type": "string",
+                                        "example": "johndoe@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/password/change": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Change Password",
+                "operationId": "App\\Http\\Controllers\\Api\\PasswordController::change",
+                "requestBody": {
+                    "description": "Request Change Password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "account email",
+                                        "type": "string",
+                                        "example": "johndoe@example.com"
+                                    },
+                                    "password": {
+                                        "description": "new password",
+                                        "type": "string",
+                                        "example": "test1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/sertifikasi": {
+            "get": {
+                "tags": [
+                    "Sertifikasi"
+                ],
+                "summary": "Sertifikasi Lists",
+                "operationId": "App\\Http\\Controllers\\Api\\SertifikasiController::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/sertifikasi/{id}": {
+            "get": {
+                "tags": [
+                    "Sertifikasi"
+                ],
+                "summary": "Sertifikasi Detail By ID",
+                "operationId": "App\\Http\\Controllers\\Api\\SertifikasiController::show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sertifikasi id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"

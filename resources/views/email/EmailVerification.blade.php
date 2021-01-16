@@ -1,5 +1,5 @@
 @component('mail::message')
-# Hi {{ $user->name }}
+# Hi {{ $user->email }},
 
 Silahkan klik link dibawah ini untuk melakukan konfirmasi email anda.
 
