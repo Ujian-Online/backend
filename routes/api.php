@@ -36,5 +36,7 @@ Route::name('api.')
         Route::middleware(['auth:api'])
             ->group(function () {
                 Route::get('user/me', 'Api\UserController@me')->name('me');
+
+                Route::get('order', 'Api\OrderController@index')->name('order.index');
             });
     });
