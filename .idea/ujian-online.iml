@@ -12,6 +12,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/promises" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/predis/predis" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mtdowling/jmespath.php" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/flysystem-aws-s3-v3" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
