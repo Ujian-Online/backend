@@ -27,6 +27,11 @@ class UserDataTable extends DataTable
             ->editColumn('status', function ($query) {
                 return ucfirst($query->status);
             })
+            ->editColumn('media_url_sign_user', function ($query) {
+                $link = '<a href="'.$query->media_url_sign_user.'">Buka</a>';
+
+                return !empty($query->media_url_sign_user) ? $link : 'Belum ada Paraf/TTD';
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->name,
@@ -96,6 +101,8 @@ class UserDataTable extends DataTable
                 ->width('25%'),
             Column::make('type'),
             Column::make('status'),
+            Column::make('media_url_sign_user')
+                ->title('TTD'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
