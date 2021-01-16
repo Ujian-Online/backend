@@ -18,4 +18,14 @@ class Tuk extends Model
         'address',
         'type',
     ];
+
+    /**
+     * Relation to Table TukBank
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function Bank()
+    {
+        return $this->hasMany('App\TukBank');
+    }
 }

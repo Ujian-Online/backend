@@ -28,10 +28,10 @@ class CreateOrdersTable extends Migration
             $table->text('comment_verification')->nullable();
             $table->string('transfer_from_bank_name')->nullable();
             $table->string('transfer_from_bank_account')->nullable();
-            $table->integer('transfer_from_bank_number')->nullable();
+            $table->string('transfer_from_bank_number')->nullable();
             $table->string('transfer_to_bank_name')->nullable();
             $table->string('transfer_to_bank_account')->nullable();
-            $table->integer('transfer_to_bank_number')->nullable();
+            $table->string('transfer_to_bank_number')->nullable();
             $table->date('transfer_date')->nullable();
             $table->string('media_url_bukti_transfer')->nullable();
             $table->date('expired_date');

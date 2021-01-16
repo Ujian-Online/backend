@@ -36,5 +36,9 @@ Route::name('api.')
         Route::middleware(['auth:api'])
             ->group(function () {
                 Route::get('user/me', 'Api\UserController@me')->name('me');
+
+                Route::get('order', 'Api\OrderController@index')->name('order.index');
+                Route::get('order/{id}', 'Api\OrderController@show')->name('order.show');
+                Route::post('order/{id}', 'Api\OrderController@update')->name('order.update');
             });
     });
