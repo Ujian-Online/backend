@@ -192,11 +192,11 @@ class OrderController extends Controller
         $fileextension = $file->extension();
         $filenewName   = (string) Str::uuid() . '.' . $fileextension;
 
-        // folder path based on device name and year/month
+        // folder path based on year/month
         $dateNow  = now();
         $filePath = '/' . $dateNow->year . '/' . $dateNow->month;
 
-        // store file atttachment to s3
+        // store file attachment to s3 with public access
         $filesave = Storage::disk('s3')->putFileAs(
             $filePath,
             $file,
@@ -231,6 +231,7 @@ class OrderController extends Controller
             'status' => 'pending_verification',
         ]);
 
+        // return response success
         return response()->json([
             'code' => 200,
             'message' => 'success'
