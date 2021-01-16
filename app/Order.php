@@ -36,6 +36,15 @@ class Order extends Model
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'original_price',
+    ];
+
+    /**
      * Relation to Table User Asesi
      *
      * @return HasOne
