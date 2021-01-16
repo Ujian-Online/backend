@@ -96,6 +96,25 @@
                 }
             }
         },
+        "/api/order": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Order Index",
+                "operationId": "App\\Http\\Controllers\\Api\\OrderController::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/password/reset": {
             "post": {
                 "tags": [
