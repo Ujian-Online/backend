@@ -143,6 +143,77 @@
                         "passport": []
                     }
                 ]
+            },
+            "put": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Update Order by ID",
+                "operationId": "App\\Http\\Controllers\\Api\\OrderController::update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Order id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update Order Data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "transfer_from_bank_name": {
+                                        "description": "Transfer dari Bank (Nama Bank)",
+                                        "type": "string",
+                                        "example": "bri"
+                                    },
+                                    "transfer_from_bank_account": {
+                                        "description": "Transfer dari Bank (Nama Akun Bank)",
+                                        "type": "string",
+                                        "example": "john doe"
+                                    },
+                                    "transfer_from_bank_number": {
+                                        "description": "Transfer dari Bank (Nomor Akun Bank)",
+                                        "type": "string",
+                                        "example": "3322114456"
+                                    },
+                                    "bukti_transfer": {
+                                        "description": "Bukti Transfer Ekstensi: JPG, JPEG, PNG atau PDF",
+                                        "type": "file",
+                                        "example": "bukti_transfer.pdf"
+                                    },
+                                    "bank_id": {
+                                        "description": "TUK Bank ID Tujuan Transfer",
+                                        "type": "int",
+                                        "example": "1"
+                                    },
+                                    "transfer_date": {
+                                        "description": "Tanggal Transfer",
+                                        "type": "datetime",
+                                        "example": "2020-10-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
             }
         },
         "/api/password/reset": {
