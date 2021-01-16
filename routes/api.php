@@ -38,5 +38,6 @@ Route::name('api.')
                 Route::get('user/me', 'Api\UserController@me')->name('me');
 
                 Route::get('order', 'Api\OrderController@index')->name('order.index');
+                Route::get('order/{id}', 'Api\OrderController@show')->name('order.show');
             });
     });
