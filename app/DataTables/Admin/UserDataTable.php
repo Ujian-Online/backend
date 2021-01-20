@@ -28,7 +28,7 @@ class UserDataTable extends DataTable
                 return ucfirst($query->status);
             })
             ->editColumn('media_url_sign_user', function ($query) {
-                $link = '<a href="'.$query->media_url_sign_user.'">Buka</a>';
+                $link = '<a href="'.$query->media_url_sign_user.'" target="_blank">Buka</a>';
 
                 return !empty($query->media_url_sign_user) ? $link : 'Belum ada Paraf/TTD';
             })
@@ -39,7 +39,8 @@ class UserDataTable extends DataTable
                     'url_edit' => route('admin.user.edit', $query->id),
                     'url_destroy' => route('admin.user.destroy', $query->id),
                 ]);
-            });
+            })
+            ->rawColumns(['media_url_sign_user']);
     }
 
     /**
