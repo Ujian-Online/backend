@@ -60,10 +60,12 @@ class UserController extends Controller
     {
         // validate input
         $request->validate([
-            'email'     => 'required|max:255|email|unique:users,email',
-            'password'  => 'required|min:6',
-            'type'      => 'required|in:' . implode(',', config('options.user_type')),
-            'status'    => 'required|in:' . implode(',', config('options.user_status')),
+            'email'             => 'required|max:255|email|unique:users,email',
+            'password'          => 'required|min:6',
+            'type'              => 'required|in:' . implode(',', config('options.user_type')),
+            'status'            => 'required|in:' . implode(',', config('options.user_status')),
+            'upload_profile'    => 'nullable|mimes:jpg,jpeg,png',
+            'upload_sign'       => 'nullable|mimes:jpg,jpeg,png'
         ]);
 
         // get form data
@@ -77,6 +79,16 @@ class UserController extends Controller
         // Hash Password
         $dataInput['password'] = Hash::make($dataInput['password']);
 
+        // upload file profile picture to s3
+        if($request->file('upload_profile')) {
+            $dataInput['media_url']  = upload_to_s3($request->file('upload_profile'));
+        }
+
+        // upload file ttd/paraf to s3
+        if($request->file('upload_sign')) {
+            $dataInput['media_url_sign_user']  = upload_to_s3($request->file('upload_sign'));
+        }
+
         // save to database
         $user = User::create($dataInput);
 
@@ -85,7 +97,7 @@ class UserController extends Controller
 
         // check if user type is assesor or not
         if ($dataInput['type'] == 'assesor') {
-            $redirect_route = route('admin.user.assesor.create', [
+            $redirect_route = route('admin.user.asesor.create', [
                 'user_id' => $user->id
             ]);
         } elseif ($dataInput['type'] == 'tuk') {
@@ -155,10 +167,12 @@ class UserController extends Controller
     {
         // validate input
         $request->validate([
-            'email'         => 'required|max:255|email|unique:users,email,' . $id,
-            'newpassword'   => 'nullable|min:6',
-            'type'          => 'required|in:' . implode(',', config('options.user_type')),
-            'status'        => 'required|in:' . implode(',', config('options.user_status')),
+            'email'             => 'required|max:255|email|unique:users,email',
+            'newpassword'       => 'required|min:6',
+            'type'              => 'required|in:' . implode(',', config('options.user_type')),
+            'status'            => 'required|in:' . implode(',', config('options.user_status')),
+            'upload_profile'    => 'nullable|mimes:jpg,jpeg,png',
+            'upload_sign'       => 'nullable|mimes:jpg,jpeg,png'
         ]);
 
         // get form data
@@ -178,6 +192,16 @@ class UserController extends Controller
         // update password if new password field not empty
         if (isset($dataInput['newpassword']) and !empty($dataInput['newpassword'])) {
             $query->password = Hash::make($dataInput['newpassword']);
+        }
+
+        // upload file profile picture to s3
+        if($request->file('upload_profile')) {
+            $query->media_url = upload_to_s3($request->file('upload_profile'));
+        }
+
+        // upload file ttd/paraf to s3
+        if($request->file('upload_sign')) {
+            $query->media_url_sign_user = upload_to_s3($request->file('upload_sign'));
         }
 
         // update data
