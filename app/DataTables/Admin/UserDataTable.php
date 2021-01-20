@@ -50,7 +50,24 @@ class UserDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery();
+        // create query variable
+        $query = $model->newQuery();
+
+        // get input filter
+        $type = request()->input('type');
+        $status = request()->input('status');
+
+        // type filter query
+        if(isset($type) and !empty($type)) {
+            $query = $query->where('type', $type);
+        }
+
+        // status filter query
+        if(isset($status) and !empty($status)) {
+            $query = $query->where('status', $status);
+        }
+
+        return $query;
     }
 
     /**
@@ -81,7 +98,7 @@ class UserDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(3, 'desc')
+                    ->orderBy(4, 'desc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
