@@ -28,7 +28,9 @@ class UserController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'User Lists'
+            'title'         => 'User Lists',
+            'filter_route'  => route('admin.user.index'),
+            'filter_view'   => 'admin.user.filter-form',
         ]);
     }
 
