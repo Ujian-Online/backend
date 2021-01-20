@@ -93,6 +93,50 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
+        <div class="form-group col-md-6">
+            <label for="media_url">Profile Picture</label>
+
+            @if(isset($isCreated) OR isset($isEdit))
+                <input type="file" class="form-control-file @error('upload_profile') is-invalid @enderror" name="upload_profile" id="upload_profile" accept=".jpg,.jpeg,.png">
+                <small id="helpFileUpload" class="text-muted">File Type: .jpg, .jpeg, .png</small>
+
+                @error('upload_profile')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            @endif
+
+            @if(isset($isShow))
+                @if($query->media_url)
+                    <img src="{{ $query->media_url }}" class="img-thumbnail img-fluid" alt="" />
+                @else
+                    <p>{{ _('Tidak ada Profile Picture') }}</p>
+                @endif
+            @endif
+
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="media_url_sign_user">TTD/Paraf</label>
+
+            @if(isset($isCreated) OR isset($isEdit))
+                <input type="file" class="form-control-file @error('upload_sign') is-invalid @enderror" name="upload_sign" id="upload_profile" accept=".jpg,.jpeg,.png">
+                <small id="helpFileUpload" class="text-muted">File Type: .jpg, .jpeg, .png</small>
+
+                @error('upload_sign')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            @endif
+
+            @if(isset($isShow))
+                @if($query->media_url_sign_user)
+                    <img src="{{ $query->media_url_sign_user }}" class="img-thumbnail img-fluid" alt="" />
+                @else
+                    <p>{{ _('Tidak ada TTD/Paraf') }}</p>
+                @endif
+            @endif
+
+        </div>
     </div>
 @endsection
 
