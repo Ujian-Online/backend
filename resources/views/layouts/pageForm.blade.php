@@ -9,7 +9,7 @@
             <div class="card card-outline card-success">
                 <div class="card-body">
                     {{-- Form With Dynamic URL Action --}}
-                    <form action="{{ $action }}" method="POST">
+                    <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Method For Edit Page --}}
