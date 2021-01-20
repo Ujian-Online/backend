@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card card-outline card-success">
                 <div class="card-body">
                     {{-- Form With Dynamic URL Action --}}
                     <form action="{{ $action }}" method="POST">
