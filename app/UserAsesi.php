@@ -24,6 +24,8 @@ class UserAsesi extends Model
         'has_job',
         'job_title',
         'job_address',
+        'company_phone',
+        'company_email',
         'user_id_admin',
         'is_verified',
         'verification_note',
@@ -52,5 +54,15 @@ class UserAsesi extends Model
      */
     public function getGenderAttribute($value) {
         return $value ? 'Pria' : 'Wanita';
+    }
+
+    /**
+     * Relation to Table User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function User()
+    {
+        return $this->hasOne('App\User', 'id', 'user_id');
     }
 }
