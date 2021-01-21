@@ -26,9 +26,15 @@ class UserTukController extends Controller
      */
     public function index(UserTukDataTable $dataTables)
     {
+        // get tuks lists
+        $tuks = Tuk::orderBy('title', 'asc')->get();
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'User TUK Lists'
+            'title'         => 'User TUK Lists',
+            'filter_route'  => route('admin.user.tuk.index'),
+            'filter_view'   => 'admin.tuk.filter-form',
+            'tuks'          => $tuks
         ]);
     }
 
