@@ -21,11 +21,19 @@ class UserAsesiDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('gender', function ($query) {
-                return config('options.user_assesi_gender')[$query->gender];
-            })
             ->editColumn('is_verified', function ($query) {
                 return $query->is_verified == true ? 'YES' : 'NO';
+            })
+            ->addColumn('email', function($query) {
+                return $query->user ? $query->user->email : 'Not Found';
+            })
+            ->addColumn('profile_picture', function($query) {
+                if(!empty($query->user) and !empty($query->user->media_url)) {
+                    $url = $query->user->media_url;
+                    return "<a href='$url' target='_blank'><img src='$url' class='img-thumbnail img-fluid' style='width: 100px;'></a>";
+                } else {
+                    return 'Not Found';
+                }
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
@@ -34,7 +42,8 @@ class UserAsesiDataTable extends DataTable
                     'url_edit' => route('admin.user.asesi.edit', $query->id),
                     'url_destroy' => route('admin.user.asesi.destroy', $query->id),
                 ]);
-            });
+            })
+            ->rawColumns(['profile_picture']);
     }
 
     /**
@@ -46,7 +55,7 @@ class UserAsesiDataTable extends DataTable
      */
     public function query(UserAsesi $model)
     {
-        return $model->newQuery();
+        return $model::with('user');
     }
 
     /**
@@ -93,18 +102,22 @@ class UserAsesiDataTable extends DataTable
     protected function getColumns()
     {
         return [
+            Column::computed('email')
+                ->title('Email'),
             Column::make('name')->title('Nama'),
-            Column::make('gender')->title('Jenis Kelamin'),
-            Column::make('no_ktp'),
+            Column::make('phone_number')->title('No. Telp'),
             Column::make('is_verified')->title('Verifikasi'),
-            Column::make('updated_at')
-                ->title('Update')
-                ->width('10%'),
-            Column::computed('action')
+            Column::computed('profile_picture')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
                 ->width('15%')
+                ->title('Profile'),
+            Column::computed('action')
+                ->orderable(false)
+                ->exportable(false)
+                ->printable(false)
+                ->width('5%')
                 ->addClass('text-center'),
         ];
     }
