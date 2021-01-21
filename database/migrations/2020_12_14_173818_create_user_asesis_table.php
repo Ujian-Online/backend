@@ -27,7 +27,6 @@ class CreateUserAsesisTable extends Migration
             $table->string('job_title')->nullable();
             $table->text('job_address')->nullable();
             $table->bigInteger('user_id_admin')->nullable();
-            $table->text('note_admin')->nullable();
             $table->boolean('is_verified');
             $table->text('verification_note')->nullable();
             $table->timestamps();
