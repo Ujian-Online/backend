@@ -28,7 +28,9 @@ class UserAsesiController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi Lists'
+            'title' => 'Asesi APL01 Lists',
+            'filter_route' => route('admin.asesi.apl01.index'),
+            'filter_view' => 'admin.assesi.filter-form'
         ]);
     }
 
@@ -43,8 +45,8 @@ class UserAsesiController extends Controller
 
         // return view template create
         return view('admin.assesi.form', [
-            'title'     => 'Tambah Asesi Baru',
-            'action'    => route('admin.user.asesi.store'),
+            'title'     => 'Tambah Asesi APL-01',
+            'action'    => route('admin.asesi.apl01.store'),
             'isCreated' => true,
             'users'     => $users
         ]);
@@ -97,7 +99,7 @@ class UserAsesiController extends Controller
         UserAsesi::create($dataInput);
 
         return redirect()
-            ->route('admin.user.asesi.index')
+            ->route('admin.asesi.apl01.index', ['is_verified' => false])
             ->with('success', trans('action.success', [
                     'name' => $dataInput['name']
             ]));
@@ -117,9 +119,9 @@ class UserAsesiController extends Controller
 
         // return data to view
         return view('admin.assesi.form', [
-            'title'     => 'Show Detail: ' . $query->name,
+            'title'     => 'Detail Asesi APL-01: ' . $query->name,
             'action'    => '#',
-            'isShow'    => route('admin.user.asesi.edit', $id),
+            'isShow'    => route('admin.asesi.apl01.edit', $id),
             'query'     => $query,
             'users'     => $users
         ]);
@@ -138,8 +140,8 @@ class UserAsesiController extends Controller
         $query = UserAsesi::findOrFail($id);
 
         return view('admin.assesi.form', [
-            'title'     => 'Edit Data: ' . $query->name,
-            'action'    => route('admin.user.asesi.update', $id),
+            'title'     => 'Ubah Asesi APL-01: ' . $query->name,
+            'action'    => route('admin.asesi.apl01.update', $id),
             'isEdit'    => true,
             'query'     => $query,
             'users'     => $users
@@ -193,7 +195,7 @@ class UserAsesiController extends Controller
         $query->update($dataInput);
 
         return redirect()
-            ->route('admin.user.asesi.index')
+            ->route('admin.asesi.apl01.index', ['is_verified' => false])
             ->with('success', trans('action.success_update', [
                 'name' => $dataInput['name']
             ]));

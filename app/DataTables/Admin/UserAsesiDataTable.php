@@ -38,9 +38,9 @@ class UserAsesiDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->name,
-                    'url_show' => route('admin.user.asesi.show', $query->id),
-                    'url_edit' => route('admin.user.asesi.edit', $query->id),
-                    'url_destroy' => route('admin.user.asesi.destroy', $query->id),
+                    'url_show' => route('admin.asesi.apl01.show', $query->id),
+                    'url_edit' => route('admin.asesi.apl01.edit', $query->id),
+                    'url_destroy' => route('admin.asesi.apl01.destroy', $query->id),
                 ]);
             })
             ->rawColumns(['profile_picture']);
@@ -55,7 +55,18 @@ class UserAsesiDataTable extends DataTable
      */
     public function query(UserAsesi $model)
     {
-        return $model::with('user');
+        // create query variable
+        $query = $model::with('user');
+
+        // get input filter
+        $is_verified = request()->input('is_verified');
+
+        // is_verified filter query
+        if(isset($is_verified) and !empty($is_verified)) {
+            $query = $query->where('is_verified', $is_verified);
+        }
+
+        return $query;
     }
 
     /**
@@ -138,7 +149,7 @@ class UserAsesiDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.user.asesi.create');
+        $url = route('admin.asesi.apl01.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {

@@ -23,7 +23,6 @@ Route::middleware(['auth', 'can:isAdmin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::resource('user/asesi', 'Admin\UserAsesiController', ['as' => 'user']);
         Route::resource('user/asesor', 'Admin\UserAsesorController', ['as' => 'user']);
         Route::resource('user/tuk', 'Admin\UserTukController', ['as' => 'user']);
         Route::resource('user', 'Admin\UserController');
@@ -36,8 +35,9 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('sertifikasi/ukelement', 'Admin\SertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);
         Route::resource('sertifikasi', 'Admin\SertifikasiController');
 
-        Route::resource('asesi/customdata', 'Admin\UserAsesiCustomDataController', ['as' => 'asesi']);
-        Route::resource('asesi/apl01', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
+        Route::resource('asesi/customdata', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
+        Route::resource('asesi/apl01', 'Admin\UserAsesiController', ['as' => 'asesi']);
+        Route::resource('asesi/apl01customdata', 'Admin\UserAsesiCustomDataController', ['as' => 'asesi']);
         Route::resource('asesi/apl02', 'Admin\AsesiUnitKompetensiDokumenController', ['as' => 'asesi']);
         Route::resource('asesi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'asesi']);
 

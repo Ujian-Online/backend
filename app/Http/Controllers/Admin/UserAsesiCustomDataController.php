@@ -28,7 +28,7 @@ class UserAsesiCustomDataController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi Custom Data Lists'
+            'title' => 'Asesi APL-01 Custom Data Lists'
         ]);
     }
 
@@ -44,8 +44,8 @@ class UserAsesiCustomDataController extends Controller
 
         // return view template create
         return view('admin.assesi.customdata-form', [
-            'title'         => 'Tambah Asesi Custom Data Baru',
-            'action'        => route('admin.asesi.customdata.store'),
+            'title'         => 'Tambah Asesi APL-01 Custom Data',
+            'action'        => route('admin.asesi.apl01customdata.store'),
             'isCreated'     => true,
             'asesis'        => $asesis,
         ]);
@@ -84,7 +84,7 @@ class UserAsesiCustomDataController extends Controller
 
         // redirect to index table
         return redirect()
-            ->route('admin.asesi.customdata.index')
+            ->route('admin.asesi.apl01customdata.index')
             ->with('success', trans('action.success', [
                 'name' => $query->title
             ]));
@@ -106,9 +106,9 @@ class UserAsesiCustomDataController extends Controller
 
         // return data to view
         return view('admin.assesi.customdata-form', [
-            'title'         => 'Tampilkan Detail: ' . $query->title,
+            'title'         => 'Detail Asesi APL-01 Custom Data: ' . $query->title,
             'action'        => '#',
-            'isShow'        => route('admin.asesi.customdata.edit', $id),
+            'isShow'        => route('admin.asesi.apl01customdata.edit', $id),
             'query'         => $query,
             'asesis'        => $asesis,
         ]);
@@ -130,8 +130,8 @@ class UserAsesiCustomDataController extends Controller
 
         // return data to view
         return view('admin.assesi.customdata-form', [
-            'title'         => 'Ubah Data: ' . $query->id,
-            'action'        => route('admin.asesi.customdata.update', $id),
+            'title'         => 'Ubah Asesi APL-01 Custom Data: ' . $query->id,
+            'action'        => route('admin.asesi.apl01customdata.update', $id),
             'isEdit'        => true,
             'query'         => $query,
             'asesis'        => $asesis,
@@ -174,7 +174,7 @@ class UserAsesiCustomDataController extends Controller
 
         // redirect
         return redirect()
-            ->route('admin.asesi.customdata.index')
+            ->route('admin.asesi.apl01customdata.index')
             ->with('success', trans('action.success_update', [
                 'name' => $query->title
             ]));
