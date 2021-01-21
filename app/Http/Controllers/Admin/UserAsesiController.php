@@ -41,7 +41,12 @@ class UserAsesiController extends Controller
      */
     public function create()
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        // get users list when not found in user asesi and type asesi
+        $users = User::select('users.*')
+            ->leftJoin('user_asesis', 'user_asesis.user_id', '!=', 'users.id')
+            ->where('users.type', 'asesi')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         // return view template create
         return view('admin.assesi.form', [
@@ -114,8 +119,14 @@ class UserAsesiController extends Controller
      */
     public function show(int $id)
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        // query get data
         $query = UserAsesi::findOrFail($id);
+        // get users list when not found in user asesi and type asesi
+        $users = User::select('users.*')
+            ->leftJoin('user_asesis', 'user_asesis.user_id', '!=', 'users.id')
+            ->where('users.type', 'asesi')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         // return data to view
         return view('admin.assesi.form', [
@@ -136,8 +147,14 @@ class UserAsesiController extends Controller
      */
     public function edit(int $id)
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        // query get data
         $query = UserAsesi::findOrFail($id);
+        // get users list when not found in user asesi and type asesi
+        $users = User::select('users.*')
+            ->leftJoin('user_asesis', 'user_asesis.user_id', '!=', 'users.id')
+            ->where('users.type', 'asesi')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('admin.assesi.form', [
             'title'     => 'Ubah Asesi APL-01: ' . $query->name,
