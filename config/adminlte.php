@@ -94,12 +94,6 @@ return [
                 ],
             ],
             [
-                'title'     => 'Asesi',
-                'icon'      => 'fas fa-user',
-                'route'     => 'admin.user.asesi.index',
-                'active'    => 'admin.user.asesi.*',
-            ],
-            [
                 'title'     => 'Asesor',
                 'icon'      => 'fas fa-user-tie',
                 'route'     => 'admin.user.asesor.index',
@@ -128,6 +122,13 @@ return [
                 'icon'      => 'fas fa-money-check-alt',
                 'route'     => 'admin.tuk.bank.index',
                 'active'    => 'admin.tuk.bank.*',
+            ],
+            'Asesi',
+            [
+                'title'     => 'APL01',
+                'icon'      => 'fas fa-user',
+                'route'     => 'admin.user.asesi.index',
+                'active'    => 'admin.user.asesi.*',
             ],
             'Sertifikasi',
             [
