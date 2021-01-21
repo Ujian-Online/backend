@@ -43,9 +43,10 @@ class UserAsesiController extends Controller
     {
         // get users list when not found in user asesi and type asesi
         $users = User::select('users.*')
-            ->leftJoin('user_asesis', 'user_asesis.user_id', '!=', 'users.id')
-            ->where('users.type', 'asesi')
-            ->orderBy('created_at', 'desc')
+            ->leftJoin('user_asesis', 'user_asesis.user_id', '=', 'users.id')
+            ->where('users.type', 'asessi')
+            ->whereNull('user_asesis.user_id')
+            ->orderBy('users.id', 'desc')
             ->get();
 
         // return view template create
@@ -68,7 +69,6 @@ class UserAsesiController extends Controller
     {
         $request->validate([
             'user_id'               => 'required|integer',
-            'user_id_admin'         => 'required|integer',
             'name'                  => 'required|min:3|max:255',
             'address'               => 'required|min:3|max:255',
             'phone_number'          => 'required|numeric',
@@ -84,7 +84,6 @@ class UserAsesiController extends Controller
         // get form data
         $dataInput = $request->only([
             'user_id',
-            'user_id_admin',
             'name',
             'address',
             'phone_number',
@@ -96,13 +95,20 @@ class UserAsesiController extends Controller
             'has_job',
             'job_title',
             'job_address',
+            'company_phone',
+            'company_email',
+            'is_verified',
             'verification_note',
-            'note_admin',
-            'is_verified'
         ]);
 
+        // get user admin input
+        $user_admin = $request->user();
+        $dataInput['user_id_admin'] = $user_admin->id;
+
+        // save to database
         UserAsesi::create($dataInput);
 
+        // return redirect
         return redirect()
             ->route('admin.asesi.apl01.index', ['is_verified' => false])
             ->with('success', trans('action.success', [
@@ -122,11 +128,7 @@ class UserAsesiController extends Controller
         // query get data
         $query = UserAsesi::findOrFail($id);
         // get users list when not found in user asesi and type asesi
-        $users = User::select('users.*')
-            ->leftJoin('user_asesis', 'user_asesis.user_id', '!=', 'users.id')
-            ->where('users.type', 'asesi')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $users = User::where('id', $query->user_id)->get();
 
         // return data to view
         return view('admin.assesi.form', [
@@ -150,10 +152,8 @@ class UserAsesiController extends Controller
         // query get data
         $query = UserAsesi::findOrFail($id);
         // get users list when not found in user asesi and type asesi
-        $users = User::select('users.*')
-            ->leftJoin('user_asesis', 'user_asesis.user_id', '!=', 'users.id')
-            ->where('users.type', 'asesi')
-            ->orderBy('created_at', 'desc')
+        $users = User::where('users.type', 'asessi')
+            ->orderBy('id', 'desc')
             ->get();
 
         return view('admin.assesi.form', [
@@ -175,11 +175,12 @@ class UserAsesiController extends Controller
      */
     public function update(Request $request, int $id)
     {
+
         $request->validate([
             'user_id'               => 'required|integer',
-            'user_id_admin'         => 'required|integer',
             'name'                  => 'required|min:3|max:255',
             'address'               => 'required|min:3|max:255',
+            'phone_number'          => 'required|numeric',
             'gender'                => 'required|boolean',
             'birth_place'           => 'required|min:3|max:225',
             'birth_date'            => 'required|date',
@@ -192,9 +193,9 @@ class UserAsesiController extends Controller
         // get form data
         $dataInput = $request->only([
             'user_id',
-            'user_id_admin',
             'name',
             'address',
+            'phone_number',
             'gender',
             'birth_place',
             'birth_date',
@@ -203,11 +204,17 @@ class UserAsesiController extends Controller
             'has_job',
             'job_title',
             'job_address',
+            'company_phone',
+            'company_email',
+            'is_verified',
             'verification_note',
-            'note_admin',
-            'is_verified'
         ]);
 
+        // get user admin input
+        $user_admin = $request->user();
+        $dataInput['user_id_admin'] = $user_admin->id;
+
+        // update data
         $query = UserAsesi::findOrFail($id);
         $query->update($dataInput);
 
