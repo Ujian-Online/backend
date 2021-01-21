@@ -25,7 +25,6 @@ class UserAsesi extends Model
         'job_title',
         'job_address',
         'user_id_admin',
-        'note_admin',
         'is_verified',
         'verification_note',
     ];
@@ -41,4 +40,17 @@ class UserAsesi extends Model
         'has_job'       => 'boolean',
         'is_verified'   => 'boolean'
     ];
+
+    /**
+     * Return Gender (Boolean) as String
+     * - Pria (true)
+     * - Wanita (false)
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    public function getGenderAttribute($value) {
+        return $value ? 'Pria' : 'Wanita';
+    }
 }
