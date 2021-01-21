@@ -32,7 +32,7 @@ class TukBankController extends Controller
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title'         => 'TUK Bank Lists',
-            'filter_route'  => route('admin.user.tuk.index'),
+            'filter_route'  => route('admin.tuk.bank.index'),
             'filter_view'   => 'admin.tuk.filter-form',
             'tuks'          => $tuks
         ]);
