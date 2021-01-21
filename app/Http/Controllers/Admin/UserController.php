@@ -167,8 +167,8 @@ class UserController extends Controller
     {
         // validate input
         $request->validate([
-            'email'             => 'required|max:255|email|unique:users,email',
-            'newpassword'       => 'required|min:6',
+            'email'             => 'required|max:255|email|unique:users,email,' . $id,
+            'newpassword'       => 'nullable|min:6',
             'type'              => 'required|in:' . implode(',', config('options.user_type')),
             'status'            => 'required|in:' . implode(',', config('options.user_status')),
             'upload_profile'    => 'nullable|mimes:jpg,jpeg,png',
