@@ -26,9 +26,15 @@ class TukBankController extends Controller
      */
     public function index(TukBankDataTable $dataTables)
     {
+        // get tuks lists
+        $tuks = Tuk::orderBy('title', 'asc')->get();
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'TUK Bank Lists'
+            'title'         => 'TUK Bank Lists',
+            'filter_route'  => route('admin.user.tuk.index'),
+            'filter_view'   => 'admin.tuk.filter-form',
+            'tuks'          => $tuks
         ]);
     }
 
