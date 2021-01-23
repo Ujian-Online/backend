@@ -30,6 +30,7 @@ class SertifikasiDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
+                    'url_sertifikasi_uk' => route('admin.sertifikasi.uk.index', ['sertifikasi_id' => $query->id ]),
                     'url_show' => route('admin.sertifikasi.show', $query->id),
                     'url_edit' => route('admin.sertifikasi.edit', $query->id),
                     'url_destroy' => route('admin.sertifikasi.destroy', $query->id),
@@ -105,7 +106,7 @@ class SertifikasiDataTable extends DataTable
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('15%')
+                ->width('10%')
                 ->addClass('text-center'),
         ];
     }
