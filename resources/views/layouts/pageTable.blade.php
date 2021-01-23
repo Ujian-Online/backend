@@ -28,10 +28,5 @@
 <script src="{{ mix('/js/admin.js') }}"></script>
 <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
 {!! $dataTable->scripts() !!}
-<script>
-    $('select').select2({
-        theme: 'bootstrap4',
-        disabled: false
-    });
-</script>
+@stack('script')
 @endsection
