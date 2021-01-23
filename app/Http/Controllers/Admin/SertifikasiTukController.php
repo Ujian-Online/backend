@@ -83,6 +83,16 @@ class SertifikasiTukController extends Controller
             'tuk_price_training',
         ]);
 
+        // cari sertifikasi dan tuk
+        $search = SertifikasiTuk::where('sertifikasi_id', $dataInput['sertifikasi_id'])
+            ->where('tuk_id', $dataInput['tuk_id'])
+            ->count();
+
+        // jika sudah ada maka return error
+        if($search != 0) {
+            return back()->withErrors('Data sudah ada.!');
+        }
+
         // save to database
         $query = SertifikasiTuk::create($dataInput);
 
