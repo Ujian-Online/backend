@@ -36,6 +36,6 @@ class SertifikasiUnitKompentensi extends Model
      */
     public function Sertifikasi()
     {
-        return $this->hasOne('App\Sertifikasi');
+        return $this->hasOne('App\Sertifikasi', 'id', 'sertifikasi_id');
     }
 }
