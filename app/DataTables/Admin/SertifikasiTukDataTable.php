@@ -46,7 +46,7 @@ class SertifikasiTukDataTable extends DataTable
     public function query(SertifikasiTuk $model)
     {
         // create query variable
-        $query = $model::with('sertifikasi');
+        $query = $model::with(['sertifikasi', 'tuk']);
 
         // get input filter
         $tuk_id = request()->input('tuk_id');
@@ -103,18 +103,18 @@ class SertifikasiTukDataTable extends DataTable
     protected function getColumns()
     {
         return [
+            Column::computed('tuk')
+                ->title('TUK')
+                ->data('tuk.title'),
             Column::computed('sertifikasi')
                 ->title('Nomor Skema')
                 ->data('sertifikasi.nomor_skema'),
             Column::computed('sertifikasi')
                 ->data('sertifikasi.title'),
             Column::make('tuk_price_baru')
-                ->title('Harga Baru TUK'),
+                ->title('Harga Baru'),
             Column::make('tuk_price_perpanjang')
-                ->title('Harga Perpanjang TUK'),
-            Column::make('updated_at')
-                ->title('Update')
-                ->width('10%'),
+                ->title('Harga Perpanjang'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
