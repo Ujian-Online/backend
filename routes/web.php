@@ -28,11 +28,13 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('user', 'Admin\UserController');
 
         Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
+        Route::get('tuk/search', 'Admin\TukController@search')->name('tuk.search');
         Route::resource('tuk', 'Admin\TukController');
 
         Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi']);
         Route::resource('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController', ['as' => 'sertifikasi']);
         Route::resource('sertifikasi/ukelement', 'Admin\SertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);
+        Route::get('sertifikasi/search', 'Admin\SertifikasiController@search')->name('sertifikasi.search');
         Route::resource('sertifikasi', 'Admin\SertifikasiController');
 
         Route::resource('asesi/customdata', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);

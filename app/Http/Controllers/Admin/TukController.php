@@ -186,4 +186,47 @@ class TukController extends Controller
             'success' => true,
         ]);
     }
+
+    /**
+     * Select2 Search Data
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function search(Request $request)
+    {
+        // database query
+        $query = new Tuk();
+        // result variable
+        $result = [];
+
+        // get input from select2 search term
+        $q = $request->input('q');
+
+        // return empty object if query is empty
+        if(empty($q)) {
+            return response()->json($result, 200);
+        }
+
+        // check if query is numeric or not
+        if(is_numeric($q)) {
+            $query = $query->where('id', 'like', "%$q%");
+        } else {
+            $query = $query->where('title', 'like', "%$q%");
+        }
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => '[ID: ' . $data->id . '] - ' . $data->title,
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
+    }
 }
