@@ -45,7 +45,18 @@ class SertifikasiTukDataTable extends DataTable
      */
     public function query(SertifikasiTuk $model)
     {
-        return $model::with('sertifikasi');
+        // create query variable
+        $query = $model::with('sertifikasi');
+
+        // get input filter
+        $tuk_id = request()->input('tuk_id');
+
+        // tuk_id filter query
+        if(isset($tuk_id) and !empty($tuk_id)) {
+            $query = $query->where('tuk_id', $tuk_id);
+        }
+
+        return $query;
     }
 
     /**
