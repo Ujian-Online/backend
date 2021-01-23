@@ -29,7 +29,9 @@ class SertifikasiTukController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Sertifikasi TUK Lists'
+            'title' => 'Sertifikasi TUK Lists',
+            'filter_route' => route('admin.sertifikasi.tuk.index'),
+            'filter_view' => 'admin.sertifikasi-tuk.filter-form'
         ]);
     }
 
