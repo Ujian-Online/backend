@@ -28,7 +28,9 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Sertifikasi Unit Kompetensi Lists'
+            'title' => 'Sertifikasi Unit Kompetensi Lists',
+            'filter_route' => route('admin.sertifikasi.uk.index'),
+            'filter_view' => 'admin.sertifikasi-uk.filter-form',
         ]);
     }
 

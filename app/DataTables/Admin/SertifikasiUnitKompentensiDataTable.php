@@ -39,7 +39,18 @@ class SertifikasiUnitKompentensiDataTable extends DataTable
      */
     public function query(SertifikasiUnitKompentensi $model)
     {
-        return $model->newQuery();
+        // create query variable
+        $query = $model::with('sertifikasi');
+
+        // get input filter
+        $sertifikasi_id = request()->input('sertifikasi_id');
+
+        // sertifikasi_id filter query
+        if(isset($sertifikasi_id) and !empty($sertifikasi_id)) {
+            $query = $query->where('sertifikasi_id', $sertifikasi_id);
+        }
+
+        return $query;
     }
 
     /**
