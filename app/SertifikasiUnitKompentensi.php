@@ -38,4 +38,14 @@ class SertifikasiUnitKompentensi extends Model
     {
         return $this->hasOne('App\Sertifikasi', 'id', 'sertifikasi_id');
     }
+
+    /**
+     * Relation to Table Sertifikasi Unit Kompetensi Element
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function UKElement()
+    {
+        return $this->hasMany('App\SertifikasiUnitKompetensiElement', 'unit_kompetensi_id', 'id');
+    }
 }
