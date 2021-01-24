@@ -189,4 +189,14 @@ class SertifikasiUnitKompetensiElementController extends Controller
             'success' => true,
         ]);
     }
+
+    /**
+     * UKElement RAW Form HTML
+     *
+     * @return Application|Factory|View
+     */
+    public function rawForm()
+    {
+        return view('admin.sertifikasi-uk.form-element');
+    }
 }
