@@ -16,9 +16,11 @@ return [
     'job_title' => 'Bidang Pekerjaan',
     'job_address' => 'Alamat/Lokasi Kerja',
     'nik' => 'Nomor Induk KTP',
-    "note_admin" => "Catatan Admin",
-    "verification_note" => "Catatan Verifikasi",
-    "media_url_sign_user" => "Tanda Tangan User",
-    "media_url_sign_admin" => "Tanda Tangan Admin",
-    "phone_number" => "No. Telphone"
+    'note_admin' => 'Catatan Admin',
+    'verification_note' => 'Catatan Verifikasi',
+    'media_url_sign_user' => 'Tanda Tangan User',
+    'media_url_sign_admin' => 'Tanda Tangan Admin',
+    'phone_number' => 'No. Telphone',
+    'company_phone' => 'No. Telphone Perusahaan',
+    'company_email' => 'Email Perusahaan'
 ];

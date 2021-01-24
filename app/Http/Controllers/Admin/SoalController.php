@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\Admin\SoalDataTable;
 use App\Http\Controllers\Controller;
-use App\Sertifikasi;
 use App\Soal;
+use App\SoalPilihanGanda;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -58,9 +58,15 @@ class SoalController extends Controller
     {
         // validate input
         $request->validate([
-            'question'         => 'required',
-            'question_type'    => 'required',
-            'max_score'        => 'required|numeric',
+            'question'      => 'required',
+            'question_type' => 'required',
+            'max_score'     => 'required|numeric',
+            'answer_essay'  => 'nullable|required_if:question_type,essay',
+            'answer_option' => 'nullable|required_if:question_type,multiple_option',
+            'option_a'      => 'nullable|required_if:question_type,multiple_option',
+            'option_b'      => 'nullable|required_if:question_type,multiple_option',
+            'option_c'      => 'nullable|required_if:question_type,multiple_option',
+            'option_d'      => 'nullable|required_if:question_type,multiple_option',
         ]);
 
         // get form data
@@ -75,11 +81,48 @@ class SoalController extends Controller
         // save to database
         $query = Soal::create($dataInput);
 
+        // pilihan ganda check and create data
+        if($dataInput['question_type'] == 'multiple_option') {
+            $pilihanGandas = [
+                [
+                    'soal_id'       => $query->id,
+                    'option'        => $request->input('option_a'),
+                    'label'         => 'A',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],
+                [
+                    'soal_id'       => $query->id,
+                    'option'        => $request->input('option_b'),
+                    'label'         => 'B',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],
+                [
+                    'soal_id'       => $query->id,
+                    'option'        => $request->input('option_c'),
+                    'label'         => 'C',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],
+                [
+                    'soal_id'       => $query->id,
+                    'option'        => $request->input('option_d'),
+                    'label'         => 'D',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],
+            ];
+
+            // bulk save to pilihan ganda
+            SoalPilihanGanda::insert($pilihanGandas);
+        }
+
         // redirect to index table
         return redirect()
             ->route('admin.soal.daftar.index')
             ->with('success', trans('action.success', [
-                'name' => $query->title
+                'name' => $query->question
             ]));
     }
 
@@ -93,7 +136,13 @@ class SoalController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = Soal::findOrFail($id);
+        $query = Soal::with('soalpilihanganda')->where('id', $id)->firstOrFail();
+
+        // pilihan ganda convert to array
+        $pilihangandas = [];
+        foreach($query->soalpilihanganda as $pilihanganda) {
+            $pilihangandas[strtolower($pilihanganda->label)] = $pilihanganda;
+        }
 
         // return data to view
         return view('admin.soal.form', [
@@ -101,6 +150,7 @@ class SoalController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.soal.daftar.edit', $id),
             'query'         => $query,
+            'pilihangandas' => $pilihangandas,
         ]);
     }
 
@@ -114,7 +164,13 @@ class SoalController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = Soal::findOrFail($id);
+        $query = Soal::with('soalpilihanganda')->where('id', $id)->firstOrFail();
+
+        // pilihan ganda convert to array
+        $pilihangandas = [];
+        foreach($query->soalpilihanganda as $pilihanganda) {
+            $pilihangandas[strtolower($pilihanganda->label)] = $pilihanganda;
+        }
 
         // return data to view
         return view('admin.soal.form', [
@@ -122,6 +178,7 @@ class SoalController extends Controller
             'action'        => route('admin.soal.daftar.update', $id),
             'isEdit'        => true,
             'query'         => $query,
+            'pilihangandas' => $pilihangandas,
         ]);
     }
 
@@ -137,15 +194,19 @@ class SoalController extends Controller
     {
         // validate input
         $request->validate([
-            'question'         => 'required',
-            'question_type'    => 'required',
-            'max_score'        => 'required|numeric',
+            'question'      => 'required',
+            'max_score'     => 'required|numeric',
+            'answer_essay'  => 'nullable|required_if:question_type,essay',
+            'answer_option' => 'nullable|required_if:question_type,multiple_option',
+            'option_a'      => 'nullable|required_if:question_type,multiple_option',
+            'option_b'      => 'nullable|required_if:question_type,multiple_option',
+            'option_c'      => 'nullable|required_if:question_type,multiple_option',
+            'option_d'      => 'nullable|required_if:question_type,multiple_option',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'question',
-            'question_type',
             'max_score',
             'answer_essay',
             'answer_option'
@@ -155,6 +216,37 @@ class SoalController extends Controller
         $query = Soal::findOrFail($id);
         // update data
         $query->update($dataInput);
+
+        // pilihan ganda check and update data
+        if($query->question_type == 'multiple_option') {
+            // update option A
+            SoalPilihanGanda::where('soal_id', $id)
+                ->where('label', 'A')
+                ->update([
+                    'option'=> $request->input('option_a')
+                ]);
+
+            // update option B
+            SoalPilihanGanda::where('soal_id', $id)
+                ->where('label', 'B')
+                ->update([
+                    'option'=> $request->input('option_b')
+                ]);
+
+            // update option C
+            SoalPilihanGanda::where('soal_id', $id)
+                ->where('label', 'C')
+                ->update([
+                    'option'=> $request->input('option_c')
+                ]);
+
+            // update option D
+            SoalPilihanGanda::where('soal_id', $id)
+                ->where('label', 'D')
+                ->update([
+                    'option'=> $request->input('option_d')
+                ]);
+        }
 
         // redirect
         return redirect()
@@ -176,6 +268,9 @@ class SoalController extends Controller
     {
         $query = Soal::findOrFail($id);
         $query->delete();
+
+        // delete on soalpilihanganda too
+        SoalPilihanGanda::where('soal_id', $id)->delete();
 
         // return response json if success
         return response()->json([

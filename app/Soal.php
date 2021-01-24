@@ -18,4 +18,9 @@ class Soal extends Model
         'answer_essay',
         'answer_option'
     ];
+
+    public function SoalPilihanGanda()
+    {
+        return $this->hasMany('App\SoalPilihanGanda', 'soal_id', 'id');
+    }
 }

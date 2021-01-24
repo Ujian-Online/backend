@@ -45,7 +45,18 @@ class UserTukDataTable extends DataTable
      */
     public function query(UserTuk $model)
     {
-        return $model::with(['user', 'tuk']);
+        // create query variable
+        $query = $model::with(['user', 'tuk']);
+
+        // get input filter
+        $tuk_id = request()->input('tuk_id');
+
+        // tuk filter query
+        if(isset($tuk_id) and !empty($tuk_id)) {
+            $query = $query->where('tuk_id', $tuk_id);
+        }
+
+        return $query;
     }
 
     /**

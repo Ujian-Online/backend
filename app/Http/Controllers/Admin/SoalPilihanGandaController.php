@@ -43,7 +43,7 @@ class SoalPilihanGandaController extends Controller
         $soals = Soal::all();
 
         // return view template create
-        return view('admin.soal.unitkompetensi-form', [
+        return view('admin.soal.pilihanganda-form', [
             'title'     => 'Tambah Pilihan Ganda Baru',
             'action'    => route('admin.soal.pilihanganda.store'),
             'isCreated' => true,

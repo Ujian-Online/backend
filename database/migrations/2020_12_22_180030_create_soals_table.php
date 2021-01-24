@@ -16,11 +16,9 @@ class CreateSoalsTable extends Migration
         Schema::create('soals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('question');
-            $table->string('question_type'); // @see config('options
-            //.soals_question_type')
-            $table->string('answer_essay');
-            $table->string('answer_option'); // @see config('options
-            //.soals_answer_option')
+            $table->string('question_type'); // @see config('options.soals_question_type')
+            $table->string('answer_essay')->nullable();
+            $table->string('answer_option')->nullable(); // @see config('options.soals_answer_option')
             $table->string('max_score');
             $table->timestamps();
         });

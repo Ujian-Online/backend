@@ -26,8 +26,9 @@ class CreateUserAsesisTable extends Migration
             $table->boolean('has_job'); // true = bekerja, false = tidak bekerja
             $table->string('job_title')->nullable();
             $table->text('job_address')->nullable();
+            $table->string('company_phone')->nullable();
+            $table->string('company_email')->nullable();
             $table->bigInteger('user_id_admin')->nullable();
-            $table->text('note_admin')->nullable();
             $table->boolean('is_verified');
             $table->text('verification_note')->nullable();
             $table->timestamps();

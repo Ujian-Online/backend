@@ -21,6 +21,9 @@ class SoalDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('question_type', function ($query) {
+                return ucwords(str_replace('_', ' ', $query->question_type));
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,

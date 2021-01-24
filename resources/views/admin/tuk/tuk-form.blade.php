@@ -15,7 +15,7 @@ $query->code ?? '' }}" @if(isset($isShow)) readonly @endif>
             @enderror
         </div>
         <div class="form-group col-md-6">
-            <label for="title">Title</label>
+            <label for="title">Nama</label>
             <input type="text" class="form-control @error('title') is-invalid
 @enderror" name="title" id="title" placeholder="Title" value="{{ old('title')
  ??

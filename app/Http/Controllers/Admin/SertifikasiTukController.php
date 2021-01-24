@@ -29,7 +29,9 @@ class SertifikasiTukController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Sertifikasi TUK Lists'
+            'title' => 'Sertifikasi TUK Lists',
+            'filter_route' => route('admin.sertifikasi.tuk.index'),
+            'filter_view' => 'admin.sertifikasi-tuk.filter-form'
         ]);
     }
 
@@ -80,6 +82,16 @@ class SertifikasiTukController extends Controller
             'tuk_price_perpanjang',
             'tuk_price_training',
         ]);
+
+        // cari sertifikasi dan tuk
+        $search = SertifikasiTuk::where('sertifikasi_id', $dataInput['sertifikasi_id'])
+            ->where('tuk_id', $dataInput['tuk_id'])
+            ->count();
+
+        // jika sudah ada maka return error
+        if($search != 0) {
+            return back()->withErrors('Data sudah ada.!');
+        }
 
         // save to database
         $query = SertifikasiTuk::create($dataInput);

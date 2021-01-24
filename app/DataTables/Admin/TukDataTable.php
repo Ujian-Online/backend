@@ -91,7 +91,8 @@ class TukDataTable extends DataTable
         return [
             Column::make('id'),
             Column::make('code'),
-            Column::make('title'),
+            Column::make('title')
+                ->title('Nama'),
             Column::make('telp'),
             Column::make('type'),
             Column::make('updated_at')

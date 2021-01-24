@@ -2,7 +2,7 @@
 
 @section('form')
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             <label for="user_id">User ID</label>
             <select class="form-control" name="user_id" id="user_id" @if(isset($isShow)) readonly @endif>
 
@@ -25,32 +25,6 @@
             @error('user_id')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
-        </div>
-
-        <div class="form-group col-md-6">
-                <label for="user_id_admin">User ID Admin</label>
-                <select class="form-control" name="user_id_admin" id="user_id_admin" @if(isset($isShow)) readonly @endif>
-
-                @foreach($users as $user)
-                    @if($user->type != 'asessi')
-                        <option
-                            value="{{ $user->id }}"
-                            @if(old('user_id_admin') == $user->id)
-                                selected
-                            @elseif(isset($query->user_id_admin) and $query->user_id_admin == $user->id)
-                                selected
-                            @endif
-                        >
-                            ID: {{ $user->id }} - {{ $user->email }} [{{ ucfirst
-                            ($user->type) }}]
-                        </option>
-                    @endif
-                @endforeach
-
-                </select>
-                @error('user_id_admin')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
         </div>
 
         <div class="form-group col-md-6">
@@ -94,7 +68,7 @@
                 @foreach(config('options.user_assesi_gender') as $key_gender => $gender)
                     <option
                         value="{{ $key_gender }}"
-                            @if(old('gender') == $gender)
+                            @if(old('gender') == $key_gender)
                                 selected
                             @elseif(isset($query->gender) and $query->gender == $gender)
                                 selected
@@ -125,7 +99,7 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label for="pendidikan_terakhir">{{ trans('form.last_education') }}</label>
             <select class="form-control" name="pendidikan_terakhir" id="pendidikan_terakhir" @if(isset($isShow)) readonly @endif>
 
@@ -147,7 +121,7 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label for="has_job">{{ trans('form.has_job') }}</label>
             <select class="form-control" name="has_job" id="has_job" @if(isset($isShow)) readonly @endif>
 
@@ -182,27 +156,29 @@
             <label for="job_address">{{ trans('form.job_address') }}</label>
             <textarea class="form-control @error('job_address') is-invalid @enderror" name="job_address" id="job_address" cols="30" rows="3" placeholder="{{ trans('form.job_address') }}" @if(isset($isShow)) readonly @endif>{{ old('job_address') ?? ($query->job_address ?? '') }}</textarea>
 
-            @error('note_admin')
+            @error('job_address')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
 
-        <div class="form-group col-md-12">
-            <label for="note_admin">{{ trans('form.note_admin') }}</label>
-            <textarea class="form-control @error('note_admin') is-invalid @enderror" name="note_admin" id="note_admin" cols="30" rows="3" placeholder="{{ trans('form.note_admin') }}" @if(isset($isShow)) readonly @endif>{{ old('note_admin') ?? ($query->note_admin ?? '') }}</textarea>
+        <div class="form-group col-md-6">
+            <label for="company_phone">{{ trans('form.company_phone') }}</label>
+            <input type="text" class="form-control @error('company_phone') is-invalid @enderror" name="company_phone" id="company_phone" placeholder="{{ trans('form.company_phone') }}" value="{{ old('company_phone') ?? ($query->company_phone ?? '') }}" @if(isset($isShow)) readonly @endif>
 
-            @error('note_admin')
+            @error('company_phone')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="form-group col-md-12">
-            <label for="verification_note">{{ trans('form.verification_note') }}</label>
-            <textarea class="form-control @error('verification_note') is-invalid @enderror" name="verification_note" id="verification_note" cols="30" rows="3" placeholder="{{ trans('form.verification_note') }}" @if(isset($isShow)) readonly @endif>{{ old('verification_note') ?? ($query->verification_note ?? '') }}</textarea>
 
-            @error('verification_note')
-                <div class="alert alert-danger">{{ $message }}</div>
+        <div class="form-group col-md-6">
+            <label for="company_email">{{ trans('form.company_email') }}</label>
+            <input type="text" class="form-control @error('company_email') is-invalid @enderror" name="company_email" id="company_email" placeholder="{{ trans('form.company_email') }}" value="{{ old('company_email') ?? ($query->company_email ?? '') }}" @if(isset($isShow)) readonly @endif>
+
+            @error('company_email')
+            <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
         <div class="form-group col-md-12">
             <label for="is_verified">Is Verified</label>
             <select class="form-control" name="is_verified" id="is_verified" @if(isset($isShow)) readonly @endif>
@@ -216,10 +192,22 @@
                 @endif
 
             </select>
+
             @error('is_verified')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
+        <div class="form-group col-md-12">
+            <label for="verification_note">{{ trans('form.verification_note') }}</label>
+            <textarea class="form-control @error('verification_note') is-invalid @enderror" name="verification_note" id="verification_note" cols="30" rows="3" placeholder="{{ trans('form.verification_note') }}" @if(isset($isShow)) readonly @endif>{{ old('verification_note') ?? ($query->verification_note ?? '') }}</textarea>
+            <small id="helpVerificationNote" class="text-muted">Tolong tulis keterangan kenapa asesi ini tidak di verifikasi</small>
+
+            @error('verification_note')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
     </div>
 @endsection
 
