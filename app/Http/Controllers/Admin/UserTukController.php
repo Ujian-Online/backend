@@ -26,9 +26,15 @@ class UserTukController extends Controller
      */
     public function index(UserTukDataTable $dataTables)
     {
+        // get tuks lists
+        $tuks = Tuk::orderBy('title', 'asc')->get();
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'User TUK Lists'
+            'title'         => 'User TUK Lists',
+            'filter_route'  => route('admin.user.tuk.index'),
+            'filter_view'   => 'admin.tuk.filter-form',
+            'tuks'          => $tuks
         ]);
     }
 
@@ -40,7 +46,13 @@ class UserTukController extends Controller
     public function create()
     {
         // get user lists
-        $users  = User::orderBy('created_at', 'desc')->get();
+        $users  = User::select('users.*')
+            ->leftJoin('user_tuks', 'user_tuks.user_id', '=', 'users.id')
+            ->where('users.type', 'tuk')
+            ->whereNull('user_tuks.user_id')
+            ->orderBy('users.id', 'desc')
+            ->get();
+
         // get tuk lists
         $tuks   = Tuk::orderBy('created_at', 'desc')->get();
 
@@ -106,9 +118,9 @@ class UserTukController extends Controller
     public function show(int $id)
     {
         // Find User by ID
-        $query = UserTuk::findOrFail($id);
+        $query  = UserTuk::findOrFail($id);
         // get user lists
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users  = User::where('id', $query->user_id)->get();
         // get tuk lists
         $tuks   = Tuk::orderBy('created_at', 'desc')->get();
 
@@ -160,13 +172,11 @@ class UserTukController extends Controller
     {
         // validate input
         $request->validate([
-            'user_id'       => 'required',
             'tuk_id'        => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'user_id',
             'tuk_id',
         ]);
 

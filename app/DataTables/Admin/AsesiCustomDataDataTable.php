@@ -24,9 +24,9 @@ class AsesiCustomDataDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_show' => route('admin.asesi.apl01.show', $query->id),
-                    'url_edit' => route('admin.asesi.apl01.edit', $query->id),
-                    'url_destroy' => route('admin.asesi.apl01.destroy', $query->id),
+                    'url_show' => route('admin.asesi.customdata.show', $query->id),
+                    'url_edit' => route('admin.asesi.customdata.edit', $query->id),
+                    'url_destroy' => route('admin.asesi.customdata.destroy', $query->id),
                 ]);
             });
     }
@@ -115,7 +115,7 @@ class AsesiCustomDataDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.asesi.apl01.create');
+        $url = route('admin.asesi.customdata.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {

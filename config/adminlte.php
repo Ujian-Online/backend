@@ -94,12 +94,6 @@ return [
                 ],
             ],
             [
-                'title'     => 'Asesi',
-                'icon'      => 'fas fa-user',
-                'route'     => 'admin.user.asesi.index',
-                'active'    => 'admin.user.asesi.*',
-            ],
-            [
                 'title'     => 'Asesor',
                 'icon'      => 'fas fa-user-tie',
                 'route'     => 'admin.user.asesor.index',
@@ -168,9 +162,15 @@ return [
             ],
             [
                 'title'     => 'APL-01',
-                'icon'      => 'fas fa-list-ol',
-                'route'     => 'admin.asesi.apl01.index',
+                'icon'      => 'fas fa-user',
+                'url'       => '/admin/asesi/apl01?is_verified=false',
                 'active'    => 'admin.asesi.apl01.*',
+            ],
+            [
+                'title'     => 'APL-01 Custom Data',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.apl01customdata.index',
+                'active'    => 'admin.asesi.apl01customdata.*',
             ],
             [
                 'title'     => 'APL-02',
@@ -214,7 +214,7 @@ return [
                 'title'     => 'Daftar Soal',
                 'icon'      => 'fa fa-book-open',
                 'route'     => 'admin.soal.daftar.index',
-                'active'    => 'admin.soal.daftar'
+                'active'    => 'admin.soal.daftar.*'
             ],
             [
                 'title'     => 'Pilihan Ganda',

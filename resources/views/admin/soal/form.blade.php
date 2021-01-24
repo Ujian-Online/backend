@@ -25,7 +25,7 @@
                             selected
                         @endif
                         >
-                            {{ ucfirst($type) }}
+                            {{ ucwords(str_replace('_', ' ', $type)) }}
                         </option>
                 @endforeach
             </select>
@@ -38,7 +38,8 @@
         <div class="form-group col-md-6" id="answer_option_element">
             <label for="answer_option">Opsi Jawaban</label>
             <select name="answer_option" id="answer_option" class="form-control" @if(isset($isShow)) readonly @endif>
-                <option>Tidak Dipilih</option>
+                <option value="" readonly>Tidak Dipilih</option>
+
                 @foreach(config('options.answer_option') as $opsi)
                     <option
                         value="{{ $opsi }}"
@@ -57,7 +58,7 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        
+
         <div class="form-group col-md-12" id="answer_essay_element">
             <label for="answer_essay">Jawaban Essay</label>
             <textarea class="form-control @error('answer_essay') is-invalid @enderror" name="answer_essay" id="answer_essay" cols="30" rows="3" @if(isset($isShow)) readonly @endif>{{ old('answer_essay') ?? ($query->answer_essay ?? '') }}</textarea>
@@ -76,29 +77,79 @@
             @enderror
         </div>
     </div>
+
+    <div class="form-row" id="pilihan-ganda" @if(old('question_type') == 'essay' OR (isset($query->answer_option) and $query->answer_option == 'essay')) style="display: none;" @endif>
+        <h3>Pilihan Ganda</h3>
+        <div class="form-group col-md-12">
+            <label for="option_a">Option A</label>
+            <input type="text" class="form-control @error('option_a') is-invalid @enderror" name="option_a" id="option_a" placeholder="Option A" value="{{ old('option_a') ?? $pilihangandas['a']->option ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('option_a')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group col-md-12">
+            <label for="option_b">Option B</label>
+            <input type="text" class="form-control @error('option_b') is-invalid @enderror" name="option_b" id="option_b" placeholder="Option B" value="{{ old('option_b') ?? $pilihangandas['b']->option ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('option_b')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group col-md-12">
+            <label for="option_c">Option C</label>
+            <input type="text" class="form-control @error('option_c') is-invalid @enderror" name="option_c" id="option_c" placeholder="Option C" value="{{ old('option_c') ?? $pilihangandas['c']->option ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('option_c')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group col-md-12">
+            <label for="option_d">Option D</label>
+            <input type="text" class="form-control @error('option_d') is-invalid @enderror" name="option_d" id="option_d" placeholder="Option D" value="{{ old('option_d') ?? $pilihangandas['d']->option ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('option_d')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
 @endsection
 
 @section('js')
     <script>
-        $('select').select2({
+        $('#question_type').select2({
+            theme: 'bootstrap4',
+            disabled: {{ (isset($isCreated) and !empty($isCreated)) ? 'false' : 'true' }}
+        });
+        $('#answer_option').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
         });
+
+
         const hide = () => {
             let answerOptionEl = $('#answer_option_element')
             let answerEssayEl = $('#answer_essay_element')
             let answerOption = $('#answer_option')
             let answerEssay = $('#answer_essay')
+            const pilihanGanda = $("#pilihan-ganda");
+
             if($('#question_type').val() == 'essay') {
                 answerOptionEl.addClass('d-none')
                 answerOption.attr('name', 'none')
                 answerEssayEl.removeClass('d-none')
                 answerEssay.attr('name', 'answer_essay')
+
+                // hide pilihan ganda option
+                pilihanGanda.hide();
             } else {
                 answerOptionEl.removeClass('d-none')
                 answerOption.attr('name', 'answer_option')
                 answerEssayEl.addClass('d-none')
                 answerEssay.attr('name', 'none')
+
+                // show pilihan ganda option
+                pilihanGanda.show();
             }
         }
         hide()

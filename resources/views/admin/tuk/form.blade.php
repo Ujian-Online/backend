@@ -62,7 +62,7 @@
     <script>
         $('#user_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (!empty(request()->query('user_id')) ? 'true' : ((isset($isShow) and !empty($isShow)) ?  'true' : 'false')) }}
+            disabled: {{ (!empty(request()->query('user_id')) ? 'true' : ((isset($isCreated) and !empty($isCreated)) ?  'false' : 'true')) }}
         });
         $('#tuk_id').select2({
             theme: 'bootstrap4',

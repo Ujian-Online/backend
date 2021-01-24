@@ -27,6 +27,11 @@ class UserDataTable extends DataTable
             ->editColumn('status', function ($query) {
                 return ucfirst($query->status);
             })
+            ->editColumn('media_url_sign_user', function ($query) {
+                $link = '<a href="'.$query->media_url_sign_user.'" target="_blank">Buka</a>';
+
+                return !empty($query->media_url_sign_user) ? $link : 'Belum ada Paraf/TTD';
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->name,
@@ -34,7 +39,8 @@ class UserDataTable extends DataTable
                     'url_edit' => route('admin.user.edit', $query->id),
                     'url_destroy' => route('admin.user.destroy', $query->id),
                 ]);
-            });
+            })
+            ->rawColumns(['media_url_sign_user']);
     }
 
     /**
@@ -45,7 +51,24 @@ class UserDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery();
+        // create query variable
+        $query = $model->newQuery();
+
+        // get input filter
+        $type = request()->input('type');
+        $status = request()->input('status');
+
+        // type filter query
+        if(isset($type) and !empty($type)) {
+            $query = $query->where('type', $type);
+        }
+
+        // status filter query
+        if(isset($status) and !empty($status)) {
+            $query = $query->where('status', $status);
+        }
+
+        return $query;
     }
 
     /**
@@ -76,7 +99,7 @@ class UserDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(3, 'desc')
+                    ->orderBy(4, 'desc')
                     ->buttons(
                         Button::make('export'),
                         Button::make('print'),
@@ -96,6 +119,8 @@ class UserDataTable extends DataTable
                 ->width('25%'),
             Column::make('type'),
             Column::make('status'),
+            Column::make('media_url_sign_user')
+                ->title('TTD'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),

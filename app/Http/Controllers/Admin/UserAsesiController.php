@@ -28,7 +28,9 @@ class UserAsesiController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi Lists'
+            'title' => 'Asesi APL01 Lists',
+            'filter_route' => route('admin.asesi.apl01.index'),
+            'filter_view' => 'admin.assesi.filter-form'
         ]);
     }
 
@@ -39,12 +41,18 @@ class UserAsesiController extends Controller
      */
     public function create()
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        // get users list when not found in user asesi and type asesi
+        $users = User::select('users.*')
+            ->leftJoin('user_asesis', 'user_asesis.user_id', '=', 'users.id')
+            ->where('users.type', 'asessi')
+            ->whereNull('user_asesis.user_id')
+            ->orderBy('users.id', 'desc')
+            ->get();
 
         // return view template create
         return view('admin.assesi.form', [
-            'title'     => 'Tambah Asesi Baru',
-            'action'    => route('admin.user.asesi.store'),
+            'title'     => 'Tambah Asesi APL-01',
+            'action'    => route('admin.asesi.apl01.store'),
             'isCreated' => true,
             'users'     => $users
         ]);
@@ -61,7 +69,6 @@ class UserAsesiController extends Controller
     {
         $request->validate([
             'user_id'               => 'required|integer',
-            'user_id_admin'         => 'required|integer',
             'name'                  => 'required|min:3|max:255',
             'address'               => 'required|min:3|max:255',
             'phone_number'          => 'required|numeric',
@@ -77,7 +84,6 @@ class UserAsesiController extends Controller
         // get form data
         $dataInput = $request->only([
             'user_id',
-            'user_id_admin',
             'name',
             'address',
             'phone_number',
@@ -89,15 +95,22 @@ class UserAsesiController extends Controller
             'has_job',
             'job_title',
             'job_address',
+            'company_phone',
+            'company_email',
+            'is_verified',
             'verification_note',
-            'note_admin',
-            'is_verified'
         ]);
 
+        // get user admin input
+        $user_admin = $request->user();
+        $dataInput['user_id_admin'] = $user_admin->id;
+
+        // save to database
         UserAsesi::create($dataInput);
 
+        // return redirect
         return redirect()
-            ->route('admin.user.asesi.index')
+            ->route('admin.asesi.apl01.index', ['is_verified' => false])
             ->with('success', trans('action.success', [
                     'name' => $dataInput['name']
             ]));
@@ -112,14 +125,16 @@ class UserAsesiController extends Controller
      */
     public function show(int $id)
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        // query get data
         $query = UserAsesi::findOrFail($id);
+        // get users list when not found in user asesi and type asesi
+        $users = User::where('id', $query->user_id)->get();
 
         // return data to view
         return view('admin.assesi.form', [
-            'title'     => 'Show Detail: ' . $query->name,
+            'title'     => 'Detail Asesi APL-01: ' . $query->name,
             'action'    => '#',
-            'isShow'    => route('admin.user.asesi.edit', $id),
+            'isShow'    => route('admin.asesi.apl01.edit', $id),
             'query'     => $query,
             'users'     => $users
         ]);
@@ -134,12 +149,16 @@ class UserAsesiController extends Controller
      */
     public function edit(int $id)
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        // query get data
         $query = UserAsesi::findOrFail($id);
+        // get users list when not found in user asesi and type asesi
+        $users = User::where('users.type', 'asessi')
+            ->orderBy('id', 'desc')
+            ->get();
 
         return view('admin.assesi.form', [
-            'title'     => 'Edit Data: ' . $query->name,
-            'action'    => route('admin.user.asesi.update', $id),
+            'title'     => 'Ubah Asesi APL-01: ' . $query->name,
+            'action'    => route('admin.asesi.apl01.update', $id),
             'isEdit'    => true,
             'query'     => $query,
             'users'     => $users
@@ -156,11 +175,12 @@ class UserAsesiController extends Controller
      */
     public function update(Request $request, int $id)
     {
+
         $request->validate([
             'user_id'               => 'required|integer',
-            'user_id_admin'         => 'required|integer',
             'name'                  => 'required|min:3|max:255',
             'address'               => 'required|min:3|max:255',
+            'phone_number'          => 'required|numeric',
             'gender'                => 'required|boolean',
             'birth_place'           => 'required|min:3|max:225',
             'birth_date'            => 'required|date',
@@ -173,9 +193,9 @@ class UserAsesiController extends Controller
         // get form data
         $dataInput = $request->only([
             'user_id',
-            'user_id_admin',
             'name',
             'address',
+            'phone_number',
             'gender',
             'birth_place',
             'birth_date',
@@ -184,16 +204,22 @@ class UserAsesiController extends Controller
             'has_job',
             'job_title',
             'job_address',
+            'company_phone',
+            'company_email',
+            'is_verified',
             'verification_note',
-            'note_admin',
-            'is_verified'
         ]);
 
+        // get user admin input
+        $user_admin = $request->user();
+        $dataInput['user_id_admin'] = $user_admin->id;
+
+        // update data
         $query = UserAsesi::findOrFail($id);
         $query->update($dataInput);
 
         return redirect()
-            ->route('admin.user.asesi.index')
+            ->route('admin.asesi.apl01.index', ['is_verified' => false])
             ->with('success', trans('action.success_update', [
                 'name' => $dataInput['name']
             ]));

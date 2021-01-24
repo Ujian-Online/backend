@@ -27,7 +27,7 @@ class AsesiCustomDataController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi APL01 Lists'
+            'title' => 'Asesi Custom Data Form Lists'
         ]);
     }
 
@@ -40,8 +40,8 @@ class AsesiCustomDataController extends Controller
     {
         // return view template create
         return view('admin.assesi.apl01-form', [
-            'title'         => 'Tambah Asesi APL01 Baru',
-            'action'        => route('admin.asesi.apl01.store'),
+            'title'         => 'Tambah Asesi Custom Data Form Baru',
+            'action'        => route('admin.asesi.customdata.store'),
             'isCreated'     => true,
         ]);
     }
@@ -72,7 +72,7 @@ class AsesiCustomDataController extends Controller
 
         // redirect to index table
         return redirect()
-            ->route('admin.asesi.apl01.index')
+            ->route('admin.asesi.customdata.index')
             ->with('success', trans('action.success', [
                 'name' => $query->title
             ]));
@@ -92,9 +92,9 @@ class AsesiCustomDataController extends Controller
 
         // return data to view
         return view('admin.assesi.apl01-form', [
-            'title'         => 'Tampilkan Detail: ' . $query->title,
+            'title'         => 'Detail Asesi Custom Data Form: ' . $query->title,
             'action'        => '#',
-            'isShow'        => route('admin.asesi.apl01.edit', $id),
+            'isShow'        => route('admin.asesi.customdata.edit', $id),
             'query'         => $query,
         ]);
     }
@@ -113,8 +113,8 @@ class AsesiCustomDataController extends Controller
 
         // return data to view
         return view('admin.assesi.apl01-form', [
-            'title'         => 'Ubah Data: ' . $query->id,
-            'action'        => route('admin.asesi.apl01.update', $id),
+            'title'         => 'Ubah Asesi Custom Data Form Data: ' . $query->id,
+            'action'        => route('admin.asesi.customdata.update', $id),
             'isEdit'        => true,
             'query'         => $query,
         ]);
@@ -149,7 +149,7 @@ class AsesiCustomDataController extends Controller
 
         // redirect
         return redirect()
-            ->route('admin.asesi.apl01.index')
+            ->route('admin.asesi.customdata.index')
             ->with('success', trans('action.success_update', [
                 'name' => $query->title
             ]));

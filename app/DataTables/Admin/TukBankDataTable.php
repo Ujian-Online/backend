@@ -43,7 +43,18 @@ class TukBankDataTable extends DataTable
      */
     public function query(TukBank $model)
     {
-        return $model::with('tuk');
+        // create query variable
+        $query = $model::with('tuk');
+
+        // get input filter
+        $tuk_id = request()->input('tuk_id');
+
+        // tuk filter query
+        if(isset($tuk_id) and !empty($tuk_id)) {
+            $query = $query->where('tuk_id', $tuk_id);
+        }
+
+        return $query;
     }
 
     /**
