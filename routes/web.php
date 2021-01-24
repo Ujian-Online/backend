@@ -49,11 +49,11 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian']);
         Route::resource('ujian/jawabanpilihan', 'Admin\UjianAsesiJawabanPilihanController', ['as' => 'ujian']);
 
+        Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal']);
         Route::resource('soal/pilihanganda', 'Admin\SoalPilihanGandaController', ['as' => 'soal']);
         Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
         Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
         Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
-        Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal']);
 
         Route::resource('order', 'Admin\OrderController');
     });
