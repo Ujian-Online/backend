@@ -214,7 +214,7 @@ return [
                 'title'     => 'Daftar Soal',
                 'icon'      => 'fa fa-book-open',
                 'route'     => 'admin.soal.daftar.index',
-                'active'    => 'admin.soal.daftar'
+                'active'    => 'admin.soal.daftar.*'
             ],
             [
                 'title'     => 'Pilihan Ganda',
