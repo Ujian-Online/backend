@@ -36,7 +36,6 @@
       <div class="sidebar">
         {{-- Sidebar Menu --}}
         @include('layouts.adminlte.sidebar')
-        {{-- @include('layouts.adminlte.sidebar-ori') --}}
       </div>
     </aside>
 
