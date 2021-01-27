@@ -22,5 +22,6 @@ return [
     'media_url_sign_admin' => 'Tanda Tangan Admin',
     'phone_number' => 'No. Telphone',
     'company_phone' => 'No. Telphone Perusahaan',
-    'company_email' => 'Email Perusahaan'
+    'company_email' => 'Email Perusahaan',
+    'company_name' => 'Nama Perusahaan'
 ];
