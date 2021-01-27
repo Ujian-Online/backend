@@ -161,7 +161,16 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
+            <label for="company_name">{{ trans('form.company_name') }}</label>
+            <input type="text" class="form-control @error('company_name') is-invalid @enderror" name="company_name" id="company_name" placeholder="{{ trans('form.company_name') }}" value="{{ old('company_name') ?? ($query->company_name ?? '') }}" @if(isset($isShow)) readonly @endif>
+
+            @error('company_name')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group col-md-4">
             <label for="company_phone">{{ trans('form.company_phone') }}</label>
             <input type="text" class="form-control @error('company_phone') is-invalid @enderror" name="company_phone" id="company_phone" placeholder="{{ trans('form.company_phone') }}" value="{{ old('company_phone') ?? ($query->company_phone ?? '') }}" @if(isset($isShow)) readonly @endif>
 
@@ -170,7 +179,7 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <label for="company_email">{{ trans('form.company_email') }}</label>
             <input type="text" class="form-control @error('company_email') is-invalid @enderror" name="company_email" id="company_email" placeholder="{{ trans('form.company_email') }}" value="{{ old('company_email') ?? ($query->company_email ?? '') }}" @if(isset($isShow)) readonly @endif>
 
