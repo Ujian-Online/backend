@@ -2,7 +2,7 @@
     <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
     {{-- Menu For Admin Access --}}
-    {{-- @can('isAdmin') --}}
+     @can('isAdmin')
 
         @include(
             'layouts.adminlte.sidebar-child', [
@@ -11,12 +11,12 @@
         )
 
     {{-- Menu For TUK Access --}}
-    {{-- @elsecan('isTuk') --}}
+     @elsecan('isTuk')
 
     {{-- Menu For Assesor Access --}}
-    {{-- @else --}}
+     @elsecan('isAssesor')
 
-    {{-- @endcan --}}
+     @endcan
 
 
         {{-- Log Out Button in Sidebar --}}
