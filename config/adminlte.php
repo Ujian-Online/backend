@@ -6,10 +6,15 @@
 
 return [
 
+    /**
+     * Sidebar Title and Logo
+     */
     'title' => env('APP_NAME', 'Laravel'),
     'logo'  => 'logo-mini.png',
 
-
+    /**
+     * Sidebar Color
+     */
     'color' => [
         'navbar'    => '',
         'logo'      => 'navbar-success',
@@ -72,6 +77,9 @@ return [
      */
 
     'menu_sidebar' => [
+        /**
+         * Menu For Admin Access
+         */
         'admin' => [
             [
                 'title'     => 'Dashboard',
@@ -288,7 +296,15 @@ return [
                 ],
             ],
         ],
+
+        /**
+         * Menu For TUK Access
+         */
         'tuk' => [],
+
+        /**
+         * Menu For Asesor Access
+         */
         'assesor' => [],
     ],
 ];
