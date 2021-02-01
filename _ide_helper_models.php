@@ -82,6 +82,12 @@ namespace App{
  * @property int $sertifikasi_id
  * @property int $tuk_id
  * @property string $tipe_sertifikasi
+ * @property string|null $sertifikat_number_old
+ * @property string|null $sertifikat_number_new
+ * @property mixed|null $sertifikat_date_old
+ * @property mixed|null $sertifikat_date_new
+ * @property string|null $sertifikat_media_url_old
+ * @property string|null $sertifikat_media_url_new
  * @property string $kode_sertifikat
  * @property float $original_price
  * @property float $tuk_price
@@ -95,14 +101,14 @@ namespace App{
  * @property string|null $transfer_to_bank_name
  * @property string|null $transfer_to_bank_account
  * @property string $transfer_to_bank_number
- * @property string|null $transfer_date
+ * @property mixed|null $transfer_date
  * @property string|null $media_url_bukti_transfer
- * @property string $expired_date
+ * @property mixed $expired_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\UserAsesi|null $Asesi
  * @property-read \App\Sertifikasi|null $Sertifikasi
  * @property-read \App\Tuk|null $Tuk
+ * @property-read \App\User|null $User
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
@@ -117,7 +123,7 @@ namespace App{
  * @property int $id
  * @property string $nomor_skema
  * @property string $title
- * @property string $original_price_baru
+ * @property float $original_price_baru
  * @property float $original_price_perpanjang
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -428,6 +434,9 @@ namespace App{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\UserAsesor|null $Asesor
+ * @property-read \App\UserTuk|null $Tuk
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
  * @property-read int|null $clients_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
