@@ -42,15 +42,11 @@ class SertifikasiUnitKompetensiController extends Controller
      */
     public function create()
     {
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-
         // return view template create
         return view('admin.sertifikasi-uk.form', [
             'title'         => 'Tambah Sertifikasi Unik Kompentensi Baru',
             'action'        => route('admin.sertifikasi.uk.store'),
             'isCreated'     => true,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
@@ -133,8 +129,6 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // Find Data by ID
         $query = SertifikasiUnitKompentensi::with('ukelement')->where('id', $id)->firstOrFail();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
 
         // return data to view
         return view('admin.sertifikasi-uk.form', [
@@ -142,7 +136,6 @@ class SertifikasiUnitKompetensiController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.sertifikasi.uk.edit', $id),
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
@@ -157,8 +150,6 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // Find Data by ID
         $query = SertifikasiUnitKompentensi::with('ukelement')->where('id', $id)->firstOrFail();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
 
         // return data to view
         return view('admin.sertifikasi-uk.form', [
@@ -166,7 +157,6 @@ class SertifikasiUnitKompetensiController extends Controller
             'action'        => route('admin.sertifikasi.uk.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
