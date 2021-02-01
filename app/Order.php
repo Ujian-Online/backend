@@ -13,10 +13,10 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'asesi_id',
+        'asesi_id', // id dari table user dengan relasi ke table userasesi
         'sertifikasi_id',
         'tuk_id',
-        'tipe_sertifikasi',
+        'tipe_sertifikasi', // see config('options.orders_tipe_sertifikasi')
         'sertifikat_number_old',
         'sertifikat_number_new',
         'sertifikat_date_old',
@@ -51,13 +51,25 @@ class Order extends Model
     ];
 
     /**
-     * Relation to Table User Asesi
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'sertifikat_date_old' => 'date:Y-m-d',
+        'sertifikat_date_new' => 'date:Y-m-d',
+        'transfer_date' => 'date:Y-m-d',
+        'expired_date' => 'date:Y-m-d',
+    ];
+
+    /**
+     * Relation to Table User
      *
      * @return HasOne
      */
-    public function Asesi()
+    public function User()
     {
-        return $this->hasOne('App\UserAsesi', 'id', 'asesi_id');
+        return $this->hasOne('App\User', 'id', 'asesi_id');
     }
 
     /**
