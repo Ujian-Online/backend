@@ -36,7 +36,9 @@ class Sertifikasi extends Model
      * @var array
      */
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'original_price_baru' => 'float',
+        'original_price_perpanjang' => 'float',
     ];
 
     /**
