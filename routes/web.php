@@ -25,6 +25,7 @@ Route::middleware(['auth', 'can:isAdmin'])
     ->group(function () {
         Route::resource('user/asesor', 'Admin\UserAsesorController', ['as' => 'user']);
         Route::resource('user/tuk', 'Admin\UserTukController', ['as' => 'user']);
+        Route::get('user/search', 'Admin\UserController@search')->name('user.search');
         Route::resource('user', 'Admin\UserController');
 
         Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);

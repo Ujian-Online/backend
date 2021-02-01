@@ -234,4 +234,104 @@ class UserController extends Controller
                 'success' => true,
         ]);
     }
+
+    /**
+     * Select2 Ajax Search
+     *
+     * param :
+     * q = query select2
+     * type = user type
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request)
+    {
+        // database query
+        $query = new User();
+        // result variable
+        $result = [];
+
+        // get input from select2 search term
+        $q = $request->input('q');
+
+        // return empty object if query is empty
+        if(empty($q)) {
+            return response()->json($result, 200);
+        }
+
+        // type search query
+        $type = $request->input('type');
+        // type allowed
+        $typeUser = ['asessi', 'assesor', 'tuk'];
+        // check type allowed from default type search or using asesi
+        $typeSearch = in_array($type, $typeUser) ? $type : 'asessi';
+
+        // update query type
+        $query = $query->where('users.type', $typeSearch);
+
+        if($typeSearch == 'asessi') {
+            $query = $query->leftJoin('user_asesis', 'user_asesis.user_id', '=', 'users.id')
+            ->select([
+                'users.id as id',
+                'users.email as email',
+                'user_asesis.id as asesi_id',
+                'user_asesis.name as name'
+            ])
+            ->when($q, function($query) use ($q) {
+                // check if query is numeric or not
+                if(is_numeric($q)) {
+                     return $query->where('users.id', 'like', "%$q%");
+                } else {
+                    return $query->where('user_asesis.name', 'like', "%$q%");
+                }
+            });
+        } elseif($typeSearch == 'assesor') {
+            $query = $query->leftJoin('user_asesors', 'user_asesors.user_id', '=', 'users.id')
+                ->select([
+                    'users.id as id',
+                    'users.email as email',
+                    'user_asesors.id as asesor_id',
+                    'user_asesors.name as name'
+                ])
+                ->when($q, function($query) use ($q) {
+                    // check if query is numeric or not
+                    if(is_numeric($q)) {
+                        return $query->where('users.id', 'like', "%$q%");
+                    } else {
+                        return $query->where('user_asesors.name', 'like', "%$q%");
+                    }
+                });
+        } elseif($typeSearch == 'tuk') {
+            $query = $query->leftJoin('user_tuks', 'user_tuks.user_id', '=', 'users.id')
+                ->leftJoin('tuks', 'tuks.id', '=', 'user_tuks.tuk_id')
+                ->select([
+                    'users.id as id',
+                    'users.email as name',
+                    'user_tuks.id as usertuk_id',
+                    'tuks.title as email'
+                ])
+                ->when($q, function($query) use ($q) {
+                    // check if query is numeric or not
+                    if(is_numeric($q)) {
+                        return $query->where('users.id', 'like', "%$q%");
+                    } else {
+                        return $query->where('tuks.title', 'like', "%$q%");
+                    }
+                });
+        }
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => '[ID: ' . $data->id . '] - ' . $data->name . ' (' . $data->email .')',
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
+    }
 }
