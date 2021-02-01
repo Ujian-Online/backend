@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'email',
         'password',
-        'type',
+        'type', // see config('options.user_type')
         'status',
         'media_url', // profile picture
         'media_url_sign_user', // signature
@@ -46,4 +46,34 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'is_active' => 'boolean'
     ];
+
+    /**
+     * Relation to Table UserAsesi
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function Asesi()
+    {
+        return $this->hasOne('App\UserAsesi', 'user_id', 'id');
+    }
+
+    /**
+     * Relation to Table UserAsesor
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function Asesor()
+    {
+        return $this->hasOne('App\UserAsesor', 'user_id', 'id');
+    }
+
+    /**
+     * Relation to Table TUK
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function Tuk()
+    {
+        return $this->hasOne('App\UserTuk', 'user_id', 'id');
+    }
 }

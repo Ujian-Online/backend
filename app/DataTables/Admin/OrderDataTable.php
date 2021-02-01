@@ -42,7 +42,7 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        return $model->with(['asesi', 'sertifikasi', 'tuk']);
+        return $model->with(['user', 'user.asesi', 'sertifikasi', 'tuk']);
     }
 
     /**
@@ -92,7 +92,7 @@ class OrderDataTable extends DataTable
             Column::make('id'),
             Column::computed('asesi')
                 ->title('Asesi')
-                ->data('asesi.name'),
+                ->data('user.asesi.name'),
             Column::computed('sertifikasi')
                 ->title('Sertifikasi')
                 ->data('sertifikasi.title'),

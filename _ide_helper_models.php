@@ -31,15 +31,17 @@ namespace App{
  * App\AsesiSertifikasiUnitKompetensiElement
  *
  * @property int $id
- * @property int $user_asesi_id
+ * @property int $asesi_id
  * @property int $unit_kompetensi_id
  * @property string $desc
  * @property string $upload_instruction
  * @property string|null $media_url
- * @property int $is_verified
+ * @property bool $is_verified
  * @property string|null $verification_note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\SertifikasiUnitKompentensi|null $UnitKompentensi
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiSertifikasiUnitKompetensiElement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiSertifikasiUnitKompetensiElement newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiSertifikasiUnitKompetensiElement query()
@@ -52,7 +54,7 @@ namespace App{
  * App\AsesiUnitKompetensiDokumen
  *
  * @property int $id
- * @property int $user_asesi_id
+ * @property int $asesi_id
  * @property int $unit_kompetensi_id
  * @property string $order
  * @property int $sertifikasi_id
@@ -61,6 +63,9 @@ namespace App{
  * @property string $sub_title
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \App\SertifikasiUnitKompentensi|null $UnitKompentensi
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen query()
@@ -80,20 +85,24 @@ namespace App{
  * @property string $kode_sertifikat
  * @property float $original_price
  * @property float $tuk_price
+ * @property float|null $tuk_price_training
  * @property string $status
  * @property string|null $comment_rejected
  * @property string|null $comment_verification
  * @property string|null $transfer_from_bank_name
  * @property string|null $transfer_from_bank_account
- * @property int|null $transfer_from_bank_number
- * @property string $transfer_to_bank_name
- * @property string $transfer_to_bank_account
- * @property int $transfer_to_bank_number
+ * @property string|null $transfer_from_bank_number
+ * @property string|null $transfer_to_bank_name
+ * @property string|null $transfer_to_bank_account
+ * @property string $transfer_to_bank_number
  * @property string|null $transfer_date
  * @property string|null $media_url_bukti_transfer
  * @property string $expired_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \App\Tuk|null $Tuk
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
@@ -108,12 +117,15 @@ namespace App{
  * @property int $id
  * @property string $nomor_skema
  * @property string $title
- * @property float $original_price_baru
+ * @property string $original_price_baru
  * @property float $original_price_perpanjang
- * @property string $jenis_sertifikasi
- * @property int $is_active
+ * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiTuk[] $SertifikasiTuk
+ * @property-read int|null $sertifikasi_tuk_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiUnitKompentensi[] $UnitKompentensi
+ * @property-read int|null $unit_kompentensi_count
  * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi query()
@@ -130,8 +142,11 @@ namespace App{
  * @property int $tuk_id
  * @property float $tuk_price_baru
  * @property float $tuk_price_perpanjang
+ * @property float|null $tuk_price_training
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \App\Tuk|null $Tuk
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiTuk newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiTuk newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiTuk query()
@@ -144,13 +159,16 @@ namespace App{
  * App\SertifikasiUnitKompentensi
  *
  * @property int $id
- * @property string $order
+ * @property int $order
  * @property int $sertifikasi_id
  * @property string $kode_unit_kompetensi
  * @property string $title
  * @property string $sub_title
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiUnitKompetensiElement[] $UKElement
+ * @property-read int|null $u_k_element_count
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi query()
@@ -168,6 +186,7 @@ namespace App{
  * @property string $upload_instruction
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\SertifikasiUnitKompentensi|null $UnitKompetensi
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement query()
@@ -182,11 +201,13 @@ namespace App{
  * @property int $id
  * @property string $question
  * @property string $question_type
- * @property string $answer_essay
- * @property string $answer_option
+ * @property string|null $answer_essay
+ * @property string|null $answer_option
  * @property string $max_score
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\SoalPilihanGanda[] $SoalPilihanGanda
+ * @property-read int|null $soal_pilihan_ganda_count
  * @method static \Illuminate\Database\Eloquent\Builder|Soal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Soal newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Soal query()
@@ -203,6 +224,7 @@ namespace App{
  * @property int $sertifikasi_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Sertifikasi|null $Sertifikasi
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket query()
@@ -219,6 +241,8 @@ namespace App{
  * @property int $soal_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Soal|null $Soal
+ * @property-read \App\SoalPaket|null $SoalPaket
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaketItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaketItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaketItem query()
@@ -236,6 +260,7 @@ namespace App{
  * @property string $label
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Soal|null $Soal
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPilihanGanda newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPilihanGanda newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPilihanGanda query()
@@ -271,6 +296,8 @@ namespace App{
  * @property string $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\TukBank[] $Bank
+ * @property-read int|null $bank_count
  * @method static \Illuminate\Database\Eloquent\Builder|Tuk newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tuk newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tuk query()
@@ -308,10 +335,15 @@ namespace App{
  * @property int $sertifikasi_id
  * @property int $order_id
  * @property string $status
- * @property int $is_kompeten
- * @property int $final_score_percentage
+ * @property bool|null $is_kompeten
+ * @property int|null $final_score_percentage
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\UserAsesor|null $Asesor
+ * @property-read \App\Order|null $Order
+ * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \App\UjianJadwal|null $Ujianjadwal
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor query()
@@ -325,6 +357,7 @@ namespace App{
  *
  * @property int $id
  * @property int $soal_id
+ * @property int $asesi_id
  * @property string $question
  * @property string $question_type
  * @property string|null $answer_essay
@@ -336,6 +369,8 @@ namespace App{
  * @property int|null $final_score
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\Soal|null $Soal
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban query()
@@ -352,6 +387,8 @@ namespace App{
  * @property string $label
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\Soal|null $Soal
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan query()
@@ -387,7 +424,6 @@ namespace App{
  * @property string $type
  * @property string $status
  * @property string|null $media_url
- * @property bool $is_active
  * @property string|null $media_url_sign_user
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -402,7 +438,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  */
-	class User extends \Eloquent {}
+	class User extends \Eloquent implements \Illuminate\Contracts\Auth\MustVerifyEmail {}
 }
 
 namespace App{
@@ -413,7 +449,8 @@ namespace App{
  * @property int $user_id
  * @property string $name
  * @property string $address
- * @property bool $gender
+ * @property int $phone_number
+ * @property string $gender
  * @property string $birth_place
  * @property \Illuminate\Support\Carbon $birth_date
  * @property string $no_ktp
@@ -421,12 +458,15 @@ namespace App{
  * @property bool $has_job
  * @property string|null $job_title
  * @property string|null $job_address
+ * @property string|null $company_name
+ * @property string|null $company_phone
+ * @property string|null $company_email
  * @property int|null $user_id_admin
- * @property string|null $note_admin
  * @property bool $is_verified
  * @property string|null $verification_note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\User|null $User
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi query()
@@ -439,7 +479,7 @@ namespace App{
  * App\UserAsesiCustomData
  *
  * @property int $id
- * @property int $user_asesi_id
+ * @property int $asesi_id
  * @property string $title
  * @property string $input_type
  * @property string $value
@@ -447,6 +487,7 @@ namespace App{
  * @property string|null $verification_note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UserAsesi|null $Asesi
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesiCustomData newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesiCustomData newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesiCustomData query()

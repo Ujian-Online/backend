@@ -95,6 +95,7 @@ class UserAsesiController extends Controller
             'has_job',
             'job_title',
             'job_address',
+            'company_name',
             'company_phone',
             'company_email',
             'is_verified',
@@ -175,7 +176,6 @@ class UserAsesiController extends Controller
      */
     public function update(Request $request, int $id)
     {
-
         $request->validate([
             'user_id'               => 'required|integer',
             'name'                  => 'required|min:3|max:255',
@@ -204,6 +204,7 @@ class UserAsesiController extends Controller
             'has_job',
             'job_title',
             'job_address',
+            'company_name',
             'company_phone',
             'company_email',
             'is_verified',

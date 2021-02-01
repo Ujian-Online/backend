@@ -24,6 +24,7 @@ class UserAsesi extends Model
         'has_job',
         'job_title',
         'job_address',
+        'company_name',
         'company_phone',
         'company_email',
         'user_id_admin',

@@ -33,38 +33,22 @@ class AuthServiceProvider extends ServiceProvider
 
         // Authentication Checker for Admin
         Gate::define('isAdmin', function ($user) {
-            return $user->type == 'admin'
-                ? Response::allow()
-                : Response::deny(
-                    trans('permission.gate.error', [':access', 'Administrator'])
-                );
+            return $user->type == 'admin';
         });
 
         // Authentication Checker for TUK
         Gate::define('isTuk', function ($user) {
-            return $user->type == 'tuk'
-                ? Response::allow()
-                : Response::deny(
-                    trans('permission.gate.error', [':access', 'TUK'])
-                );
+            return $user->type == 'tuk';
         });
 
         // Authentication Checker for Assesor
         Gate::define('isAssesor', function ($user) {
-            return $user->type == 'assesor'
-                ? Response::allow()
-                : Response::deny(
-                    trans('permission.gate.error', [':access', 'Assesor'])
-                );
+            return $user->type == 'assesor';
         });
 
-        // Authentication Checker for TUK
+        // Authentication Checker for Asessi
         Gate::define('isAsessi', function ($user) {
-            return $user->type == 'asessi'
-                ? Response::allow()
-                : Response::deny(
-                    trans('permission.gate.error', [':access', 'Assesi'])
-                );
+            return $user->type == 'asessi';
         });
     }
 }

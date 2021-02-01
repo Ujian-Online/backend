@@ -99,13 +99,13 @@ class UserTukController extends Controller
         }
 
         // save to database
-        UserTuk::create($dataInput);
+        $query = UserTuk::create($dataInput);
 
         // redirect to index table
         return redirect()
             ->route('admin.user.tuk.index')
             ->with('success', trans('action.success', [
-                    'name' => $dataInput['user_id']
+                    'name' => $query->id
             ]));
     }
 
