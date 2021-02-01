@@ -130,6 +130,13 @@ class SertifikasiUnitKompentensiDataTable extends DataTable
         // Create Route URL
         $url = route('admin.sertifikasi.uk.create');
 
+        // kalau di filter ada sertifikasi_id
+        // include sertifikasi_id di url create
+        $sertifikasi_id = request()->input('sertifikasi_id');
+        if(!empty($sertifikasi_id)) {
+            $url = route('admin.sertifikasi.uk.create', ['sertifikasi_id' => $sertifikasi_id]);
+        }
+
         // return function redirect
         return 'function (e, dt, button, config) {
             window.location = "'. $url .'";
