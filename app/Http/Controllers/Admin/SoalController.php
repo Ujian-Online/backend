@@ -129,19 +129,27 @@ class SoalController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|JsonResponse|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         // Find Data by ID
         $query = Soal::with('soalpilihanganda')->where('id', $id)->firstOrFail();
 
+        // return as json if request by ajax
+        if($request->ajax()) {
+            return $query;
+        }
+
         // pilihan ganda convert to array
         $pilihangandas = [];
-        foreach($query->soalpilihanganda as $pilihanganda) {
-            $pilihangandas[strtolower($pilihanganda->label)] = $pilihanganda;
+        if(isset($query->soalpilihanganda) and !empty($query->soalpilihanganda)) {
+            foreach($query->soalpilihanganda as $pilihanganda) {
+                $pilihangandas[strtolower($pilihanganda->label)] = $pilihanganda;
+            }
         }
 
         // return data to view
