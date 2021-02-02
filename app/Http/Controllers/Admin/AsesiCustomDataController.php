@@ -27,7 +27,7 @@ class AsesiCustomDataController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi Custom Data Form Lists'
+            'title' => 'Asesi Custom Data (APL-01) Form Lists'
         ]);
     }
 
@@ -40,7 +40,7 @@ class AsesiCustomDataController extends Controller
     {
         // return view template create
         return view('admin.assesi.apl01-form', [
-            'title'         => 'Tambah Asesi Custom Data Form Baru',
+            'title'         => 'Tambah Asesi Custom Data (APL-01) Form Baru',
             'action'        => route('admin.asesi.customdata.store'),
             'isCreated'     => true,
         ]);
@@ -92,7 +92,7 @@ class AsesiCustomDataController extends Controller
 
         // return data to view
         return view('admin.assesi.apl01-form', [
-            'title'         => 'Detail Asesi Custom Data Form: ' . $query->title,
+            'title'         => 'Detail Asesi Custom Data (APL-01) Form: ' . $query->title,
             'action'        => '#',
             'isShow'        => route('admin.asesi.customdata.edit', $id),
             'query'         => $query,
@@ -113,7 +113,7 @@ class AsesiCustomDataController extends Controller
 
         // return data to view
         return view('admin.assesi.apl01-form', [
-            'title'         => 'Ubah Asesi Custom Data Form Data: ' . $query->id,
+            'title'         => 'Ubah Asesi Custom Data (APL-01) Form Data: ' . $query->id,
             'action'        => route('admin.asesi.customdata.update', $id),
             'isEdit'        => true,
             'query'         => $query,
