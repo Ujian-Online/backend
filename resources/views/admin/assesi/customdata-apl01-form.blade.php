@@ -28,7 +28,7 @@
                         {{ __('selected') }}
                         @endif
                     >
-                        {{ ucfirst($type) }}
+                        {{ ucwords(str_replace('_', ' ', $type)) }}
                     </option>
                 @endforeach
 
@@ -36,6 +36,17 @@
 
             @error('input_type')
                 <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group col-md-12" id="dropdown-data" style="display: none;">
+            <label for="dropdown_option">Dropdown Option</label>
+            <textarea class="form-control @error('dropdown_option') is-invalid @enderror" name="dropdown_option" id="dropdown_option"
+                      cols="30" rows="5" placeholder="Data Satu,Data Dua,Data Tiga"></textarea>
+            <small id="helpDropdownOption" class="text-muted">Pisahkan data dengan Koma untuk membuat Dropdown Option.</small>
+
+            @error('dropdown_option')
+                <div class="alert alert-danger"> {{ $message }}</div>
             @enderror
         </div>
 
@@ -48,5 +59,22 @@
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
         });
+    </script>
+    <script>
+        // listen if input_type change
+        $("#input_type").on('change', function () {
+            const me = $(this);
+            const value = me.val();
+
+            // dropdown data div
+            const dropdownData = $("#dropdown-data");
+
+            // show html if value select is dropdown
+            if(value === 'dropdown') {
+                dropdownData.show();
+            } else {
+                dropdownData.hide();
+            }
+        })
     </script>
 @endsection
