@@ -31,6 +31,20 @@
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
+        <div class="form-group bg-gray col-md-12" id="soal-detail" style="display: none;">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="question">Pertanyaan</label>
+                    <textarea class="form-control" id="question" cols="30" rows="3" readonly></textarea>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="question_type">Tipe Pertanyaan</label>
+                    <input type="text" class="form-control" id="question_type" placeholder="Tipe Pertanyaan" value="" style="text-transform: capitalize;" readonly>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -150,5 +164,30 @@
          * Select2 with Ajax End
          * @type {string}
          */
+    </script>
+    <script>
+        // listen if soal_id change
+        $("#soal_id").on('change', async function () {
+           const me = $(this)
+           const value = me.val();
+
+           try {
+               const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
+               const { data: response } = request;
+
+               // show soal html
+               $("#soal-detail").show();
+
+               // change value question
+               $("#question").val(response.question);
+               // change value question_type
+               // format value
+               const questionType = response.question_type;
+               $("#question_type").val(questionType.replace('_', ' '));
+
+           } catch (e) {
+
+           }
+        });
     </script>
 @endsection
