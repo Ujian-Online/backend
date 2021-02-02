@@ -39,7 +39,7 @@ class AsesiCustomDataController extends Controller
     public function create()
     {
         // return view template create
-        return view('admin.assesi.apl01-form', [
+        return view('admin.assesi.customdata-apl01-form', [
             'title'         => 'Tambah Asesi Custom Data (APL-01) Form Baru',
             'action'        => route('admin.asesi.customdata.store'),
             'isCreated'     => true,
@@ -91,7 +91,7 @@ class AsesiCustomDataController extends Controller
         $query = AsesiCustomData::findOrFail($id);
 
         // return data to view
-        return view('admin.assesi.apl01-form', [
+        return view('admin.assesi.customdata-apl01-form', [
             'title'         => 'Detail Asesi Custom Data (APL-01) Form: ' . $query->title,
             'action'        => '#',
             'isShow'        => route('admin.asesi.customdata.edit', $id),
@@ -112,7 +112,7 @@ class AsesiCustomDataController extends Controller
         $query = AsesiCustomData::findOrFail($id);
 
         // return data to view
-        return view('admin.assesi.apl01-form', [
+        return view('admin.assesi.customdata-apl01-form', [
             'title'         => 'Ubah Asesi Custom Data (APL-01) Form Data: ' . $query->id,
             'action'        => route('admin.asesi.customdata.update', $id),
             'isEdit'        => true,
