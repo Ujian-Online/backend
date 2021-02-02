@@ -16,8 +16,8 @@ class CreateAsesiCustomDataTable extends Migration
         Schema::create('asesi_custom_data', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->string('input_type'); // @see config('option
-            //.asesi_custom_data_input_type)
+            $table->string('input_type'); // @see config('option.asesi_custom_data_input_type)
+            $table->text('dropdown_option')->nullable();
             $table->timestamps();
         });
     }
