@@ -183,7 +183,7 @@ return [
                 'active'    => 'admin.asesi.*',
                 'sub_menu'  => [
                     [
-                        'title'     => 'Custom Data',
+                        'title'     => 'Custom Data (APL-01)',
                         'icon'      => 'fas fa-list-ol',
                         'route'     => 'admin.asesi.customdata.index',
                         'active'    => 'admin.asesi.customdata.*',
