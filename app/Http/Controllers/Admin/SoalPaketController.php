@@ -39,15 +39,11 @@ class SoalPaketController extends Controller
      */
     public function create()
     {
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-
         // return view template create
         return view('admin.soal.paket-form', [
             'title'         => 'Tambah Soal Paket Baru',
             'action'        => route('admin.soal.paket.store'),
             'isCreated'     => true,
-            'sertifikasis'  => $sertifikasis
         ]);
     }
 
@@ -94,8 +90,6 @@ class SoalPaketController extends Controller
     {
         // Find Data by ID
         $query = SoalPaket::findOrFail($id);
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
 
         // return data to view
         return view('admin.soal.paket-form', [
@@ -103,7 +97,6 @@ class SoalPaketController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.soal.paket.edit', $id),
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
@@ -118,8 +111,6 @@ class SoalPaketController extends Controller
     {
         // Find Data by ID
         $query = SoalPaket::findOrFail($id);
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
 
         // return data to view
         return view('admin.soal.paket-form', [
@@ -127,7 +118,6 @@ class SoalPaketController extends Controller
             'action'        => route('admin.soal.paket.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
