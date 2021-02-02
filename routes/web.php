@@ -50,8 +50,10 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian']);
         Route::resource('ujian/jawabanpilihan', 'Admin\UjianAsesiJawabanPilihanController', ['as' => 'ujian']);
 
+        Route::get('soal/search', 'Admin\SoalController@search')->name('soal.search');
         Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal']);
         Route::resource('soal/pilihanganda', 'Admin\SoalPilihanGandaController', ['as' => 'soal']);
+        Route::get('soal/paket/search', 'Admin\SoalPaketController@search')->name('soal.paket.search');
         Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
         Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
         Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
