@@ -16,16 +16,16 @@
 
         <div class="form-group col-md-6">
             <label for="input_type">Input Type</label>
-            <select class="form-control" name="input_type" id="input_type" @if(isset($isShow)) readonly @endif>
+            <select class="form-control @error('input_type') is-invalid @enderror" name="input_type" id="input_type" @if(isset($isShow)) readonly @endif>
 
                 @foreach(config('options.asesi_custom_data_input_type') as $type)
                     <option
                         value="{{ $type }}"
 
-                    @if(old('type') == $type)
-                        {{ __('selected') }}
+                        @if(old('input_type') == $type)
+                            {{ __('selected') }}
                         @elseif(isset($query->input_type) and !empty($query->input_type) and $query->input_type == $type)
-                        {{ __('selected') }}
+                            {{ __('selected') }}
                         @endif
                     >
                         {{ ucwords(str_replace('_', ' ', $type)) }}
@@ -41,13 +41,35 @@
 
         <div class="form-group col-md-12" id="dropdown-data" style="display: none;">
             <label for="dropdown_option">Dropdown Option</label>
-            <textarea class="form-control @error('dropdown_option') is-invalid @enderror" name="dropdown_option" id="dropdown_option"
-                      cols="30" rows="5" placeholder="Data Satu,Data Dua,Data Tiga"></textarea>
-            <small id="helpDropdownOption" class="text-muted">Pisahkan data dengan Koma untuk membuat Dropdown Option.</small>
 
-            @error('dropdown_option')
-                <div class="alert alert-danger"> {{ $message }}</div>
-            @enderror
+            @if(isset($isCreated) OR isset($isEdit))
+                <button type="button" class="btn btn-primary btn-sm" id="add-dropdown">
+                    Tambah Opsi Dropdown
+                </button>
+            @endif
+
+            <div id="input-dropdown-result" class="form-row mt-2">
+
+                {{-- Loop data kalau form show atau edit --}}
+                @if(isset($isShow) OR isset($isEdit) and $query->input_type == 'dropdown' and !empty($query->dropdown_option))
+                        @foreach(explode(',', $query->dropdown_option) as $key => $dropdownOption)
+                            <div id="dropdown-option-data-{{ $key }}" class="col-md-12 form-row">
+
+                                @if(isset($isEdit))
+                                    <div class="form-group col-md-2">
+                                        <button type="button" class="btn btn-danger btn-block" onclick="deleteButton({{$key}})">Delete</button>
+                                    </div>
+                                @endif
+
+                                <div class="form-group col-md-10">
+                                    <input type="text" class="form-control mb-2"
+                                           name="dropdown_option[]" id="dropdown_option_{{$key}}" placeholder="Opsi Dropdown"
+                                           value="{{ $dropdownOption }}" @if(isset($isShow)) readonly @endif>
+                                </div>
+                            </div>
+                        @endforeach
+                @endif
+            </div>
         </div>
 
     </div>
@@ -61,6 +83,13 @@
         });
     </script>
     <script>
+        // show input if page show
+        const input_type_show = '{{ $query->input_type ?? '' }}';
+        const isShow = {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }};
+        if(input_type_show === 'dropdown' || isShow) {
+            $("#dropdown-data").show();
+        }
+
         // listen if input_type change
         $("#input_type").on('change', function () {
             const me = $(this);
@@ -72,9 +101,34 @@
             // show html if value select is dropdown
             if(value === 'dropdown') {
                 dropdownData.show();
+                $("#add-dropdown").click();
             } else {
                 dropdownData.hide();
+                $("#dropdown_option").val('');
             }
+        });
+
+        // tambah form dropdown option jika klik tambah
+        $("#add-dropdown").on('click', function () {
+            const randomID = Date.now();
+            const divRandomId = "dropdown-option-data-" + randomID;
+
+            $("#input-dropdown-result").append(`
+                <div id=${divRandomId} class="col-md-12 form-row">
+                    <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-danger btn-block" onclick="deleteButton(${randomID})">Delete</button>
+                    </div>
+                    <div class="form-group col-md-10">
+                        <input type="text" class="form-control mb-2" name="dropdown_option[]" id="dropdown_option_${randomID}" placeholder="Opsi Dropdown">
+                    </div>
+                </div>
+            `);
         })
+
+        // delete button function
+        function deleteButton(id)
+        {
+            $(`#dropdown-option-data-${id}`).remove();
+        }
     </script>
 @endsection
