@@ -235,6 +235,9 @@
                         <tbody>
 
                             @foreach($query->asesicustomdata as $asesicustomdata)
+                                {{-- include id in submit --}}
+                                <input type="hidden" name="asesicustomdata[id][]" value="{{$asesicustomdata->id}}">
+
                                 <tr id="asesicustomdata-{{ $asesicustomdata->id }}">
                                     <th scope="row">{{ $asesicustomdata->title }}</th>
                                     <td>
