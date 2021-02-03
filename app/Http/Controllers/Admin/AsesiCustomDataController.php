@@ -57,8 +57,9 @@ class AsesiCustomDataController extends Controller
     {
         // validate input
         $request->validate([
-            'title'         => 'required',
-            'input_type'    => 'required',
+            'title'             => 'required',
+            'input_type'        => 'required|in:' . implode(',', config('options.asesi_custom_data_input_type')),
+            'dropdown_option.*' => 'nullable|required_if:input_type,dropdown'
         ]);
 
         // get form data
@@ -66,6 +67,12 @@ class AsesiCustomDataController extends Controller
             'title',
             'input_type',
         ]);
+
+        // update value dropdown option
+        if($dataInput['input_type'] == 'dropdown') {
+            $dropdownInput = $request->input('dropdown_option');
+            $dataInput['dropdown_option'] = implode(',', $dropdownInput);
+        }
 
         // save to database
         $query = AsesiCustomData::create($dataInput);
@@ -132,8 +139,9 @@ class AsesiCustomDataController extends Controller
     {
         // validate input
         $request->validate([
-            'title'         => 'required',
-            'input_type'    => 'required',
+            'title'             => 'required',
+            'input_type'        => 'required|in:' . implode(',', config('options.asesi_custom_data_input_type')),
+            'dropdown_option'   => 'nullable|required_if:input_type,dropdown'
         ]);
 
         // get form data
@@ -141,6 +149,12 @@ class AsesiCustomDataController extends Controller
             'title',
             'input_type',
         ]);
+
+        // update value dropdown option
+        if($dataInput['input_type'] == 'dropdown') {
+            $dropdownInput = $request->input('dropdown_option');
+            $dataInput['dropdown_option'] = implode(',', $dropdownInput);
+        }
 
         // find by id and update
         $query = AsesiCustomData::findOrFail($id);
