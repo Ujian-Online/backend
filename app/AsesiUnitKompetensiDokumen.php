@@ -49,6 +49,6 @@ class AsesiUnitKompetensiDokumen extends Model
      */
     public function AsesiSertifikasiUnitKompetensiElement()
     {
-        return $this->hasOne('App\AsesiSertifikasiUnitKompetensiElement', 'id', 'unit_kompetensi_id');
+        return $this->hasMany('App\AsesiSertifikasiUnitKompetensiElement', 'unit_kompetensi_id', 'unit_kompetensi_id');
     }
 }
