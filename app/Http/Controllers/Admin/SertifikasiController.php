@@ -89,12 +89,20 @@ class SertifikasiController extends Controller
      *
      * @param int $id
      *
-     * @return Application|Factory|Response|View
+     * @return Sertifikasi|Sertifikasi[]|Application|Factory|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|Response|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         // Find Data by ID
         $query = Sertifikasi::findOrFail($id);
+
+        // return json if request by ajax
+        if($request->ajax()) {
+            return $query->makeVisible([
+                'original_price_baru',
+                'original_price_perpanjang',
+            ]);
+        }
 
         // return data to view
         return view('admin.sertifikasi.sertifikasi-form', [

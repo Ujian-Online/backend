@@ -42,15 +42,11 @@ class SertifikasiUnitKompetensiController extends Controller
      */
     public function create()
     {
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-
         // return view template create
         return view('admin.sertifikasi-uk.form', [
             'title'         => 'Tambah Sertifikasi Unik Kompentensi Baru',
             'action'        => route('admin.sertifikasi.uk.store'),
             'isCreated'     => true,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
@@ -133,8 +129,6 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // Find Data by ID
         $query = SertifikasiUnitKompentensi::with('ukelement')->where('id', $id)->firstOrFail();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
 
         // return data to view
         return view('admin.sertifikasi-uk.form', [
@@ -142,7 +136,6 @@ class SertifikasiUnitKompetensiController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.sertifikasi.uk.edit', $id),
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
@@ -157,8 +150,6 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // Find Data by ID
         $query = SertifikasiUnitKompentensi::with('ukelement')->where('id', $id)->firstOrFail();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
 
         // return data to view
         return view('admin.sertifikasi-uk.form', [
@@ -166,7 +157,6 @@ class SertifikasiUnitKompetensiController extends Controller
             'action'        => route('admin.sertifikasi.uk.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
@@ -290,5 +280,57 @@ class SertifikasiUnitKompetensiController extends Controller
             'code' => 200,
             'success' => true,
         ]);
+    }
+
+    /**
+     * Select2 Search Data
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request)
+    {
+        // database query
+        $query = new SertifikasiUnitKompentensi();
+        // result variable
+        $result = [];
+
+        // get input from select2 search term
+        $q = $request->input('q');
+        // sertifikasi query
+        $sertifikasi_id = $request->input('sertifikasi_id');
+
+        // return empty object if query is empty
+        if(empty($q)) {
+            return response()->json($result, 200);
+        }
+
+        // check if query is numeric or not
+        if(is_numeric($q)) {
+
+            // cari sertifikasi id kalau di query statusnya true atau 1
+            if($sertifikasi_id) {
+                $query = $query->where('sertifikasi_id', $q);
+            } else {
+                // cari hanya id unit kompetensi
+                $query = $query->where('id', 'like', "%$q%");
+            }
+
+        } else {
+            $query = $query->where('title', 'like', "%$q%");
+        }
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => '[ID: ' . $data->id . '] - ' . $data->title,
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
     }
 }

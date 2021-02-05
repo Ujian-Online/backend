@@ -23,13 +23,13 @@ class AsesiUnitKompetensiDokumen extends Model
     ];
 
     /**
-     * Relation to Table User Asesi
+     * Relation to Table User
      *
      * @return HasOne
      */
-    public function Asesi()
+    public function User()
     {
-        return $this->hasOne('App\UserAsesi', 'id', 'asesi_id');
+        return $this->hasOne('App\User', 'id', 'asesi_id');
     }
 
     /**
@@ -39,7 +39,7 @@ class AsesiUnitKompetensiDokumen extends Model
      */
     public function Sertifikasi()
     {
-        return $this->hasOne('App\Sertifikasi');
+        return $this->hasOne('App\Sertifikasi', 'id', 'sertifikasi_id');
     }
 
     /**
@@ -47,8 +47,8 @@ class AsesiUnitKompetensiDokumen extends Model
      *
      * @return HasOne
      */
-    public function UnitKompentensi()
+    public function AsesiSertifikasiUnitKompetensiElement()
     {
-        return $this->hasOne('App\SertifikasiUnitKompentensi', 'id', 'unit_kompetensi_id');
+        return $this->hasMany('App\AsesiSertifikasiUnitKompetensiElement', 'unit_kompetensi_id', 'unit_kompetensi_id');
     }
 }

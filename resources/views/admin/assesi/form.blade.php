@@ -217,6 +217,75 @@
             @enderror
         </div>
 
+        {{-- show custom data form --}}
+        @if(isset($isShow) OR isset($isEdit) and !empty($query->asesicustomdata))
+            <div class="form-group col-md-12">
+                <h3>Asesi Custom Data</h3>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Data</th>
+                                <th>Verified</th>
+                                <th>Vertification Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach($query->asesicustomdata as $asesicustomdata)
+                                {{-- include id in submit --}}
+                                <input type="hidden" name="asesicustomdata[id][]" value="{{$asesicustomdata->id}}">
+
+                                <tr id="asesicustomdata-{{ $asesicustomdata->id }}">
+                                    <th scope="row">{{ $asesicustomdata->title }}</th>
+                                    <td>
+                                        @if(in_array($asesicustomdata->input_type, ['upload_image', 'upload_pdf']))
+                                            @if(!empty($asesicustomdata->value))
+                                                <a class="btn btn-primary btn-sm" href="{{$asesicustomdata->value}}">Buka File</a>
+                                            @else
+                                                File Belum di Unggah
+                                            @endif
+                                        @else
+                                            {{ $asesicustomdata->value }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(isset($isShow))
+                                            {{ $asesicustomdata->is_verified ? 'YES' : 'NO' }}
+                                        @elseif(isset($isEdit))
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="asesicustomdata[is_verified][{{$asesicustomdata->id}}]"
+                                                       id="asesicustomdata-is_verified-{{$asesicustomdata->id}}" value="1" @if($asesicustomdata->is_verified == 1) {{ _('checked') }} @endif>
+                                                <label class="form-check-label">YES</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="asesicustomdata[is_verified][{{$asesicustomdata->id}}]"
+                                                       id="asesicustomdata-is_verified-{{$asesicustomdata->id}}" value="0" @if($asesicustomdata->is_verified == 0) {{ _('checked') }} @endif>
+                                                <label class="form-check-label">NO</label>
+                                            </div>
+                                        @endif
+
+                                    </td>
+                                    <td>
+                                        @if(isset($isShow))
+                                            {{ $asesicustomdata->verification_note }}
+                                        @elseif(isset($isEdit))
+                                            <textarea class="form-control" rows="3"
+                                                      name="asesicustomdata[verification_note][{{$asesicustomdata->id}}]"
+                                                      id="asesicustomdata-verification_note-{{$asesicustomdata->id}}">{{ $asesicustomdata->verification_note }}</textarea>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
     </div>
 @endsection
 

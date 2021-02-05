@@ -66,4 +66,14 @@ class UserAsesi extends Model
     {
         return $this->hasOne('App\User', 'id', 'user_id');
     }
+
+    /**
+     * Relation to Table UserAsesiCustomData
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function AsesiCustomData()
+    {
+        return $this->hasMany('App\UserAsesiCustomData', 'asesi_id', 'id');
+    }
 }

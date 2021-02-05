@@ -129,19 +129,27 @@ class SoalController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|JsonResponse|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         // Find Data by ID
         $query = Soal::with('soalpilihanganda')->where('id', $id)->firstOrFail();
 
+        // return as json if request by ajax
+        if($request->ajax()) {
+            return $query;
+        }
+
         // pilihan ganda convert to array
         $pilihangandas = [];
-        foreach($query->soalpilihanganda as $pilihanganda) {
-            $pilihangandas[strtolower($pilihanganda->label)] = $pilihanganda;
+        if(isset($query->soalpilihanganda) and !empty($query->soalpilihanganda)) {
+            foreach($query->soalpilihanganda as $pilihanganda) {
+                $pilihangandas[strtolower($pilihanganda->label)] = $pilihanganda;
+            }
         }
 
         // return data to view
@@ -277,5 +285,48 @@ class SoalController extends Controller
             'code' => 200,
             'success' => true,
         ]);
+    }
+
+    /**
+     * Select2 Search Data
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function search(Request $request)
+    {
+        // database query
+        $query = new Soal();
+        // result variable
+        $result = [];
+
+        // get input from select2 search term
+        $q = $request->input('q');
+
+        // return empty object if query is empty
+        if(empty($q)) {
+            return response()->json($result, 200);
+        }
+
+        // check if query is numeric or not
+        if(is_numeric($q)) {
+            $query = $query->where('id', 'like', "%$q%");
+        } else {
+            $query = $query->where('question', 'like', "%$q%");
+        }
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => '[ID: ' . $data->id . '] - ' . $data->question,
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
     }
 }

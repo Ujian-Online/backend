@@ -8,7 +8,7 @@
         <div class="form-group col-md-12">
             <label for="asesi_id">User ID Asesi</label>
             <select class="form-control @error('asesi_id') is-invalid @enderror"
-                    name="asesi_id" id="asesi_id">
+                    name="asesi_id" id="asesi_id" data-placeholder="Pilih User ID Asesi">
             </select>
 
             @error('asesi_id')
@@ -19,7 +19,7 @@
         <div class="form-group col-md-12">
             <label for="sertifikasi_id">Sertifikasi ID</label>
             <select class="form-control @error('sertifikasi_id') is-invalid @enderror"
-                    name="sertifikasi_id" id="sertifikasi_id">
+                    name="sertifikasi_id" id="sertifikasi_id" data-placeholder="Pilih Sertifikasi ID">
             </select>
 
             @error('sertifikasi_id')
@@ -30,7 +30,7 @@
         <div class="form-group col-md-12">
             <label for="tuk_id">TUK ID</label>
             <select class="form-control @error('tuk_id') is-invalid @enderror"
-                    name="tuk_id" id="tuk_id">
+                    name="tuk_id" id="tuk_id" data-placeholder="Pilih TUK ID">
             </select>
 
             @error('tuk_id')
@@ -84,7 +84,7 @@
 
         <div class="form-group col-md-2">
             <label for="sertifikat_date_old">Tanggal Sertifikat Lama</label>
-            <input type="date" class="form-control @error('sertifikat_date_old') is-invalid @enderror" name="sertifikat_date_old" id="sertifikat_date_old" placeholder="Tanggal Sertifikat Lama" value="{{ old('sertifikat_date_old') ?? \Carbon\Carbon::parse($query->sertifikat_date_old)->toDateString() ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <input type="date" class="form-control @error('sertifikat_date_old') is-invalid @enderror" name="sertifikat_date_old" id="sertifikat_date_old" placeholder="Tanggal Sertifikat Lama" value="{{ old('sertifikat_date_old') ?? (isset($query->sertifikat_date_old) && !empty($query->sertifikat_date_old) ? \Carbon\Carbon::parse($query->sertifikat_date_old)->toDateString() : '' ) ?? '' }}" @if(isset($isShow)) readonly @endif>
 
             @error('sertifikat_date_old')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -111,7 +111,7 @@
 
         <div class="form-group col-md-2">
             <label for="sertifikat_date_new">Tanggal Sertifikat Baru</label>
-            <input type="date" class="form-control @error('sertifikat_date_new') is-invalid @enderror" name="sertifikat_date_new" id="sertifikat_date_new" placeholder="Tanggal Sertifikat Baru" value="{{ old('sertifikat_date_new') ?? \Carbon\Carbon::parse($query->sertifikat_date_new)->toDateString() ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <input type="date" class="form-control @error('sertifikat_date_new') is-invalid @enderror" name="sertifikat_date_new" id="sertifikat_date_new" placeholder="Tanggal Sertifikat Baru" value="{{ old('sertifikat_date_new') ?? (isset($query->sertifikat_date_new) && !empty($query->sertifikat_date_new) ? \Carbon\Carbon::parse($query->sertifikat_date_new)->toDateString() : '' ) ?? '' }}" @if(isset($isShow)) readonly @endif>
 
             @error('sertifikat_date_new')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -271,7 +271,7 @@
 
         <div class="form-group col-md-2">
             <label for="transfer_date">Tanggal Transfer</label>
-            <input type="date" class="form-control @error('transfer_date') is-invalid @enderror" name="transfer_date" id="transfer_date" placeholder="Tanggal Transfer" value="{{ old('transfer_date') ?? \Carbon\Carbon::parse($query->transfer_date)->toDateString() ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <input type="date" class="form-control @error('transfer_date') is-invalid @enderror" name="transfer_date" id="transfer_date" placeholder="Tanggal Transfer" value="{{ old('transfer_date') ?? (isset($query->transfer_date) && !empty($query->transfer_date) ? \Carbon\Carbon::parse($query->transfer_date)->toDateString() : '') ?? '' }}" @if(isset($isShow)) readonly @endif>
 
             @error('transfer_date')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -280,7 +280,7 @@
 
         <div class="form-group col-md-2">
             <label for="expired_date">Jatuh Tempo</label>
-            <input type="date" class="form-control @error('expired_date') is-invalid @enderror" name="expired_date" id="expired_date" placeholder="Jatuh Tempo" value="{{ old('expired_date') ?? \Carbon\Carbon::parse($query->expired_date)->toDateString() ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <input type="date" class="form-control @error('expired_date') is-invalid @enderror" name="expired_date" id="expired_date" placeholder="Jatuh Tempo" value="{{ old('expired_date') ?? (isset($query->expired_date) && !empty($query->expired_date) ? \Carbon\Carbon::parse($query->expired_date)->toDateString() : '') ?? '' }}" @if(isset($isShow)) readonly @endif>
 
             @error('expired_date')
             <div class="alert alert-danger">{{ $message }}</div>

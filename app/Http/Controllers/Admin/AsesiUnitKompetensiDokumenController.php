@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\AsesiSertifikasiUnitKompetensiElement;
 use App\AsesiUnitKompetensiDokumen;
 use App\DataTables\Admin\AsesiUnitKompetensiDokumenDataTable;
 use App\Http\Controllers\Controller;
 use App\Sertifikasi;
 use App\SertifikasiUnitKompentensi;
+use App\SertifikasiUnitKompetensiElement;
+use App\User;
 use App\UserAsesi;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -30,7 +33,7 @@ class AsesiUnitKompetensiDokumenController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi Custom Data Lists'
+            'title' => 'Asesi APL-02 Lists'
         ]);
     }
 
@@ -41,8 +44,6 @@ class AsesiUnitKompetensiDokumenController extends Controller
      */
     public function create()
     {
-        // get asesi lists
-        $asesis = UserAsesi::all();
         // get unit kompetensi lists
         $unitkompentensis = SertifikasiUnitKompentensi::all();
         // get sertifikasi lists
@@ -50,10 +51,9 @@ class AsesiUnitKompetensiDokumenController extends Controller
 
         // return view template create
         return view('admin.assesi.apl02-form', [
-            'title'             => 'Tambah Asesi APL02 Baru',
+            'title'             => 'Tambah Asesi APL-02',
             'action'            => route('admin.asesi.apl02.store'),
             'isCreated'         => true,
-            'asesis'            => $asesis,
             'unitkompentensis'  => $unitkompentensis,
             'sertifikasis'      => $sertifikasis,
         ]);
@@ -72,26 +72,48 @@ class AsesiUnitKompetensiDokumenController extends Controller
         $request->validate([
             'asesi_id'              => 'required',
             'unit_kompetensi_id'    => 'required',
-            'order'                 => 'required',
             'sertifikasi_id'        => 'required',
-            'kode_unit_kompetensi'  => 'required',
-            'title'                 => 'required',
-            'sub_title'             => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'asesi_id',
             'unit_kompetensi_id',
-            'order',
             'sertifikasi_id',
-            'kode_unit_kompetensi',
-            'title',
-            'sub_title',
         ]);
+
+        // Copy Snapshot From Sertifikasi Unit Kompetensi
+        $sertifikasiUK = SertifikasiUnitKompentensi::where('id', $dataInput['unit_kompetensi_id'])
+                    ->where('sertifikasi_id', $dataInput['sertifikasi_id'])->firstOrFail();
+
+        // update input from index data to snapshot
+        $dataInput['order'] = $sertifikasiUK->order;
+        $dataInput['kode_unit_kompetensi'] = $sertifikasiUK->kode_unit_kompetensi;
+        $dataInput['title'] = $sertifikasiUK->title;
+        $dataInput['sub_title'] = $sertifikasiUK->sub_title;
 
         // save to database
         $query = AsesiUnitKompetensiDokumen::create($dataInput);
+
+        // Copy Snapshot From SertifikasiUnitKompetensiElement to AsesiSertifikasiUnitKompetensiElement
+        $sertifikasiUKElements = SertifikasiUnitKompetensiElement::where('unit_kompetensi_id', $dataInput['unit_kompetensi_id'])->get();
+
+        // loop data and change date to now
+        $asesiUKElements = [];
+        foreach($sertifikasiUKElements as $sertifikasiUKElement) {
+            $asesiUKElements[] = [
+                'asesi_id' => $dataInput['asesi_id'],
+                'unit_kompetensi_id' => $sertifikasiUKElement->unit_kompetensi_id,
+                'desc' => $sertifikasiUKElement->desc,
+                'upload_instruction' => $sertifikasiUKElement->upload_instruction,
+                'is_verified' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        // bulk insert snapshot
+        AsesiSertifikasiUnitKompetensiElement::insert($asesiUKElements);
 
         // redirect to index table
         return redirect()
@@ -112,8 +134,6 @@ class AsesiUnitKompetensiDokumenController extends Controller
     {
         // Find Data by ID
         $query = AsesiUnitKompetensiDokumen::findOrFail($id);
-        // get asesi lists
-        $asesis = UserAsesi::all();
         // get unit kompetensi lists
         $unitkompentensis = SertifikasiUnitKompentensi::all();
         // get sertifikasi lists
@@ -121,11 +141,10 @@ class AsesiUnitKompetensiDokumenController extends Controller
 
         // return data to view
         return view('admin.assesi.apl02-form', [
-            'title'             => 'Tampilkan Detail: ' . $query->title,
+            'title'             => 'Detail Asesi APL-02: ' . $query->title,
             'action'            => '#',
             'isShow'            => route('admin.asesi.apl02.edit', $id),
             'query'             => $query,
-            'asesis'            => $asesis,
             'unitkompentensis'  => $unitkompentensis,
             'sertifikasis'      => $sertifikasis,
         ]);
@@ -142,8 +161,6 @@ class AsesiUnitKompetensiDokumenController extends Controller
     {
         // Find Data by ID
         $query = AsesiUnitKompetensiDokumen::findOrFail($id);
-        // get asesi lists
-        $asesis = UserAsesi::all();
         // get unit kompetensi lists
         $unitkompentensis = SertifikasiUnitKompentensi::all();
         // get sertifikasi lists
@@ -151,11 +168,10 @@ class AsesiUnitKompetensiDokumenController extends Controller
 
         // return data to view
         return view('admin.assesi.apl02-form', [
-            'title'             => 'Ubah Data: ' . $query->id,
+            'title'             => 'Ubah Asesi APL-02: ' . $query->id,
             'action'            => route('admin.asesi.apl02.update', $id),
             'isEdit'            => true,
             'query'             => $query,
-            'asesis'            => $asesis,
             'unitkompentensis'  => $unitkompentensis,
             'sertifikasis'      => $sertifikasis,
         ]);
@@ -179,7 +195,6 @@ class AsesiUnitKompetensiDokumenController extends Controller
             'sertifikasi_id'        => 'required',
             'kode_unit_kompetensi'  => 'required',
             'title'                 => 'required',
-            'sub_title'             => 'required',
         ]);
 
         // get form data
@@ -224,5 +239,144 @@ class AsesiUnitKompetensiDokumenController extends Controller
             'code' => 200,
             'success' => true,
         ]);
+    }
+
+    /**
+     * APL-02 View Function
+     *
+     * @param Request $request
+     * @param int $userid
+     * @param int $sertifikasiid
+     * @return Application|Factory|View
+     */
+    public function apl02View(Request $request, int $userid, int $sertifikasiid)
+    {
+        // get user asesi detail
+        $user = User::with('asesi')->findOrFail($userid);
+        // get sertifikasi detail
+        $sertifikasi = Sertifikasi::findOrFail($sertifikasiid);
+        // get UK Dokumen and Element
+        $unitkompetensis = AsesiUnitKompetensiDokumen::with(
+                'asesisertifikasiunitkompetensielement'
+            )
+            ->where('asesi_id', $userid)
+            ->where('sertifikasi_id', $sertifikasiid)
+            ->get();
+
+        // get name from asesi object
+        $name = $user->email;
+        if(isset($user->asesi) and !empty($user->asesi)) {
+            $name = $user->asesi->name;
+        }
+
+        // return data to view
+        return view('admin.assesi.apl02-view', [
+            'title'             => 'Detail Asesi APL-02: ' . $name,
+            'action'            => '#',
+            'isShow'            => route('admin.asesi.apl02.viewedit', [
+                'userid'        => $userid,
+                'sertifikasiid' => $sertifikasiid
+            ]),
+            'user'              => $user,
+            'sertifikasi'       => $sertifikasi,
+            'unitkompetensis'   => $unitkompetensis,
+        ]);
+    }
+
+    /**
+     * APL-02 View Edit Function
+     *
+     * @param Request $request
+     * @param int $userid
+     * @param int $sertifikasiid
+     * @return Application|Factory|View
+     */
+    public function apl02ViewEdit(Request $request, int $userid, int $sertifikasiid)
+    {
+        // get user asesi detail
+        $user = User::with('asesi')->findOrFail($userid);
+        // get sertifikasi detail
+        $sertifikasi = Sertifikasi::findOrFail($sertifikasiid);
+        // get UK Dokumen and Element
+        $unitkompetensis = AsesiUnitKompetensiDokumen::with(
+            'asesisertifikasiunitkompetensielement'
+        )
+            ->where('asesi_id', $userid)
+            ->where('sertifikasi_id', $sertifikasiid)
+            ->get();
+
+        // get name from asesi object
+        $name = $user->email;
+        if(isset($user->asesi) and !empty($user->asesi)) {
+            $name = $user->asesi->name;
+        }
+
+        // return data to view
+        return view('admin.assesi.apl02-view', [
+            'title'             => 'Detail Asesi APL-02: ' . $name,
+            'action'            => route('admin.asesi.apl02.viewupdate', [
+                'userid'        => $userid,
+                'sertifikasiid' => $sertifikasiid
+            ]),
+            'isEdit'            => true,
+            'user'              => $user,
+            'sertifikasi'       => $sertifikasi,
+            'unitkompetensis'   => $unitkompetensis,
+        ]);
+    }
+
+    /**
+     * APL-02 Update Function
+     *
+     * @param Request $request
+     * @param int $userid
+     * @param int $sertifikasiid
+     * @return RedirectResponse
+     */
+    public function apl02ViewUpdate(Request $request, int $userid, int $sertifikasiid)
+    {
+        $request->validate([
+            'ukelement' => 'required|array'
+        ]);
+
+        // get uk element data
+        $ukelements = $request->input('ukelement');
+        // check if uk element empty or not
+        if(!empty($ukelements)) {
+            // loop uk element id to get id
+            foreach($ukelements['id'] as $ukelement) {
+                $uk_id = $ukelement;
+                // is_verified by id
+                $is_verified = $ukelements['is_verified'][$uk_id];
+                // verification note by id
+                $verification_note = $ukelements['verification_note'][$uk_id];
+
+                // run update query by each id
+                AsesiSertifikasiUnitKompetensiElement::select(['is_verified', 'verification_note'])
+                    ->where('id', $uk_id)
+                    ->where('asesi_id', $userid)
+                    ->update([
+                        'is_verified' => $is_verified,
+                        'verification_note' => $verification_note,
+                    ]);
+            }
+        }
+
+
+        // get user asesi detail
+        $user = User::with('asesi')->findOrFail($userid);
+
+        // get name from asesi object
+        $name = $user->email;
+        if(isset($user->asesi) and !empty($user->asesi)) {
+            $name = $user->asesi->name;
+        }
+
+        // redirect
+        return redirect()
+            ->route('admin.asesi.apl02.index')
+            ->with('success', trans('action.success_update', [
+                'name' => $name
+            ]));
     }
 }

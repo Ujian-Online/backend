@@ -21,12 +21,27 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+//            ->addColumn('status', function($query) {
+//                $asesiukelement = $query->asesisertifikasiunitkompetensielement;
+//
+//                // return verified status
+//                if(isset($asesiukelement) and !empty($asesiukelement)) {
+//                    return $asesiukelement->is_verified ? 'Verified' : 'Unverified';
+//                } else {
+//                    return 'Unverified';
+//                }
+//            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
-                    'title' => $query->title,
-                    'url_show' => route('admin.asesi.apl02.show', $query->id),
-                    'url_edit' => route('admin.asesi.apl02.edit', $query->id),
-                    'url_destroy' => route('admin.asesi.apl02.destroy', $query->id),
+                    'title' => $query->asesi_id,
+                    'url_show' => route('admin.asesi.apl02.view', [
+                        'userid' => $query->asesi_id,
+                        'sertifikasiid' => $query->sertifikasi_id
+                    ]),
+                    'url_edit' => route('admin.asesi.apl02.viewedit', [
+                        'userid' => $query->asesi_id,
+                        'sertifikasiid' => $query->sertifikasi_id
+                    ]),
                 ]);
             });
     }
@@ -39,7 +54,9 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
      */
     public function query(AsesiUnitKompetensiDokumen $model)
     {
-        return $model->newQuery();
+        return $model::with(['user', 'user.asesi', 'sertifikasi'])
+            ->select(['asesi_id', 'sertifikasi_id'])
+            ->groupBy( 'asesi_id', 'sertifikasi_id');
     }
 
     /**
@@ -86,11 +103,12 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('title'),
-            Column::make('kode_unit_kompetensi'),
-            Column::make('updated_at')
-                ->title('Update')
-                ->width('10%'),
+            Column::computed('asesi')
+                ->title('Asesi')
+                ->data('user.asesi.name'),
+            Column::computed('sertifikasi')
+                ->title('Sertifikasi')
+                ->data('sertifikasi.title'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
