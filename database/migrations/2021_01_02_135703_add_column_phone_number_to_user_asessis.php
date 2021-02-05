@@ -14,7 +14,7 @@ class AddColumnPhoneNumberToUserAsessis extends Migration
     public function up()
     {
         Schema::table('user_asesis', function (Blueprint $table) {
-            $table->integer('phone_number')->after('address');
+            $table->string('phone_number')->after('address');
         });
     }
 
