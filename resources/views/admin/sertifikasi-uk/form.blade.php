@@ -72,9 +72,9 @@
         <div class="form-row mb-4" id="new-element"></div>
         <div class="form-row">
             @if(!isset($isShow))
-                    <button type="button" id="tambah-element" class="btn btn-primary mb-4" onclick="">
-                        <i class="fas fa-plus-circle"></i> Tambah Element
-                    </button>
+                <button type="button" id="tambah-element" class="btn btn-primary mb-4" onclick="">
+                    <i class="fas fa-plus-circle"></i> Tambah Element
+                </button>
             @endif
         </div>
     @endif
@@ -114,7 +114,7 @@
         // sertifikasi select2 with ajax query search
         $('#sertifikasi_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (!empty(request()->input('sertifikasi_id'))) ?? (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            disabled: {{ (!empty(request()->input('sertifikasi_id'))) ?? (isset($isShow) and !empty($isShow)) ? 'readonly' : 'false' }},
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
