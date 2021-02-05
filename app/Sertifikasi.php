@@ -60,4 +60,14 @@ class Sertifikasi extends Model
     {
         return $this->hasMany('App\SertifikasiUnitKompentensi');
     }
+
+    /**
+     * Relation to Table Sertifikasi Unit Kompentensi
+     *
+     * @return HasMany
+     */
+    public function AsesiUnitKompetensiDokumen()
+    {
+        return $this->hasMany('App\AsesiUnitKompetensiDokumen', 'sertifikasi_id', 'id');
+    }
 }
