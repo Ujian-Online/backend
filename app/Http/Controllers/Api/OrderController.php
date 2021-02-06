@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderConfirmation;
 use App\Order;
 use App\Sertifikasi;
 use App\SertifikasiTuk;
 use App\TukBank;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Str;
 use Storage;
 
@@ -197,12 +199,18 @@ class OrderController extends Controller
         $getInput['expired_date'] = now()->addDay();
 
         // save to database
-        Order::create($getInput);
+        $order = Order::create($getInput);
+
+        // kirim email ke asesi
+        Mail::to($user->email)->send(new OrderConfirmation($user->id, $order->id));
 
         // return response success
         return response()->json([
             'code' => 200,
-            'message' => 'success'
+            'message' => 'success',
+            'data' => [
+                'id' => $order->id
+            ],
         ], 200);
     }
 
