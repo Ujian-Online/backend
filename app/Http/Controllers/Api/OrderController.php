@@ -247,12 +247,9 @@ class OrderController extends Controller
         $user = $request->user();
 
         // get order detail by ID
-        return Order::with(['sertifikasi', 'tuk', 'tuk.bank', 'asesi'])
-            ->leftjoin('user_asesis', 'user_asesis.id', '=', 'orders.asesi_id')
-            ->leftjoin('users', 'users.id', '=', 'user_asesis.user_id')
-            ->select('orders.*')
-            ->where('users.id', $user->id)
-            ->where('orders.id', $id)
+        return Order::with(['sertifikasi', 'tuk', 'tuk.bank', 'user', 'user.asesi'])
+            ->where('asesi_id', $user->id)
+            ->where('id', $id)
             ->firstOrFail();
     }
 
@@ -380,11 +377,8 @@ class OrderController extends Controller
         $bank = TukBank::findOrFail($getInput['bank_id']);
 
         // save to database
-        $order = Order::select('orders.*')
-            ->leftjoin('user_asesis', 'user_asesis.id', '=', 'orders.asesi_id')
-            ->leftjoin('users', 'users.id', '=', 'user_asesis.user_id')
-            ->where('users.id', $user->id)
-            ->where('orders.id', $id)
+        $order = Order::where('asesi_id', $user->id)
+            ->where('id', $id)
             ->firstOrFail();
 
         // update fields
