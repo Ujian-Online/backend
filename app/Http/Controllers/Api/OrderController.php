@@ -41,10 +41,7 @@ class OrderController extends Controller
         $user = $request->user();
 
         // get order detail
-        return Order::with('sertifikasi')
-            ->leftjoin('user_asesis', 'user_asesis.id', '=', 'orders.asesi_id')
-            ->leftjoin('users', 'users.id', '=', 'user_asesis.user_id')
-            ->select('orders.*')
+        return Order::with(['sertifikasi', 'tuk'])
             ->where('users.id', $user->id)
             ->paginate(10);
     }
