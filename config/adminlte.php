@@ -256,12 +256,12 @@ return [
                         'route'     => 'admin.soal.daftar.index',
                         'active'    => 'admin.soal.daftar.*'
                     ],
-                    [
-                        'title'     => 'Pilihan Ganda',
-                        'icon'      => 'fas fa-tasks',
-                        'route'     => 'admin.soal.pilihanganda.index',
-                        'active'    => 'admin.soal.pilihanganda.*',
-                    ],
+                    // [
+                    //     'title'     => 'Pilihan Ganda',
+                    //     'icon'      => 'fas fa-tasks',
+                    //     'route'     => 'admin.soal.pilihanganda.index',
+                    //     'active'    => 'admin.soal.pilihanganda.*',
+                    // ],
                     [
                         'title'     => 'Paket',
                         'icon'      => 'fas fa-cube',
