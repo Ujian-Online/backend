@@ -194,12 +194,12 @@ return [
                         'url'       => '/admin/asesi/apl01?is_verified=false',
                         'active'    => 'admin.asesi.apl01.*',
                     ],
-                    [
-                        'title'     => 'APL-01 Custom Data',
-                        'icon'      => 'fas fa-list-ol',
-                        'route'     => 'admin.asesi.apl01customdata.index',
-                        'active'    => 'admin.asesi.apl01customdata.*',
-                    ],
+                    // [
+                    //     'title'     => 'APL-01 Custom Data',
+                    //     'icon'      => 'fas fa-list-ol',
+                    //     'route'     => 'admin.asesi.apl01customdata.index',
+                    //     'active'    => 'admin.asesi.apl01customdata.*',
+                    // ],
                     [
                         'title'     => 'APL-02',
                         'icon'      => 'fas fa-list-ol',
