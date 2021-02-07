@@ -268,12 +268,12 @@ return [
                         'route'     => 'admin.soal.paket.index',
                         'active'    => 'admin.soal.paket.*',
                     ],
-                    [
-                        'title'     => 'Paket Item',
-                        'icon'      => 'fas fa-cubes',
-                        'route'     => 'admin.soal.paketitem.index',
-                        'active'    => 'admin.soal.paketitem.*',
-                    ],
+                    // [
+                    //     'title'     => 'Paket Item',
+                    //     'icon'      => 'fas fa-cubes',
+                    //     'route'     => 'admin.soal.paketitem.index',
+                    //     'active'    => 'admin.soal.paketitem.*',
+                    // ],
                     // [
                     //     'title'     => 'Unit Kompetensi',
                     //     'icon'      => 'far fa-bookmark',
