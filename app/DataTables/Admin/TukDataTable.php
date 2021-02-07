@@ -75,8 +75,8 @@ class TukDataTable extends DataTable
                     ->dom('Bfrtip')
                     ->orderBy(5, 'desc')
                     ->buttons(
-                        Button::make('export'),
-                        Button::make('print'),
+                        // Button::make('export'),
+                        // Button::make('print'),
                         Button::make('reload')
                     );
     }
