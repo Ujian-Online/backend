@@ -206,12 +206,12 @@ return [
                         'route'     => 'admin.asesi.apl02.index',
                         'active'    => 'admin.asesi.apl02.*',
                     ],
-                    [
-                        'title'     => 'Unit Kompetensi Element',
-                        'icon'      => 'fas fa-list-ol',
-                        'route'     => 'admin.asesi.ukelement.index',
-                        'active'    => 'admin.asesi.ukelement.*',
-                    ],
+                    // [
+                    //     'title'     => 'Unit Kompetensi Element',
+                    //     'icon'      => 'fas fa-list-ol',
+                    //     'route'     => 'admin.asesi.ukelement.index',
+                    //     'active'    => 'admin.asesi.ukelement.*',
+                    // ],
                 ],
             ],
             [
