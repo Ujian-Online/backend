@@ -169,12 +169,12 @@ return [
                         'route'     => 'admin.sertifikasi.uk.index',
                         'active'    => 'admin.sertifikasi.uk.*',
                     ],
-                    [
-                        'title'     => 'Unit Kompetensi Element',
-                        'icon'      => 'fas fa-list-ul',
-                        'route'     => 'admin.sertifikasi.ukelement.index',
-                        'active'    => 'admin.sertifikasi.ukelement.*',
-                    ],
+                    // [
+                    //     'title'     => 'Unit Kompetensi Element',
+                    //     'icon'      => 'fas fa-list-ul',
+                    //     'route'     => 'admin.sertifikasi.ukelement.index',
+                    //     'active'    => 'admin.sertifikasi.ukelement.*',
+                    // ],
                 ],
             ],
             [
