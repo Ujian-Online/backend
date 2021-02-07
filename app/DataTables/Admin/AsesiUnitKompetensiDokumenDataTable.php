@@ -89,8 +89,8 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                     ->dom('Bfrtip')
                     ->orderBy(2, 'desc')
                     ->buttons(
-                        Button::make('export'),
-                        Button::make('print'),
+                        // Button::make('export'),
+                        // Button::make('print'),
                         Button::make('reload')
                     );
     }
