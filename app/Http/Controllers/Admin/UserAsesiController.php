@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\UserAsesi;
+use App\UserAsesiCustomData;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -95,6 +96,7 @@ class UserAsesiController extends Controller
             'has_job',
             'job_title',
             'job_address',
+            'company_name',
             'company_phone',
             'company_email',
             'is_verified',
@@ -126,7 +128,7 @@ class UserAsesiController extends Controller
     public function show(int $id)
     {
         // query get data
-        $query = UserAsesi::findOrFail($id);
+        $query = UserAsesi::with('asesicustomdata')->where('id', $id)->firstOrFail();
         // get users list when not found in user asesi and type asesi
         $users = User::where('id', $query->user_id)->get();
 
@@ -175,7 +177,6 @@ class UserAsesiController extends Controller
      */
     public function update(Request $request, int $id)
     {
-
         $request->validate([
             'user_id'               => 'required|integer',
             'name'                  => 'required|min:3|max:255',
@@ -204,6 +205,7 @@ class UserAsesiController extends Controller
             'has_job',
             'job_title',
             'job_address',
+            'company_name',
             'company_phone',
             'company_email',
             'is_verified',
@@ -213,6 +215,27 @@ class UserAsesiController extends Controller
         // get user admin input
         $user_admin = $request->user();
         $dataInput['user_id_admin'] = $user_admin->id;
+
+        // custom data input update
+        $customDatas = $request->input('asesicustomdata');
+        if(!empty($customDatas)) {
+            // loop data for update
+            foreach($customDatas['id'] as $customData) {
+                // get id from hidden form custom data
+                $cd_id = (int) $customData;
+                // get is verfieid by id
+                $cd_is_verified = isset($customDatas['is_verified'][$cd_id]) ? $customDatas['is_verified'][$cd_id] : 0;
+                // get verification_note by id
+                $cd_verification_note = isset($customDatas['verification_note'][$cd_id]) ? $customDatas['verification_note'][$cd_id] : null;
+
+                // update each fields
+                UserAsesiCustomData::findOrFail($cd_id)
+                    ->update([
+                        'is_verified'       => $cd_is_verified,
+                        'verification_note' => $cd_verification_note
+                    ]);
+            }
+        }
 
         // update data
         $query = UserAsesi::findOrFail($id);

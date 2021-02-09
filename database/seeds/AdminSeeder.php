@@ -25,7 +25,6 @@ class AdminSeeder extends Seeder
             'password'          => Hash::make($password),
             'type'              => 'admin',
             'status'            => 'active',
-            'is_active'         => true
         ]);
 
         // buat output

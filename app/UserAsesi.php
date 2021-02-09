@@ -24,6 +24,7 @@ class UserAsesi extends Model
         'has_job',
         'job_title',
         'job_address',
+        'company_name',
         'company_phone',
         'company_email',
         'user_id_admin',
@@ -64,5 +65,15 @@ class UserAsesi extends Model
     public function User()
     {
         return $this->hasOne('App\User', 'id', 'user_id');
+    }
+
+    /**
+     * Relation to Table UserAsesiCustomData
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function AsesiCustomData()
+    {
+        return $this->hasMany('App\UserAsesiCustomData', 'asesi_id', 'id');
     }
 }

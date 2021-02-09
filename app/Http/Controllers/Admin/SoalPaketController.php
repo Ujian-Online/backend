@@ -39,15 +39,11 @@ class SoalPaketController extends Controller
      */
     public function create()
     {
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-
         // return view template create
         return view('admin.soal.paket-form', [
             'title'         => 'Tambah Soal Paket Baru',
             'action'        => route('admin.soal.paket.store'),
             'isCreated'     => true,
-            'sertifikasis'  => $sertifikasis
         ]);
     }
 
@@ -94,8 +90,6 @@ class SoalPaketController extends Controller
     {
         // Find Data by ID
         $query = SoalPaket::findOrFail($id);
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
 
         // return data to view
         return view('admin.soal.paket-form', [
@@ -103,7 +97,6 @@ class SoalPaketController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.soal.paket.edit', $id),
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
@@ -118,8 +111,6 @@ class SoalPaketController extends Controller
     {
         // Find Data by ID
         $query = SoalPaket::findOrFail($id);
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
 
         // return data to view
         return view('admin.soal.paket-form', [
@@ -127,7 +118,6 @@ class SoalPaketController extends Controller
             'action'        => route('admin.soal.paket.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
         ]);
     }
 
@@ -184,5 +174,48 @@ class SoalPaketController extends Controller
             'code' => 200,
             'success' => true,
         ]);
+    }
+
+    /**
+     * Select2 Search Data
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function search(Request $request)
+    {
+        // database query
+        $query = new SoalPaket();
+        // result variable
+        $result = [];
+
+        // get input from select2 search term
+        $q = $request->input('q');
+
+        // return empty object if query is empty
+        if(empty($q)) {
+            return response()->json($result, 200);
+        }
+
+        // check if query is numeric or not
+        if(is_numeric($q)) {
+            $query = $query->where('id', 'like', "%$q%");
+        } else {
+            $query = $query->where('title', 'like', "%$q%");
+        }
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => '[ID: ' . $data->id . '] - ' . $data->title,
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
     }
 }

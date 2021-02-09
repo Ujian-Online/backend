@@ -41,21 +41,11 @@ class OrderController extends Controller
      */
     public function create()
     {
-        // get asesi lists
-        $asesis = UserAsesi::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get tuk lists
-        $tuks = Tuk::all();
-
         // return view template create
         return view('admin.order.form', [
             'title'         => 'Tambah Order Baru',
             'action'        => route('admin.order.store'),
             'isCreated'     => true,
-            'asesis'        => $asesis,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
         ]);
     }
 
@@ -80,7 +70,10 @@ class OrderController extends Controller
             'transfer_to_bank_name'     => 'required',
             'transfer_to_bank_account'  => 'required',
             'transfer_to_bank_number'   => 'required',
+            'transfer_date'             => 'required|date',
             'expired_date'              => 'required|date',
+            'sertifikat_date_old'       => 'nullable|date',
+            'sertifikat_date_new'       => 'nullable|date',
         ]);
 
         // get form data
@@ -89,6 +82,12 @@ class OrderController extends Controller
             'sertifikasi_id',
             'tuk_id',
             'tipe_sertifikasi',
+            'sertifikat_number_old',
+            'sertifikat_number_new',
+            'sertifikat_date_old',
+            'sertifikat_date_new',
+            'sertifikat_media_url_old',
+            'sertifikat_media_url_new',
             'kode_sertifikat',
             'original_price',
             'tuk_price',
@@ -129,12 +128,6 @@ class OrderController extends Controller
     {
         // Find Data by ID
         $query = Order::findOrFail($id);
-        // get asesi lists
-        $asesis = UserAsesi::where('id', $query->asesi_id)->get();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::where('id', $query->sertifikasi_id)->get();
-        // get tuk lists
-        $tuks = Tuk::where('id', $query->tuk_id)->get();
 
         // return data to view
         return view('admin.order.form', [
@@ -142,9 +135,6 @@ class OrderController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.order.edit', $id),
             'query'         => $query,
-            'asesis'        => $asesis,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
         ]);
     }
 
@@ -159,12 +149,6 @@ class OrderController extends Controller
     {
         // Find Data by ID
         $query = Order::findOrFail($id);
-        // get asesi lists
-        $asesis = UserAsesi::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get tuk lists
-        $tuks = Tuk::all();
 
         // return data to view
         return view('admin.order.form', [
@@ -172,9 +156,6 @@ class OrderController extends Controller
             'action'        => route('admin.order.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'asesis'        => $asesis,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
         ]);
     }
 
@@ -209,6 +190,12 @@ class OrderController extends Controller
             'sertifikasi_id',
             'tuk_id',
             'tipe_sertifikasi',
+            'sertifikat_number_old',
+            'sertifikat_number_new',
+            'sertifikat_date_old',
+            'sertifikat_date_new',
+            'sertifikat_media_url_old',
+            'sertifikat_media_url_new',
             'kode_sertifikat',
             'original_price',
             'tuk_price',

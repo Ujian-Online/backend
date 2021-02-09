@@ -36,7 +36,9 @@ class Sertifikasi extends Model
      * @var array
      */
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'original_price_baru' => 'float',
+        'original_price_perpanjang' => 'float',
     ];
 
     /**
@@ -57,5 +59,15 @@ class Sertifikasi extends Model
     public function UnitKompentensi()
     {
         return $this->hasMany('App\SertifikasiUnitKompentensi');
+    }
+
+    /**
+     * Relation to Table Sertifikasi Unit Kompentensi
+     *
+     * @return HasMany
+     */
+    public function AsesiUnitKompetensiDokumen()
+    {
+        return $this->hasMany('App\AsesiUnitKompetensiDokumen', 'sertifikasi_id', 'id');
     }
 }

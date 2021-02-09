@@ -101,8 +101,8 @@ class UserDataTable extends DataTable
                     ->dom('Bfrtip')
                     ->orderBy(4, 'desc')
                     ->buttons(
-                        Button::make('export'),
-                        Button::make('print'),
+                        // Button::make('export'),
+                        // Button::make('print'),
                         Button::make('reload')
                     );
     }

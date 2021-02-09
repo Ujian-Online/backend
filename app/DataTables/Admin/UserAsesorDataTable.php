@@ -73,8 +73,8 @@ class UserAsesorDataTable extends DataTable
                     ->dom('Bfrtip')
                     ->orderBy(1, 'asc')
                     ->buttons(
-                        Button::make('export'),
-                        Button::make('print'),
+                        // Button::make('export'),
+                        // Button::make('print'),
                         Button::make('reload')
                     );
     }

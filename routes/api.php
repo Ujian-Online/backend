@@ -38,6 +38,7 @@ Route::name('api.')
                 Route::get('user/me', 'Api\UserController@me')->name('me');
 
                 Route::get('order', 'Api\OrderController@index')->name('order.index');
+                Route::post('order', 'Api\OrderController@store')->name('order.store');
                 Route::get('order/{id}', 'Api\OrderController@show')->name('order.show');
                 Route::post('order/{id}', 'Api\OrderController@update')->name('order.update');
             });

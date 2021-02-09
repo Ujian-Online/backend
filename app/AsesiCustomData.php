@@ -14,5 +14,6 @@ class AsesiCustomData extends Model
     protected $fillable = [
         'title',
         'input_type',
+        'dropdown_option',
     ];
 }

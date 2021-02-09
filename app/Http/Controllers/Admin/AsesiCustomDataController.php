@@ -27,7 +27,7 @@ class AsesiCustomDataController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi Custom Data Form Lists'
+            'title' => 'Asesi Custom Data (APL-01) Form Lists'
         ]);
     }
 
@@ -39,8 +39,8 @@ class AsesiCustomDataController extends Controller
     public function create()
     {
         // return view template create
-        return view('admin.assesi.apl01-form', [
-            'title'         => 'Tambah Asesi Custom Data Form Baru',
+        return view('admin.assesi.customdata-apl01-form', [
+            'title'         => 'Tambah Asesi Custom Data (APL-01) Form Baru',
             'action'        => route('admin.asesi.customdata.store'),
             'isCreated'     => true,
         ]);
@@ -57,8 +57,9 @@ class AsesiCustomDataController extends Controller
     {
         // validate input
         $request->validate([
-            'title'         => 'required',
-            'input_type'    => 'required',
+            'title'             => 'required',
+            'input_type'        => 'required|in:' . implode(',', config('options.asesi_custom_data_input_type')),
+            'dropdown_option.*' => 'nullable|required_if:input_type,dropdown'
         ]);
 
         // get form data
@@ -66,6 +67,12 @@ class AsesiCustomDataController extends Controller
             'title',
             'input_type',
         ]);
+
+        // update value dropdown option
+        if($dataInput['input_type'] == 'dropdown') {
+            $dropdownInput = $request->input('dropdown_option');
+            $dataInput['dropdown_option'] = implode(',', $dropdownInput);
+        }
 
         // save to database
         $query = AsesiCustomData::create($dataInput);
@@ -91,8 +98,8 @@ class AsesiCustomDataController extends Controller
         $query = AsesiCustomData::findOrFail($id);
 
         // return data to view
-        return view('admin.assesi.apl01-form', [
-            'title'         => 'Detail Asesi Custom Data Form: ' . $query->title,
+        return view('admin.assesi.customdata-apl01-form', [
+            'title'         => 'Detail Asesi Custom Data (APL-01) Form: ' . $query->title,
             'action'        => '#',
             'isShow'        => route('admin.asesi.customdata.edit', $id),
             'query'         => $query,
@@ -112,8 +119,8 @@ class AsesiCustomDataController extends Controller
         $query = AsesiCustomData::findOrFail($id);
 
         // return data to view
-        return view('admin.assesi.apl01-form', [
-            'title'         => 'Ubah Asesi Custom Data Form Data: ' . $query->id,
+        return view('admin.assesi.customdata-apl01-form', [
+            'title'         => 'Ubah Asesi Custom Data (APL-01) Form Data: ' . $query->id,
             'action'        => route('admin.asesi.customdata.update', $id),
             'isEdit'        => true,
             'query'         => $query,
@@ -132,8 +139,9 @@ class AsesiCustomDataController extends Controller
     {
         // validate input
         $request->validate([
-            'title'         => 'required',
-            'input_type'    => 'required',
+            'title'             => 'required',
+            'input_type'        => 'required|in:' . implode(',', config('options.asesi_custom_data_input_type')),
+            'dropdown_option'   => 'nullable|required_if:input_type,dropdown'
         ]);
 
         // get form data
@@ -141,6 +149,12 @@ class AsesiCustomDataController extends Controller
             'title',
             'input_type',
         ]);
+
+        // update value dropdown option
+        if($dataInput['input_type'] == 'dropdown') {
+            $dropdownInput = $request->input('dropdown_option');
+            $dataInput['dropdown_option'] = implode(',', $dropdownInput);
+        }
 
         // find by id and update
         $query = AsesiCustomData::findOrFail($id);

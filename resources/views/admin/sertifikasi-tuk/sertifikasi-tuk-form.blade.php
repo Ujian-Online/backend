@@ -4,50 +4,40 @@
     @include('layouts.alert')
 
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             <label for="sertifikasi_id">Sertifikasi ID</label>
             <select class="form-control @error('sertifikasi_id') is-invalid @enderror"
-                    name="sertifikasi_id" id="sertifikasi_id">
-
-                @foreach($sertifikasis as $sertifikasi)
-                    <option
-                        value="{{ $sertifikasi->id }}"
-                        @if(!empty(request()->query('sertifikasi_id')) and request()->query('sertifikasi_id') == $sertifikasi->id)
-                            {{  __('selected') }}
-                        @elseif(isset($query->sertifikasi_id) and $query->sertifikasi_id ==
-                        $sertifikasi->id)
-                            {{  __('selected') }}
-                        @endif
-                    >
-                        [ID: {{ $sertifikasi->id }}] - {{ $sertifikasi->title }} (Nomor Skema: {{ $sertifikasi->nomor_skema }})
-                    </option>
-                @endforeach
-
+                    name="sertifikasi_id" id="sertifikasi_id" data-placeholder="Pilih Sertifikasi ID">
             </select>
+
+            @error('sertifikasi_id')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             <label for="tuk_id">TUK ID</label>
             <select class="form-control @error('tuk_id') is-invalid @enderror"
-                    name="tuk_id" id="tuk_id">
-
-                @foreach($tuks as $tuk)
-                    <option
-                        value="{{ $tuk->id }}"
-                    @if(!empty(request()->query('tuk_id')) and request()
-                    ->query('tuk_id') == $tuk->id)
-                        {{  __('selected') }}
-                        @elseif(isset($query->tuk_id) and $query->tuk_id ==
-                        $tuk->id)
-                        {{  __('selected') }}
-                        @endif
-                    >
-                        [ID: {{ $tuk->id }}] - {{ $tuk->title }} (Code: {{
-                        $tuk->code }})
-                    </option>
-                @endforeach
-
+                    name="tuk_id" id="tuk_id" data-placeholder="Pilih TUK ID">
             </select>
+
+            @error('tuk_id')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group bg-gray col-md-12" id="harga-original-sertifikasi" style="display: none;">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="original_price_baru">Harga Baru</label>
+                    <input type="number" class="form-control" id="original_price_baru" placeholder="Harga Baru" value="" readonly>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="original_price_perpanjang">Harga Perpanjang</label>
+                    <input type="number" class="form-control" id="original_price_perpanjang" placeholder="Harga Perpanjang" value="" readonly>
+                </div>
+            </div>
         </div>
 
         <div class="form-group col-md-6">
@@ -81,9 +71,145 @@
 
 @section('js')
     <script>
-        $('select').select2({
+        /**
+         * Select2 with Ajax Start
+         * @type {string}
+         */
+
+            // default selected tuk_id from query URL
+        const tuk_id_default = '{{ request()->input('tuk_id') ?? $query->tuk_id ?? null }}'
+        // trigger load data if tuk_id_default not null
+        if(tuk_id_default) {
+            var tukSelected = $('#tuk_id');
+            $.ajax({
+                url: '{{ route('admin.tuk.search') }}' + '?q=' + tuk_id_default,
+                dataType: 'JSON',
+            }).then(function (data) {
+                // create the option and append to Select2
+                var option = new Option(data[0].text, data[0].id, true, true);
+                tukSelected.append(option).trigger('change');
+
+                // manually trigger the `select2:select` event
+                tukSelected.trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: data
+                    }
+                });
+            });
+        }
+
+        // tuk select2 with ajax query search
+        $('#tuk_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            allowClear: true,
+            minimumInputLength: 1,
+            ajax: {
+                url: '{{ route('admin.tuk.search') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                data: function (data) {
+                    return {
+                        q: data.term
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
         });
+
+        /**
+         * Select2 with Ajax End
+         * @type {string}
+         */
+    </script>
+    <script>
+        /**
+         * Select2 with Ajax Start
+         * @type {string}
+         */
+
+            // default selected sertifikasi_id from query URL
+        const sertifikasi_id_default = '{{ request()->input('sertifikasi_id') ?? $query->sertifikasi_id ?? null }}'
+        // trigger load data if sertifikasi_id not null
+        if(sertifikasi_id_default) {
+            var sertifikasiSelected = $('#sertifikasi_id');
+            $.ajax({
+                url: '{{ route('admin.sertifikasi.search') }}' + '?q=' + sertifikasi_id_default,
+                dataType: 'JSON',
+            }).then(function (data) {
+                // create the option and append to Select2
+                var option = new Option(data[0].text, data[0].id, true, true);
+                sertifikasiSelected.append(option).trigger('change');
+
+                // manually trigger the `select2:select` event
+                sertifikasiSelected.trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: data
+                    }
+                });
+            });
+        }
+
+        // sertifikasi select2 with ajax query search
+        $('#sertifikasi_id').select2({
+            theme: 'bootstrap4',
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            allowClear: true,
+            minimumInputLength: 1,
+            ajax: {
+                url: '{{ route('admin.sertifikasi.search') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                data: function (data) {
+                    return {
+                        q: data.term
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
+        });
+
+        /**
+         * Select2 with Ajax End
+         * @type {string}
+         */
+    </script>
+    <script>
+        // listen if sertifikasi change
+        $("#sertifikasi_id").on('change', async function () {
+            // get select option
+            const me = $(this);
+            // get select option value
+            const value = me.val();
+
+            try {
+                // fetch sertifikasi detail with axios
+                const request = await axios.get('{{ url('admin/sertifikasi') }}' + `/${value}`)
+                const { data: response } = request;
+
+                // show original price form
+                $("#harga-original-sertifikasi").show();
+
+                // update value original price baru
+                $("#original_price_baru").val(response.original_price_baru);
+                // update value origin price perpanjang
+                $("#original_price_perpanjang").val(response.original_price_perpanjang);
+
+            } catch (e) {
+                alert(`Gagal mengambil detail sertifikasi, ID: ${value}`);
+            }
+        })
     </script>
 @endsection

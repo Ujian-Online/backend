@@ -19,6 +19,12 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('sertifikasi_id');
             $table->bigInteger('tuk_id');
             $table->string('tipe_sertifikasi'); // @see config('options.orders_tipe_sertifikasi')
+            $table->string('sertifikat_number_old')->nullable();
+            $table->string('sertifikat_number_new')->nullable();
+            $table->date('sertifikat_date_old')->nullable();
+            $table->date('sertifikat_date_new')->nullable();
+            $table->string('sertifikat_media_url_old')->nullable();
+            $table->string('sertifikat_media_url_new')->nullable();
             $table->string('kode_sertifikat')->nullable();
             $table->float('original_price');
             $table->float('tuk_price');

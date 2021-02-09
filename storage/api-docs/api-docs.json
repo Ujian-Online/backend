@@ -113,6 +113,71 @@
                         "passport": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Create New Order",
+                "operationId": "App\\Http\\Controllers\\Api\\OrderController::store",
+                "requestBody": {
+                    "description": "Update Order Data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "sertifikasi_id": {
+                                        "description": "Sertifikasi ID",
+                                        "type": "number",
+                                        "example": "1"
+                                    },
+                                    "tuk_id": {
+                                        "description": "TUK ID",
+                                        "type": "number",
+                                        "example": "1"
+                                    },
+                                    "tipe_sertifikasi": {
+                                        "description": "Tipe Order, Example: baru/perpanjang",
+                                        "type": "string",
+                                        "example": "baru"
+                                    },
+                                    "training": {
+                                        "description": "Order dengan Training",
+                                        "type": "boolean",
+                                        "example": "false"
+                                    },
+                                    "sertifikat_number_old": {
+                                        "description": "Nomor Sertifikat Lama, Kirimkan value jika Tipe Order: perpanjang",
+                                        "type": "boolean",
+                                        "example": "123-123-123"
+                                    },
+                                    "sertifikat_date_old": {
+                                        "description": "Tanggal Sertifikat Lama, Kirimkan value jika Tipe Order: perpanjang",
+                                        "type": "date",
+                                        "example": "2020-10-25"
+                                    },
+                                    "sertifikat_upload_old": {
+                                        "description": "File Sertifikat Lama, Ekstensi: JPG, JPEG, PNG atau PDF",
+                                        "type": "file",
+                                        "example": "sertifikat_lama.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
             }
         },
         "/api/order/{id}": {
@@ -195,7 +260,7 @@
                                     },
                                     "transfer_date": {
                                         "description": "Tanggal Transfer",
-                                        "type": "datetime",
+                                        "type": "date",
                                         "example": "2020-10-31"
                                     }
                                 },
@@ -397,9 +462,9 @@
                 "scheme": "https",
                 "flows": {
                     "password": {
-                        "authorizationUrl": "http://127.0.0.1:8000/oauth/authorize",
-                        "tokenUrl": "http://127.0.0.1:8000/oauth/token",
-                        "refreshUrl": "http://127.0.0.1:8000/token/refresh",
+                        "authorizationUrl": "http://localhost/oauth/authorize",
+                        "tokenUrl": "http://localhost/oauth/token",
+                        "refreshUrl": "http://localhost/token/refresh",
                         "scopes": []
                     }
                 }

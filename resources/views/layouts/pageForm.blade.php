@@ -21,7 +21,7 @@
                         @yield('form')
 
                         {{-- Waktu Pembuatan --}}
-                        @if(!isset($isCreated))
+                        @if(!isset($isCreated) and isset($query->created_at) and ($query->updated_at))
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="">Tanggal Pembuatan</label>
