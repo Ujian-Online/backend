@@ -133,7 +133,7 @@ class OrderController extends Controller
 
         // return data to view
         return view('admin.order.form', [
-            'title'         => 'Tampilkan Detail: ' . $query->id,
+            'title'         => 'Tampilkan Detail Order ID: ' . $query->id,
             'action'        => '#',
             'isShow'        => route('admin.order.edit', $id),
             'query'         => $query,
@@ -154,7 +154,7 @@ class OrderController extends Controller
 
         // return data to view
         return view('admin.order.form', [
-            'title'         => 'Ubah Data: ' . $query->id,
+            'title'         => 'Ubah Data Order ID: ' . $query->id,
             'action'        => route('admin.order.update', $id),
             'isEdit'        => true,
             'query'         => $query,
