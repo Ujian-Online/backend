@@ -30,7 +30,9 @@ class OrderController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Order Lists'
+            'title'         => 'Order Lists',
+            'filter_route'  => route('admin.order.index'),
+            'filter_view'   => 'admin.order.filter-form',
         ]);
     }
 
