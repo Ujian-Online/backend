@@ -46,7 +46,7 @@
                         </button>
 
                         {{-- Button For Show Page --}}
-                        @elseif(isset($isShow))
+                        @elseif(isset($isShow) and filter_var($isShow, FILTER_VALIDATE_URL))
                         <a href="{{ $isShow }}" class="btn btn-warning m-auto">
                             <div class="row">
                                 <div class="col-2">
