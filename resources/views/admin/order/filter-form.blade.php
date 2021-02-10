@@ -22,8 +22,7 @@
                         </select>
                     </div>
 
-
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="status">Status</label>
                         <select class="form-control select2" name="status" id="status">
                             <option value="" readonly>Pilih Status</option>
@@ -41,6 +40,16 @@
                             @endforeach
 
                         </select>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="dateFrom">Tgl Pembayaran Dari</label>
+                        <input type="date" class="form-control" name="dateFrom" id="dateFrom" value="{{ request()->input('dateFrom') ?? '' }}">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="dateTo">Tgl Pembayaran Sampai</label>
+                        <input type="date" class="form-control" name="dateTo" id="dateTo" value="{{ request()->input('dateTo') ?? '' }}">
                     </div>
                 </div>
                 <button class="btn btn-primary">
