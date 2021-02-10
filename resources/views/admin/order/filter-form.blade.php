@@ -11,16 +11,18 @@
         <div class="card-body">
             <form id="filter-form" action="{{ $filter_route }}" method="GET">
                 <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="tuk_id">TUK</label>
-                        <select class="form-control" name="tuk_id" id="tuk_id" data-placeholder="Pilih TUK">
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="tuk">Sertifikasi</label>
-                        <select class="form-control" name="sertifikasi_id" id="sertifikasi_id" data-placeholder="Pilih Sertifikasi">
-                        </select>
-                    </div>
+                    @can('isAdmin')
+                        <div class="form-group col-md-6">
+                            <label for="tuk_id">TUK</label>
+                            <select class="form-control" name="tuk_id" id="tuk_id" data-placeholder="Pilih TUK">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="tuk">Sertifikasi</label>
+                            <select class="form-control" name="sertifikasi_id" id="sertifikasi_id" data-placeholder="Pilih Sertifikasi">
+                            </select>
+                        </div>
+                    @endcan
 
                     <div class="form-group col-md-4">
                         <label for="status">Status</label>
@@ -64,6 +66,7 @@
 </div>
 
 @push('script')
+    @can('isAdmin')
     <script>
         /**
          * Select2 with Ajax Start
@@ -180,4 +183,5 @@
          * @type {string}
          */
     </script>
+    @endcan
 @endpush
