@@ -12,6 +12,11 @@ use Yajra\DataTables\Services\DataTable;
 class OrderDataTable extends DataTable
 {
     /**
+     * Data User Login
+     */
+    private $user;
+
+    /**
      * Build DataTable class.
      *
      * @param mixed $query Results from query() method.
@@ -28,11 +33,17 @@ class OrderDataTable extends DataTable
                 return ucwords(str_replace('_', ' ', $query->status));
             })
             ->addColumn('action', function ($query) {
+                $editButton = null;
+
+                if($this->user->can('isTuk')) {
+                    $editButton = route('admin.order.edit', $query->id);
+                }
+
                 return view('layouts.pageTableAction', [
-                    'title' => $query->title,
+                    'title' => $query->id,
                      'url_show' => route('admin.order.show', $query->id),
-                    // 'url_edit' => route('admin.order.edit', $query->id),
-                    'url_destroy' => route('admin.order.destroy', $query->id),
+                     'url_edit' => $editButton,
+                    // 'url_destroy' => route('admin.order.destroy', $query->id),
                 ]);
             });
     }
@@ -47,22 +58,42 @@ class OrderDataTable extends DataTable
     {
         $query = $model->with(['user', 'user.asesi', 'sertifikasi', 'tuk']);
 
-        // get input filter
-        $tuk_id = request()->input('tuk_id');
-        $sertifikasi_id = request()->input('sertifikasi_id');
+        // get user active before apply filter
+        $user = request()->user();
+
+        // inject ke data user global property
+        $this->user = $user;
+
+        /**
+         * Filter For Admin Access Only
+         */
+        if($user->can('isAdmin')) {
+            // get input filter for admin only
+            $tuk_id = request()->input('tuk_id');
+            $sertifikasi_id = request()->input('sertifikasi_id');
+
+            // tuk_id filter query
+            if(isset($tuk_id) and !empty($tuk_id)) {
+                $query = $query->where('tuk_id', $tuk_id);
+            }
+
+            // sertifikasi_id filter query
+            if(isset($sertifikasi_id) and !empty($sertifikasi_id)) {
+                $query = $query->where('sertifikasi_id', $sertifikasi_id);
+            }
+        }
+
+        // Added Filter if Access by TUK
+        if($user->can('isTuk')) {
+            // get tuk id based from user id
+            $tukid = $user->tuk->tuk_id;
+            $query = $query->where('tuk_id', $tukid);
+        }
+
+        // get input filter for admin and tuk
         $status = request()->input('status');
         $dateFrom = request()->input('dateFrom');
         $dateTo = request()->input('dateTo');
-
-        // tuk_id filter query
-        if(isset($tuk_id) and !empty($tuk_id)) {
-            $query = $query->where('tuk_id', $tuk_id);
-        }
-
-        // sertifikasi_id filter query
-        if(isset($sertifikasi_id) and !empty($sertifikasi_id)) {
-            $query = $query->where('sertifikasi_id', $sertifikasi_id);
-        }
 
         // status filter query
         if(isset($status) and !empty($status)) {
