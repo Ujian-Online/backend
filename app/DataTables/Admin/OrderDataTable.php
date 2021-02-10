@@ -51,6 +51,8 @@ class OrderDataTable extends DataTable
         $tuk_id = request()->input('tuk_id');
         $sertifikasi_id = request()->input('sertifikasi_id');
         $status = request()->input('status');
+        $dateFrom = request()->input('dateFrom');
+        $dateTo = request()->input('dateTo');
 
         // tuk_id filter query
         if(isset($tuk_id) and !empty($tuk_id)) {
@@ -65,6 +67,16 @@ class OrderDataTable extends DataTable
         // status filter query
         if(isset($status) and !empty($status)) {
             $query = $query->where('status', $status);
+        }
+
+        // dateFrom filter query
+        if(isset($dateFrom) and !empty($dateFrom)) {
+            $query = $query->where('transfer_date', '>=', $dateFrom);
+        }
+
+        // dateTo filter query
+        if(isset($query) and !empty($dateTo)) {
+            $query = $query->where('transfer_date', '<=', $dateTo);
         }
 
         // return query
