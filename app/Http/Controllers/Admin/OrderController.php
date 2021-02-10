@@ -135,7 +135,7 @@ class OrderController extends Controller
         return view('admin.order.form', [
             'title'         => 'Tampilkan Detail Order ID: ' . $query->id,
             'action'        => '#',
-            'isShow'        => route('admin.order.edit', $id),
+            'isShow'        => true,
             'query'         => $query,
         ]);
     }
