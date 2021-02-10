@@ -122,20 +122,30 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Application|Factory|Response|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         // Find Data by ID
         $query = Order::findOrFail($id);
+
+        // edit mode url
+        $editUrl = true;
+
+        // get user active
+        $user = $request->user();
+        if($user->can('isTuk')) {
+            $editUrl = route('admin.order.edit', $id);
+        }
 
         // return data to view
         return view('admin.order.form', [
             'title'         => 'Tampilkan Detail Order ID: ' . $query->id,
             'action'        => '#',
-            'isShow'        => true,
+            'isShow'        => $editUrl,
             'query'         => $query,
         ]);
     }
@@ -143,11 +153,12 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Application|Factory|Response|View
      */
-    public function edit(int $id)
+    public function edit(Request $request, int $id)
     {
         // Find Data by ID
         $query = Order::findOrFail($id);
@@ -173,47 +184,14 @@ class OrderController extends Controller
     {
         // validate input
         $request->validate([
-            'asesi_id'                  => 'required',
-            'sertifikasi_id'            => 'required',
-            'tuk_id'                    => 'required',
-            'tipe_sertifikasi'          => 'required|in:' . implode(',', config('options.orders_tipe_sertifikasi')),
-            'original_price'            => 'required',
-            'tuk_price'                 => 'required',
-            'status'                    => 'required|in:' . implode(',', config('options.orders_status')),
-            'transfer_to_bank_name'     => 'required',
-            'transfer_to_bank_account'  => 'required',
-            'transfer_to_bank_number'   => 'required',
-            'expired_date'              => 'required|date',
+            'status' => 'required|in:' . implode(',', config('options.orders_status')),
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'asesi_id',
-            'sertifikasi_id',
-            'tuk_id',
-            'tipe_sertifikasi',
-            'sertifikat_number_old',
-            'sertifikat_number_new',
-            'sertifikat_date_old',
-            'sertifikat_date_new',
-            'sertifikat_media_url_old',
-            'sertifikat_media_url_new',
-            'kode_sertifikat',
-            'original_price',
-            'tuk_price',
-            'tuk_price_training',
             'status',
             'comment_rejected',
             'comment_verification',
-            'transfer_from_bank_name',
-            'transfer_from_bank_account',
-            'transfer_from_bank_number',
-            'transfer_to_bank_name',
-            'transfer_to_bank_account',
-            'transfer_to_bank_number',
-            'transfer_date',
-            'media_url_bukti_transfer',
-            'expired_date',
         ]);
 
         // find by id and update
