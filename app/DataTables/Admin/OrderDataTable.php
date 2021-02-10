@@ -24,6 +24,9 @@ class OrderDataTable extends DataTable
             ->editColumn('tipe_sertifikasi', function($query) {
                 return ucwords($query->tipe_sertifikasi);
             })
+            ->editColumn('status', function($query) {
+                return ucwords(str_replace('_', ' ', $query->status));
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
@@ -100,6 +103,7 @@ class OrderDataTable extends DataTable
                 ->title('TUK')
                 ->data('tuk.title'),
             Column::make('tipe_sertifikasi'),
+            Column::make('status'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
