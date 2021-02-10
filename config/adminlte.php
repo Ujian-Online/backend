@@ -300,7 +300,27 @@ return [
         /**
          * Menu For TUK Access
          */
-        'tuk' => [],
+        'tuk' => [
+            [
+                'title'     => 'Dashboard',
+                'icon'      => 'fas fa-tachometer-alt fa-fw',
+                'route'     => 'home',
+                'active'    => 'home',
+            ],
+            [
+                'title'     => 'Order',
+                'icon'      => 'fas fa-cart-plus',
+                'active'    => 'admin.order.*',
+                'sub_menu'  => [
+                    [
+                        'title'     => 'List Order',
+                        'icon'      => 'fas fa-cart-plus',
+                        'route'     => 'admin.order.index',
+                        'active'    => 'admin.order.*',
+                    ],
+                ],
+            ],
+        ],
 
         /**
          * Menu For Asesor Access
