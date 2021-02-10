@@ -30,8 +30,8 @@ class OrderDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_show' => route('admin.order.show', $query->id),
-                    'url_edit' => route('admin.order.edit', $query->id),
+                     'url_show' => route('admin.order.show', $query->id),
+                    // 'url_edit' => route('admin.order.edit', $query->id),
                     'url_destroy' => route('admin.order.destroy', $query->id),
                 ]);
             });
@@ -101,10 +101,10 @@ class OrderDataTable extends DataTable
                         'dom' => 'Bfrtip',
                         'buttons' => [
                             'pageLength',
-                            [
-                                'text' => '<i class="fas fa-plus-circle"></i> ' . trans('table.create'),
-                                'action' => $this->createButton()
-                            ],
+                            // [
+                            //     'text' => '<i class="fas fa-plus-circle"></i> ' . trans('table.create'),
+                            //     'action' => $this->createButton()
+                            // ],
                         ],
                     ])
                     ->setTableId('order-table')
