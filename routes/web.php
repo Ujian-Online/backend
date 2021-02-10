@@ -68,5 +68,5 @@ Route::middleware(['auth', 'can:isAdmin'])
         Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
         Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
 
-        Route::resource('order', 'Admin\OrderController');
+        Route::resource('order', 'Admin\OrderController')->except(['create', 'store', 'edit', 'update']);
     });
