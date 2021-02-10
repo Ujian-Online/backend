@@ -45,7 +45,30 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        return $model->with(['user', 'user.asesi', 'sertifikasi', 'tuk']);
+        $query = $model->with(['user', 'user.asesi', 'sertifikasi', 'tuk']);
+
+        // get input filter
+        $tuk_id = request()->input('tuk_id');
+        $sertifikasi_id = request()->input('sertifikasi_id');
+        $status = request()->input('status');
+
+        // tuk_id filter query
+        if(isset($tuk_id) and !empty($tuk_id)) {
+            $query = $query->where('tuk_id', $tuk_id);
+        }
+
+        // sertifikasi_id filter query
+        if(isset($sertifikasi_id) and !empty($sertifikasi_id)) {
+            $query = $query->where('sertifikasi_id', $sertifikasi_id);
+        }
+
+        // status filter query
+        if(isset($status) and !empty($status)) {
+            $query = $query->where('status', $status);
+        }
+
+        // return query
+        return $query;
     }
 
     /**
