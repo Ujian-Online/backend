@@ -129,14 +129,21 @@ class OrderController extends Controller
      */
     public function show(Request $request, int $id)
     {
+        // get user active
+        $user = $request->user();
+
+        // get tuk id user
+        $tukId = $user->tuk->tuk_id;
+
         // Find Data by ID
-        $query = Order::findOrFail($id);
+        $query = Order::where('id', $id)
+            ->where('tuk_id', $tukId)
+            ->firstOrFail();
 
         // edit mode url
         $editUrl = true;
 
-        // get user active
-        $user = $request->user();
+        // check tuk permission
         if($user->can('isTuk')) {
             $editUrl = route('admin.order.edit', $id);
         }
@@ -160,8 +167,21 @@ class OrderController extends Controller
      */
     public function edit(Request $request, int $id)
     {
+        // get user active
+        $user = $request->user();
+
+        // check tuk permission
+        if(!$user->can('isTuk')) {
+            abort(403);
+        }
+
+        // get tuk id user
+        $tukId = $user->tuk->tuk_id;
+
         // Find Data by ID
-        $query = Order::findOrFail($id);
+        $query = Order::where('id', $id)
+            ->where('tuk_id', $tukId)
+            ->firstOrFail();
 
         // return data to view
         return view('admin.order.form', [
@@ -182,6 +202,14 @@ class OrderController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        // get user active
+        $user = $request->user();
+
+        // check tuk permission
+        if(!$user->can('isTuk')) {
+            abort(403);
+        }
+
         // validate input
         $request->validate([
             'status' => 'required|in:' . implode(',', config('options.orders_status')),
@@ -194,8 +222,13 @@ class OrderController extends Controller
             'comment_verification',
         ]);
 
+        // get tuk id user
+        $tukId = $user->tuk->tuk_id;
+
         // find by id and update
-        $query = Order::findOrFail($id);
+        $query = Order::where('id', $id)
+            ->where('tuk_id', $tukId)
+            ->firstOrFail();
         // update data
         $query->update($dataInput);
 
