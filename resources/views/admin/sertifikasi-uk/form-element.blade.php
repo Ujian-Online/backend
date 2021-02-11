@@ -20,14 +20,14 @@
     <div class="col-md-12 bg-gray border" id="uk-new-ukid">
         <div class="form-row">
             <div class="form-group col-md-2">
-                <button type="button" class="btn btn-primary m-2"><i class="fas fa-info-circle"></i> ID: NEW-ukid</button>
-                <button type="button" class="btn btn-danger uk-delete m-2" data-id="new-ukid"><i class="fas fa-trash-alt"></i> Hapus</button>
+                <button type="button" class="btn btn-primary m-2"><i class="fas fa-info-circle"></i> ID: NEW-{{ $id ?? 'ukid' }}</button>
+                <button type="button" class="btn btn-danger uk-delete m-2" data-id="new-{{ $id ?? 'ukid' }}"><i class="fas fa-trash-alt"></i> Hapus</button>
             </div>
             <div class="form-group col-md-10">
                 <label for="desc">Deskripsi</label>
-                <textarea class="form-control" name="desc[new-ukid]" cols="30" rows="5"></textarea>
+                <textarea class="form-control" name="desc[new-{{ $id ?? 'ukid' }}]" cols="30" rows="5">{{ $desc ?? '' }}</textarea>
                 <label for="upload_instruction">Instruksi Upload</label>
-                <textarea class="form-control" name="upload_instruction[new-ukid]" cols="30" rows="5"></textarea>
+                <textarea class="form-control" name="upload_instruction[new-{{ $id ?? 'ukid' }}]" cols="30" rows="5">{{ $upload_instruction ?? '' }}</textarea>
             </div>
         </div>
     </div>
