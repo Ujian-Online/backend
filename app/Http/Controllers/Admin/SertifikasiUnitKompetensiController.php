@@ -110,9 +110,17 @@ class SertifikasiUnitKompetensiController extends Controller
          * UK Element Save to Database End
          */
 
+        // default redirect route
+        $redirectRoute = route('admin.sertifikasi.uk.index');
+
+        // route check if sertifikasi_id found
+        $sertifikasi_id = $request->input('sertifikasi_id');
+        if(!empty($request->input('sertifikasi_id'))) {
+            $redirectRoute = route('admin.sertifikasi.uk.index', ['sertifikasi_id' => $sertifikasi_id]);
+        }
+
         // redirect to index table
-        return redirect()
-            ->route('admin.sertifikasi.uk.index')
+        return redirect($redirectRoute)
             ->with('success', trans('action.success', [
                 'name' => $query->title
             ]));
