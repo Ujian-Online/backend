@@ -65,7 +65,6 @@ class SertifikasiUnitKompetensiController extends Controller
             'sertifikasi_id'        => 'required',
             'kode_unit_kompetensi'  => 'required',
             'title'                 => 'required',
-            'sub_title'             => 'required',
         ]);
 
         // get form data
@@ -184,7 +183,6 @@ class SertifikasiUnitKompetensiController extends Controller
             'sertifikasi_id'        => 'required',
             'kode_unit_kompetensi'  => 'required',
             'title'                 => 'required',
-            'sub_title'             => 'required',
         ]);
 
         // get form data
