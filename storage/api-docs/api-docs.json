@@ -44,7 +44,7 @@
                 "summary": "Update APL01 Data",
                 "operationId": "App\\Http\\Controllers\\Api\\Apl01Controller::store",
                 "requestBody": {
-                    "description": "Update Order Data",
+                    "description": "Update APL01 Data",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -119,6 +119,48 @@
                                         "description": "Email Perusahaan",
                                         "type": "string",
                                         "example": "company@test.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/apl01/customdata/{id}": {
+            "post": {
+                "tags": [
+                    "APL01"
+                ],
+                "summary": "Update APL01 Custom Data",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl01Controller::customdata",
+                "requestBody": {
+                    "description": "Update Custom Data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "customdataid": {
+                                        "description": "Custom Data ID dari Index Custom Data dari API: GET /api/apl01 object customdata",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "value": {
+                                        "description": "Value ini berbeda-beda inputannya,\n     *                         tergantung dari custom data, jika file upload, maka berupa file ekstensi: JPG/JPEG/PNG/PDF,\n     *                          jika dropdown maka sesuai value dari dropdown_option, jika text, maka text biasa.",
+                                        "type": "file",
+                                        "example": "scan_ijazah.pdf"
                                     }
                                 },
                                 "type": "object"
