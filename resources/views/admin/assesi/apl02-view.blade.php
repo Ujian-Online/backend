@@ -7,25 +7,70 @@
 
         <div class="form-group col-md-12">
 
-            <div class="form-group row">
-                <label for="name" class="col-sm-4 col-form-label">Nama</label>
-                <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" id="name" value="{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '' }}">
-                </div>
-            </div>
+            <a href="{{ request()->url() }}?print=true" class="btn btn-success"><i class="fas fa-print"></i> Cetak APL-02</a>
 
-            <div class="form-group row">
-                <label for="sertifikasi" class="col-sm-4 col-form-label">Sertifikasi</label>
-                <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" id="sertifikasi" value="{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->title : '' }}">
-                </div>
-            </div>
+            <div class="table-responsive mt-2 mb-2">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td rowspan="3" class="text-center text-bold bg-success"  style="vertical-align: middle;">
+                            Skema Sertifikasi
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Judul</td>
+                        <td>:</td>
+                        <td class="bg-success">{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->title : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor</td>
+                        <td>:</td>
+                        <td>{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->nomor_skema : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">TUK</td>
+                        <td>:</td>
+                        <td>
+                            @if(isset($tuk) and !empty($tuk))
+                                @php
+                                    // untuk hitung loop buat strip (/)
+                                    $countKey = 0;
+                                @endphp
+                                @foreach(config('options.tuk_type') as $keyTukType => $tukType)
 
-            <div class="form-group row">
-                <label for="nomorskemasertifikasi" class="col-sm-4 col-form-label">Nomor Skema Sertifikasi</label>
-                <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" id="nomorskemasertifikasi" value="{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->nomor_skema : '' }}">
-                </div>
+                                    @if($countKey > 0 )
+                                        {{ _('/') }}
+                                    @endif
+                                    @if($keyTukType == $tuk->type)
+                                        {{ $tukType }}
+                                    @else
+                                        <span style="text-decoration: line-through;">{{ $tukType }}</span>
+                                    @endif
+
+                                    @php
+                                        $countKey = $countKey+1
+                                    @endphp
+                                @endforeach
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Nama Asesor</td>
+                        <td>:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Nama</td>
+                        <td>:</td>
+                        <td>{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Tanggal</td>
+                        <td>:</td>
+                        <td>{{ (isset($unitkompetensis) and !empty($unitkompetensis)) ? \Carbon\Carbon::parse($unitkompetensis[0]->created_at)->format('d F Y') : '' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
@@ -58,7 +103,7 @@
                                 <th width="5%">No.</th>
                                 <th width="60%">Element</th>
                                 <th width="10%">File</th>
-                                <th width="5%">Verify</th>
+                                <th width="5%">Verify (K/BK)</th>
                                 <th width="20%">Comment</th>
                             </tr>
                         </thead>

@@ -41,7 +41,16 @@ class UserAsesi extends Model
         'gender'        => 'boolean',
         'birth_date'    => 'date',
         'has_job'       => 'boolean',
-        'is_verified'   => 'boolean'
+        'is_verified'   => 'boolean',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'user_id_admin',
     ];
 
     /**
@@ -55,6 +64,16 @@ class UserAsesi extends Model
      */
     public function getGenderAttribute($value) {
         return $value ? 'Pria' : 'Wanita';
+    }
+
+    /**
+     * Format Date
+     *
+     * @param $value
+     * @return string
+     */
+    public function getBirthDateAttribute($value) {
+        return \Carbon\Carbon::parse($value)->toDateString();
     }
 
     /**

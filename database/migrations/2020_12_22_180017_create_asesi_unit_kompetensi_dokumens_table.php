@@ -21,7 +21,7 @@ class CreateAsesiUnitKompetensiDokumensTable extends Migration
             $table->bigInteger('sertifikasi_id');
             $table->string('kode_unit_kompetensi');
             $table->string('title');
-            $table->string('sub_title');
+            $table->string('sub_title')->nullable();
             $table->timestamps();
         });
     }

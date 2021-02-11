@@ -17,6 +17,14 @@ use Storage;
 class OrderController extends Controller
 {
     /**
+     * Apply Middleware Verified in All Function
+     */
+    public function __construct()
+    {
+        $this->middleware('verified');
+    }
+
+    /**
      * Order Index Function
      *
      * @param Request $request
