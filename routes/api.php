@@ -43,5 +43,6 @@ Route::name('api.')
                 Route::post('order/{id}', 'Api\OrderController@update')->name('order.update');
 
                 Route::get('apl01', 'Api\Apl01Controller@index')->name('apl01.index');
+                Route::post('apl01', 'Api\Apl01Controller@store')->name('apl01.store');
             });
     });
