@@ -89,7 +89,7 @@ class SertifikasiUnitKompetensiController extends Controller
         $upload_instruction = $request->input('upload_instruction');
 
         // only save if description and upload instruction is found
-        if(count($desc) != 0 and count($upload_instruction) != 0) {
+        if(isset($desc) and !empty($desc) and isset($upload_instruction) and !empty($upload_instruction)) {
             // merge array uk element
             $uk_element = [];
             foreach($desc as $key => $description) {
