@@ -19,6 +19,25 @@
         }
     ],
     "paths": {
+        "/api/apl01": {
+            "get": {
+                "tags": [
+                    "APL01"
+                ],
+                "summary": "Asesi APL01 Data",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl01Controller::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
