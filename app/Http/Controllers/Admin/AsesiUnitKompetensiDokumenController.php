@@ -6,6 +6,7 @@ use App\AsesiSertifikasiUnitKompetensiElement;
 use App\AsesiUnitKompetensiDokumen;
 use App\DataTables\Admin\AsesiUnitKompetensiDokumenDataTable;
 use App\Http\Controllers\Controller;
+use App\Order;
 use App\Sertifikasi;
 use App\SertifikasiUnitKompentensi;
 use App\SertifikasiUnitKompetensiElement;
@@ -269,17 +270,31 @@ class AsesiUnitKompetensiDokumenController extends Controller
             $name = $user->asesi->name;
         }
 
+        // print mode
+        $printMode = $request->input('print') ? true : false;
+
+        // get order detail
+        $order = Order::where('asesi_id', $userid)
+            ->where('sertifikasi_id', $sertifikasiid)
+            ->orderBy('transfer_date', 'desc')
+            ->firstOrFail();
+
+        // get tuk detail
+        $tuk = $order->tuk;
+
         // return data to view
-        return view('admin.assesi.apl02-view', [
+        return view($printMode ?  'admin.assesi.apl02-print' : 'admin.assesi.apl02-view', [
             'title'             => 'Detail Asesi APL-02: ' . $name,
             'action'            => '#',
             'isShow'            => route('admin.asesi.apl02.viewedit', [
                 'userid'        => $userid,
                 'sertifikasiid' => $sertifikasiid
             ]),
+            'printMode'         => $printMode,
             'user'              => $user,
             'sertifikasi'       => $sertifikasi,
             'unitkompetensis'   => $unitkompetensis,
+            'tuk'               => $tuk,
         ]);
     }
 
