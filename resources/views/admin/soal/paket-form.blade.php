@@ -58,6 +58,27 @@
                                 </tr>
                             </thead>
                             <tbody id="soal-pilihanganda-result">
+                            @if(isset($isShow) OR isset($isEdit))
+                                @foreach($soal_pilihangandas as $soal_pilihanganda)
+                                    <tr id="pilihanganda-{{ $soal_pilihanganda->id }}">
+                                        <input type="hidden" name="soal_pilihanganda_id[]" value="{{ $soal_pilihanganda->id }}">
+                                        <td class="text-center">{{ $soal_pilihanganda->id }}</td>
+                                        <td>
+                                            {{ $soal_pilihanganda->question }}
+                                            <ol type="A">
+                                                @if(isset($soal_pilihanganda->soalpilihanganda) and !empty($soal_pilihanganda->soalpilihanganda))
+                                                    @foreach($soal_pilihanganda->soalpilihanganda as $pilganda)
+                                                        <li>{{ $pilganda->option }}</li>
+                                                    @endforeach
+                                                @endif
+                                            </ol>
+                                        </td>
+                                        <td class="text-center">{{ $soal_pilihanganda->answer_option }}</td>
+                                        <td class="text-center">{{ $soal_pilihanganda->max_score }}</td>
+                                        <td><button type="button" class="btn btn-danger" onclick="deltr('pilihanganda-{{ $soal_pilihanganda->id }}')" @if(isset($isShow)) disabled @endif >Delete</button></td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -88,6 +109,18 @@
                             </tr>
                             </thead>
                             <tbody id="soal-essay-result">
+                            @if(isset($isShow) OR isset($isEdit))
+                                @foreach($soal_essays as $soal_essay)
+                                    <tr id="essay-{{ $soal_essay->id }}">
+                                        <input type="hidden" name="soal_essay_id[]" value="{{ $soal_essay->id }}">
+                                        <td class="text-center">{{ $soal_essay->id }}</td>
+                                        <td>{{ $soal_essay->question }}</td>
+                                        <td>{{ $soal_essay->answer_essay }}</td>
+                                        <td class="text-center">{{ $soal_essay->max_score }}</td>
+                                        <td><button type="button" class="btn btn-danger" onclick="deltr('essay-{{ $soal_essay->id }}')" @if(isset($isShow)) disabled @endif >Delete</button></td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>
