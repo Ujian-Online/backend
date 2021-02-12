@@ -124,7 +124,26 @@ class SoalPaketController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = SoalPaket::findOrFail($id);
+        $query = SoalPaket::with([
+                'soalpaketitem',
+                'soalpaketitem.soal',
+                'soalpaketitem.soal.soalpilihanganda'
+        ]) ->findOrFail($id);
+        $soal_pilihangandas = [];
+        $soal_essays = [];
+
+        // extract soal pilihanganda and essay from soalpaketitem if found
+        if(isset($query->soalpaketitem) and !empty($query->soalpaketitem)) {
+            foreach($query->soalpaketitem as $soalpaketitem) {
+                if(isset($soalpaketitem->soal) and !empty($soalpaketitem->soal)) {
+                    if($soalpaketitem->soal->question_type == 'multiple_option') {
+                        $soal_pilihangandas[] = $soalpaketitem->soal;
+                    } else {
+                        $soal_essays[] = $soalpaketitem->soal;
+                    }
+                }
+            }
+        }
 
         // return data to view
         return view('admin.soal.paket-form', [
@@ -132,6 +151,8 @@ class SoalPaketController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.soal.paket.edit', $id),
             'query'         => $query,
+            'soal_pilihangandas'    => $soal_pilihangandas,
+            'soal_essays'           => $soal_essays,
         ]);
     }
 
@@ -145,7 +166,26 @@ class SoalPaketController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = SoalPaket::findOrFail($id);
+        $query = SoalPaket::with([
+            'soalpaketitem',
+            'soalpaketitem.soal',
+            'soalpaketitem.soal.soalpilihanganda'
+        ]) ->findOrFail($id);
+        $soal_pilihangandas = [];
+        $soal_essays = [];
+
+        // extract soal pilihanganda and essay from soalpaketitem if found
+        if(isset($query->soalpaketitem) and !empty($query->soalpaketitem)) {
+            foreach($query->soalpaketitem as $soalpaketitem) {
+                if(isset($soalpaketitem->soal) and !empty($soalpaketitem->soal)) {
+                    if($soalpaketitem->soal->question_type == 'multiple_option') {
+                        $soal_pilihangandas[] = $soalpaketitem->soal;
+                    } else {
+                        $soal_essays[] = $soalpaketitem->soal;
+                    }
+                }
+            }
+        }
 
         // return data to view
         return view('admin.soal.paket-form', [
@@ -153,6 +193,8 @@ class SoalPaketController extends Controller
             'action'        => route('admin.soal.paket.update', $id),
             'isEdit'        => true,
             'query'         => $query,
+            'soal_pilihangandas'    => $soal_pilihangandas,
+            'soal_essays'           => $soal_essays,
         ]);
     }
 
