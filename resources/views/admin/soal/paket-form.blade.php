@@ -182,6 +182,8 @@
 
         function deltr(id) {
             $(`#${id}`).remove();
+            $("#soal_pilihanganda_id").val('').trigger('change');
+            $("#soal_essay_id").val('').trigger('change');
         }
 
         // soal select2 with ajax query search
@@ -247,27 +249,29 @@
            const value = me.val();
 
            try {
-               const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
-               const { data: response } = request;
+               if(value) {
+                   const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
+                   const { data: response } = request;
 
-               $("#soal-pilihanganda-result").append(`
-                    <tr id="pilihanganda-${response.id}">
-                        <input type="hidden" name="soal_pilihanganda_id[]" value="${response.id}">
-                        <td class="text-center">${response.id}</td>
-                        <td>
-                            ${response.question}
-                            <ol type="A">
-                                <li>${response.soalpilihanganda[0].option}</li>
-                                <li>${response.soalpilihanganda[1].option}</li>
-                                <li>${response.soalpilihanganda[2].option}</li>
-                                <li>${response.soalpilihanganda[3].option}</li>
-                            </ol>
-                        </td>
-                        <td class="text-center">${response.answer_option}</td>
-                        <td class="text-center">${response.max_score}</td>
-                        <td><button type="button" class="btn btn-danger" onclick="deltr('pilihanganda-${response.id}')">Delete</button></td>
-                    </tr>
-               `);
+                   $("#soal-pilihanganda-result").append(`
+                        <tr id="pilihanganda-${response.id}">
+                            <input type="hidden" name="soal_pilihanganda_id[]" value="${response.id}">
+                            <td class="text-center">${response.id}</td>
+                            <td>
+                                ${response.question}
+                                <ol type="A">
+                                    <li>${response.soalpilihanganda[0].option}</li>
+                                    <li>${response.soalpilihanganda[1].option}</li>
+                                    <li>${response.soalpilihanganda[2].option}</li>
+                                    <li>${response.soalpilihanganda[3].option}</li>
+                                </ol>
+                            </td>
+                            <td class="text-center">${response.answer_option}</td>
+                            <td class="text-center">${response.max_score}</td>
+                            <td><button type="button" class="btn btn-danger" onclick="deltr('pilihanganda-${response.id}')">Delete</button></td>
+                        </tr>
+                   `);
+               }
 
            } catch (e) {
                 alert('Gagal mengambil detail soal pilihan ganda.!');
@@ -281,19 +285,21 @@
             const value = me.val();
 
             try {
-                const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
-                const { data: response } = request;
+                if(value) {
+                    const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
+                    const { data: response } = request;
 
-                $("#soal-essay-result").append(`
-                    <tr id="essay-${response.id}">
-                        <input type="hidden" name="soal_essay_id[]" value="${response.id}">
-                        <td class="text-center">${response.id}</td>
-                        <td>${response.question}</td>
-                        <td>${response.answer_essay}</td>
-                        <td class="text-center">${response.max_score}</td>
-                        <td><button type="button" class="btn btn-danger" onclick="deltr('essay-${response.id}')">Delete</button></td>
-                    </tr>
-               `);
+                    $("#soal-essay-result").append(`
+                        <tr id="essay-${response.id}">
+                            <input type="hidden" name="soal_essay_id[]" value="${response.id}">
+                            <td class="text-center">${response.id}</td>
+                            <td>${response.question}</td>
+                            <td>${response.answer_essay}</td>
+                            <td class="text-center">${response.max_score}</td>
+                            <td><button type="button" class="btn btn-danger" onclick="deltr('essay-${response.id}')">Delete</button></td>
+                        </tr>
+                   `);
+                }
 
             } catch (e) {
                 alert('Gagal mengambil detail soal essay.!');
