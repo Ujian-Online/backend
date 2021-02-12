@@ -33,7 +33,13 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
 //            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
-                    'title' => $query->asesi_id,
+                    'title' => (isset($query->user) and !empty($query->user)
+                                and isset($query->user->asesi) and !empty($query->user->asesi))
+                                ? $query->user->asesi->name : $query->asesi_id,
+                    'url_print' => route('admin.asesi.apl02.view', [
+                        'userid' => $query->asesi_id,
+                        'sertifikasiid' => $query->sertifikasi_id
+                    ]) . '?print=true',
                     'url_show' => route('admin.asesi.apl02.view', [
                         'userid' => $query->asesi_id,
                         'sertifikasiid' => $query->sertifikasi_id
