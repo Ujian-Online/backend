@@ -225,6 +225,43 @@ class SoalPaketController extends Controller
         // update data
         $query->update($dataInput);
 
+        // destroy old data in soalpaketitem
+        SoalPaketItem::where('soal_paket_id', $id)->delete();
+
+        // get input soal_pilihanganda_id
+        $soal_pilihangandas = $request->input('soal_pilihanganda_id');
+        // get input soal_essay_id
+        $soal_essays = $request->input('soal_essay_id');
+        // variable for soal paket item
+        $soal_paket_items = [];
+
+        // loop soal pilihan ganda
+        if(isset($soal_pilihangandas) and !empty($soal_pilihangandas)) {
+            foreach($soal_pilihangandas as $soal_pilihanganda) {
+                $soal_paket_items[] = [
+                    'soal_paket_id' => $query->id,
+                    'soal_id' => $soal_pilihanganda,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        // loop soal essay
+        if(isset($soal_essays) and !empty($soal_essays)) {
+            foreach($soal_essays as $soal_essay) {
+                $soal_paket_items[] = [
+                    'soal_paket_id' => $query->id,
+                    'soal_id' => $soal_essay,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        // bulk insert soal paket item
+        SoalPaketItem::insert($soal_paket_items);
+
         // redirect
         return redirect()
             ->route('admin.soal.paket.index')
