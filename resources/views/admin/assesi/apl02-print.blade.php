@@ -25,11 +25,12 @@
                         <td>:</td>
                         <td>{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->nomor_skema : '' }}</td>
                     </tr>
+                    @if(isset($tuk) and !empty($tuk))
                     <tr>
                         <td colspan="2">TUK</td>
                         <td>:</td>
                         <td>
-                            @if(isset($tuk) and !empty($tuk))
+
                                 @php
                                 // untuk hitung loop buat strip (/)
                                 $countKey = 0;
@@ -49,24 +50,27 @@
                                      $countKey = $countKey+1
                                     @endphp
                                 @endforeach
-                            @endif
+
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="2">Nama Asesor</td>
-                        <td>:</td>
-                        <td></td>
-                    </tr>
+                    @endif
+                    {{--<tr>--}}
+                    {{--<td colspan="2">Nama Asesor</td>--}}
+                    {{--<td>:</td>--}}
+                    {{--<td></td>--}}
+                    {{--</tr>--}}
                     <tr>
                         <td colspan="2">Nama</td>
                         <td>:</td>
                         <td>{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '' }}</td>
                     </tr>
+                    @if(isset($order) and !empty($order))
                     <tr>
                         <td colspan="2">Tanggal</td>
                         <td>:</td>
-                        <td>{{ (isset($unitkompetensis) and !empty($unitkompetensis)) ? \Carbon\Carbon::parse($unitkompetensis[0]->created_at)->format('d F Y') : '' }}</td>
+                        <td>{{ (isset($order) and !empty($order)) ? \Carbon\Carbon::parse($order->created_at)->format('d F Y') : '' }}</td>
                     </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -97,12 +101,12 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th width="5%">No.</th>
-                                <th width="55%">Element</th>
-                                <th width="10%">File</th>
-                                <th width="5%">K</th>
-                                <th width="5%">BK</th>
-                                <th width="20%">Comment</th>
+                                <th width="5%" class="text-center" style="vertical-align: middle;">No.</th>
+                                <th width="55%" class="text-center" style="vertical-align: middle;">Element</th>
+                                <th width="10%" class="text-center" style="vertical-align: middle;">File</th>
+                                <th width="5%" class="text-center" style="vertical-align: middle;">K</th>
+                                <th width="5%" class="text-center" style="vertical-align: middle;">BK</th>
+                                <th width="20%" class="text-center" style="vertical-align: middle;">Comment</th>
                             </tr>
                         </thead>
                         <tbody>
