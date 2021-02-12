@@ -303,17 +303,25 @@ class SoalController extends Controller
 
         // get input from select2 search term
         $q = $request->input('q');
+        $type = $request->input('type');
+        $skip = $request->input('skip');
 
         // return empty object if query is empty
-        if(empty($q)) {
-            return response()->json($result, 200);
-        }
-
-        // check if query is numeric or not
-        if(is_numeric($q)) {
+        if(!empty($q) and is_numeric($q)) {
             $query = $query->where('id', 'like', "%$q%");
         } else {
             $query = $query->where('question', 'like', "%$q%");
+        }
+
+        // filter by type
+        if(!empty($type)) {
+            $questionType = ($type == 'multiple_option') ? 'multiple_option' : 'essay';
+            $query = $query->where('question_type', $questionType);
+        }
+
+        // exclude or skip by id
+        if(!empty($skip)) {
+            $query = $query->whereNotIn('id', explode(',', $skip));
         }
 
         // check if data found or not
