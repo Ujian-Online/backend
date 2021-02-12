@@ -21,17 +21,6 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-12">
-            <label for="soal_id">Soal ID</label>
-            <select class="form-control @error('soal_id') is-invalid @enderror"
-                    name="soal_id" id="soal_id" data-placeholder="Pilih Soal ID">
-            </select>
-
-            @error('soal_id')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
         <div class="form-group bg-gray col-md-12" id="soal-detail" style="display: none;">
             <div class="form-row">
                 <div class="form-group col-md-12">
@@ -42,6 +31,66 @@
                 <div class="form-group col-md-6">
                     <label for="question_type">Tipe Pertanyaan</label>
                     <input type="text" class="form-control" id="question_type" placeholder="Tipe Pertanyaan" value="" style="text-transform: capitalize;" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-tasks"></i> Soal Pilihan Ganda</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <select class="form-control" id="soal_pilihanganda_id" data-placeholder="Pilih Soal Pilihan Ganda">
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th width="5%" style="vertical-align: middle;">ID</th>
+                                    <th width="75%" style="vertical-align: middle;">Pertanyaan</th>
+                                    <th width="5%" style="vertical-align: middle;">Jawaban</th>
+                                    <th width="5%" style="vertical-align: middle;">Max Score</th>
+                                    <th width="10%" style="vertical-align: middle;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="soal-pilihanganda-result">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-outline card-info">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-tasks"></i> Soal Essay</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <select class="form-control" id="soal_essay_id" data-placeholder="Pilih Soal Essay">
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr class="text-center">
+                                <th width="5%" style="vertical-align: middle;">ID</th>
+                                <th width="40%" style="vertical-align: middle;">Pertanyaan</th>
+                                <th width="40%" style="vertical-align: middle;">Jawaban</th>
+                                <th width="5%" style="vertical-align: middle;">Max Score</th>
+                                <th width="10%" style="vertical-align: middle;">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="soal-essay-result">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,31 +162,30 @@
          * @type {string}
          */
 
-            // default selected soal_id from query URL
-        const soal_id_default = '{{ request()->input('soal_id') ?? null }}'
-        // trigger load data if soal_id not null
-        if(soal_id_default) {
-            var soalSelected = $('#soal_id');
-            $.ajax({
-                url: '{{ route('admin.soal.search') }}' + '?q=' + soal_id_default,
-                dataType: 'JSON',
-            }).then(function (data) {
-                // create the option and append to Select2
-                var option = new Option(data[0].text, data[0].id, true, true);
-                soalSelected.append(option).trigger('change');
+        // get id soalpilihanganda
+        function soalpil() {
+            const soalpil = $("input[name='soal_pilihanganda_id[]']")
+                .map(function(){return $(this).val();}).get();
 
-                // manually trigger the `select2:select` event
-                soalSelected.trigger({
-                    type: 'select2:select',
-                    params: {
-                        data: data
-                    }
-                });
-            });
+            // convert array to string with comma separate
+            return soalpil.join();
+        }
+
+        // get id soalessay
+        function soalessay() {
+            const soalessay = $("input[name='soal_essay_id[]']")
+                .map(function(){return $(this).val();}).get();
+
+            // convert array to string with comma separate
+            return soalessay.join();
+        }
+
+        function deltr(id) {
+            $(`#${id}`).remove();
         }
 
         // soal select2 with ajax query search
-        $('#soal_id').select2({
+        $('#soal_pilihanganda_id').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
             allowClear: true,
@@ -149,7 +197,34 @@
                 cache: false,
                 data: function (data) {
                     return {
-                        q: data.term
+                        q: data.term,
+                        type: 'multiple_option',
+                        skip: soalpil()
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
+        });
+
+        $('#soal_essay_id').select2({
+            theme: 'bootstrap4',
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            allowClear: true,
+            ajax: {
+                url: '{{ route('admin.soal.search') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                minimumInputLength: 1,
+                data: function (data) {
+                    return {
+                        q: data.term,
+                        type: 'essay',
+                        skip: soalessay()
                     }
                 },
                 processResults: function (response) {
@@ -166,8 +241,8 @@
          */
     </script>
     <script>
-        // listen if soal_id change
-        $("#soal_id").on('change', async function () {
+        // listen if soal_pilihanganda_id change
+        $("#soal_pilihanganda_id").on('change', async function () {
            const me = $(this)
            const value = me.val();
 
@@ -175,19 +250,54 @@
                const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
                const { data: response } = request;
 
-               // show soal html
-               $("#soal-detail").show();
-
-               // change value question
-               $("#question").val(response.question);
-               // change value question_type
-               // format value
-               const questionType = response.question_type;
-               $("#question_type").val(questionType.replace('_', ' '));
+               $("#soal-pilihanganda-result").append(`
+                    <tr id="pilihanganda-${response.id}">
+                        <input type="hidden" name="soal_pilihanganda_id[]" value="${response.id}">
+                        <td class="text-center">${response.id}</td>
+                        <td>
+                            ${response.question}
+                            <ol type="A">
+                                <li>${response.soalpilihanganda[0].option}</li>
+                                <li>${response.soalpilihanganda[1].option}</li>
+                                <li>${response.soalpilihanganda[2].option}</li>
+                                <li>${response.soalpilihanganda[3].option}</li>
+                            </ol>
+                        </td>
+                        <td class="text-center">${response.answer_option}</td>
+                        <td class="text-center">${response.max_score}</td>
+                        <td><button type="button" class="btn btn-danger" onclick="deltr('pilihanganda-${response.id}')">Delete</button></td>
+                    </tr>
+               `);
 
            } catch (e) {
-
+                alert('Gagal mengambil detail soal pilihan ganda.!');
            }
+        });
+    </script>
+    <script>
+        // listen if soal_pilihanganda_id change
+        $("#soal_essay_id").on('change', async function () {
+            const me = $(this)
+            const value = me.val();
+
+            try {
+                const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
+                const { data: response } = request;
+
+                $("#soal-essay-result").append(`
+                    <tr id="essay-${response.id}">
+                        <input type="hidden" name="soal_essay_id[]" value="${response.id}">
+                        <td class="text-center">${response.id}</td>
+                        <td>${response.question}</td>
+                        <td>${response.answer_essay}</td>
+                        <td class="text-center">${response.max_score}</td>
+                        <td><button type="button" class="btn btn-danger" onclick="deltr('essay-${response.id}')">Delete</button></td>
+                    </tr>
+               `);
+
+            } catch (e) {
+                alert('Gagal mengambil detail soal essay.!');
+            }
         });
     </script>
 @endsection
