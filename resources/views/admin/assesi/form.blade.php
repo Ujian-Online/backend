@@ -2,6 +2,9 @@
 
 @section('form')
     <div class="form-row">
+
+        <a href="{{ request()->url() }}?print=true" class="btn btn-success mb-2"><i class="fas fa-print"></i> Cetak APL-01</a>
+
         <div class="form-group col-md-12">
             <label for="user_id">User ID</label>
             <select class="form-control" name="user_id" id="user_id" @if(isset($isShow)) readonly @endif>
@@ -291,6 +294,18 @@
 
 @section('js')
     <script>
+        $(document).on('keydown', function(e) {
+            e.preventDefault();
+
+            if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+                e.cancelBubble = true;
+                e.stopImmediatePropagation();
+
+                const redirectPrint = '{{ request()->url() }}?print=true';
+                window.location = redirectPrint;
+            }
+        });
+
         $('select').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}

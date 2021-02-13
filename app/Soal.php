@@ -21,6 +21,6 @@ class Soal extends Model
 
     public function SoalPilihanGanda()
     {
-        return $this->hasMany('App\SoalPilihanGanda', 'soal_id', 'id');
+        return $this->hasMany('App\SoalPilihanGanda', 'soal_id', 'id')->orderBy('label', 'ASC');
     }
 }

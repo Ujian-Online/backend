@@ -277,10 +277,9 @@ class AsesiUnitKompetensiDokumenController extends Controller
         $order = Order::where('asesi_id', $userid)
             ->where('sertifikasi_id', $sertifikasiid)
             ->orderBy('transfer_date', 'desc')
-            ->firstOrFail();
-
-        // get tuk detail
-        $tuk = $order->tuk;
+            ->first();
+        // get tuk detail based on order
+        $tuk = (isset($order) & !empty($order)) ? $order->tuk : null;
 
         // return data to view
         return view($printMode ?  'admin.assesi.apl02-print' : 'admin.assesi.apl02-view', [
@@ -294,6 +293,7 @@ class AsesiUnitKompetensiDokumenController extends Controller
             'user'              => $user,
             'sertifikasi'       => $sertifikasi,
             'unitkompetensis'   => $unitkompetensis,
+            'order'             => $order,
             'tuk'               => $tuk,
         ]);
     }
