@@ -152,7 +152,7 @@ class UserAsesiController extends Controller
     public function edit(int $id)
     {
         // query get data
-        $query = UserAsesi::findOrFail($id);
+        $query = UserAsesi::with('asesicustomdata')->where('id', $id)->firstOrFail();
         // get users list when not found in user asesi and type asesi
         $users = User::where('users.type', 'asessi')
             ->orderBy('id', 'desc')
