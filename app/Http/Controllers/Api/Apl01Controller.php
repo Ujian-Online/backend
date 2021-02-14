@@ -287,10 +287,18 @@ class Apl01Controller extends Controller
         $value = $request->input('value');
 
         // request validate based on input type
-        if($customdata->input_type == 'upload_image' OR $customdata->input_type == 'upload_pdf') {
+        if($customdata->input_type == 'upload_image') {
             $request->validate([
                 'customdataid'  => 'required',
-                'value'         => 'required|mimes:jpg,jpeg,png,pdf'
+                'value'         => 'required|mimes:jpg,jpeg,png'
+            ]);
+
+            // run upload data
+            $value = upload_to_s3($request->file('value'));
+        } else if($customdata->input_type == 'upload_pdf') {
+            $request->validate([
+                'customdataid'  => 'required',
+                'value'         => 'required|mimes:pdf'
             ]);
 
             // run upload data
