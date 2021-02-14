@@ -132,13 +132,18 @@ class OrderController extends Controller
         // get user active
         $user = $request->user();
 
-        // get tuk id user
-        $tukId = $user->tuk->tuk_id;
-
         // Find Data by ID
-        $query = Order::where('id', $id)
-            ->where('tuk_id', $tukId)
-            ->firstOrFail();
+        $query = Order::where('id', $id);
+
+        // get tuk id user if access by tuk
+        $tukId = null;
+        if($user->can('isTuk') and isset($user->tuk) and !empty($user->tuk)) {
+                $tukId = $user->tuk->tuk_id;
+                $query = $query->where('tuk_id', $tukId);
+        }
+
+        // fetch data
+        $query = $query->firstOrFail();
 
         // edit mode url
         $editUrl = true;
@@ -175,13 +180,18 @@ class OrderController extends Controller
             abort(403);
         }
 
-        // get tuk id user
-        $tukId = $user->tuk->tuk_id;
-
         // Find Data by ID
-        $query = Order::where('id', $id)
-            ->where('tuk_id', $tukId)
-            ->firstOrFail();
+        $query = Order::where('id', $id);
+
+        // get tuk id user if access by tuk
+        $tukId = null;
+        if($user->can('isTuk') and isset($user->tuk) and !empty($user->tuk)) {
+            $tukId = $user->tuk->tuk_id;
+            $query = $query->where('tuk_id', $tukId);
+        }
+
+        // fetch data
+        $query = $query->firstOrFail();
 
         // return data to view
         return view('admin.order.form', [
@@ -222,13 +232,18 @@ class OrderController extends Controller
             'comment_verification',
         ]);
 
-        // get tuk id user
-        $tukId = $user->tuk->tuk_id;
+        // Find Data by ID
+        $query = Order::where('id', $id);
 
-        // find by id and update
-        $query = Order::where('id', $id)
-            ->where('tuk_id', $tukId)
-            ->firstOrFail();
+        // get tuk id user if access by tuk
+        $tukId = null;
+        if($user->can('isTuk') and isset($user->tuk) and !empty($user->tuk)) {
+            $tukId = $user->tuk->tuk_id;
+            $query = $query->where('tuk_id', $tukId);
+        }
+
+        // fetch data
+        $query = $query->firstOrFail();
         // update data
         $query->update($dataInput);
 
