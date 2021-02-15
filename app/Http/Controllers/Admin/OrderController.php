@@ -247,6 +247,11 @@ class OrderController extends Controller
         // update data
         $query->update($dataInput);
 
+        // create APL01 form if payment verified
+        if($dataInput['status'] == 'payment_verified') {
+            UserAsesi::create(['user_id' => $query->asesi_id]);
+        }
+
         // redirect
         return redirect()
             ->route('admin.order.index')
