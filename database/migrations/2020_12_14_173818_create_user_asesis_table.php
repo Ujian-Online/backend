@@ -15,7 +15,7 @@ class CreateUserAsesisTable extends Migration
     {
         Schema::create('user_asesis', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->unique();
             $table->string('name')->nullable();
             $table->text('address')->nullable();
             $table->boolean('gender')->nullable(); // true = pria, false = wanita
