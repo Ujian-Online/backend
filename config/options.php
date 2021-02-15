@@ -115,6 +115,11 @@ return [
         'canceled',
         'completed',
     ],
+    'orders_status_tuk' => [
+        'payment_rejected',
+        'payment_verified',
+        'canceled',
+    ],
     'question_type' => [
         'essay',
         'multiple_option'
