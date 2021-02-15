@@ -51,6 +51,21 @@
 
     <h3>UK Element</h3>
 
+    @if(old('desc') && old('upload_instruction'))
+        @php
+            // fetch old input
+            $descs = old('desc');
+            $upload_instructions = old('upload_instruction');
+        @endphp
+        @foreach($descs as $key => $desc)
+            @include('admin.sertifikasi-uk.form-element', [
+                        'id' => str_replace('new-', '', $key),
+                        'desc' => $desc,
+                        'upload_instruction' => $upload_instructions[$key]
+                    ])
+        @endforeach
+    @endif
+
     {{--  Load UK Element  --}}
     @if(isset($isShow) OR isset($isEdit))
         <div class="form-row mb-4">
@@ -89,7 +104,7 @@
          */
 
             // default selected sertifikasi_id from query URL
-        const sertifikasi_id_default = '{{ request()->input('sertifikasi_id') ?? $query->sertifikasi_id ?? null }}'
+        const sertifikasi_id_default = '{{ request()->input('sertifikasi_id') ?? old('sertifikasi_id') ?? $query->sertifikasi_id ?? null }}'
         // trigger load data if sertifikasi_id not null
         if(sertifikasi_id_default) {
             var sertifikasiSelected = $('#sertifikasi_id');

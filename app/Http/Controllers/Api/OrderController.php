@@ -17,6 +17,14 @@ use Storage;
 class OrderController extends Controller
 {
     /**
+     * Apply Middleware Verified in All Function
+     */
+    public function __construct()
+    {
+        $this->middleware('verified');
+    }
+
+    /**
      * Order Index Function
      *
      * @param Request $request
@@ -41,8 +49,8 @@ class OrderController extends Controller
         $user = $request->user();
 
         // get order detail
-        return Order::with(['sertifikasi', 'tuk'])
-            ->where('users.id', $user->id)
+        return Order::with(['sertifikasi', 'tuk', 'user', 'user.asesi'])
+            ->where('asesi_id', $user->id)
             ->paginate(10);
     }
 

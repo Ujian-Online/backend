@@ -26,4 +26,14 @@ class SoalPaket extends Model
     {
         return $this->hasOne('App\Sertifikasi', 'id', 'sertifikasi_id');
     }
+
+    /**
+     * Relation to Table SoalPaketItem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function SoalPaketItem()
+    {
+        return $this->hasMany('App\SoalPaketItem', 'soal_paket_id', 'id');
+    }
 }

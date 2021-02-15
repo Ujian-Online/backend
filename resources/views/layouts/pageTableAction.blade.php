@@ -1,6 +1,9 @@
 @if(isset($url_sertifikasi_uk))
 <a href="{{ $url_sertifikasi_uk }}" class="btn btn-info btn-sm mb-2" title="Buka Unit Kompetensi dari Sertifikasi: {{ $title }}"><i class="fas fa-list-ul"></i></a>
 @endif
+@if(isset($url_print))
+    <a href="{{ $url_print }}" class="btn btn-warning btn-sm mb-2" title="Print Dokumen: {{ $title }}"><i class="fas fa-print"></i></a>
+@endif
 @if(isset($url_show))
 <a href="{{ $url_show }}" class="btn btn-primary btn-sm mb-2 btn-show" title="Detail: {{ $title }}"><i class="far fa-eye"></i></a>
 @endif

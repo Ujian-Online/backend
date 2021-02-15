@@ -19,6 +19,167 @@
         }
     ],
     "paths": {
+        "/api/apl01": {
+            "get": {
+                "tags": [
+                    "APL01"
+                ],
+                "summary": "Asesi APL01 Data",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl01Controller::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "APL01"
+                ],
+                "summary": "Update APL01 Data",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl01Controller::store",
+                "requestBody": {
+                    "description": "Update APL01 Data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nama Lengkap",
+                                        "type": "string",
+                                        "example": "john doe"
+                                    },
+                                    "address": {
+                                        "description": "Alamat Lengkap",
+                                        "type": "string",
+                                        "example": "Jl. Ahmad Yani No. 1 RT 1 RW 2, Dukuh Menanggal, Surabaya, Jawa Timur"
+                                    },
+                                    "phone_number": {
+                                        "description": "Nomor Telpon",
+                                        "type": "string",
+                                        "example": "081212341234"
+                                    },
+                                    "gender": {
+                                        "description": "Jenis Kelamin: pria/wanita",
+                                        "type": "string",
+                                        "example": "pria"
+                                    },
+                                    "birth_place": {
+                                        "description": "Tempat Lahir",
+                                        "type": "string",
+                                        "example": "Surabaya"
+                                    },
+                                    "birth_date": {
+                                        "description": "Tanggal Lahir, Date Format: Y-m-d",
+                                        "type": "date",
+                                        "example": "2020-01-01"
+                                    },
+                                    "no_ktp": {
+                                        "description": "Nomor KTP, Example: 1234567890123456",
+                                        "type": "string",
+                                        "example": "1234567890123456"
+                                    },
+                                    "pendidikan_terakhir": {
+                                        "description": "Pendidikan Terakhir: SMA/SMK/D1/D2/D3/D4/S1/S2/S3",
+                                        "type": "string",
+                                        "example": "SMA"
+                                    },
+                                    "has_job": {
+                                        "description": "Apakah memiliki pekerjaan?, Example: true = bekerja, false = tidak bekerja",
+                                        "type": "boolean",
+                                        "example": "1"
+                                    },
+                                    "job_title": {
+                                        "description": "Jenis/Pangkat Pekerjaan",
+                                        "type": "string",
+                                        "example": "Teknisi"
+                                    },
+                                    "job_address": {
+                                        "description": "Alamat Pekerjaan",
+                                        "type": "string",
+                                        "example": "Jl. Raya Darmo, Surabaya, Jawa Timur"
+                                    },
+                                    "company_name": {
+                                        "description": "Nama Perusahaan",
+                                        "type": "string",
+                                        "example": "IT Tech"
+                                    },
+                                    "company_phone": {
+                                        "description": "Nomor Telpon Perusahaan",
+                                        "type": "string",
+                                        "example": "02112341234"
+                                    },
+                                    "company_email": {
+                                        "description": "Email Perusahaan",
+                                        "type": "string",
+                                        "example": "company@test.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/apl01/customdata/{id}": {
+            "post": {
+                "tags": [
+                    "APL01"
+                ],
+                "summary": "Update APL01 Custom Data",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl01Controller::customdata",
+                "requestBody": {
+                    "description": "Update Custom Data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "customdataid": {
+                                        "description": "Custom Data ID dari Index Custom Data dari API: GET /api/apl01 object customdata",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "value": {
+                                        "description": "Value ini berbeda-beda inputannya,\n     *                         tergantung dari custom data, jika file upload, maka berupa file ekstensi: JPG/JPEG/PNG/PDF,\n     *                          jika dropdown maka sesuai value dari dropdown_option, jika text, maka text biasa.",
+                                        "type": "file",
+                                        "example": "scan_ijazah.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [

@@ -6,6 +6,7 @@ use App\DataTables\Admin\SoalPaketDataTable;
 use App\Http\Controllers\Controller;
 use App\Sertifikasi;
 use App\SoalPaket;
+use App\SoalPaketItem;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -71,6 +72,40 @@ class SoalPaketController extends Controller
         // save to database
         $query = SoalPaket::create($dataInput);
 
+        // get input soal_pilihanganda_id
+        $soal_pilihangandas = $request->input('soal_pilihanganda_id');
+        // get input soal_essay_id
+        $soal_essays = $request->input('soal_essay_id');
+        // variable for soal paket item
+        $soal_paket_items = [];
+
+        // loop soal pilihan ganda
+        if(isset($soal_pilihangandas) and !empty($soal_pilihangandas)) {
+            foreach($soal_pilihangandas as $soal_pilihanganda) {
+                $soal_paket_items[] = [
+                    'soal_paket_id' => $query->id,
+                    'soal_id' => $soal_pilihanganda,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        // loop soal essay
+        if(isset($soal_essays) and !empty($soal_essays)) {
+            foreach($soal_essays as $soal_essay) {
+                $soal_paket_items[] = [
+                    'soal_paket_id' => $query->id,
+                    'soal_id' => $soal_essay,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        // bulk insert soal paket item
+        SoalPaketItem::insert($soal_paket_items);
+
         // redirect to index table
         return redirect()
             ->route('admin.soal.paket.index')
@@ -89,7 +124,26 @@ class SoalPaketController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = SoalPaket::findOrFail($id);
+        $query = SoalPaket::with([
+                'soalpaketitem',
+                'soalpaketitem.soal',
+                'soalpaketitem.soal.soalpilihanganda'
+        ]) ->findOrFail($id);
+        $soal_pilihangandas = [];
+        $soal_essays = [];
+
+        // extract soal pilihanganda and essay from soalpaketitem if found
+        if(isset($query->soalpaketitem) and !empty($query->soalpaketitem)) {
+            foreach($query->soalpaketitem as $soalpaketitem) {
+                if(isset($soalpaketitem->soal) and !empty($soalpaketitem->soal)) {
+                    if($soalpaketitem->soal->question_type == 'multiple_option') {
+                        $soal_pilihangandas[] = $soalpaketitem->soal;
+                    } else {
+                        $soal_essays[] = $soalpaketitem->soal;
+                    }
+                }
+            }
+        }
 
         // return data to view
         return view('admin.soal.paket-form', [
@@ -97,6 +151,8 @@ class SoalPaketController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.soal.paket.edit', $id),
             'query'         => $query,
+            'soal_pilihangandas'    => $soal_pilihangandas,
+            'soal_essays'           => $soal_essays,
         ]);
     }
 
@@ -110,7 +166,26 @@ class SoalPaketController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = SoalPaket::findOrFail($id);
+        $query = SoalPaket::with([
+            'soalpaketitem',
+            'soalpaketitem.soal',
+            'soalpaketitem.soal.soalpilihanganda'
+        ]) ->findOrFail($id);
+        $soal_pilihangandas = [];
+        $soal_essays = [];
+
+        // extract soal pilihanganda and essay from soalpaketitem if found
+        if(isset($query->soalpaketitem) and !empty($query->soalpaketitem)) {
+            foreach($query->soalpaketitem as $soalpaketitem) {
+                if(isset($soalpaketitem->soal) and !empty($soalpaketitem->soal)) {
+                    if($soalpaketitem->soal->question_type == 'multiple_option') {
+                        $soal_pilihangandas[] = $soalpaketitem->soal;
+                    } else {
+                        $soal_essays[] = $soalpaketitem->soal;
+                    }
+                }
+            }
+        }
 
         // return data to view
         return view('admin.soal.paket-form', [
@@ -118,6 +193,8 @@ class SoalPaketController extends Controller
             'action'        => route('admin.soal.paket.update', $id),
             'isEdit'        => true,
             'query'         => $query,
+            'soal_pilihangandas'    => $soal_pilihangandas,
+            'soal_essays'           => $soal_essays,
         ]);
     }
 
@@ -147,6 +224,43 @@ class SoalPaketController extends Controller
         $query = SoalPaket::findOrFail($id);
         // update data
         $query->update($dataInput);
+
+        // destroy old data in soalpaketitem
+        SoalPaketItem::where('soal_paket_id', $id)->delete();
+
+        // get input soal_pilihanganda_id
+        $soal_pilihangandas = $request->input('soal_pilihanganda_id');
+        // get input soal_essay_id
+        $soal_essays = $request->input('soal_essay_id');
+        // variable for soal paket item
+        $soal_paket_items = [];
+
+        // loop soal pilihan ganda
+        if(isset($soal_pilihangandas) and !empty($soal_pilihangandas)) {
+            foreach($soal_pilihangandas as $soal_pilihanganda) {
+                $soal_paket_items[] = [
+                    'soal_paket_id' => $query->id,
+                    'soal_id' => $soal_pilihanganda,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        // loop soal essay
+        if(isset($soal_essays) and !empty($soal_essays)) {
+            foreach($soal_essays as $soal_essay) {
+                $soal_paket_items[] = [
+                    'soal_paket_id' => $query->id,
+                    'soal_id' => $soal_essay,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        // bulk insert soal paket item
+        SoalPaketItem::insert($soal_paket_items);
 
         // redirect
         return redirect()

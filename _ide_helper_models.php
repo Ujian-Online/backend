@@ -17,6 +17,7 @@ namespace App{
  * @property int $id
  * @property string $title
  * @property string $input_type
+ * @property string|null $dropdown_option
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiCustomData newModelQuery()
@@ -60,12 +61,13 @@ namespace App{
  * @property int $sertifikasi_id
  * @property string $kode_unit_kompetensi
  * @property string $title
- * @property string $sub_title
+ * @property string|null $sub_title
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\AsesiSertifikasiUnitKompetensiElement[] $AsesiSertifikasiUnitKompetensiElement
+ * @property-read int|null $asesi_sertifikasi_unit_kompetensi_element_count
  * @property-read \App\Sertifikasi|null $Sertifikasi
- * @property-read \App\SertifikasiUnitKompentensi|null $UnitKompentensi
+ * @property-read \App\User|null $User
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen query()
@@ -88,7 +90,7 @@ namespace App{
  * @property mixed|null $sertifikat_date_new
  * @property string|null $sertifikat_media_url_old
  * @property string|null $sertifikat_media_url_new
- * @property string $kode_sertifikat
+ * @property string|null $kode_sertifikat
  * @property float $original_price
  * @property float $tuk_price
  * @property float|null $tuk_price_training
@@ -100,7 +102,7 @@ namespace App{
  * @property string|null $transfer_from_bank_number
  * @property string|null $transfer_to_bank_name
  * @property string|null $transfer_to_bank_account
- * @property string $transfer_to_bank_number
+ * @property string|null $transfer_to_bank_number
  * @property mixed|null $transfer_date
  * @property string|null $media_url_bukti_transfer
  * @property mixed $expired_date
@@ -128,6 +130,8 @@ namespace App{
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\AsesiUnitKompetensiDokumen[] $AsesiUnitKompetensiDokumen
+ * @property-read int|null $asesi_unit_kompetensi_dokumen_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiTuk[] $SertifikasiTuk
  * @property-read int|null $sertifikasi_tuk_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiUnitKompentensi[] $UnitKompentensi
@@ -169,7 +173,7 @@ namespace App{
  * @property int $sertifikasi_id
  * @property string $kode_unit_kompetensi
  * @property string $title
- * @property string $sub_title
+ * @property string|null $sub_title
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Sertifikasi|null $Sertifikasi
@@ -458,10 +462,10 @@ namespace App{
  * @property int $user_id
  * @property string $name
  * @property string $address
- * @property int $phone_number
+ * @property string $phone_number
  * @property string $gender
  * @property string $birth_place
- * @property \Illuminate\Support\Carbon $birth_date
+ * @property string $birth_date
  * @property string $no_ktp
  * @property string $pendidikan_terakhir
  * @property bool $has_job
@@ -475,6 +479,8 @@ namespace App{
  * @property string|null $verification_note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\UserAsesiCustomData[] $AsesiCustomData
+ * @property-read int|null $asesi_custom_data_count
  * @property-read \App\User|null $User
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi newQuery()

@@ -121,19 +121,22 @@ class UserAsesiController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Application|Factory|Response|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         // query get data
         $query = UserAsesi::with('asesicustomdata')->where('id', $id)->firstOrFail();
         // get users list when not found in user asesi and type asesi
         $users = User::where('id', $query->user_id)->get();
 
+        $printMode = $request->input('print');
+
         // return data to view
-        return view('admin.assesi.form', [
+        return view($printMode ? 'admin.assesi.apl01-print' : 'admin.assesi.form', [
             'title'     => 'Detail Asesi APL-01: ' . $query->name,
             'action'    => '#',
             'isShow'    => route('admin.asesi.apl01.edit', $id),
@@ -152,7 +155,7 @@ class UserAsesiController extends Controller
     public function edit(int $id)
     {
         // query get data
-        $query = UserAsesi::findOrFail($id);
+        $query = UserAsesi::with('asesicustomdata')->where('id', $id)->firstOrFail();
         // get users list when not found in user asesi and type asesi
         $users = User::where('users.type', 'asessi')
             ->orderBy('id', 'desc')

@@ -65,7 +65,6 @@ class SertifikasiUnitKompetensiController extends Controller
             'sertifikasi_id'        => 'required',
             'kode_unit_kompetensi'  => 'required',
             'title'                 => 'required',
-            'sub_title'             => 'required',
         ]);
 
         // get form data
@@ -89,7 +88,7 @@ class SertifikasiUnitKompetensiController extends Controller
         $upload_instruction = $request->input('upload_instruction');
 
         // only save if description and upload instruction is found
-        if(count($desc) != 0 and count($upload_instruction) != 0) {
+        if(isset($desc) and !empty($desc) and isset($upload_instruction) and !empty($upload_instruction)) {
             // merge array uk element
             $uk_element = [];
             foreach($desc as $key => $description) {
@@ -110,9 +109,17 @@ class SertifikasiUnitKompetensiController extends Controller
          * UK Element Save to Database End
          */
 
+        // default redirect route
+        $redirectRoute = route('admin.sertifikasi.uk.index');
+
+        // route check if sertifikasi_id found
+        $sertifikasi_id = $request->input('sertifikasi_id');
+        if(!empty($request->input('sertifikasi_id'))) {
+            $redirectRoute = route('admin.sertifikasi.uk.index', ['sertifikasi_id' => $sertifikasi_id]);
+        }
+
         // redirect to index table
-        return redirect()
-            ->route('admin.sertifikasi.uk.index')
+        return redirect($redirectRoute)
             ->with('success', trans('action.success', [
                 'name' => $query->title
             ]));
@@ -176,7 +183,6 @@ class SertifikasiUnitKompetensiController extends Controller
             'sertifikasi_id'        => 'required',
             'kode_unit_kompetensi'  => 'required',
             'title'                 => 'required',
-            'sub_title'             => 'required',
         ]);
 
         // get form data
