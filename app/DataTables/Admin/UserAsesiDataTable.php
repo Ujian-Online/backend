@@ -63,7 +63,7 @@ class UserAsesiDataTable extends DataTable
         $is_verified = request()->input('is_verified');
 
         // is_verified filter query
-        if(isset($is_verified)) {
+        if(isset($is_verified) and $is_verified == 1 OR $is_verified == true) {
             $query = $query->where('is_verified', $is_verified);
         }
 
