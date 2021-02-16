@@ -44,7 +44,7 @@ class OrderDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 $editButton = null;
 
-                if($this->user->can('isTuk')) {
+                if($this->user->can('isTuk') and $query->status != 'completed') {
                     $editButton = route('admin.order.edit', $query->id);
                 }
 
