@@ -168,7 +168,7 @@ class OrderController extends Controller
      * @param Request $request
      * @param int $id
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|RedirectResponse|Response|View
      */
     public function edit(Request $request, int $id)
     {
@@ -192,6 +192,11 @@ class OrderController extends Controller
 
         // fetch data
         $query = $query->firstOrFail();
+
+        // order tidak bisa di edit klo status nya complete
+        if($query->status == 'completed') {
+            return redirect()->back()->withErrors('Tidak bisa merubah data order dengan status complete.');
+        }
 
         // return data to view
         return view('admin.order.form', [
@@ -244,6 +249,12 @@ class OrderController extends Controller
 
         // fetch data
         $query = $query->firstOrFail();
+
+        // order tidak bisa di edit klo status nya complete
+        if($query->status == 'completed') {
+            return redirect()->back()->withErrors('Tidak bisa merubah data order dengan status complete.');
+        }
+
         // update data
         $query->update($dataInput);
 
