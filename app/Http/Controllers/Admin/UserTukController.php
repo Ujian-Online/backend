@@ -190,7 +190,7 @@ class UserTukController extends Controller
         return redirect()
             ->route('admin.user.tuk.index')
             ->with('success', trans('action.success_update', [
-                'name' => $dataInput['user_id']
+                'name' => $query->id
             ]));
     }
 
