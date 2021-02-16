@@ -222,7 +222,7 @@ class OrderController extends Controller
 
         // validate input
         $request->validate([
-            'status' => 'required|in:' . implode(',', config('options.orders_status')),
+            'status' => 'required|in:' . implode(',', config('options.orders_status_tuk')),
         ]);
 
         // get form data
