@@ -338,7 +338,7 @@ class OrderController extends Controller
 
         // filter by status
         if(isset($status) and !empty($status)) {
-            $query = $query->where('status', $status);
+            $query = $query->where('orders.status', $status);
         }
 
         // check if data found or not
