@@ -339,6 +339,17 @@ return [
                 'active'    => 'admin.sertifikasi.*',
                 'sub_menu'  => [
                     [
+                        'title'     => 'Sertifikasi',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.index',
+                        'active'    => [
+                            'admin.sertifikasi.index',
+                            'admin.sertifikasi.create',
+                            'admin.sertifikasi.show',
+                            'admin.sertifikasi.update',
+                        ],
+                    ],
+                    [
                         'title'     => 'Unit Kompetensi',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.uk.index',
