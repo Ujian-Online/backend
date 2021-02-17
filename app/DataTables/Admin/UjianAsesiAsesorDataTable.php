@@ -40,7 +40,7 @@ class UjianAsesiAsesorDataTable extends DataTable
                 return $name_asesor;
             })
             ->editColumn('status', function($query) {
-                return $query->status ? ucwords($query->status) : '';
+                return $query->status ? ucwords(str_replace('_', ' ', $query->status)) : '';
             })
             ->editColumn('is_kompeten', function($query) {
                 return $query->is_kompeten ? config('options.ujian_asesi_is_kompeten')[$query->is_kompeten] : '';
