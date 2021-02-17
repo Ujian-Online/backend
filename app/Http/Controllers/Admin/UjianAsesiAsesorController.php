@@ -32,7 +32,9 @@ class UjianAsesiAsesorController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Jadwal Ujian Asesi Lists'
+            'title' => 'Jadwal Ujian Asesi Lists',
+            'filter_route'  => route('admin.ujian.asesi.index'),
+            'filter_view'   => 'admin.ujian.filter-form',
         ]);
     }
 
