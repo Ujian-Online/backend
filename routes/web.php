@@ -75,8 +75,8 @@ Route::middleware(['auth'])
             Route::get('tuk/search', 'Admin\TukController@search')->name('tuk.search');
             Route::resource('tuk', 'Admin\TukController');
 
-            Route::resource('sertifikasi', 'Admin\SertifikasiController');
             Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi']);
+            Route::resource('sertifikasi', 'Admin\SertifikasiController');
 
             Route::resource('asesi/customdata', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
             Route::resource('asesi/apl01', 'Admin\UserAsesiController', ['as' => 'asesi']);
