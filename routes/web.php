@@ -29,11 +29,13 @@ Route::middleware(['auth'])
         Route::middleware('can:isAdminTukAsesor')->group(function () {
             Route::get('sertifikasi/search', 'Admin\SertifikasiController@search')->name('sertifikasi.search');
             Route::get('user/search', 'Admin\UserController@search')->name('user.search');
+            Route::get('ujian/jadwal/search', 'Admin\UjianJadwalController@search')->name('ujian.jadwal.search');
         });
 
         // Route Can be Access For Admin or TUK
         Route::middleware('can:isAdminTuk')->group(function () {
             Route::get('/order', 'Admin\OrderController@index')->name('order.index');
+            Route::get('/order/search', 'Admin\OrderController@search')->name('order.search');
             Route::get('/order/{id}', 'Admin\OrderController@show')->name('order.show');
         });
 
