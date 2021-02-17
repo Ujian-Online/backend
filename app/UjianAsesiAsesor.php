@@ -18,6 +18,7 @@ class UjianAsesiAsesor extends Model
         'ujian_jadwal_id',
         'sertifikasi_id',
         'order_id',
+        'soal_paket_id',
         'status',
         'is_kompeten',
         'final_score_percentage',
