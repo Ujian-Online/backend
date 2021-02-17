@@ -39,7 +39,19 @@ class SoalPaketDataTable extends DataTable
      */
     public function query(SoalPaket $model)
     {
-        return $model->with('sertifikasi');
+        // default query
+        $query = $model->with('sertifikasi');
+
+        // get user login
+        $user = request()->user();
+
+        // add filter if access by asesor
+        if($user->can('isAssesor')) {
+            $query = $query->where('asesor_id', $user->id);
+        }
+
+        // return query
+        return $query;
     }
 
     /**
