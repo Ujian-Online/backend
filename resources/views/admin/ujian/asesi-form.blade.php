@@ -74,7 +74,15 @@
 
         <div class="form-group col-md-4">
             <label for="status">Status</label>
-            <select class="form-control" name="status" id="status" @if(isset($isShow)) readonly @endif>
+            <select class="form-control" name="status" id="status"
+                @if(isset($isShow)) readonly @endif
+                @if(isset($isEdit))
+                    @can('isAdmin')
+                        {{ _('readonly') }}
+                    @endcan
+                @endif
+
+            >
 
                 @foreach(config('options.ujian_asesi_asesors_status') as $status)
                     <option
@@ -99,7 +107,14 @@
 
         <div class="form-group col-md-4">
             <label for="is_kompeten">Kompeten</label>
-            <select class="form-control" name="is_kompeten" id="is_kompeten" @if(isset($isShow)) readonly @endif>
+            <select class="form-control" name="is_kompeten" id="is_kompeten"
+                @if(isset($isShow)) readonly @endif
+                @if(isset($isEdit))
+                    @can('isAdmin')
+                        {{ _('readonly') }}
+                    @endcan
+                @endif
+            >
 
                 @foreach(config('options.ujian_asesi_is_kompeten') as $key => $kompeten)
                     <option
@@ -124,7 +139,16 @@
 
         <div class="form-group col-md-4">
             <label for="final_score_percentage">Skor Final</label>
-            <input type="number" class="form-control @error('final_score_percentage') is-invalid @enderror" name="final_score_percentage" id="final_score_percentage" placeholder="Skor Final" value="{{ old('final_score_percentage') ?? $query->final_score_percentage ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <input type="number" class="form-control @error('final_score_percentage') is-invalid @enderror"
+                   name="final_score_percentage" id="final_score_percentage"
+                   placeholder="Skor Final" value="{{ old('final_score_percentage') ?? $query->final_score_percentage ?? '' }}"
+                   @if(isset($isShow)) readonly @endif
+                   @if(isset($isEdit))
+                       @can('isAdmin')
+                           {{ _('readonly') }}
+                       @endcan
+                   @endif
+            >
 
             @error('final_score_percentage')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -138,11 +162,6 @@
 
 @section('js')
     <script>
-        $('select').select2({
-            theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
-        });
-
         // order_id watch
         $("#order_id").on('change', async function () {
             const me = $(this);
@@ -319,12 +338,12 @@
          */
 
             // default selected tuk_id from query URL
-        const ujian_jadwal_id_default = '{{ old('ujian_jadwal_id') ?? request()->input('ujian_jadwal_id') ?? $query->ujian_jadwal_id ?? null }}'
+        const ujian_jadwal_id_default = '{{ old('ujian_jadwal_id') ?? $query->ujian_jadwal_id ?? null }}'
         // trigger load data if tuk_id_default not null
         if(ujian_jadwal_id_default) {
             var ujianJadwalSelected = $('#ujian_jadwal_id');
             $.ajax({
-                url: '{{ route('admin.ujian.jadwal.search') }}' + '?&date=true',
+                url: '{{ route('admin.ujian.jadwal.search') }}' + '?q=' + ujian_jadwal_id_default,
                 dataType: 'JSON',
             }).then(function (data) {
                 // create the option and append to Select2
@@ -461,7 +480,7 @@
         // soal select2 with ajax query search
         $('#soal_paket_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            disabled: true,
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
@@ -494,12 +513,12 @@
          */
 
             // default selected order_id from query URL
-        const order_id_default = '{{ old('order_id') ?? request()->input('order_id') ?? $query->order_id ?? null }}'
+        const order_id_default = '{{ old('order_id') ?? $query->order_id ?? null }}'
         // trigger load data if order_id not null
         if(order_id_default) {
             var orderSelected = $('#order_id');
             $.ajax({
-                url: '{{ route('admin.order.search') }}' + '?q=' + order_id_default + '&status=payment_verified',
+                url: '{{ route('admin.order.search') }}' + '?q=' + order_id_default,
                 dataType: 'JSON',
             }).then(function (data) {
                 // create the option and append to Select2
@@ -519,7 +538,7 @@
         // sertifikasi select2 with ajax query search
         $('#order_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            disabled: {{ (isset($isCreated) and !empty($isCreated)) ? 'false' : 'true' }},
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
