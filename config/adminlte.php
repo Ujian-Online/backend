@@ -365,6 +365,12 @@ return [
                     ],
                 ],
             ],
+            [
+                'title'     => 'Surat Tugas',
+                'icon'      => 'fa fa-file-signature',
+                'route'     => 'admin.surat-tugas.index',
+                'active'    => 'admin.surat-tugas.*',
+            ]
         ],
     ],
 ];
