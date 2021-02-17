@@ -66,6 +66,18 @@ class SuratTugasDataTable extends DataTable
     public function html()
     {
         return $this->builder()
+                    ->parameters([
+                        'responsive' => true,
+                        'autoWidth' => false,
+                        'lengthMenu' => [
+                            [10, 25, 50, -1],
+                            ['10 rows', '25 rows', '50 rows', 'Show all']
+                        ],
+                        'dom' => 'Bfrtip',
+                        'buttons' => [
+                            'pageLength',
+                        ],
+                    ])
                     ->setTableId('surattugas-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
