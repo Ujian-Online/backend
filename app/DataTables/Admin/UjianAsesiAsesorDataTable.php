@@ -21,6 +21,24 @@ class UjianAsesiAsesorDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->addColumn('name_asesi', function($query) {
+                $name_asesi = $query->userasesi->email;
+
+                if(isset($query->userasesi->asesi) and !empty($query->userasesi->asesi) and isset($query->userasesi->asesi->name) and !empty($query->userasesi->asesi->name)) {
+                    $name_asesi = $query->user->asesi->name;
+                }
+
+                return $name_asesi;
+            })
+            ->addColumn('name_asesor', function($query) {
+                $name_asesor = $query->userasesor->email;
+
+                if(isset($query->userasesor->asesor) and !empty($query->userasesor->asesor) and isset($query->userasesor->asesor->name) and !empty($query->userasesor->asesor->name)) {
+                    $name_asesor = $query->userasesor->asesor->name;
+                }
+
+                return $name_asesor;
+            })
             ->editColumn('status', function($query) {
                 return $query->status ? ucwords($query->status) : '';
             })
@@ -45,7 +63,15 @@ class UjianAsesiAsesorDataTable extends DataTable
      */
     public function query(UjianAsesiAsesor $model)
     {
-        return $model->with(['asesi', 'asesor', 'ujianjadwal', 'sertifikasi', 'order']);
+        return $model->with([
+            'userasesi',
+            'userasesi.asesi',
+            'userasesor',
+            'userasesor.asesor',
+            'ujianjadwal',
+            'sertifikasi',
+            'order'
+        ]);
     }
 
     /**
@@ -94,26 +120,31 @@ class UjianAsesiAsesorDataTable extends DataTable
         return [
             Column::computed('jadwal')
                 ->title('Jadwal Ujian')
-                ->data('ujianjadwal.title'),
+                ->data('ujianjadwal.title')
+                ->width('10%'),
             Column::computed('tanggal')
                 ->title('Tgl Ujian')
-                ->data('ujianjadwal.tanggal'),
-            Column::computed('asesi')
+                ->data('ujianjadwal.tanggal')
+                ->width('10%'),
+            Column::computed('name_asesi')
                 ->title('Asesi')
-                ->data('asesi.name'),
-            Column::computed('asesor')
+                ->width('10%'),
+            Column::computed('name_asesor')
                 ->title('Asesor')
-                ->data('asesor.name'),
+                ->width('10%'),
             Column::computed('sertifikasi')
                 ->title('Sertifikasi')
-                ->data('sertifikasi.title'),
-            Column::make('status'),
-            Column::make('is_kompeten'),
+                ->data('sertifikasi.title')
+                ->width('20%'),
+            Column::make('status')
+                ->width('10%'),
+            Column::make('is_kompeten')
+                ->width('5%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('15%')
+                ->width('5%')
                 ->addClass('text-center'),
         ];
     }
