@@ -31,7 +31,7 @@ class SuratTugasDataTable extends DataTable
                 return $name_asesi;
             })
             ->editColumn('status', function($query) {
-                return $query->status ? ucwords($query->status) : '';
+                return $query->status ? ucwords(str_replace('_', ' ', $query->status)) : '';
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
@@ -50,12 +50,35 @@ class SuratTugasDataTable extends DataTable
      */
     public function query(UjianAsesiAsesor $model)
     {
-        return $model->with([
+        // default query
+        $query = $model->with([
             'userasesi',
             'userasesi.asesi',
             'ujianjadwal',
             'sertifikasi'
         ]);
+
+        // get filter input
+        $ujianjadwal = request()->input('ujian_jadwal_id');
+        $sertifikasi = request()->input('sertifikasi_id');
+        $status = request()->input('status');
+
+        // filter ujian_jadwal_id
+        if(!empty($ujianjadwal)) {
+            $query = $query->where('ujian_jadwal_id', $ujianjadwal);
+        }
+
+        // filter sertifikasi_id
+        if(!empty($sertifikasi)) {
+            $query = $query->where('sertifikasi_id', $sertifikasi);
+        }
+
+        // filter status
+        if(!empty($status)) {
+            $query = $query->where('status', $status);
+        }
+
+        return $query;
     }
 
     /**
@@ -96,7 +119,6 @@ class SuratTugasDataTable extends DataTable
     protected function getColumns()
     {
         return [
-
             Column::computed('name_asesi')
                 ->title('Asesi Name')
                 ->width('15%'),
