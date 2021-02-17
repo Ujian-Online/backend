@@ -145,6 +145,11 @@ class OrderController extends Controller
         // fetch data
         $query = $query->firstOrFail();
 
+        // return json if request by ajax
+        if($request->ajax()) {
+            return $query;
+        }
+
         // edit mode url
         $editUrl = true;
 
@@ -289,5 +294,72 @@ class OrderController extends Controller
             'code' => 200,
             'success' => true,
         ]);
+    }
+
+    /**
+     * Ajax Select2 Search
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request)
+    {
+        // database query
+        $query = new Order();
+        // result variable
+        $result = [];
+
+        // get input from select2 search term
+        $q = $request->input('q');
+        $status = $request->input('status');
+
+        // return empty object if query is empty
+        if(empty($q)) {
+            return response()->json($result, 200);
+        }
+
+        // default query join
+        $query = $query->select([
+            'orders.id as id',
+            'users.email as email',
+            'user_asesis.name as name',
+            'sertifikasis.title as sertifikasi_title'
+        ])
+            ->leftJoin('users', 'users.id', '=', 'orders.asesi_id')
+            ->leftJoin('user_asesis', 'user_asesis.user_id', 'orders.asesi_id')
+            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'orders.sertifikasi_id');
+
+        // check if query is numeric or not
+        if(is_numeric($q)) {
+            $query = $query->where('orders.id', 'like', "%$q%");
+        } else {
+            $query = $query->where('user_asesis.name', 'like', "%$q%");
+        }
+
+        // filter by status
+        if(isset($status) and !empty($status)) {
+            $query = $query->where('status', $status);
+        }
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+
+                // get user name or email
+                $name = $data->email;
+                if(isset($data->name) and !empty($data->name)) {
+                    $name = $data->name . ' (' . $data->email . ')';
+                }
+
+                // result ajax
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => '[ID: ' . $data->id . '] - ' . $name . ' - Sertifikasi: ' . $data->sertifikasi_title,
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
     }
 }
