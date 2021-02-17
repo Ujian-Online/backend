@@ -379,7 +379,7 @@ return [
             [
                 'title'     => 'Surat Tugas',
                 'icon'      => 'fa fa-file-signature',
-                'route'     => 'admin.surat-tugas.index',
+                'url'       => '/admin/surat-tugas/?status=menunggu',
                 'active'    => 'admin.surat-tugas.*',
             ]
         ],
