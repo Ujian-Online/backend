@@ -148,7 +148,7 @@
                             {{ __('selected') }}
                         @endif
                     >
-                        {{ ucwords($status) }}
+                        {{ ucwords(str_replace('_', ' ', $status)) }}
                     </option>
                 @endforeach
 

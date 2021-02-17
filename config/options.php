@@ -79,6 +79,7 @@ return [
     ],
     'ujian_asesi_asesors_status' => [
         'menunggu',
+        'paket_soal_assigned',
         'penilaian',
         'selesai'
     ],
