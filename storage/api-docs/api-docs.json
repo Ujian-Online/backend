@@ -138,7 +138,7 @@
                 ]
             }
         },
-        "/api/apl01/customdata/{id}": {
+        "/api/apl01/customdata": {
             "post": {
                 "tags": [
                     "APL01"
@@ -370,7 +370,7 @@
                     }
                 ]
             },
-            "put": {
+            "post": {
                 "tags": [
                     "Order"
                 ],
