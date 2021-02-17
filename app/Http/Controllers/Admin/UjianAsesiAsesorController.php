@@ -43,27 +43,11 @@ class UjianAsesiAsesorController extends Controller
      */
     public function create()
     {
-        // get asesi lists
-        $asesis = UserAsesi::all();
-        // get asesor lists
-        $asesors = UserAsesor::all();
-        // get jadwal ujian lists
-        $jadwalujians = UjianJadwal::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get order lists
-        $orders = Order::all();
-
         // return view template create
         return view('admin.ujian.asesi-form', [
             'title'         => 'Tambah Jadwal Ujian Asesi Baru',
-            'action'        => route('admin.ujian.jadwal.store'),
+            'action'        => route('admin.ujian.asesi.store'),
             'isCreated'     => true,
-            'asesis'        => $asesis,
-            'asesors'       => $asesors,
-            'jadwalujians'  => $jadwalujians,
-            'sertifikasis'  => $sertifikasis,
-            'orders'        => $orders,
         ]);
     }
 
@@ -78,25 +62,25 @@ class UjianAsesiAsesorController extends Controller
     {
         // validate input
         $request->validate([
-            'asesi_id'          => 'required',
             'asesor_id'         => 'required',
             'ujian_jadwal_id'   => 'required',
-            'sertifikasi_id'    => 'required',
             'order_id'          => 'required',
-            'status'            => 'required|in:' . implode(',', config('options.ujian_asesi_asesors_status')),
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'asesi_id',
             'asesor_id',
             'ujian_jadwal_id',
-            'sertifikasi_id',
             'order_id',
-            'status',
-            'is_kompeten',
-            'final_score_percentage',
         ]);
+
+        // default status
+        $dataInput['status'] = 'menunggu';
+
+        // get order information and copy information from order
+        $order = Order::findOrFail($dataInput['order_id']);
+        $dataInput['asesi_id'] = $order->asesi_id;
+        $dataInput['sertifikasi_id'] = $order->sertifikasi_id;
 
         // save to database
         $query = UjianAsesiAsesor::create($dataInput);
@@ -120,16 +104,6 @@ class UjianAsesiAsesorController extends Controller
     {
         // Find Data by ID
         $query = UjianAsesiAsesor::findOrFail($id);
-        // get asesi lists
-        $asesis = UserAsesi::all();
-        // get asesor lists
-        $asesors = UserAsesor::all();
-        // get jadwal ujian lists
-        $jadwalujians = UjianJadwal::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get order lists
-        $orders = Order::all();
 
         // return data to view
         return view('admin.ujian.asesi-form', [
@@ -137,11 +111,6 @@ class UjianAsesiAsesorController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.ujian.asesi.edit', $id),
             'query'         => $query,
-            'asesis'        => $asesis,
-            'asesors'       => $asesors,
-            'jadwalujians'  => $jadwalujians,
-            'sertifikasis'  => $sertifikasis,
-            'orders'        => $orders,
         ]);
     }
 
@@ -156,16 +125,6 @@ class UjianAsesiAsesorController extends Controller
     {
         // Find Data by ID
         $query = UjianAsesiAsesor::findOrFail($id);
-        // get asesi lists
-        $asesis = UserAsesi::all();
-        // get asesor lists
-        $asesors = UserAsesor::all();
-        // get jadwal ujian lists
-        $jadwalujians = UjianJadwal::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get order lists
-        $orders = Order::all();
 
         // return data to view
         return view('admin.ujian.asesi-form', [
@@ -173,11 +132,6 @@ class UjianAsesiAsesorController extends Controller
             'action'        => route('admin.ujian.asesi.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'asesis'        => $asesis,
-            'asesors'       => $asesors,
-            'jadwalujians'  => $jadwalujians,
-            'sertifikasis'  => $sertifikasis,
-            'orders'        => $orders,
         ]);
     }
 
