@@ -16,26 +16,28 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-12">
-            <label for="asesor_id">Asesor ID</label>
-            <select class="form-control @error('asesor_id') is-invalid @enderror"
-                    name="asesor_id" id="asesor_id" data-placeholder="Pilih Asesor ID">
-            </select>
+        @can('isAdmin')
+            <div class="form-group col-md-12">
+                <label for="asesor_id">Asesor ID</label>
+                <select class="form-control @error('asesor_id') is-invalid @enderror"
+                        name="asesor_id" id="asesor_id" data-placeholder="Pilih Asesor ID">
+                </select>
 
-            @error('asesor_id')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
+                @error('asesor_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group col-md-12">
-            <label for="order_id">Order ID</label>
-            <select class="form-control @error('order_id') is-invalid @enderror" name="order_id" id="order_id" data-placeholder="Pilih Order ID">
-            </select>
+            <div class="form-group col-md-12">
+                <label for="order_id">Order ID</label>
+                <select class="form-control @error('order_id') is-invalid @enderror" name="order_id" id="order_id" data-placeholder="Pilih Order ID">
+                </select>
 
-            @error('order_id')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
+                @error('order_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
+        @endcan
 
         <div class="form-group col-md-12">
             <label for="asesi_id">Asesi ID</label>
@@ -77,9 +79,7 @@
             <select class="form-control" name="status" id="status"
                 @if(isset($isShow)) readonly @endif
                 @if(isset($isEdit))
-                    @can('isAdmin')
-                        {{ _('readonly') }}
-                    @endcan
+                    {{ _('readonly') }}
                 @endif
 
             >
@@ -113,6 +113,9 @@
                     @can('isAdmin')
                         {{ _('readonly') }}
                     @endcan
+                    @if(isset($query->status) and !empty($query->status) and $query->status != 'paket_soal_assigned')
+                        {{ _('readonly') }}
+                    @endif
                 @endif
             >
 
@@ -147,6 +150,9 @@
                        @can('isAdmin')
                            {{ _('readonly') }}
                        @endcan
+                       @if(isset($query->status) and !empty($query->status) and $query->status != 'paket_soal_assigned')
+                           {{ _('readonly') }}
+                       @endif
                    @endif
             >
 
@@ -363,7 +369,7 @@
         // tuk select2 with ajax query search
         $('#ujian_jadwal_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : (request()->user()->can('isAdmin') ? 'false' : true) }},
             allowClear: true,
             ajax: {
                 url: '{{ route('admin.ujian.jadwal.search') }}',
@@ -480,7 +486,7 @@
         // soal select2 with ajax query search
         $('#soal_paket_id').select2({
             theme: 'bootstrap4',
-            disabled: true,
+            disabled: {{ (isset($isEdit) and !empty($isEdit) and request()->user()->can('isAssesor') and isset($query->status) and !empty($query->status) and $query->status == 'menunggu') ? 'false' : 'true' }},
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
