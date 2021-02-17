@@ -56,6 +56,14 @@ class SertifikasiTukDataTable extends DataTable
             $query = $query->where('tuk_id', $tuk_id);
         }
 
+        // get input filter
+        $sertifikasi_id = request()->input('sertifikasi_id');
+
+        // sertifikasi_id filter query
+        if(isset($sertifikasi_id) and !empty($sertifikasi_id)) {
+            $query = $query->where('sertifikasi_id', $sertifikasi_id);
+        }
+
         return $query;
     }
 

@@ -18,6 +18,7 @@ class UjianAsesiAsesor extends Model
         'ujian_jadwal_id',
         'sertifikasi_id',
         'order_id',
+        'soal_paket_id',
         'status',
         'is_kompeten',
         'final_score_percentage',
@@ -37,9 +38,9 @@ class UjianAsesiAsesor extends Model
      *
      * @return HasOne
      */
-    public function Asesi()
+    public function UserAsesi()
     {
-        return $this->hasOne('App\UserAsesi', 'id', 'asesi_id');
+        return $this->hasOne('App\User', 'id', 'asesi_id');
     }
 
     /**
@@ -47,9 +48,9 @@ class UjianAsesiAsesor extends Model
      *
      * @return HasOne
      */
-    public function Asesor()
+    public function UserAsesor()
     {
-        return $this->hasOne('App\UserAsesor', 'id', 'asesor_id');
+        return $this->hasOne('App\User', 'id', 'asesor_id');
     }
 
     /**

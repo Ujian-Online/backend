@@ -32,7 +32,9 @@ class UjianAsesiAsesorController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Jadwal Ujian Asesi Lists'
+            'title' => 'Jadwal Ujian Asesi Lists',
+            'filter_route'  => route('admin.ujian.asesi.index'),
+            'filter_view'   => 'admin.ujian.filter-form',
         ]);
     }
 
@@ -43,27 +45,11 @@ class UjianAsesiAsesorController extends Controller
      */
     public function create()
     {
-        // get asesi lists
-        $asesis = UserAsesi::all();
-        // get asesor lists
-        $asesors = UserAsesor::all();
-        // get jadwal ujian lists
-        $jadwalujians = UjianJadwal::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get order lists
-        $orders = Order::all();
-
         // return view template create
         return view('admin.ujian.asesi-form', [
             'title'         => 'Tambah Jadwal Ujian Asesi Baru',
-            'action'        => route('admin.ujian.jadwal.store'),
+            'action'        => route('admin.ujian.asesi.store'),
             'isCreated'     => true,
-            'asesis'        => $asesis,
-            'asesors'       => $asesors,
-            'jadwalujians'  => $jadwalujians,
-            'sertifikasis'  => $sertifikasis,
-            'orders'        => $orders,
         ]);
     }
 
@@ -78,28 +64,32 @@ class UjianAsesiAsesorController extends Controller
     {
         // validate input
         $request->validate([
-            'asesi_id'          => 'required',
             'asesor_id'         => 'required',
             'ujian_jadwal_id'   => 'required',
-            'sertifikasi_id'    => 'required',
             'order_id'          => 'required',
-            'status'            => 'required|in:' . implode(',', config('options.ujian_asesi_asesors_status')),
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'asesi_id',
             'asesor_id',
             'ujian_jadwal_id',
-            'sertifikasi_id',
             'order_id',
-            'status',
-            'is_kompeten',
-            'final_score_percentage',
         ]);
+
+        // default status
+        $dataInput['status'] = 'menunggu';
+
+        // get order information and copy information from order
+        $order = Order::findOrFail($dataInput['order_id']);
+        $dataInput['asesi_id'] = $order->asesi_id;
+        $dataInput['sertifikasi_id'] = $order->sertifikasi_id;
 
         // save to database
         $query = UjianAsesiAsesor::create($dataInput);
+
+        // update order status ke complete
+        $order->status = 'completed';
+        $order->save();
 
         // redirect to index table
         return redirect()
@@ -120,16 +110,6 @@ class UjianAsesiAsesorController extends Controller
     {
         // Find Data by ID
         $query = UjianAsesiAsesor::findOrFail($id);
-        // get asesi lists
-        $asesis = UserAsesi::all();
-        // get asesor lists
-        $asesors = UserAsesor::all();
-        // get jadwal ujian lists
-        $jadwalujians = UjianJadwal::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get order lists
-        $orders = Order::all();
 
         // return data to view
         return view('admin.ujian.asesi-form', [
@@ -137,11 +117,6 @@ class UjianAsesiAsesorController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.ujian.asesi.edit', $id),
             'query'         => $query,
-            'asesis'        => $asesis,
-            'asesors'       => $asesors,
-            'jadwalujians'  => $jadwalujians,
-            'sertifikasis'  => $sertifikasis,
-            'orders'        => $orders,
         ]);
     }
 
@@ -156,16 +131,6 @@ class UjianAsesiAsesorController extends Controller
     {
         // Find Data by ID
         $query = UjianAsesiAsesor::findOrFail($id);
-        // get asesi lists
-        $asesis = UserAsesi::all();
-        // get asesor lists
-        $asesors = UserAsesor::all();
-        // get jadwal ujian lists
-        $jadwalujians = UjianJadwal::all();
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get order lists
-        $orders = Order::all();
 
         // return data to view
         return view('admin.ujian.asesi-form', [
@@ -173,11 +138,6 @@ class UjianAsesiAsesorController extends Controller
             'action'        => route('admin.ujian.asesi.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'asesis'        => $asesis,
-            'asesors'       => $asesors,
-            'jadwalujians'  => $jadwalujians,
-            'sertifikasis'  => $sertifikasis,
-            'orders'        => $orders,
         ]);
     }
 
@@ -191,27 +151,39 @@ class UjianAsesiAsesorController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        // validate input
-        $request->validate([
-            'asesi_id'          => 'required',
-            'asesor_id'         => 'required',
-            'ujian_jadwal_id'   => 'required',
-            'sertifikasi_id'    => 'required',
-            'order_id'          => 'required',
-            'status'            => 'required|in:' . implode(',', config('options.ujian_asesi_asesors_status')),
-        ]);
+        // get user detail
+        $user = $request->user();
 
-        // get form data
-        $dataInput = $request->only([
-            'asesi_id',
-            'asesor_id',
-            'ujian_jadwal_id',
-            'sertifikasi_id',
-            'order_id',
-            'status',
-            'is_kompeten',
-            'final_score_percentage',
-        ]);
+        // allow admin edit limit
+        if($user->can('isAdmin')) {
+            // validate input
+            $request->validate([
+                'asesor_id'         => 'required',
+                'ujian_jadwal_id'   => 'required',
+            ]);
+
+            // get form data
+            $dataInput = $request->only([
+                'asesor_id',
+                'ujian_jadwal_id',
+            ]);
+        } elseif($user->can('isAsesor')) {
+            // validate input
+            $request->validate([
+                'soal_paket_id'     => 'required',
+                'status'            => 'required|in:' . implode(',', config('options.ujian_asesi_asesors_status')),
+            ]);
+
+            // get form data
+            $dataInput = $request->only([
+                'soal_paket_id',
+                'status',
+                'is_kompeten',
+                'final_score_percentage',
+            ]);
+        }
+
+
 
         // find by id and update
         $query = UjianAsesiAsesor::findOrFail($id);
@@ -237,6 +209,13 @@ class UjianAsesiAsesorController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $query = UjianAsesiAsesor::findOrFail($id);
+
+        // update order status jika ujian di hapus
+        $order = Order::findOrFail($query->order_id);
+        $order->status = 'payment_verified';
+        $order->save();
+
+        // delete data
         $query->delete();
 
         // return response json if success

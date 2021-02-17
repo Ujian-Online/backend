@@ -29,7 +29,9 @@ class SoalPaketController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Soal Paket Lists'
+            'title' => 'Soal Paket Lists',
+            'filter_route' => route('admin.soal.paket.index'),
+            'filter_view' => 'admin.soal.filter-form'
         ]);
     }
 

@@ -22,6 +22,12 @@
     {{-- Menu For Assesor Access --}}
      @elsecan('isAssesor')
 
+            @include(
+               'layouts.adminlte.sidebar-child', [
+                   "menus" => config('adminlte.menu_sidebar.asesor')
+               ]
+            )
+
      @endcan
 
 

@@ -178,4 +178,48 @@ class UjianJadwalController extends Controller
             'success' => true,
         ]);
     }
+
+    /**
+     * Ajax Search
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request)
+    {
+        // database query
+        $query = new UjianJadwal();
+        // result variable
+        $result = [];
+
+        // get input from select2 search term
+        $q = $request->input('q');
+        $date = $request->input('date');
+
+        // check if query is numeric or not
+        if(is_numeric($q)) {
+            $query = $query->where('id', 'like', "%$q%");
+        } else {
+            $query = $query->where('title', 'like', "%$q%");
+        }
+
+        // date filter
+        if(isset($date) and !empty($date)) {
+            $datenow    = now()->toDateString();
+            $query      = $query->where('tanggal', '>=', $datenow);
+        }
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => '[ID: ' . $data->id . '] - ' . $data->title . ' - Tanggal Ujian : ' . \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y'),
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
+    }
 }

@@ -23,8 +23,19 @@ class SertifikasiController extends Controller
      *
      * @return mixed
      */
-    public function index(SertifikasiDataTable $dataTables)
+    public function index(Request $request)
     {
+        // get user login
+        $user = $request->user();
+
+        // default sertifikasi table
+        $dataTables = new SertifikasiDataTable();
+
+        // sertifikasi table for asesor
+        if($user->can('isAssesor')) {
+            $dataTables = new \App\DataTables\Asesor\SertifikasiDataTable();
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Sertifikasi Lists'

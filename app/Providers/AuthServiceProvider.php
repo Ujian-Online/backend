@@ -60,5 +60,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('isAdminTukAsesor', function ($user) {
             return $user->type == 'admin' OR $user->type == 'tuk' OR $user->type == 'assesor';
         });
+
+        // Authentication For Admin and Asesor
+        Gate::define('isAdminAsesor', function ($user) {
+            return $user->type == 'admin' OR $user->type == 'assesor';
+        });
     }
 }

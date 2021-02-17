@@ -20,6 +20,7 @@ class CreateUjianAsesiAsesorsTable extends Migration
             $table->bigInteger('ujian_jadwal_id');
             $table->bigInteger('sertifikasi_id');
             $table->bigInteger('order_id');
+            $table->bigInteger('soal_paket_id')->nullable();
             $table->string('status'); // @see config('options.ujian_asesi_asesors_status')
             $table->boolean('is_kompeten')->nullable(); // @see config('options
             //.ujian_asesi_is_kompeten')
