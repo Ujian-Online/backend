@@ -76,7 +76,6 @@ Route::middleware(['auth'])
             Route::resource('tuk', 'Admin\TukController');
 
             Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi']);
-            Route::resource('sertifikasi', 'Admin\SertifikasiController');
 
             Route::resource('asesi/customdata', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
             Route::resource('asesi/apl01', 'Admin\UserAsesiController', ['as' => 'asesi']);
@@ -102,4 +101,6 @@ Route::middleware(['auth'])
             Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
             Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
         });
+
+        Route::resource('sertifikasi', 'Admin\SertifikasiController')->middleware('can:isAdminAsesor');
     });
