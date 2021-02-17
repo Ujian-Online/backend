@@ -40,6 +40,20 @@ Route::middleware(['auth'])
         });
 
         // Asesor Access Only
+        Route::middleware('can:isAdminAsesor')->group(function () {
+            Route::get('sertifikasi/uk/search', 'Admin\SertifikasiUnitKompetensiController@search')->name('sertifikasi.uk.search');
+            Route::resource('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController', ['as' => 'sertifikasi']);
+            Route::get('sertifikasi/ukelement/rawform', 'Admin\SertifikasiUnitKompetensiElementController@rawForm')->name('ukelement.rawform');
+            Route::resource('sertifikasi/ukelement', 'Admin\SertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);
+
+
+            Route::get('soal/search', 'Admin\SoalController@search')->name('soal.search');
+            Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal']);
+            Route::get('soal/paket/search', 'Admin\SoalPaketController@search')->name('soal.paket.search');
+            Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
+        });
+
+        // Asesor Access Only
         Route::middleware('can:isAssesor')->group(function () {
             //
         });
@@ -61,13 +75,8 @@ Route::middleware(['auth'])
             Route::get('tuk/search', 'Admin\TukController@search')->name('tuk.search');
             Route::resource('tuk', 'Admin\TukController');
 
-            Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi']);
-            Route::get('sertifikasi/uk/search', 'Admin\SertifikasiUnitKompetensiController@search')->name('sertifikasi.uk.search');
-            Route::resource('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController', ['as' => 'sertifikasi']);
-            Route::get('sertifikasi/ukelement/rawform', 'Admin\SertifikasiUnitKompetensiElementController@rawForm')->name('ukelement.rawform');
-            Route::resource('sertifikasi/ukelement', 'Admin\SertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);
-
             Route::resource('sertifikasi', 'Admin\SertifikasiController');
+            Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi']);
 
             Route::resource('asesi/customdata', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
             Route::resource('asesi/apl01', 'Admin\UserAsesiController', ['as' => 'asesi']);
@@ -89,11 +98,7 @@ Route::middleware(['auth'])
             Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian']);
             Route::resource('ujian/jawabanpilihan', 'Admin\UjianAsesiJawabanPilihanController', ['as' => 'ujian']);
 
-            Route::get('soal/search', 'Admin\SoalController@search')->name('soal.search');
-            Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal']);
             Route::resource('soal/pilihanganda', 'Admin\SoalPilihanGandaController', ['as' => 'soal']);
-            Route::get('soal/paket/search', 'Admin\SoalPaketController@search')->name('soal.paket.search');
-            Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
             Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
             Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
         });
