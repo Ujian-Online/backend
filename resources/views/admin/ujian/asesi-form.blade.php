@@ -546,7 +546,6 @@
             theme: 'bootstrap4',
             disabled: {{ (isset($isCreated) and !empty($isCreated)) ? 'false' : 'true' }},
             allowClear: true,
-            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('admin.order.search') }}',
                 dataType: 'JSON',
