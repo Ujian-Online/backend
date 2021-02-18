@@ -55,7 +55,8 @@ Route::middleware(['auth'])
 
         // Asesor Access Only
         Route::middleware('can:isAssesor')->group(function () {
-            Route::resource('surat-tugas', 'Asesor\SuratTugasController');
+            Route::resource('surat-tugas', 'Asesor\SuratTugasController')->except(['create', 'store', 'destroy']);
+            Route::resource('ujian-asesi', 'Asesor\UjianAsesiPenilaianController');
         });
 
         // TUK Access Only
