@@ -65,7 +65,12 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        $query = $model->with(['user', 'user.asesi', 'sertifikasi', 'tuk']);
+        $query = $model->with(['user', 'user.asesi', 'tuk'])
+            ->select([
+                'orders.*',
+                'sertifikasis.title as sertifikasi_title'
+            ])
+            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'orders.sertifikasi_id');
 
         // get user active before apply filter
         $user = request()->user();
@@ -170,9 +175,8 @@ class OrderDataTable extends DataTable
             Column::make('id'),
             Column::computed('name_asesi')
                 ->title('Asesi'),
-            Column::computed('sertifikasi')
-                ->title('Sertifikasi')
-                ->data('sertifikasi.title'),
+            Column::computed('sertifikasi_title')
+                ->title('Sertifikasi'),
             Column::computed('tuk')
                 ->title('TUK')
                 ->data('tuk.title'),
