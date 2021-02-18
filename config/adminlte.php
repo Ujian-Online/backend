@@ -237,12 +237,6 @@ return [
                         'route'     => 'admin.ujian.jawaban.index',
                         'active'    => 'admin.ujian.jawaban.*',
                     ],
-//                    [
-//                        'title'     => 'Asesi Jawaban Pilihan',
-//                        'icon'      => 'fas fa-list',
-//                        'route'     => 'admin.ujian.jawabanpilihan.index',
-//                        'active'    => 'admin.ujian.jawabanpilihan.*',
-//                    ],
                 ],
             ],
             [
