@@ -15,12 +15,14 @@ class CreateUjianAsesiJawabansTable extends Migration
     {
         Schema::create('ujian_asesi_jawabans', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('ujian_asesi_asesor_id');
             $table->bigInteger('soal_id');
             $table->bigInteger('asesi_id');
             $table->text('question');
             $table->string('question_type'); // @see config('options.ujian_asesi_jawabans_question_type')
             $table->text('answer_essay')->nullable();
             $table->string('answer_option')->nullable(); // @see config('options.ujian_asesi_jawabans_answer_option')
+            $table->longText('options_label')->nullable();
             $table->integer('urutan'); //  (1, 2 dst)
             $table->text('user_answer')->nullable();
             $table->text('catatan_asesor')->nullable();
