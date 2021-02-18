@@ -326,7 +326,6 @@ return [
                 'route'     => 'home',
                 'active'    => 'home',
             ],
-
             [
                 'title'     => 'Sertifikasi',
                 'icon'      => 'fas fa-list-ul',
@@ -375,6 +374,12 @@ return [
                 'icon'      => 'fa fa-file-signature',
                 'url'       => '/admin/surat-tugas/?status=menunggu',
                 'active'    => 'admin.surat-tugas.*',
+            ],
+            [
+                'title'     => 'Ujian Asesi (Penilaian)',
+                'icon'      => 'fa fa-file-signature',
+                'url'       => '/admin/ujian-asesi/?status=penilaian',
+                'active'    => 'admin.ujian-asesi.*',
             ]
         ],
     ],
