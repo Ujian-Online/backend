@@ -48,12 +48,12 @@ class UjianAsesiJawaban extends Model
     }
 
     /**
-     * Relation to Table User Asesi
+     * Relation to Table User
      *
      * @return HasOne
      */
     public function Asesi()
     {
-        return $this->hasOne('App\UserAsesi', 'id', 'asesi_id');
+        return $this->hasOne('App\User', 'id', 'asesi_id');
     }
 }
