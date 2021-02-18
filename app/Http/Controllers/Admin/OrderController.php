@@ -313,11 +313,6 @@ class OrderController extends Controller
         $q = $request->input('q');
         $status = $request->input('status');
 
-        // return empty object if query is empty
-        if(empty($q)) {
-            return response()->json($result, 200);
-        }
-
         // default query join
         $query = $query->select([
             'orders.id as id',
@@ -327,13 +322,14 @@ class OrderController extends Controller
         ])
             ->leftJoin('users', 'users.id', '=', 'orders.asesi_id')
             ->leftJoin('user_asesis', 'user_asesis.user_id', 'orders.asesi_id')
-            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'orders.sertifikasi_id');
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'orders.sertifikasi_id');
 
         // check if query is numeric or not
         if(is_numeric($q)) {
             $query = $query->where('orders.id', 'like', "%$q%");
         } else {
-            $query = $query->where('user_asesis.name', 'like', "%$q%");
+            $query = $query->where('user_asesis.name', 'like', "%$q%")
+                    ->where('users.email', 'like', "%$q%");
         }
 
         // filter by status
