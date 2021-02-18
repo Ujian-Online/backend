@@ -25,7 +25,7 @@ class UjianAsesiAsesorDataTable extends DataTable
                 $name_asesi = $query->userasesi->email;
 
                 if(isset($query->userasesi->asesi) and !empty($query->userasesi->asesi) and isset($query->userasesi->asesi->name) and !empty($query->userasesi->asesi->name)) {
-                    $name_asesi = $query->user->asesi->name;
+                    $name_asesi = $query->userasesi->asesi->name;
                 }
 
                 return $name_asesi;
