@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Asesor;
 
 use App\DataTables\Asesor\SuratTugasDataTable;
 use App\Http\Controllers\Controller;
+use App\SoalPaket;
 use App\UjianAsesiAsesor;
+use App\UjianAsesiJawaban;
 use Illuminate\Http\Request;
 
 class SuratTugasController extends Controller
@@ -112,8 +114,59 @@ class SuratTugasController extends Controller
             // update status ke paket_soal_assigned
             $dataInput['status'] = 'paket_soal_assigned';
 
-            // validasi jika status paket_soal_assigned
-        } elseif($query->status == 'paket_soal_assigned') {
+            // get soal from soalpaket for snapshot
+            $soal_pakets = SoalPaket::with([
+                'soalpaketitem',
+                'soalpaketitem.soal',
+                'soalpaketitem.soal.soalpilihanganda'
+            ])->where('id', $dataInput['soal_paket_id'])
+            ->firstOrFail();
+
+            // check if soal found
+            if(isset($soal_pakets->soalpaketitem) and !empty($soal_pakets->soalpaketitem)) {
+                // variable untuk simpan soal
+                $soal_lists = [];
+
+                foreach($soal_pakets->soalpaketitem as $key_soalpaketitem => $soal_paket_item) {
+
+                    // soal data
+                    $soal = $soal_paket_item->soal;
+                    $soal_pilihanganda = [];
+
+                    // generate array for multiple option
+                    if($soal->question_type == 'multiple_option') {
+                        foreach($soal->soalpilihanganda as $soalpil) {
+                            // generate array with key from label
+                            $soal_pilihanganda[$soalpil->label] = $soalpil->option;
+                        }
+                    }
+
+                    $soal_lists[] = [
+                        'ujian_asesi_asesor_id' => $id,
+                        'soal_id'           => $soal_paket_item->soal_id,
+                        'asesi_id'          => $query->asesi_id,
+                        'question'          => $soal->question,
+                        'question_type'     => $soal->question_type,
+                        'answer_essay'      => $soal->answer_essay,
+                        'answer_option'     => $soal->answer_option,
+                        'options_label'     => ($soal->question_type == 'multiple_option') ? json_encode($soal_pilihanganda) : null,
+                        'urutan'            => $key_soalpaketitem + 1,
+                        'max_score'         => (int) $soal->max_score,
+                        'final_score'       => ($soal->question_type == 'multiple_option') ? 0 : null,
+                        'created_at'        => now(),
+                        'updated_at'        => now(),
+                    ];
+                }
+
+                // Bulk Insert
+                UjianAsesiJawaban::insert($soal_lists);
+            } else {
+                // return error kalau paket yang dipilih tidak ada soal sama sekali
+                return redirect()->back()->withErrors('Paket yang dipilih belum memiliki daftar soal yang dikerjakan.!');
+            }
+
+        // validasi jika status paket_soal_assigned
+        } elseif($query->status == 'penilaian') {
             // validate input
             $request->validate([
                 'is_kompeten' => 'required',
