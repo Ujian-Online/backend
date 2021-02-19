@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Asesor;
 
 use App\DataTables\Asesor\UjianAsesiPenilaianDataTable;
 use App\Http\Controllers\Controller;
+use App\UjianAsesiAsesor;
+use App\UjianAsesiJawaban;
 use Illuminate\Http\Request;
 
 class UjianAsesiPenilaianController extends Controller
@@ -49,22 +51,97 @@ class UjianAsesiPenilaianController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function show($id)
     {
-        //
+        // Find Data by ID
+        $query = UjianAsesiAsesor::with([
+            'userasesi',
+            'userasesi.asesi',
+            'userasesor',
+            'userasesor.asesor',
+            'ujianjadwal',
+            'sertifikasi',
+            'ujianasesijawaban',
+            'soalpaket',
+            'order',
+            'order.tuk'
+        ])->findOrFail($id);
+
+        // pisahkan soal jawaban pilihan ganda dan essay kalau ada datanya
+        $soal_pilihangandas = [];
+        $soal_essays = [];
+        if(isset($query->ujianasesijawaban) and !empty($query->ujianasesijawaban)) {
+            foreach($query->ujianasesijawaban as $soal) {
+                if($soal->question_type == 'multiple_option') {
+                    $soal_pilihangandas[] = $soal;
+                } else {
+                    $soal_essays[] = $soal;
+                }
+            }
+        }
+
+        // return data to view
+        return view('asesor.ujian.penilaian-form', [
+            'title'                 => 'Ujian Asesi Detail: ' . $query->id,
+            'action'                => '#',
+            'isShow'                => route('admin.ujian-asesi.edit', $id),
+            'query'                 => $query,
+            'soal_pilihangandas'    => $soal_pilihangandas,
+            'soal_essays'           => $soal_essays,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function edit($id)
     {
-        //
+        // Find Data by ID
+        $query = UjianAsesiAsesor::with([
+            'userasesi',
+            'userasesi.asesi',
+            'userasesor',
+            'userasesor.asesor',
+            'ujianjadwal',
+            'sertifikasi',
+            'ujianasesijawaban',
+            'soalpaket',
+            'order',
+            'order.tuk'
+        ])->findOrFail($id);
+
+        // hanya bisa update jika status penilaian
+        if($query->status != 'penilaian') {
+            return redirect()->back()->withErrors('Data tidak bisa di ubah lagi.!');
+        }
+
+        // pisahkan soal jawaban pilihan ganda dan essay kalau ada datanya
+        $soal_pilihangandas = [];
+        $soal_essays = [];
+        if(isset($query->ujianasesijawaban) and !empty($query->ujianasesijawaban)) {
+            foreach($query->ujianasesijawaban as $soal) {
+                if($soal->question_type == 'multiple_option') {
+                    $soal_pilihangandas[] = $soal;
+                } else {
+                    $soal_essays[] = $soal;
+                }
+            }
+        }
+
+        // return data to view
+        return view('asesor.ujian.penilaian-form', [
+            'title'                 => 'Ujian Asesi Penilaian ID: ' . $query->id,
+            'action'                => route('admin.ujian-asesi.update', $id),
+            'isEdit'                => true,
+            'query'                 => $query,
+            'soal_pilihangandas'    => $soal_pilihangandas,
+            'soal_essays'           => $soal_essays,
+        ]);
     }
 
     /**
@@ -72,11 +149,57 @@ class UjianAsesiPenilaianController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+        // get user login
+        $user = $request->user();
+
+        // Find Data by ID
+        $query = UjianAsesiAsesor::where('asesor_id', $user->id)->where('id', $id)->firstOrFail();
+
+        // hanya bisa update jika status penilaian
+        if($query->status != 'penilaian') {
+            return redirect()->back()->withErrors('Data tidak bisa di ubah lagi.!');
+        }
+
+        // get input soal_essay
+        $soal_essay_id = $request->input('soal_essay_id');
+        $soal_essay = $request->input('soal_essay');
+
+        // loop essay id for update fields
+        foreach($soal_essay_id as $essay) {
+
+            // run update query based on id ujian_asesi_asesor and asesi_id
+            // prevent from hijack id in html
+            $ujianjawaban = UjianAsesiJawaban::where('ujian_asesi_asesor_id', $id)
+                ->where('asesi_id', $query->asesi_id)
+                ->where('id', $essay)
+                ->first();
+
+            // only run update if data found
+            if($ujianjawaban) {
+                $ujianjawaban_update = [
+                    'final_score' => $soal_essay['final_score'][$essay] ?? null,
+                    'catatan_asesor' => $soal_essay['catatan_asesor'][$essay] ?? null,
+                ];
+
+                $ujianjawaban->update($ujianjawaban_update);
+            }
+
+        }
+
+        // update status to selesai
+        $query->status = 'selesai';
+        $query->save();
+
+        // return redirect
+        return redirect()->route('admin.ujian-asesi.index', ['status' => 'penilaian'])
+            ->with('success', trans('action.success_update', [
+                'name' => $query->id
+            ]));
+
     }
 
     /**
