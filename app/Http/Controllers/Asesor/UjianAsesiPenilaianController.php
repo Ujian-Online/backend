@@ -72,13 +72,26 @@ class UjianAsesiPenilaianController extends Controller
         // pisahkan soal jawaban pilihan ganda dan essay kalau ada datanya
         $soal_pilihangandas = [];
         $soal_essays = [];
+        $total_nilai = 0;
+        $total_max = 0;
         if(isset($query->ujianasesijawaban) and !empty($query->ujianasesijawaban)) {
             foreach($query->ujianasesijawaban as $soal) {
                 if($soal->question_type == 'multiple_option') {
+                    // update object soal pilihan ganda
                     $soal_pilihangandas[] = $soal;
+
+                    // update nilai asesi berdasarkan maxscore
+                    $total_nilai += $soal->max_score;
                 } else {
+                    // update object soal essay
                     $soal_essays[] = $soal;
+
+                    // update nilai asesi berdasarkan final_score
+                    $total_nilai += $soal->final_score;
                 }
+
+                // update total max score semua soal
+                $total_max += $soal->max_score;
             }
         }
 
@@ -90,6 +103,8 @@ class UjianAsesiPenilaianController extends Controller
             'query'                 => $query,
             'soal_pilihangandas'    => $soal_pilihangandas,
             'soal_essays'           => $soal_essays,
+            'total_nilai'           => $total_nilai,
+            'total_max'             => $total_max,
         ]);
     }
 
@@ -157,7 +172,8 @@ class UjianAsesiPenilaianController extends Controller
         $user = $request->user();
 
         // Find Data by ID
-        $query = UjianAsesiAsesor::where('asesor_id', $user->id)->where('id', $id)->firstOrFail();
+        $query = UjianAsesiAsesor::with('ujianasesijawaban')
+                ->where('asesor_id', $user->id)->where('id', $id)->firstOrFail();
 
         // hanya bisa update jika status penilaian
         if($query->status != 'penilaian') {
@@ -187,10 +203,31 @@ class UjianAsesiPenilaianController extends Controller
 
                 $ujianjawaban->update($ujianjawaban_update);
             }
+        }
 
+        // fetch ulang database untuk kalkulasi ulang nilai precentage
+        $ujianasesiasesor = UjianAsesiAsesor::with('ujianasesijawaban')->findOrFail($id);
+
+        // hitung nilai
+        $total_nilai = 0;
+        $total_max = 0;
+        if(isset($ujianasesiasesor->ujianasesijawaban) and !empty($ujianasesiasesor->ujianasesijawaban)) {
+            foreach($ujianasesiasesor->ujianasesijawaban as $soal) {
+                if($soal->question_type == 'multiple_option') {
+                    // update nilai asesi berdasarkan maxscore
+                    $total_nilai += $soal->max_score;
+                } else {
+                    // update nilai asesi berdasarkan final_score
+                    $total_nilai += $soal->final_score;
+                }
+
+                // update total max score semua soal
+                $total_max += $soal->max_score;
+            }
         }
 
         // update status to selesai
+        $query->final_score_percentage = ceil(($total_nilai/$total_max)*100);
         $query->status = 'selesai';
         $query->save();
 
