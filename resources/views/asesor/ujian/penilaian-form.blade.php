@@ -4,7 +4,6 @@
     @include('layouts.alert')
 
     <div class="form-row">
-
         <div class="table-responsive mt-2 mb-2">
             <table class="table table-bordered">
                 <tbody>
@@ -230,5 +229,49 @@
             </div>
         </div>
     </div>
+
+    @if(isset($isShow))
+    <div class="form-row">
+        <div class="table-responsive mt-2 mb-2">
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
+                        Hasil Akhir
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Score Ujian Hasil/Max</td>
+                    <td width="2%">:</td>
+                    <td class="text-bold">
+                        {{ $total_nilai }} / {{ $total_max }}
+                        @if(!empty($query->final_score_percentage))
+                            {{ _('=') }} {{ $query->final_score_percentage }}{{ _('%') }}
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Kompeten</td>
+                    <td width="2%">:</td>
+                    <td>
+                        @if(!empty($query->is_kompeten))
+                            @if($query->is_kompeten)
+                                <span>Kompeten</span>{{ _(' / ') }}
+                                <span style="text-decoration: line-through;">Tidak Kompeten</span>
+                            @else
+                                <span style="text-decoration: line-through;">Kompeten</span>{{ _(' / ') }}
+                                <span>Tidak Kompeten</span>
+                            @endif
+                        @else
+                            <span>Kompeten</span>{{ _(' / ') }}
+                            <span>Tidak Kompeten</span>
+                        @endif
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
 
 @endsection
