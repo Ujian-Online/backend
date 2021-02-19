@@ -31,13 +31,19 @@ class UjianAsesiPenilaianDataTable extends DataTable
                 return $name_asesi;
             })
             ->editColumn('status', function($query) {
-                return $query->status ? ucwords(str_replace('_', ' ', $query->status)) : '';
+                $status = $query->status ? ucwords(str_replace('_', ' ', $query->status)) : '';
+
+                if($status == 'Penilaian') {
+                    $status = 'Butuh Penilaian';
+                }
+
+                return $status;
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_show' => route('admin.surat-tugas.show', $query->id),
-                    'url_edit' => route('admin.surat-tugas.edit', $query->id),
+                    'url_show' => route('admin.ujian-asesi.show', $query->id),
+                    'url_edit' => ($query->status == 'penilaian') ? route('admin.ujian-asesi.edit', $query->id) : null,
                 ]);
             });
     }
@@ -124,8 +130,6 @@ class UjianAsesiPenilaianDataTable extends DataTable
             Column::computed('tanggal')
                 ->title('Tgl Ujian')
                 ->data('ujianjadwal.tanggal')
-                ->width('10%'),
-            Column::make('status')
                 ->width('10%'),
             Column::make('status')
                 ->width('10%'),
