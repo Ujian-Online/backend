@@ -92,4 +92,14 @@ class UjianAsesiAsesor extends Model
     {
         return $this->hasMany('App\UjianAsesiJawaban', 'ujian_asesi_asesor_id', 'id');
     }
+
+    /**
+     * Relation to Table SoalPaket
+     *
+     * @return HasOne
+     */
+    public function SoalPaket()
+    {
+        return $this->hasOne('App\SoalPaket', 'id','soal_paket_id');
+    }
 }
