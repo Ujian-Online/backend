@@ -265,7 +265,13 @@ class OrderController extends Controller
 
         // create APL01 form if payment verified
         if($dataInput['status'] == 'payment_verified') {
-            UserAsesi::create(['user_id' => $query->asesi_id]);
+            // check if APL01 is Ready or Not
+            $apl01 = UserAsesi::where('user_id', $query->asesi_id)->count();
+
+            // only create once
+            if($apl01 != 0) {
+                UserAsesi::create(['user_id' => $query->asesi_id]);
+            }
         }
 
         // redirect
