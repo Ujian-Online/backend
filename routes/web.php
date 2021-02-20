@@ -102,5 +102,5 @@ Route::middleware(['auth'])
             Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
         });
 
-        Route::resource('sertifikasi', 'Admin\SertifikasiController')->middleware('can:isAdminAsesor');
+        Route::resource('sertifikasi', 'Admin\SertifikasiController')->middleware('can:isAdminTukAsesor');
     });
