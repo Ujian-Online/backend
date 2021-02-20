@@ -209,6 +209,7 @@ namespace App{
  * App\Soal
  *
  * @property int $id
+ * @property int|null $asesor_id
  * @property string $question
  * @property string $question_type
  * @property string|null $answer_essay
@@ -355,6 +356,9 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Order|null $Order
  * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \App\SoalPaket|null $SoalPaket
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\UjianAsesiJawaban[] $UjianAsesiJawaban
+ * @property-read int|null $ujian_asesi_jawaban_count
  * @property-read \App\UjianJadwal|null $Ujianjadwal
  * @property-read \App\User|null $UserAsesi
  * @property-read \App\User|null $UserAsesor
@@ -385,7 +389,7 @@ namespace App{
  * @property int|null $final_score
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\User|null $Asesi
  * @property-read \App\Soal|null $Soal
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban newQuery()
