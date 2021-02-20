@@ -32,7 +32,7 @@ class SertifikasiController extends Controller
         $dataTables = new SertifikasiDataTable();
 
         // sertifikasi table for asesor
-        if($user->can('isAssesor')) {
+        if(!$user->can('isAdmin')) {
             $dataTables = new \App\DataTables\Asesor\SertifikasiDataTable();
         }
 
@@ -47,8 +47,14 @@ class SertifikasiController extends Controller
      *
      * @return Application|Factory|Response|View
      */
-    public function create()
+    public function create(Request $request)
     {
+        // limit access by admin only
+        $user = $request->user();
+        if(!$user->can('isAdmin')) {
+            abort(403);
+        }
+
         // return view template create
         return view('admin.sertifikasi.sertifikasi-form', [
             'title'     => 'Tambah Sertifikasi Baru',
@@ -66,6 +72,12 @@ class SertifikasiController extends Controller
      */
     public function store(Request $request)
     {
+        // limit access by admin only
+        $user = $request->user();
+        if(!$user->can('isAdmin')) {
+            abort(403);
+        }
+
         // validate input
         $request->validate([
             'nomor_skema'               => 'required',
@@ -133,6 +145,12 @@ class SertifikasiController extends Controller
      */
     public function edit(int $id)
     {
+        // limit access by admin only
+        $user = $request->user();
+        if(!$user->can('isAdmin')) {
+            abort(403);
+        }
+
         // Find Data by ID
         $query = Sertifikasi::findOrFail($id);
 
@@ -155,6 +173,12 @@ class SertifikasiController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        // limit access by admin only
+        $user = $request->user();
+        if(!$user->can('isAdmin')) {
+            abort(403);
+        }
+
         // validate input
         $request->validate([
             'nomor_skema'               => 'required',
@@ -196,6 +220,12 @@ class SertifikasiController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
+        // limit access by admin only
+        $user = $request->user();
+        if(!$user->can('isAdmin')) {
+            abort(403);
+        }
+
         $query = Sertifikasi::findOrFail($id);
         $query->delete();
 
