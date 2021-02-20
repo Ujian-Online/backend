@@ -344,6 +344,12 @@ return [
                     ],
                 ],
             ],
+            [
+                'title'     => 'Jadwal Ujian Asesi',
+                'icon'      => 'fas fa-book-reader',
+                'route'     => 'admin.ujian.asesi.index',
+                'active'    => 'admin.ujian.asesi.*',
+            ],
         ],
 
         /**
