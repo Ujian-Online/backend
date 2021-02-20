@@ -65,6 +65,7 @@ Route::middleware(['auth'])
             Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
             Route::get('/order/{id}/edit', 'Admin\OrderController@edit')->name('order.edit');
             Route::patch('/order/{id}', 'Admin\OrderController@update')->name('order.update');
+            Route::get('ujian/asesi', 'Admin\UjianAsesiAsesorController@index')->name('ujian.asesi.index');
         });
 
 
@@ -96,7 +97,7 @@ Route::middleware(['auth'])
             Route::resource('asesi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'asesi']);
 
             Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
-            Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian']);
+            Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian'])->except('index');
             Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian']);
 
             Route::resource('soal/pilihanganda', 'Admin\SoalPilihanGandaController', ['as' => 'soal']);
