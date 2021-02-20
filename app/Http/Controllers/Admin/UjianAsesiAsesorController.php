@@ -28,8 +28,15 @@ class UjianAsesiAsesorController extends Controller
      *
      * @return mixed
      */
-    public function index(UjianAsesiAsesorDataTable $dataTables)
+    public function index(Request $request, UjianAsesiAsesorDataTable $dataTables)
     {
+        // get user login
+        $user = $request->user();
+        // change index if loggin by tuk
+        if($user->can('isTuk')) {
+            $dataTables = new \App\DataTables\Tuk\UjianAsesiAsesorDataTable();
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Jadwal Ujian Asesi Lists',
