@@ -302,6 +302,12 @@ return [
                 'active'    => 'home',
             ],
             [
+                'title'     => 'Bank',
+                'icon'      => 'fas fa-money-check-alt',
+                'route'     => 'admin.tuk.bank.index',
+                'active'    => 'admin.tuk.bank.*',
+            ],
+            [
                 'title'     => 'Sertifikasi',
                 'icon'      => 'fas fa-list-ul',
                 'active'    => 'admin.sertifikasi.*',
