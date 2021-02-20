@@ -302,6 +302,24 @@ return [
                 'active'    => 'home',
             ],
             [
+                'title'     => 'Sertifikasi',
+                'icon'      => 'fas fa-list-ul',
+                'active'    => 'admin.sertifikasi.*',
+                'sub_menu'  => [
+                    [
+                        'title'     => 'Sertifikasi',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.index',
+                        'active'    => [
+                            'admin.sertifikasi.index',
+                            'admin.sertifikasi.create',
+                            'admin.sertifikasi.show',
+                            'admin.sertifikasi.update',
+                        ],
+                    ],
+                ],
+            ],
+            [
                 'title'     => 'Order',
                 'icon'      => 'fas fa-cart-plus',
                 'active'    => 'admin.order.*',
