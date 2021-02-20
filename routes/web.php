@@ -62,6 +62,7 @@ Route::middleware(['auth'])
 
         // TUK Access Only
         Route::middleware('can:isTuk')->group(function () {
+            Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
             Route::get('/order/{id}/edit', 'Admin\OrderController@edit')->name('order.edit');
             Route::patch('/order/{id}', 'Admin\OrderController@update')->name('order.update');
         });
@@ -73,7 +74,6 @@ Route::middleware(['auth'])
             Route::resource('user/tuk', 'Admin\UserTukController', ['as' => 'user']);
             Route::resource('user', 'Admin\UserController');
 
-            Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
             Route::get('tuk/search', 'Admin\TukController@search')->name('tuk.search');
             Route::resource('tuk', 'Admin\TukController');
 
