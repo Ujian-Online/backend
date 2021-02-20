@@ -69,7 +69,8 @@ class UjianAsesiAsesorDataTable extends DataTable
      */
     public function query(UjianAsesiAsesor $model)
     {
-        return $model->with([
+        // default query
+        $query = $model->with([
             'userasesi',
             'userasesi.asesi',
             'userasesor',
@@ -78,6 +79,32 @@ class UjianAsesiAsesorDataTable extends DataTable
             'sertifikasi',
             'order'
         ]);
+
+        // get input filter
+        $ujian_jadwal_id = request()->input('ujian_jadwal_id');
+        $sertifikasi_id = request()->input('sertifikasi_id');
+        $status = request()->input('status');
+
+        // filter by jadwal id
+        if(!empty($ujian_jadwal_id)) {
+            $query = $query->whereHas('ujianjadwal', function($query) use ($ujian_jadwal_id) {
+                $query->where('id', $ujian_jadwal_id);
+            });
+        }
+
+        // filter by sertifikasi
+        if(!empty($sertifikasi_id)) {
+            $query = $query->whereHas('sertifikasi', function($query) use ($sertifikasi_id) {
+                $query->where('id', $sertifikasi_id);
+            });
+        }
+
+        // filter by ujian jadwal
+        if(!empty($status)) {
+            $query = $query->where('status', $status);
+        }
+
+        return $query;
     }
 
     /**
