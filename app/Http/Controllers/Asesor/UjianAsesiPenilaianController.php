@@ -168,6 +168,10 @@ class UjianAsesiPenilaianController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'is_kompeten' => 'required|boolean'
+        ]);
+
         // get user login
         $user = $request->user();
 
@@ -228,6 +232,7 @@ class UjianAsesiPenilaianController extends Controller
 
         // update status to selesai
         $query->final_score_percentage = ceil(($total_nilai/$total_max)*100);
+        $query->is_kompeten = $request->input('is_kompeten');
         $query->status = 'selesai';
         $query->save();
 
