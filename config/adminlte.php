@@ -317,6 +317,12 @@ return [
                             'admin.sertifikasi.update',
                         ],
                     ],
+                    [
+                        'title'     => 'TUK',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.tuk.index',
+                        'active'    => 'admin.sertifikasi.tuk.*',
+                    ],
                 ],
             ],
             [
