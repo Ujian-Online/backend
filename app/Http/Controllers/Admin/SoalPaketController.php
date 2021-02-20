@@ -309,16 +309,17 @@ class SoalPaketController extends Controller
         // get input from select2 search term
         $q = $request->input('q');
 
-        // return empty object if query is empty
-        if(empty($q)) {
-            return response()->json($result, 200);
-        }
-
         // check if query is numeric or not
         if(is_numeric($q)) {
             $query = $query->where('id', 'like', "%$q%");
         } else {
             $query = $query->where('title', 'like', "%$q%");
+        }
+
+        // limit search soal paket by asesor id if search by assesor
+        $user = $request->user();
+        if($user->can('isAssesor')) {
+            $query = $query->where('asesor_id', $user->id);
         }
 
         // check if data found or not

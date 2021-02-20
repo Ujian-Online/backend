@@ -488,7 +488,6 @@
             theme: 'bootstrap4',
             disabled: {{ (isset($isEdit) and !empty($isEdit) and request()->user()->can('isAssesor') and isset($query->status) and !empty($query->status) and $query->status == 'menunggu') ? 'false' : 'true' }},
             allowClear: true,
-            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('admin.soal.paket.search') }}',
                 dataType: 'JSON',
