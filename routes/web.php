@@ -38,6 +38,8 @@ Route::middleware(['auth'])
             Route::get('/order/search', 'Admin\OrderController@search')->name('order.search');
             Route::get('/order/{id}', 'Admin\OrderController@show')->name('order.show');
             Route::get('sertifikasi/tuk', 'Admin\SertifikasiTukController@index')->name('sertifikasi.tuk.index');
+            Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
+            Route::get('ujian/asesi', 'Admin\UjianAsesiAsesorController@index')->name('ujian.asesi.index');
         });
 
         // Asesor Access Only
@@ -62,10 +64,8 @@ Route::middleware(['auth'])
 
         // TUK Access Only
         Route::middleware('can:isTuk')->group(function () {
-            Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
             Route::get('/order/{id}/edit', 'Admin\OrderController@edit')->name('order.edit');
             Route::patch('/order/{id}', 'Admin\OrderController@update')->name('order.update');
-            Route::get('ujian/asesi', 'Admin\UjianAsesiAsesorController@index')->name('ujian.asesi.index');
         });
 
 
