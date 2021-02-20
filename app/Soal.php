@@ -12,6 +12,7 @@ class Soal extends Model
      * @var array
      */
     protected $fillable = [
+        'asesor_id',
         'question',
         'question_type',
         'max_score',
