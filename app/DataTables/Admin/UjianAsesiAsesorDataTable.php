@@ -42,8 +42,14 @@ class UjianAsesiAsesorDataTable extends DataTable
             ->editColumn('status', function($query) {
                 return $query->status ? ucwords(str_replace('_', ' ', $query->status)) : '';
             })
-            ->editColumn('is_kompeten', function($query) {
-                return $query->is_kompeten ? config('options.ujian_asesi_is_kompeten')[$query->is_kompeten] : '';
+            ->editColumn('is_kompeten', function ($query) {
+                $kompeten = '';
+                // cek apa datanya ada atau tidak
+                if(!empty($query->is_kompeten)) {
+                    $kompeten = $query->is_kompeten ? 'Kompeten' : 'Tidak Kompeten';
+                }
+                // return kompeten status
+                return $kompeten;
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [

@@ -39,6 +39,15 @@ class UjianAsesiPenilaianDataTable extends DataTable
 
                 return $status;
             })
+            ->editColumn('is_kompeten', function ($query) {
+                $kompeten = '';
+                // cek apa datanya ada atau tidak
+                if(!empty($query->is_kompeten)) {
+                    $kompeten = $query->is_kompeten ? 'Kompeten' : 'Tidak Kompeten';
+                }
+                // return kompeten status
+                return $kompeten;
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
