@@ -19,8 +19,7 @@ class SertifikasiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SertifikasiDataTable $dataTables
-     *
+     * @param Request $request
      * @return mixed
      */
     public function index(Request $request)
@@ -47,14 +46,8 @@ class SertifikasiController extends Controller
      *
      * @return Application|Factory|Response|View
      */
-    public function create(Request $request)
+    public function create()
     {
-        // limit access by admin only
-        $user = $request->user();
-        if(!$user->can('isAdmin')) {
-            abort(403);
-        }
-
         // return view template create
         return view('admin.sertifikasi.sertifikasi-form', [
             'title'     => 'Tambah Sertifikasi Baru',
@@ -72,12 +65,6 @@ class SertifikasiController extends Controller
      */
     public function store(Request $request)
     {
-        // limit access by admin only
-        $user = $request->user();
-        if(!$user->can('isAdmin')) {
-            abort(403);
-        }
-
         // validate input
         $request->validate([
             'nomor_skema'               => 'required',
@@ -110,6 +97,7 @@ class SertifikasiController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Sertifikasi|Sertifikasi[]|Application|Factory|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|Response|View
@@ -145,12 +133,6 @@ class SertifikasiController extends Controller
      */
     public function edit(int $id)
     {
-        // limit access by admin only
-        $user = $request->user();
-        if(!$user->can('isAdmin')) {
-            abort(403);
-        }
-
         // Find Data by ID
         $query = Sertifikasi::findOrFail($id);
 
@@ -173,12 +155,6 @@ class SertifikasiController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        // limit access by admin only
-        $user = $request->user();
-        if(!$user->can('isAdmin')) {
-            abort(403);
-        }
-
         // validate input
         $request->validate([
             'nomor_skema'               => 'required',
@@ -220,12 +196,6 @@ class SertifikasiController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        // limit access by admin only
-        $user = $request->user();
-        if(!$user->can('isAdmin')) {
-            abort(403);
-        }
-
         $query = Sertifikasi::findOrFail($id);
         $query->delete();
 
