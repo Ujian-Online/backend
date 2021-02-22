@@ -59,6 +59,7 @@ class UjianController extends Controller
      *   path="/api/ujian/{id}",
      *   tags={"Ujian"},
      *   summary="Detail Ujian Soal dan Jawaban By ID",
+     *   security={{"passport":{}}},
      *   @OA\Parameter(
      *      name="id",
      *      description="Ujian id",
