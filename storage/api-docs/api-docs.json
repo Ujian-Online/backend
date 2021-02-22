@@ -197,6 +197,41 @@
                         "passport": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "APL02"
+                ],
+                "summary": "Update APL02 Unit Kompetensi Element",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl02Controller::updateElement",
+                "requestBody": {
+                    "description": "Update Unit Kompetensi Element",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "value": {
+                                        "description": "File upload. Ekstensi: JPG/JPEG/PNG/PDF",
+                                        "type": "file",
+                                        "example": "cara_penerapan_xxx.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
             }
         },
         "/api/apl02/{id}": {
@@ -586,6 +621,50 @@
                         "name": "id",
                         "in": "path",
                         "description": "Sertifikasi id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/ujian": {
+            "get": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Jadwal Ujian Asesi",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::jadwal",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/ujian/{id}": {
+            "get": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Detail Ujian Soal dan Jawaban By ID",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::soal",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ujian id",
                         "required": true,
                         "schema": {
                             "type": "integer"
