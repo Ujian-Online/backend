@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\UjianAsesiAsesor;
+use App\UjianAsesiJawaban;
 use Illuminate\Http\Request;
 
 class UjianController extends Controller
@@ -90,5 +91,78 @@ class UjianController extends Controller
             ->where('id', $id)
             ->where('asesi_id', $user->id)
             ->firstOrFail();
+    }
+
+    /**
+     * Asesi Menjawab Pertanyaan
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     *
+     *
+     * @OA\Post(
+     *   path="/api/ujian/jawaban",
+     *   tags={"Ujian"},
+     *   summary="Menjawab Pertanyaan Dari Ujian",
+     *   security={{"passport":{}}},
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Menjawab Pertanyaan",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                @OA\Property(
+     *                     property="id",
+     *                     description="ID Pertanyaan",
+     *                     type="integer",
+     *                     example="5"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="answer",
+     *                     description="Jawaban Pertanyaan, Bisa untuk multiple_option atau essay",
+     *                     type="string",
+     *                     example="C"
+     *                 ),
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     )
+     * )
+     */
+    public function jawaban(Request $request)
+    {
+        // validate input
+        $request->validate([
+            'id' => 'required',
+            'answer' => 'required'
+        ]);
+
+        // get user login
+        $user = $request->user();
+
+        // get input
+        $id = $request->input('id');
+        $answer = $request->input('answer');
+
+        // search jawaban data
+        $query = UjianAsesiJawaban::where('id', $id)->where('asesi_id', $user->id)->firstOrFail();
+
+        // update jawaban berdasarkan multiple options
+        if($query->question_type == 'multiple_option') {
+            $query->answer_option = $answer;
+        } else {
+            $query->answer_essay = $answer;
+        }
+
+        // simpan jawaban
+        $query->save();
+
+        // return save data
+        return response()->json($query);
     }
 }
