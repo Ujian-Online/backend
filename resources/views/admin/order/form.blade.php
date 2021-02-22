@@ -265,14 +265,22 @@
             <select class="form-control select2" name="status" id="status" @if(isset($isShow)) readonly @endif>
                 <option value="" readonly>Pilih Status</option>
 
-                @foreach(config('options.orders_status') as $status)
+                @php
+                    $orderStatus = config('options.orders_status');
+
+                    if(isset($isEdit) and request()->user()->can('isTuk')) {
+                        $orderStatus = config('options.orders_status_tuk');
+                    }
+                @endphp
+
+                @foreach($orderStatus as $status)
                     <option
                         value="{{ $status }}"
 
-                    @if(old('status') == $status)
-                        {{ __('selected') }}
+                        @if(old('status') == $status)
+                            {{ __('selected') }}
                         @elseif(isset($query->status) and !empty($query->status) and $query->status == $status)
-                        {{ __('selected') }}
+                            {{ __('selected') }}
                         @endif
                     >
                         {{ ucwords(str_replace('_', ' ', $status)) }}

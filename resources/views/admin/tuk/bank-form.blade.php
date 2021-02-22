@@ -5,33 +5,22 @@
 
     <div class="form-row">
 
-        <div class="form-group col-md-6">
-            <label for="tuk_id">TUK ID</label>
-            <select class="form-control @error('tuk_id') is-invalid @enderror"
-                    name="tuk_id" id="tuk_id">
+            @can('isAdmin')
+                <div class="form-group col-md-6">
+                    <label for="tuk_id">TUK ID</label>
+                    <select class="form-control @error('tuk_id') is-invalid @enderror"
+                            name="tuk_id" id="tuk_id" data-placeholder="Pilih TUK ID">
+                    </select>
 
-                @foreach($tuks as $tuk)
-                    <option
-                        value="{{ $tuk->id }}"
-                    @if(!empty(request()->query('tuk_id')) and request()
-                    ->query('tuk_id') == $tuk->id)
-                        {{  __('selected') }}
-                        @elseif(isset($query->tuk_id) and $query->tuk_id ==
-                        $tuk->id)
-                        {{  __('selected') }}
-                        @endif
-                    >
-                        [ID: {{ $tuk->id }}] - {{ $tuk->title }} ({{
-                        $tuk->code }})
-                    </option>
-                @endforeach
+                    @error('tuk_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            @endcan
 
-            </select>
-
-            @error('tuk_id')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
+            @can('isTuk')
+                <input type="hidden" name="tuk_id" value="{{ $query->tuk_id ?? '' }}">
+            @endcan
         <div class="form-group col-md-6">
             <label for="bank_name">Bank</label>
             <select class="form-control" name="bank_name" id="bank_name" @if(isset
@@ -86,9 +75,68 @@
 
 @section('js')
     <script>
-        $('select').select2({
+        $('#bank_name').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
         });
+    </script>
+
+    <script>
+        /**
+         * Select2 with Ajax Start
+         * @type {string}
+         */
+
+            // default selected tuk_id from query URL
+        const tuk_id_default = '{{ request()->input('tuk_id') ?? null }}'
+        // trigger load data if tuk_id_default not null
+        if(tuk_id_default) {
+            var tukSelected = $('#tuk_id');
+            $.ajax({
+                url: '{{ route('admin.tuk.search') }}' + '?q=' + tuk_id_default,
+                dataType: 'JSON',
+            }).then(function (data) {
+                // create the option and append to Select2
+                var option = new Option(data[0].text, data[0].id, true, true);
+                tukSelected.append(option).trigger('change');
+
+                // manually trigger the `select2:select` event
+                tukSelected.trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: data
+                    }
+                });
+            });
+        }
+
+        // tuk select2 with ajax query search
+        $('#tuk_id').select2({
+            theme: 'bootstrap4',
+            disabled: false,
+            allowClear: true,
+            minimumInputLength: 1,
+            ajax: {
+                url: '{{ route('admin.tuk.search') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                data: function (data) {
+                    return {
+                        q: data.term
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
+        });
+
+        /**
+         * Select2 with Ajax End
+         * @type {string}
+         */
     </script>
 @endsection

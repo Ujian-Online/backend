@@ -209,6 +209,7 @@ namespace App{
  * App\Soal
  *
  * @property int $id
+ * @property int|null $asesor_id
  * @property string $question
  * @property string $question_type
  * @property string|null $answer_essay
@@ -232,9 +233,12 @@ namespace App{
  * @property int $id
  * @property string $title
  * @property int $sertifikasi_id
+ * @property int|null $asesor_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\SoalPaketItem[] $SoalPaketItem
+ * @property-read int|null $soal_paket_item_count
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SoalPaket query()
@@ -344,16 +348,20 @@ namespace App{
  * @property int $ujian_jadwal_id
  * @property int $sertifikasi_id
  * @property int $order_id
+ * @property int|null $soal_paket_id
  * @property string $status
  * @property bool|null $is_kompeten
  * @property int|null $final_score_percentage
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\UserAsesi|null $Asesi
- * @property-read \App\UserAsesor|null $Asesor
  * @property-read \App\Order|null $Order
  * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \App\SoalPaket|null $SoalPaket
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\UjianAsesiJawaban[] $UjianAsesiJawaban
+ * @property-read int|null $ujian_asesi_jawaban_count
  * @property-read \App\UjianJadwal|null $Ujianjadwal
+ * @property-read \App\User|null $UserAsesi
+ * @property-read \App\User|null $UserAsesor
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiAsesor query()
@@ -366,12 +374,14 @@ namespace App{
  * App\UjianAsesiJawaban
  *
  * @property int $id
+ * @property int $ujian_asesi_asesor_id
  * @property int $soal_id
  * @property int $asesi_id
  * @property string $question
  * @property string $question_type
  * @property string|null $answer_essay
  * @property string|null $answer_option
+ * @property array|null $options_label
  * @property int $urutan
  * @property string|null $user_answer
  * @property string|null $catatan_asesor
@@ -379,31 +389,13 @@ namespace App{
  * @property int|null $final_score
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \App\User|null $Asesi
  * @property-read \App\Soal|null $Soal
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawaban query()
  */
 	class UjianAsesiJawaban extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\UjianAsesiJawabanPilihan
- *
- * @property int $id
- * @property string $option
- * @property string $label
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\UserAsesi|null $Asesi
- * @property-read \App\Soal|null $Soal
- * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UjianAsesiJawabanPilihan query()
- */
-	class UjianAsesiJawabanPilihan extends \Eloquent {}
 }
 
 namespace App{
@@ -460,22 +452,22 @@ namespace App{
  *
  * @property int $id
  * @property int $user_id
- * @property string $name
- * @property string $address
- * @property string $phone_number
+ * @property string|null $name
+ * @property string|null $address
+ * @property string|null $phone_number
  * @property string $gender
- * @property string $birth_place
+ * @property string|null $birth_place
  * @property string $birth_date
- * @property string $no_ktp
- * @property string $pendidikan_terakhir
- * @property bool $has_job
+ * @property string|null $no_ktp
+ * @property string|null $pendidikan_terakhir
+ * @property bool|null $has_job
  * @property string|null $job_title
  * @property string|null $job_address
  * @property string|null $company_name
  * @property string|null $company_phone
  * @property string|null $company_email
  * @property int|null $user_id_admin
- * @property bool $is_verified
+ * @property bool|null $is_verified
  * @property string|null $verification_note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

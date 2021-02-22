@@ -78,6 +78,12 @@ class SoalController extends Controller
             'answer_option'
         ]);
 
+        // get user login, and set asesor_id if loggin by asesor
+        $user = $request->user();
+        if($user->can('isAssesor')) {
+            $dataInput['asesor_id'] = $user->id;
+        }
+
         // save to database
         $query = Soal::create($dataInput);
 
@@ -165,14 +171,21 @@ class SoalController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|RedirectResponse|Response|View
      */
-    public function edit(int $id)
+    public function edit(Request $request, int $id)
     {
         // Find Data by ID
         $query = Soal::with('soalpilihanganda')->where('id', $id)->firstOrFail();
+
+        // get user login, and get asesor_id if loggin by asesor
+        $user = $request->user();
+        if($user->can('isAssesor') and $query->asesor_id != $user->id) {
+            return redirect()->route('admin.soal.daftar.index')->withErrors('Anda tidak memiliki akses ke soal: [ID: ' . $query->id . '] ' . $query->question);
+        }
 
         // pilihan ganda convert to array
         $pilihangandas = [];
@@ -221,7 +234,17 @@ class SoalController extends Controller
         ]);
 
         // find by id and update
-        $query = Soal::findOrFail($id);
+        $query = Soal::findOrFail('id', $id);
+
+        // get user login, and get asesor_id if loggin by asesor
+        $user = $request->user();
+        if($user->can('isAssesor') and $query->asesor_id != $user->id) {
+            return redirect()->route('admin.soal.daftar.index')->withErrors('Anda tidak memiliki akses ke soal: [ID: ' . $query->id . '] ' . $query->question);
+        }
+
+        // fetch data
+        $query = $query->firstOrFail();
+
         // update data
         $query->update($dataInput);
 
@@ -267,14 +290,28 @@ class SoalController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(Request $request, int $id): JsonResponse
     {
+        // get user login
+        $user = $request->user();
+
+        // find data by id
         $query = Soal::findOrFail($id);
+
+        // delete query based on asesor id if login by asesor
+        if($user->can('isAssesor') and $query->asesor_id != $user->id) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses ke soal: [ID: ' . $query->id . '] ' . $query->question
+            ], 403);
+        }
+
+        // run delete data query
         $query->delete();
 
         // delete on soalpilihanganda too

@@ -19,12 +19,22 @@ class SertifikasiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SertifikasiDataTable $dataTables
-     *
+     * @param Request $request
      * @return mixed
      */
-    public function index(SertifikasiDataTable $dataTables)
+    public function index(Request $request)
     {
+        // get user login
+        $user = $request->user();
+
+        // default sertifikasi table
+        $dataTables = new SertifikasiDataTable();
+
+        // sertifikasi table for asesor
+        if(!$user->can('isAdmin')) {
+            $dataTables = new \App\DataTables\Asesor\SertifikasiDataTable();
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Sertifikasi Lists'
@@ -87,6 +97,7 @@ class SertifikasiController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Sertifikasi|Sertifikasi[]|Application|Factory|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|Response|View

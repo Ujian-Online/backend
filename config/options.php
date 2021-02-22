@@ -79,6 +79,7 @@ return [
     ],
     'ujian_asesi_asesors_status' => [
         'menunggu',
+        'paket_soal_assigned',
         'penilaian',
         'selesai'
     ],
@@ -114,6 +115,11 @@ return [
         'payment_verified',
         'canceled',
         'completed',
+    ],
+    'orders_status_tuk' => [
+        'payment_rejected',
+        'payment_verified',
+        'canceled',
     ],
     'question_type' => [
         'essay',

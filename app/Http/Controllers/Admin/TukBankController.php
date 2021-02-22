@@ -20,12 +20,23 @@ class TukBankController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @param TukBankDataTable $dataTables
      *
      * @return mixed
      */
-    public function index(TukBankDataTable $dataTables)
+    public function index(Request $request, TukBankDataTable $dataTables)
     {
+        // get user login
+        $user = $request->user();
+        // change index if loggin by tuk
+        if($user->can('isTuk')) {
+            $dataTables = new \App\DataTables\Tuk\TukBankDataTable();
+            return $dataTables->render('layouts.pageTable', [
+                'title' => 'TUK Bank Lists',
+            ]);
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title'         => 'TUK Bank Lists',
@@ -41,15 +52,11 @@ class TukBankController extends Controller
      */
     public function create()
     {
-        // get tuk lists
-        $tuks   = Tuk::orderBy('created_at', 'desc')->get();
-
         // return view template create
         return view('admin.tuk.bank-form', [
             'title'     => 'Tambah TUK Bank Baru',
             'action'    => route('admin.tuk.bank.store'),
             'isCreated' => true,
-            'tuks'      => $tuks,
         ]);
     }
 
@@ -64,7 +71,6 @@ class TukBankController extends Controller
     {
         // validate input
         $request->validate([
-            'tuk_id'            => 'required',
             'bank_name'         => 'required',
             'account_number'    => 'required',
             'account_name'      => 'required',
@@ -77,6 +83,13 @@ class TukBankController extends Controller
             'account_number',
             'account_name',
         ]);
+
+        // filter if loggin by tuk
+        $user = $request->user();
+        if($user->can('isTuk')) {
+            $tuk = $user->tuk->tuk_id;
+            $dataInput['tuk_id'] = $tuk;
+        }
 
         // save to database
         TukBank::create($dataInput);
@@ -92,16 +105,28 @@ class TukBankController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Application|Factory|Response|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
+        // filter if loggin by tuk
+        $user = $request->user();
+
         // Find User by ID
         $query = TukBank::findOrFail($id);
-        // get tuk lists
-        $tuks   = Tuk::orderBy('created_at', 'desc')->get();
+
+        // check access by tuk
+        if($user->can('isTuk')) {
+            $tuk = $user->tuk->tuk_id;
+
+            // throw error if tuk_id not same
+            if($query->tuk_id != $tuk) {
+                abort(403);
+            }
+        }
 
         // return data to view
         return view('admin.tuk.bank-form', [
@@ -110,23 +135,34 @@ class TukBankController extends Controller
             'action'    => '#',
             'isShow'    => route('admin.tuk.bank.edit', $id),
             'query'     => $query,
-            'tuks'      => $tuks,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Application|Factory|Response|View
      */
-    public function edit(int $id)
+    public function edit(Request $request, int $id)
     {
+        // filter if loggin by tuk
+        $user = $request->user();
+
         // Find User by ID
         $query = TukBank::findOrFail($id);
-        // get tuk lists
-        $tuks   = Tuk::orderBy('created_at', 'desc')->get();
+
+        // check access by tuk
+        if($user->can('isTuk')) {
+            $tuk = $user->tuk->tuk_id;
+
+            // throw error if tuk_id not same
+            if($query->tuk_id != $tuk) {
+                abort(403);
+            }
+        }
 
         // return data to view
         return view('admin.tuk.bank-form', [
@@ -135,7 +171,6 @@ class TukBankController extends Controller
             'action'    => route('admin.tuk.bank.update', $id),
             'isEdit'    => true,
             'query'     => $query,
-            'tuks'      => $tuks,
         ]);
     }
 
@@ -149,6 +184,9 @@ class TukBankController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        // filter if loggin by tuk
+        $user = $request->user();
+
         // validate input
         $request->validate([
             'tuk_id'            => 'required',
@@ -167,6 +205,20 @@ class TukBankController extends Controller
 
         // find by id and update
         $query = TukBank::findOrFail($id);
+
+        // filter by tuk_id
+        if($user->can('isTuk')) {
+            // get tuk id
+            $tuk = $user->tuk->tuk_id;
+            // update inpjut
+            $dataInput['tuk_id'] = $tuk;
+
+            // throw error if tuk_id not same
+            if($query->tuk_id != $tuk) {
+                abort(403);
+            }
+        }
+
         // update data
         $query->update($dataInput);
 
@@ -182,14 +234,32 @@ class TukBankController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(Request $request, int $id): JsonResponse
     {
+        // filter if loggin by tuk
+        $user = $request->user();
+
+        // query tukbank
         $query = TukBank::findOrFail($id);
+
+        // filter by tuk_id
+        if($user->can('isTuk')) {
+            // get tuk id
+            $tuk = $user->tuk->tuk_id;
+
+            // throw error if tuk_id not same
+            if($query->tuk_id != $tuk) {
+                abort(403);
+            }
+        }
+
+        // query delete
         $query->delete();
 
         // return response json if success

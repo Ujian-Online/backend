@@ -237,12 +237,6 @@ return [
                         'route'     => 'admin.ujian.jawaban.index',
                         'active'    => 'admin.ujian.jawaban.*',
                     ],
-                    [
-                        'title'     => 'Asesi Jawaban Pilihan',
-                        'icon'      => 'fas fa-list',
-                        'route'     => 'admin.ujian.jawabanpilihan.index',
-                        'active'    => 'admin.ujian.jawabanpilihan.*',
-                    ],
                 ],
             ],
             [
@@ -308,6 +302,36 @@ return [
                 'active'    => 'home',
             ],
             [
+                'title'     => 'Bank',
+                'icon'      => 'fas fa-money-check-alt',
+                'route'     => 'admin.tuk.bank.index',
+                'active'    => 'admin.tuk.bank.*',
+            ],
+            [
+                'title'     => 'Sertifikasi',
+                'icon'      => 'fas fa-list-ul',
+                'active'    => 'admin.sertifikasi.*',
+                'sub_menu'  => [
+                    [
+                        'title'     => 'Sertifikasi',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.index',
+                        'active'    => [
+                            'admin.sertifikasi.index',
+                            'admin.sertifikasi.create',
+                            'admin.sertifikasi.show',
+                            'admin.sertifikasi.update',
+                        ],
+                    ],
+                    [
+                        'title'     => 'TUK',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.tuk.index',
+                        'active'    => 'admin.sertifikasi.tuk.*',
+                    ],
+                ],
+            ],
+            [
                 'title'     => 'Order',
                 'icon'      => 'fas fa-cart-plus',
                 'active'    => 'admin.order.*',
@@ -320,11 +344,79 @@ return [
                     ],
                 ],
             ],
+            [
+                'title'     => 'Jadwal Ujian Asesi',
+                'icon'      => 'fas fa-book-reader',
+                'route'     => 'admin.ujian.asesi.index',
+                'active'    => 'admin.ujian.asesi.*',
+            ],
         ],
 
         /**
          * Menu For Asesor Access
          */
-        'assesor' => [],
+        'asesor' => [
+            [
+                'title'     => 'Dashboard',
+                'icon'      => 'fas fa-tachometer-alt fa-fw',
+                'route'     => 'home',
+                'active'    => 'home',
+            ],
+            [
+                'title'     => 'Sertifikasi',
+                'icon'      => 'fas fa-list-ul',
+                'active'    => 'admin.sertifikasi.*',
+                'sub_menu'  => [
+                    [
+                        'title'     => 'Sertifikasi',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.index',
+                        'active'    => [
+                            'admin.sertifikasi.index',
+                            'admin.sertifikasi.create',
+                            'admin.sertifikasi.show',
+                            'admin.sertifikasi.update',
+                        ],
+                    ],
+                    [
+                        'title'     => 'Unit Kompetensi',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.uk.index',
+                        'active'    => 'admin.sertifikasi.uk.*',
+                    ],
+                ],
+            ],
+            [
+                'title'     => 'Soal',
+                'icon'      => 'fa fa-book-open',
+                'active'    => 'admin.soal.*',
+                'sub_menu'  => [
+                    [
+                        'title'     => 'Daftar Soal',
+                        'icon'      => 'fa fa-book-open',
+                        'route'     => 'admin.soal.daftar.index',
+                        'active'    => 'admin.soal.daftar.*'
+                    ],
+                    [
+                        'title'     => 'Paket',
+                        'icon'      => 'fas fa-cube',
+                        'route'     => 'admin.soal.paket.index',
+                        'active'    => 'admin.soal.paket.*',
+                    ],
+                ],
+            ],
+            [
+                'title'     => 'Surat Tugas',
+                'icon'      => 'fa fa-file-signature',
+                'url'       => '/admin/surat-tugas/?status=menunggu',
+                'active'    => 'admin.surat-tugas.*',
+            ],
+            [
+                'title'     => 'Ujian Asesi (Penilaian)',
+                'icon'      => 'fa fa-file-signature',
+                'url'       => '/admin/ujian-asesi/?status=penilaian',
+                'active'    => 'admin.ujian-asesi.*',
+            ]
+        ],
     ],
 ];

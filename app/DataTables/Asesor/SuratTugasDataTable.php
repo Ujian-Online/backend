@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataTables\Admin;
+namespace App\DataTables\Asesor;
 
 use App\UjianAsesiAsesor;
 use Yajra\DataTables\Html\Button;
@@ -9,7 +9,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UjianAsesiAsesorDataTable extends DataTable
+class SuratTugasDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -30,33 +30,14 @@ class UjianAsesiAsesorDataTable extends DataTable
 
                 return $name_asesi;
             })
-            ->addColumn('name_asesor', function($query) {
-                $name_asesor = $query->userasesor->email;
-
-                if(isset($query->userasesor->asesor) and !empty($query->userasesor->asesor) and isset($query->userasesor->asesor->name) and !empty($query->userasesor->asesor->name)) {
-                    $name_asesor = $query->userasesor->asesor->name;
-                }
-
-                return $name_asesor;
-            })
             ->editColumn('status', function($query) {
                 return $query->status ? ucwords(str_replace('_', ' ', $query->status)) : '';
-            })
-            ->editColumn('is_kompeten', function ($query) {
-                $kompeten = '';
-                // cek apa datanya ada atau tidak
-                if(!empty($query->is_kompeten)) {
-                    $kompeten = $query->is_kompeten ? 'Kompeten' : 'Tidak Kompeten';
-                }
-                // return kompeten status
-                return $kompeten;
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_show' => route('admin.ujian.asesi.show', $query->id),
-                    'url_edit' => route('admin.ujian.asesi.edit', $query->id),
-                    'url_destroy' => route('admin.ujian.asesi.destroy', $query->id),
+                    'url_show' => route('admin.surat-tugas.show', $query->id),
+                    'url_edit' => route('admin.surat-tugas.edit', $query->id),
                 ]);
             });
     }
@@ -73,33 +54,26 @@ class UjianAsesiAsesorDataTable extends DataTable
         $query = $model->with([
             'userasesi',
             'userasesi.asesi',
-            'userasesor',
-            'userasesor.asesor',
             'ujianjadwal',
-            'sertifikasi',
-            'order'
+            'sertifikasi'
         ]);
 
-        // get input filter
-        $ujian_jadwal_id = request()->input('ujian_jadwal_id');
-        $sertifikasi_id = request()->input('sertifikasi_id');
+        // get filter input
+        $ujianjadwal = request()->input('ujian_jadwal_id');
+        $sertifikasi = request()->input('sertifikasi_id');
         $status = request()->input('status');
 
-        // filter by jadwal id
-        if(!empty($ujian_jadwal_id)) {
-            $query = $query->whereHas('ujianjadwal', function($query) use ($ujian_jadwal_id) {
-                $query->where('id', $ujian_jadwal_id);
-            });
+        // filter ujian_jadwal_id
+        if(!empty($ujianjadwal)) {
+            $query = $query->where('ujian_jadwal_id', $ujianjadwal);
         }
 
-        // filter by sertifikasi
-        if(!empty($sertifikasi_id)) {
-            $query = $query->whereHas('sertifikasi', function($query) use ($sertifikasi_id) {
-                $query->where('id', $sertifikasi_id);
-            });
+        // filter sertifikasi_id
+        if(!empty($sertifikasi)) {
+            $query = $query->where('sertifikasi_id', $sertifikasi);
         }
 
-        // filter by ujian jadwal
+        // filter status
         if(!empty($status)) {
             $query = $query->where('status', $status);
         }
@@ -125,20 +99,14 @@ class UjianAsesiAsesorDataTable extends DataTable
                         'dom' => 'Bfrtip',
                         'buttons' => [
                             'pageLength',
-                            [
-                                'text' => '<i class="fas fa-plus-circle"></i> ' . trans('table.create'),
-                                'action' => $this->createButton()
-                            ]
                         ],
                     ])
-                    ->setTableId('ujianasesiasesor-table')
+                    ->setTableId('surattugas-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(1)
+                    ->orderBy(4, 'desc')
                     ->buttons(
-                        // Button::make('export'),
-                        // Button::make('print'),
                         Button::make('reload')
                     );
     }
@@ -151,33 +119,32 @@ class UjianAsesiAsesorDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('jadwal')
-                ->title('Jadwal Ujian')
-                ->data('ujianjadwal.title')
-                ->width('10%'),
-            Column::computed('tanggal')
-                ->title('Tgl Ujian')
-                ->data('ujianjadwal.tanggal')
-                ->width('10%'),
             Column::computed('name_asesi')
-                ->title('Asesi')
-                ->width('10%'),
-            Column::computed('name_asesor')
-                ->title('Asesor')
-                ->width('10%'),
+                ->title('Asesi Name')
+                ->width('15%'),
+            Column::computed('email_asesi')
+                ->title('Asesi Email')
+                ->data('userasesi.email')
+                ->width('15%'),
             Column::computed('sertifikasi')
                 ->title('Sertifikasi')
                 ->data('sertifikasi.title')
                 ->width('20%'),
+            Column::computed('jadwal')
+                ->title('Jadwal Ujian')
+                ->data('ujianjadwal.title')
+                ->width('20%'),
+            Column::computed('tanggal')
+                ->title('Tgl Ujian')
+                ->data('ujianjadwal.tanggal')
+                ->width('10%'),
             Column::make('status')
                 ->width('10%'),
-            Column::make('is_kompeten')
-                ->width('5%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('5%')
+                ->width('10%')
                 ->addClass('text-center'),
         ];
     }
@@ -189,20 +156,6 @@ class UjianAsesiAsesorDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'UjianAsesiAsesor_' . date('YmdHis');
-    }
-
-    /**
-     * Custom Create Button Action
-     */
-    public function createButton()
-    {
-        // Create Route URL
-        $url = route('admin.ujian.asesi.create');
-
-        // return function redirect
-        return 'function (e, dt, button, config) {
-            window.location = "'. $url .'";
-        }';
+        return 'SuratTugas_' . date('YmdHis');
     }
 }

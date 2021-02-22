@@ -1,15 +1,15 @@
 <?php
 
-namespace App\DataTables\Admin;
+namespace App\DataTables\Tuk;
 
-use App\UjianAsesiJawabanPilihan;
+use App\TukBank;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UjianAsesiJawabanPilihanDataTable extends DataTable
+class TukBankDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -24,9 +24,10 @@ class UjianAsesiJawabanPilihanDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->id,
-                    'url_show' => route('admin.ujian.jawabanpilihan.show', $query->id),
-                    'url_edit' => route('admin.ujian.jawabanpilihan.edit', $query->id),
-                    'url_destroy' => route('admin.ujian.jawabanpilihan.destroy', $query->id),
+                    'url_show' => route('admin.tuk.bank.show', $query->id),
+                    'url_edit' => route('admin.tuk.bank.edit', $query->id),
+                    'url_destroy' => route('admin.tuk.bank.destroy',
+                        $query->id),
                 ]);
             });
     }
@@ -34,12 +35,24 @@ class UjianAsesiJawabanPilihanDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\UjianAsesiJawabanPilihan $model
+     * @param \App\TukBank $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(UjianAsesiJawabanPilihan $model)
+    public function query(TukBank $model)
     {
-        return $model->with(['asesi', 'soal']);
+        // default query
+        $query = $model->newQuery();
+
+        // filter if loggin by tuk
+        $user = request()->user();
+        // user tuk
+        $tuk = null;
+        if($user->can('isTuk')) {
+            $tuk = $user->tuk->tuk_id;
+            $query = $query->where('tuk_id', $tuk);
+        }
+
+        return $query;
     }
 
     /**
@@ -66,14 +79,12 @@ class UjianAsesiJawabanPilihanDataTable extends DataTable
                             ]
                         ],
                     ])
-                    ->setTableId('ujianasesijawabanpilihan-table')
+                    ->setTableId('tukbank-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(4, 'desc')
+                    ->orderBy(0, 'asc')
                     ->buttons(
-                        // Button::make('export'),
-                        // Button::make('print'),
                         Button::make('reload')
                     );
     }
@@ -86,14 +97,9 @@ class UjianAsesiJawabanPilihanDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('asesi')
-                ->title('Asesi')
-                ->data('asesi.name'),
-            Column::computed('soal')
-                ->title('Soal')
-                ->data('soal.question'),
-            Column::make('option'),
-            Column::make('label'),
+            Column::make('bank_name'),
+            Column::make('account_number'),
+            Column::make('account_name'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
@@ -113,7 +119,7 @@ class UjianAsesiJawabanPilihanDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'UjianAsesiJawabanPilihan_' . date('YmdHis');
+        return 'TukBank_' . date('YmdHis');
     }
 
     /**
@@ -122,7 +128,7 @@ class UjianAsesiJawabanPilihanDataTable extends DataTable
     public function createButton()
     {
         // Create Route URL
-        $url = route('admin.ujian.jawabanpilihan.create');
+        $url = route('admin.tuk.bank.create');
 
         // return function redirect
         return 'function (e, dt, button, config) {

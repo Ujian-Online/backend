@@ -26,6 +26,15 @@ class OrderDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->addColumn('name_asesi', function($query) {
+                $name_asesi = $query->user->email;
+
+                if(isset($query->user->asesi) and !empty($query->user->asesi) and isset($query->user->asesi->name) and !empty($query->user->asesi->name)) {
+                    $name_asesi = $query->user->asesi->name;
+                }
+
+                return $name_asesi;
+            })
             ->editColumn('tipe_sertifikasi', function($query) {
                 return ucwords($query->tipe_sertifikasi);
             })
@@ -35,7 +44,7 @@ class OrderDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 $editButton = null;
 
-                if($this->user->can('isTuk')) {
+                if($this->user->can('isTuk') and $query->status != 'completed') {
                     $editButton = route('admin.order.edit', $query->id);
                 }
 
@@ -56,7 +65,12 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        $query = $model->with(['user', 'user.asesi', 'sertifikasi', 'tuk']);
+        $query = $model->with(['user', 'user.asesi', 'tuk'])
+            ->select([
+                'orders.*',
+                'sertifikasis.title as sertifikasi_title'
+            ])
+            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'orders.sertifikasi_id');
 
         // get user active before apply filter
         $user = request()->user();
@@ -159,12 +173,10 @@ class OrderDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::computed('asesi')
-                ->title('Asesi')
-                ->data('user.asesi.name'),
-            Column::computed('sertifikasi')
-                ->title('Sertifikasi')
-                ->data('sertifikasi.title'),
+            Column::computed('name_asesi')
+                ->title('Asesi'),
+            Column::computed('sertifikasi_title')
+                ->title('Sertifikasi'),
             Column::computed('tuk')
                 ->title('TUK')
                 ->data('tuk.title'),

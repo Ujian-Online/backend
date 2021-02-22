@@ -138,7 +138,7 @@
                 ]
             }
         },
-        "/api/apl01/customdata/{id}": {
+        "/api/apl01/customdata": {
             "post": {
                 "tags": [
                     "APL01"
@@ -178,6 +178,90 @@
                         "passport": []
                     }
                 ]
+            }
+        },
+        "/api/apl02": {
+            "get": {
+                "tags": [
+                    "APL02"
+                ],
+                "summary": "Asesi APL02 Index Data",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl02Controller::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "APL02"
+                ],
+                "summary": "Update APL02 Unit Kompetensi Element",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl02Controller::updateElement",
+                "requestBody": {
+                    "description": "Update Unit Kompetensi Element",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "description": "ID Unit Kompetensi Element",
+                                        "type": "integer",
+                                        "example": "5"
+                                    },
+                                    "value": {
+                                        "description": "File upload. Ekstensi: JPG/JPEG/PNG/PDF",
+                                        "type": "file",
+                                        "example": "cara_penerapan_xxx.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/apl02/{id}": {
+            "get": {
+                "tags": [
+                    "APL02"
+                ],
+                "summary": "APL02 Detail By ID",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl02Controller::show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sertifikasi id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
         "/api/login": {
@@ -370,7 +454,7 @@
                     }
                 ]
             },
-            "put": {
+            "post": {
                 "tags": [
                     "Order"
                 ],
@@ -553,6 +637,92 @@
                         "description": "OK"
                     }
                 }
+            }
+        },
+        "/api/ujian": {
+            "get": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Jadwal Ujian Asesi",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::jadwal",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/ujian/{id}": {
+            "get": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Detail Ujian Soal dan Jawaban By ID",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::soal",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ujian id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/ujian/jawaban": {
+            "post": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Menjawab Pertanyaan Dari Ujian",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::jawaban",
+                "requestBody": {
+                    "description": "Menjawab Pertanyaan",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "description": "ID Pertanyaan",
+                                        "type": "integer",
+                                        "example": "5"
+                                    },
+                                    "answer": {
+                                        "description": "Jawaban Pertanyaan, Bisa untuk multiple_option atau essay",
+                                        "type": "string",
+                                        "example": "C"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
             }
         },
         "/api/user/me": {

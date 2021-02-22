@@ -266,7 +266,7 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Put(
+     * @OA\Post(
      *   path="/api/order/{id}",
      *   tags={"Order"},
      *   summary="Update Order by ID",

@@ -15,6 +15,7 @@ class CreateSoalsTable extends Migration
     {
         Schema::create('soals', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('asesor_id')->nullable();
             $table->text('question');
             $table->string('question_type'); // @see config('options.soals_question_type')
             $table->string('answer_essay')->nullable();

@@ -170,17 +170,17 @@
 
 @section('js')
     <script>
-        $(document).on('keydown', function(e) {
-            e.preventDefault();
+        {{--$(document).on('keydown', function(e) {--}}
+        {{--    e.preventDefault();--}}
 
-            if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
-                e.cancelBubble = true;
-                e.stopImmediatePropagation();
+        {{--    if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){--}}
+        {{--        e.cancelBubble = true;--}}
+        {{--        e.stopImmediatePropagation();--}}
 
-                const redirectPrint = '{{ request()->url() }}?print=true';
-                window.location = redirectPrint;
-            }
-        });
+        {{--        const redirectPrint = '{{ request()->url() }}?print=true';--}}
+        {{--        window.location = redirectPrint;--}}
+        {{--    }--}}
+        {{--});--}}
 
 
         $('select').select2({

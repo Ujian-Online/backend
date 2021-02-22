@@ -57,7 +57,7 @@
 
         <div class="form-group col-md-12">
             <label for="phone_number">{{ trans('form.phone_number') }}</label>
-            <input type="number" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" id="phone_number" placeholder="{{ trans('form.phone_number') }}" value="{{ $query->phone_number ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <input type="number" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" id="phone_number" placeholder="{{ trans('form.phone_number') }}" value="{{ old('phone_number') ?? $query->phone_number ?? '' }}" @if(isset($isShow)) readonly @endif>
 
             @error('phone_number')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -226,7 +226,7 @@
                 <h3>Asesi Custom Data</h3>
 
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Title</th>
@@ -294,17 +294,17 @@
 
 @section('js')
     <script>
-        $(document).on('keydown', function(e) {
-            e.preventDefault();
+        {{--$(document).on('keydown', function(e) {--}}
+        {{--    e.preventDefault();--}}
 
-            if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
-                e.cancelBubble = true;
-                e.stopImmediatePropagation();
+        {{--    if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){--}}
+        {{--        e.cancelBubble = true;--}}
+        {{--        e.stopImmediatePropagation();--}}
 
-                const redirectPrint = '{{ request()->url() }}?print=true';
-                window.location = redirectPrint;
-            }
-        });
+        {{--        const redirectPrint = '{{ request()->url() }}?print=true';--}}
+        {{--        window.location = redirectPrint;--}}
+        {{--    }--}}
+        {{--});--}}
 
         $('select').select2({
             theme: 'bootstrap4',

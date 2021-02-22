@@ -93,6 +93,6 @@ class UserAsesi extends Model
      */
     public function AsesiCustomData()
     {
-        return $this->hasMany('App\UserAsesiCustomData', 'asesi_id', 'id');
+        return $this->hasMany('App\UserAsesiCustomData', 'asesi_id', 'user_id');
     }
 }

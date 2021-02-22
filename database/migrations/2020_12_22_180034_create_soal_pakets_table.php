@@ -17,6 +17,7 @@ class CreateSoalPaketsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->bigInteger('sertifikasi_id');
+            $table->bigInteger('asesor_id')->nullable();
             $table->timestamps();
         });
     }

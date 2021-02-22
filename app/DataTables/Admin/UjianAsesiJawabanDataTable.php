@@ -21,6 +21,15 @@ class UjianAsesiJawabanDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->addColumn('name_asesi', function($query) {
+                $name_asesi = $query->asesi->email;
+
+                if(isset($query->asesi->asesi) and !empty($query->asesi->asesi) and isset($query->asesi->asesi->name) and !empty($query->asesi->asesi->name)) {
+                    $name_asesi = $query->asesi->asesi->name;
+                }
+
+                return $name_asesi;
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->id,
@@ -86,9 +95,9 @@ class UjianAsesiJawabanDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('asesi')
+            Column::computed('name_asesi')
                 ->title('Asesi')
-                ->data('asesi.name'),
+                ->width('10%'),
             Column::make('question'),
             Column::make('max_score'),
             Column::make('updated_at')

@@ -15,6 +15,7 @@ class SoalPaket extends Model
     protected $fillable = [
         'title',
         'sertifikasi_id',
+        'asesor_id',
     ];
 
     /**
