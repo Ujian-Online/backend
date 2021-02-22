@@ -119,6 +119,12 @@ class Apl02Controller extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
+     *                @OA\Property(
+     *                     property="id",
+     *                     description="ID Unit Kompetensi Element",
+     *                     type="integer",
+     *                     example="5"
+     *                 ),
      *                 @OA\Property(
      *                     property="value",
      *                     description="File upload. Ekstensi: JPG/JPEG/PNG/PDF",
