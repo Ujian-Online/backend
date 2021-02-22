@@ -49,5 +49,8 @@ Route::name('api.')
                 Route::get('apl02', 'Api\Apl02Controller@index')->name('apl02.index');
                 Route::get('apl02/{id}', 'Api\Apl02Controller@show')->name('apl02.show');
                 Route::post('apl02', 'Api\Apl02Controller@updateElement')->name('apl02.updateElement');
+
+                Route::get('ujian', 'Api\UjianController@jadwal')->name('ujian.jadwal');
+                Route::get('ujian/{id}', 'Api\UjianController@soal')->name('ujian.soal');
             });
     });
