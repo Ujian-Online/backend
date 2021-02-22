@@ -37,6 +37,9 @@ Route::middleware(['auth'])
             Route::get('/order', 'Admin\OrderController@index')->name('order.index');
             Route::get('/order/search', 'Admin\OrderController@search')->name('order.search');
             Route::get('/order/{id}', 'Admin\OrderController@show')->name('order.show');
+            Route::get('sertifikasi/tuk', 'Admin\SertifikasiTukController@index')->name('sertifikasi.tuk.index');
+            Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
+            Route::get('ujian/asesi', 'Admin\UjianAsesiAsesorController@index')->name('ujian.asesi.index');
         });
 
         // Asesor Access Only
@@ -55,7 +58,8 @@ Route::middleware(['auth'])
 
         // Asesor Access Only
         Route::middleware('can:isAssesor')->group(function () {
-            Route::resource('surat-tugas', 'Asesor\SuratTugasController');
+            Route::resource('surat-tugas', 'Asesor\SuratTugasController')->except(['create', 'store', 'destroy']);
+            Route::resource('ujian-asesi', 'Asesor\UjianAsesiPenilaianController');
         });
 
         // TUK Access Only
@@ -71,11 +75,11 @@ Route::middleware(['auth'])
             Route::resource('user/tuk', 'Admin\UserTukController', ['as' => 'user']);
             Route::resource('user', 'Admin\UserController');
 
-            Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
             Route::get('tuk/search', 'Admin\TukController@search')->name('tuk.search');
             Route::resource('tuk', 'Admin\TukController');
 
-            Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi']);
+            Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi'])->except('index');
+            Route::resource('sertifikasi', 'Admin\SertifikasiController')->except('index');
 
             Route::resource('asesi/customdata', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
             Route::resource('asesi/apl01', 'Admin\UserAsesiController', ['as' => 'asesi']);
@@ -93,14 +97,13 @@ Route::middleware(['auth'])
             Route::resource('asesi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'asesi']);
 
             Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
-            Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian']);
+            Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian'])->except('index');
             Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian']);
-            Route::resource('ujian/jawabanpilihan', 'Admin\UjianAsesiJawabanPilihanController', ['as' => 'ujian']);
 
             Route::resource('soal/pilihanganda', 'Admin\SoalPilihanGandaController', ['as' => 'soal']);
             Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
             Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
         });
 
-        Route::resource('sertifikasi', 'Admin\SertifikasiController')->middleware('can:isAdminAsesor');
+        Route::get('sertifikasi', 'Admin\SertifikasiController@index')->name('sertifikasi.index')->middleware('can:isAdminTukAsesor');
     });

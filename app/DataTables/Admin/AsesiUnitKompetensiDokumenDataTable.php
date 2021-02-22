@@ -31,6 +31,15 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
 //                    return 'Unverified';
 //                }
 //            })
+            ->addColumn('name_asesi', function($query) {
+                $name_asesi = $query->user->email;
+
+                if(isset($query->user->asesi) and !empty($query->user->asesi) and isset($query->user->asesi->name) and !empty($query->user->asesi->name)) {
+                    $name_asesi = $query->user->asesi->name;
+                }
+
+                return $name_asesi;
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => (isset($query->user) and !empty($query->user)
@@ -109,9 +118,9 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('asesi')
+            Column::computed('name_asesi')
                 ->title('Asesi')
-                ->data('user.asesi.name'),
+                ->width('10%'),
             Column::computed('sertifikasi')
                 ->title('Sertifikasi')
                 ->data('sertifikasi.title'),

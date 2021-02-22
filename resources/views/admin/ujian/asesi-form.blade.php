@@ -113,7 +113,7 @@
                     @can('isAdmin')
                         {{ _('readonly') }}
                     @endcan
-                    @if(isset($query->status) and !empty($query->status) and $query->status != 'paket_soal_assigned')
+                    @if(isset($query->status) and !empty($query->status) and in_array($query->status, ['menunggu','paket_soal_assigned']))
                         {{ _('readonly') }}
                     @endif
                 @endif
@@ -150,7 +150,7 @@
                        @can('isAdmin')
                            {{ _('readonly') }}
                        @endcan
-                       @if(isset($query->status) and !empty($query->status) and $query->status != 'paket_soal_assigned')
+                       @if(isset($query->status) and !empty($query->status) and $query->status != 'penilaian')
                            {{ _('readonly') }}
                        @endif
                    @endif
@@ -310,7 +310,7 @@
         // asesor select2 with ajax query search
         $('#asesor_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : ((request()->user()->can('isAdmin') and in_array($query->status, ['menunggu','paket_soal_assigned'])) ? 'false' : true) }},
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
@@ -369,7 +369,7 @@
         // tuk select2 with ajax query search
         $('#ujian_jadwal_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : (request()->user()->can('isAdmin') ? 'false' : true) }},
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : ((request()->user()->can('isAdmin') and in_array($query->status, ['menunggu','paket_soal_assigned'])) ? 'false' : true) }},
             allowClear: true,
             ajax: {
                 url: '{{ route('admin.ujian.jadwal.search') }}',
@@ -488,7 +488,6 @@
             theme: 'bootstrap4',
             disabled: {{ (isset($isEdit) and !empty($isEdit) and request()->user()->can('isAssesor') and isset($query->status) and !empty($query->status) and $query->status == 'menunggu') ? 'false' : 'true' }},
             allowClear: true,
-            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('admin.soal.paket.search') }}',
                 dataType: 'JSON',

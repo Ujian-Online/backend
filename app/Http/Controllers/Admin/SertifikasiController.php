@@ -19,8 +19,7 @@ class SertifikasiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SertifikasiDataTable $dataTables
-     *
+     * @param Request $request
      * @return mixed
      */
     public function index(Request $request)
@@ -32,7 +31,7 @@ class SertifikasiController extends Controller
         $dataTables = new SertifikasiDataTable();
 
         // sertifikasi table for asesor
-        if($user->can('isAssesor')) {
+        if(!$user->can('isAdmin')) {
             $dataTables = new \App\DataTables\Asesor\SertifikasiDataTable();
         }
 
@@ -98,6 +97,7 @@ class SertifikasiController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Sertifikasi|Sertifikasi[]|Application|Factory|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|Response|View

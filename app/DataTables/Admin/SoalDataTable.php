@@ -25,11 +25,26 @@ class SoalDataTable extends DataTable
                 return ucwords(str_replace('_', ' ', $query->question_type));
             })
             ->addColumn('action', function ($query) {
+                // get user login
+                $user = request()->user();
+
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
                     'url_show' => route('admin.soal.daftar.show', $query->id),
-                    'url_edit' => route('admin.soal.daftar.edit', $query->id),
-                    'url_destroy' => route('admin.soal.daftar.destroy', $query->id),
+                    'url_edit' => $user->can('isAdmin') ?
+                        route('admin.soal.daftar.edit', $query->id) :
+                        (
+                            ($user->can('isAssesor') and $query->asesor_id == $user->id) ?
+                                route('admin.soal.daftar.edit', $query->id) :
+                                null
+                        ),
+                    'url_destroy' => $user->can('isAdmin') ?
+                        route('admin.soal.daftar.destroy', $query->id) :
+                        (
+                            ($user->can('isAssesor') and $query->asesor_id == $user->id) ?
+                                route('admin.soal.daftar.destroy', $query->id) :
+                                null
+                        ),
                 ]);
             });
     }
@@ -89,11 +104,13 @@ class SoalDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
+            Column::make('id')
+                ->width('5%'),
             Column::make('question')
-                ->width('30%'),
+                ->width('60%'),
             Column::make('question_type')
-                ->title('Question Type'),
+                ->title('Question Type')
+                ->width('10%'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),

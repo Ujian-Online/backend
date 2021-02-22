@@ -28,8 +28,15 @@ class UjianAsesiAsesorController extends Controller
      *
      * @return mixed
      */
-    public function index(UjianAsesiAsesorDataTable $dataTables)
+    public function index(Request $request, UjianAsesiAsesorDataTable $dataTables)
     {
+        // get user login
+        $user = $request->user();
+        // change index if loggin by tuk
+        if($user->can('isTuk')) {
+            $dataTables = new \App\DataTables\Tuk\UjianAsesiAsesorDataTable();
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Jadwal Ujian Asesi Lists',
@@ -154,6 +161,15 @@ class UjianAsesiAsesorController extends Controller
         // get user detail
         $user = $request->user();
 
+        // find by id and update
+        $query = UjianAsesiAsesor::findOrFail($id);
+
+        // return error if status penilaian or selesai
+        // admin can edit only if status menunggu or paket_soal_assigned
+        if(in_array($query->status, ['penilaian', 'selesai'])) {
+            return redirect()->back()->withErrors('Jadwal Ujian Asesi Hanya Bisa di Rubah Jika Status Menunggu/Paket Soal Assigned.');
+        }
+
         // allow admin edit limit
         if($user->can('isAdmin')) {
             // validate input
@@ -185,8 +201,7 @@ class UjianAsesiAsesorController extends Controller
 
 
 
-        // find by id and update
-        $query = UjianAsesiAsesor::findOrFail($id);
+
         // update data
         $query->update($dataInput);
 

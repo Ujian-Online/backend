@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataTables\Admin;
+namespace App\DataTables\Tuk;
 
 use App\UjianAsesiAsesor;
 use Yajra\DataTables\Html\Button;
@@ -50,14 +50,6 @@ class UjianAsesiAsesorDataTable extends DataTable
                 }
                 // return kompeten status
                 return $kompeten;
-            })
-            ->addColumn('action', function ($query) {
-                return view('layouts.pageTableAction', [
-                    'title' => $query->title,
-                    'url_show' => route('admin.ujian.asesi.show', $query->id),
-                    'url_edit' => route('admin.ujian.asesi.edit', $query->id),
-                    'url_destroy' => route('admin.ujian.asesi.destroy', $query->id),
-                ]);
             });
     }
 
@@ -104,6 +96,19 @@ class UjianAsesiAsesorDataTable extends DataTable
             $query = $query->where('status', $status);
         }
 
+        // get user login
+        $user = request()->user();
+        // change index if loggin by tuk
+        if($user->can('isTuk')) {
+            // get tuk id
+            $tuk = $user->tuk->tuk_id;
+
+            // filter tuk id based on order data
+            $query = $query->whereHas('order', function($query) use ($tuk) {
+                $query->where('tuk_id', $tuk);
+            });
+        }
+
         return $query;
     }
 
@@ -124,11 +129,7 @@ class UjianAsesiAsesorDataTable extends DataTable
                         ],
                         'dom' => 'Bfrtip',
                         'buttons' => [
-                            'pageLength',
-                            [
-                                'text' => '<i class="fas fa-plus-circle"></i> ' . trans('table.create'),
-                                'action' => $this->createButton()
-                            ]
+                            'pageLength'
                         ],
                     ])
                     ->setTableId('ujianasesiasesor-table')
@@ -173,12 +174,6 @@ class UjianAsesiAsesorDataTable extends DataTable
                 ->width('10%'),
             Column::make('is_kompeten')
                 ->width('5%'),
-            Column::computed('action')
-                ->orderable(false)
-                ->exportable(false)
-                ->printable(false)
-                ->width('5%')
-                ->addClass('text-center'),
         ];
     }
 
@@ -190,19 +185,5 @@ class UjianAsesiAsesorDataTable extends DataTable
     protected function filename()
     {
         return 'UjianAsesiAsesor_' . date('YmdHis');
-    }
-
-    /**
-     * Custom Create Button Action
-     */
-    public function createButton()
-    {
-        // Create Route URL
-        $url = route('admin.ujian.asesi.create');
-
-        // return function redirect
-        return 'function (e, dt, button, config) {
-            window.location = "'. $url .'";
-        }';
     }
 }

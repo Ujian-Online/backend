@@ -21,12 +21,27 @@ class SertifikasiTukController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SertifikasiTukDataTable $dataTables
-     *
+     * @param Request $request
      * @return mixed
      */
-    public function index(SertifikasiTukDataTable $dataTables)
+    public function index(Request $request)
     {
+        // get user login
+        $user = $request->user();
+
+        // default sertifikasi table
+        $dataTables = new SertifikasiTukDataTable();
+
+        // sertifikasi table for asesor
+        if($user->can('isTuk')) {
+            $dataTables = new \App\DataTables\Tuk\SertifikasiTukDataTable();
+
+            // return index data with datatables services
+            return $dataTables->render('layouts.pageTable', [
+                'title' => 'Sertifikasi TUK Lists',
+            ]);
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Sertifikasi TUK Lists',
