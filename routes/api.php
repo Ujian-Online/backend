@@ -45,5 +45,8 @@ Route::name('api.')
                 Route::get('apl01', 'Api\Apl01Controller@index')->name('apl01.index');
                 Route::post('apl01', 'Api\Apl01Controller@store')->name('apl01.store');
                 Route::post('apl01/customdata', 'Api\Apl01Controller@customdata')->name('apl01.store');
+
+                Route::get('apl02', 'Api\Apl02Controller@index')->name('apl02.index');
+                Route::get('apl02/{id}', 'Api\Apl02Controller@show')->name('apl02.show');
             });
     });
