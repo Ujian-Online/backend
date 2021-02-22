@@ -71,6 +71,12 @@ class SoalPaketController extends Controller
             'sertifikasi_id',
         ]);
 
+        // get user login (asesor)
+        $user = $request->user();
+        if($user->can('isAssesor')) {
+            $dataInput['asesor_id'] = $user->id;
+        }
+
         // save to database
         $query = SoalPaket::create($dataInput);
 
@@ -221,6 +227,12 @@ class SoalPaketController extends Controller
             'title',
             'sertifikasi_id',
         ]);
+
+        // get user login (asesor)
+        $user = $request->user();
+        if($user->can('isAssesor')) {
+            $dataInput['asesor_id'] = $user->id;
+        }
 
         // find by id and update
         $query = SoalPaket::findOrFail($id);
