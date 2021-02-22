@@ -180,6 +180,50 @@
                 ]
             }
         },
+        "/api/apl02": {
+            "get": {
+                "tags": [
+                    "APL02"
+                ],
+                "summary": "Asesi APL02 Index Data",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl02Controller::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/apl02/{id}": {
+            "get": {
+                "tags": [
+                    "APL02"
+                ],
+                "summary": "APL02 Detail By ID",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl02Controller::show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sertifikasi id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
