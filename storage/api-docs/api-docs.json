@@ -211,6 +211,11 @@
                         "multipart/form-data": {
                             "schema": {
                                 "properties": {
+                                    "id": {
+                                        "description": "ID Unit Kompetensi Element",
+                                        "type": "integer",
+                                        "example": "5"
+                                    },
                                     "value": {
                                         "description": "File upload. Ekstensi: JPG/JPEG/PNG/PDF",
                                         "type": "file",
@@ -676,6 +681,48 @@
                         "description": "OK"
                     }
                 }
+            }
+        },
+        "/api/ujian/jawaban": {
+            "post": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Menjawab Pertanyaan Dari Ujian",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::jawaban",
+                "requestBody": {
+                    "description": "Menjawab Pertanyaan",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "description": "ID Pertanyaan",
+                                        "type": "integer",
+                                        "example": "5"
+                                    },
+                                    "answer": {
+                                        "description": "Jawaban Pertanyaan, Bisa untuk multiple_option atau essay",
+                                        "type": "string",
+                                        "example": "C"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
             }
         },
         "/api/user/me": {
