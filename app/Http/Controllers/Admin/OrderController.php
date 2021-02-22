@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\Admin\OrderDataTable;
 use App\Http\Controllers\Controller;
+use App\Jobs\APLCreate;
 use App\Order;
 use App\Sertifikasi;
 use App\Tuk;
@@ -265,13 +266,7 @@ class OrderController extends Controller
 
         // create APL01 form if payment verified
         if($dataInput['status'] == 'payment_verified') {
-            // check if APL01 is Ready or Not
-            $apl01 = UserAsesi::where('user_id', $query->asesi_id)->count();
-
-            // only create once
-            if($apl01 != 0) {
-                UserAsesi::create(['user_id' => $query->asesi_id]);
-            }
+            APLCreate::dispatch($user->id, $query->sertifikasi_id);
         }
 
         // redirect
