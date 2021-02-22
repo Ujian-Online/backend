@@ -310,7 +310,7 @@
         // asesor select2 with ajax query search
         $('#asesor_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : ((request()->user()->can('isAdmin') and in_array($query->status, ['menunggu','paket_soal_assigned'])) ? 'false' : true) }},
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : ((request()->user()->can('isAdmin') and isset($query) and in_array($query->status, ['menunggu','paket_soal_assigned'])) ? 'false' : true) }},
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
@@ -369,7 +369,7 @@
         // tuk select2 with ajax query search
         $('#ujian_jadwal_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : ((request()->user()->can('isAdmin') and in_array($query->status, ['menunggu','paket_soal_assigned'])) ? 'false' : true) }},
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : ((request()->user()->can('isAdmin') and isset($query) and in_array($query->status, ['menunggu','paket_soal_assigned'])) ? 'false' : true) }},
             allowClear: true,
             ajax: {
                 url: '{{ route('admin.ujian.jadwal.search') }}',
