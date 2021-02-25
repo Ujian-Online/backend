@@ -314,7 +314,7 @@ return [
                 'active'    => 'admin.sertifikasi.*',
                 'sub_menu'  => [
                     [
-                        'title'     => 'Sertifikasi',
+                        'title'     => 'Detail Sertifikasi',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.index',
                         'active'    => [
@@ -325,7 +325,7 @@ return [
                         ],
                     ],
                     [
-                        'title'     => 'TUK',
+                        'title'     => 'Sertifikasi Ke TUK',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.tuk.index',
                         'active'    => 'admin.sertifikasi.tuk.*',
@@ -369,7 +369,7 @@ return [
                 'active'    => 'admin.sertifikasi.*',
                 'sub_menu'  => [
                     [
-                        'title'     => 'Sertifikasi',
+                        'title'     => 'Detail Sertifikasi',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.index',
                         'active'    => [
