@@ -98,7 +98,7 @@ Route::middleware(['auth'])
 
             Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
             Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian'])->except('index');
-            Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian']);
+            Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian'])->only(['index', 'show']);
 
             Route::resource('soal/pilihanganda', 'Admin\SoalPilihanGandaController', ['as' => 'soal']);
             Route::resource('soal/paketitem', 'Admin\SoalPaketitemController', ['as' => 'soal']);
