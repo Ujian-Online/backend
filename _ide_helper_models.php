@@ -349,6 +349,7 @@ namespace App{
  * @property int $sertifikasi_id
  * @property int $order_id
  * @property int|null $soal_paket_id
+ * @property string|null $ujian_start
  * @property string $status
  * @property bool|null $is_kompeten
  * @property int|null $final_score_percentage

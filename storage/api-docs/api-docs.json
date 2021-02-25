@@ -730,6 +730,36 @@
                 ]
             }
         },
+        "/api/ujian/{id}/start": {
+            "post": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Start Ujian DateTime",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::start",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ujian id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/user/me": {
             "get": {
                 "tags": [

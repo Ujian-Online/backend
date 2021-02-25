@@ -19,7 +19,7 @@
                             {{  __('selected') }}
                         @endif
                     >
-                        [ID: {{ $soals->id }}] - {{ $asesi->question }}
+                        [ID: {{ $soals->id }}] - {{ $soals->question }}
                     </option>
                 @endforeach
 
@@ -34,21 +34,6 @@
             <label for="asesi_id">Asesi ID</label>
             <select class="form-control @error('asesi_id') is-invalid @enderror"
                     name="asesi_id" id="asesi_id">
-
-                @foreach($asesis as $asesi)
-                    <option
-                        value="{{ $asesi->id }}"
-
-                        @if(!empty(request()->query('asesi_id')) and request()->query('asesi_id') == $asesi->id)
-                            {{  __('selected') }}
-                        @elseif(isset($query->asesi_id) and $query->asesi_id == $asesi->id)
-                            {{  __('selected') }}
-                        @endif
-                    >
-                        [ID: {{ $asesi->id }}] - {{ $asesi->name }}
-                    </option>
-                @endforeach
-
             </select>
 
             @error('asesi_id')
@@ -65,7 +50,7 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label for="question_type">Question Type</label>
             <select class="form-control" name="question_type" id="question_type" @if(isset($isShow)) readonly @endif>
 
@@ -90,7 +75,7 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label for="urutan">Urutan</label>
             <input type="number" class="form-control @error('urutan') is-invalid @enderror" name="urutan" id="urutan" placeholder="Urutan" value="{{ old('urutan') ?? $query->urutan ?? '' }}" @if(isset($isShow)) readonly @endif>
 
@@ -99,7 +84,10 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-4">
+
+        @if(isset($query) and $query->question_type == 'multiple_option')
+
+        <div class="form-group col-md-12">
             <label for="answer_option">Answer Option</label>
             <select class="form-control" name="answer_option" id="answer_option" @if(isset($isShow)) readonly @endif>
 
@@ -124,6 +112,8 @@
             @enderror
         </div>
 
+        @else
+
         <div class="form-group col-md-12">
             <label for="answer_essay">Answer Essay</label>
             <textarea class="form-control editorInput @error('answer_essay') is-invalid @enderror" name="answer_essay" id="answer_essay" cols="30" rows="5" @if(isset($isShow)) readonly @endif>{{ old('answer_essay') ?? $query->answer_essay ?? '' }}</textarea>
@@ -132,6 +122,8 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
+        @endif
 
         <div class="form-group col-md-12">
             <label for="user_answer">User Answer</label>
@@ -173,7 +165,7 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.ckeditor.com/4.15.1/standard/ckeditor.js"></script>
+{{--    <script src="https://cdn.ckeditor.com/4.15.1/standard/ckeditor.js"></script>--}}
     <script>
         $('select').select2({
             theme: 'bootstrap4',
@@ -181,8 +173,67 @@
         });
 
         // CKEditor4
-        window.onload = function() {
-            CKEDITOR.replaceAll( 'editorInput' );
-        };
+        // window.onload = function() {
+        //     CKEDITOR.replaceAll( 'editorInput' );
+        // };
+    </script>
+    <script>
+        /**
+         * Select2 with Ajax Start
+         * @type {string}
+         */
+
+            // default selected asesi_id from query URL
+        const user_asesi_id_default = '{{ old('asesi_id') ?? request()->input('asesi_id') ?? $query->asesi_id ?? null }}'
+        // trigger load data if user_asesi_id_default not null
+        if(user_asesi_id_default) {
+            var userAsesiSelected = $('#asesi_id');
+            $.ajax({
+                url: '{{ route('admin.user.search') }}' + '?q=' + user_asesi_id_default + '&type=asessi',
+                dataType: 'JSON',
+            }).then(function (data) {
+                // create the option and append to Select2
+                var option = new Option(data[0].text, data[0].id, true, true);
+                userAsesiSelected.append(option).trigger('change');
+
+                // manually trigger the `select2:select` event
+                userAsesiSelected.trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: data
+                    }
+                });
+            });
+        }
+
+        // asesi select2 with ajax query search
+        $('#asesi_id').select2({
+            theme: 'bootstrap4',
+            disabled: 'readonly',
+            allowClear: true,
+            minimumInputLength: 1,
+            ajax: {
+                url: '{{ route('admin.user.search') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                data: function (data) {
+                    return {
+                        q: data.term,
+                        type: 'asessi' // see config('options.user_type')
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
+        });
+
+        /**
+         * Select2 with Ajax End
+         * @type {string}
+         */
     </script>
 @endsection

@@ -266,7 +266,7 @@ class OrderController extends Controller
 
         // create APL01 form if payment verified
         if($dataInput['status'] == 'payment_verified') {
-            APLCreate::dispatch($user->id, $query->sertifikasi_id);
+            APLCreate::dispatch($query->asesi_id, $query->sertifikasi_id);
         }
 
         // redirect

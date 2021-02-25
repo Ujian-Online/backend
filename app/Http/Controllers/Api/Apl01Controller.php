@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\AsesiCustomData;
 use App\Http\Controllers\Controller;
+use App\Jobs\APL01AdminNotification;
 use App\UserAsesi;
 use App\UserAsesiCustomData;
 use Illuminate\Http\Request;
@@ -220,6 +221,9 @@ class Apl01Controller extends Controller
             $queryData = UserAsesi::create($dataInput);
         }
 
+        // Kirim Email ke Admin
+        APL01AdminNotification::dispatch($user->id);
+
         // return json response
         return response()->json($queryData);
     }
@@ -308,11 +312,6 @@ class Apl01Controller extends Controller
                 'customdataid'  => 'required',
                 'value'         => 'required|in:' . $customdata->dropdown_option
             ]);
-        } else {
-            $request->validate([
-                'customdataid'  => 'required',
-                'value'         => 'required'
-            ]);
         }
 
         // check asesi apl01 custom data, found or not, for update or create new element
@@ -323,6 +322,9 @@ class Apl01Controller extends Controller
         if($apl01customdata) {
             $apl01customdata->value = $value;
             $save = $apl01customdata->save();
+
+            // Kirim Email ke Admin
+            APL01AdminNotification::dispatch($user->id, $apl01customdata->id);
         } else {
             // buat baru jika tidak ada customdata
             $save = UserAsesiCustomData::create([
@@ -332,8 +334,14 @@ class Apl01Controller extends Controller
                 'value' => $value,
                 'is_verified' => false,
             ]);
+
+            // Kirim Email ke Admin
+            APL01AdminNotification::dispatch($user->id, $save->id);
         }
 
-        return response()->json($save);
+        return response()->json([
+            'code' => 200,
+            'message' => 'success'
+        ], 200);
     }
 }

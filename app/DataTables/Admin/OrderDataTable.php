@@ -39,7 +39,27 @@ class OrderDataTable extends DataTable
                 return ucwords($query->tipe_sertifikasi);
             })
             ->editColumn('status', function($query) {
-                return ucwords(str_replace('_', ' ', $query->status));
+                $statusRaw = $query->status;
+                $status = ucwords(str_replace('_', ' ', $query->status));
+                $statusHTML = '';
+
+                if($statusRaw == 'waiting_payment') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-primary'>$status</button>";
+                } elseif ($statusRaw == 'pending_verification') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-warning'>$status</button>";
+                } elseif ($statusRaw == 'payment_rejected') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-danger'>$status</button>";
+                } elseif ($statusRaw == 'payment_verified') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-info'>$status</button>";
+                } elseif ($statusRaw == 'canceled') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-secondary'>$status</button>";
+                } elseif ($statusRaw == 'completed') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-success'>$status</button>";
+                } else {
+                    $statusHTML = $status;
+                }
+
+                return $statusHTML;
             })
             ->addColumn('action', function ($query) {
                 $editButton = null;
@@ -54,7 +74,8 @@ class OrderDataTable extends DataTable
                      'url_edit' => $editButton,
                     // 'url_destroy' => route('admin.order.destroy', $query->id),
                 ]);
-            });
+            })
+            ->rawColumns(['status']);
     }
 
     /**
@@ -172,21 +193,27 @@ class OrderDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
+            Column::make('id')
+                ->width('5%'),
             Column::computed('name_asesi')
-                ->title('Asesi'),
+                ->title('Asesi')
+                ->width('20%'),
             Column::computed('sertifikasi_title')
-                ->title('Sertifikasi'),
+                ->title('Sertifikasi')
+                ->width('20%'),
             Column::computed('tuk')
                 ->title('TUK')
-                ->data('tuk.title'),
-            Column::make('tipe_sertifikasi'),
-            Column::make('status'),
+                ->data('tuk.title')
+                ->width('20%'),
+            Column::make('tipe_sertifikasi')
+                ->width('10%'),
+            Column::make('status')
+                ->width('10%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('15%')
+                ->width('5%')
                 ->addClass('text-center'),
         ];
     }
