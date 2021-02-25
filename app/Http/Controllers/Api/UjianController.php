@@ -196,4 +196,56 @@ class UjianController extends Controller
         // return save data
         return response()->json($query);
     }
+
+    /**
+     * Start Ujian Count
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * * @OA\Post(
+     *   path="/api/ujian/{id}/start",
+     *   tags={"Ujian"},
+     *   summary="Start Ujian DateTime",
+     *   security={{"passport":{}}},
+     *   @OA\Parameter(
+     *      name="id",
+     *      description="Ujian id",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *          type="integer"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response="200",
+     *      description="OK"
+     *   )
+     * )
+     */
+    public function start(Request $request, $id)
+    {
+        // get user login
+        $user = $request->user();
+
+        // search jawaban data
+        $query = UjianAsesiAsesor::where('id', $id)->where('asesi_id', $user->id)->firstOrFail();
+
+        if(empty($query->ujian_start)) {
+            // update start time
+            $query->ujian_start = now();
+            $query->save();
+
+            return response()->json([
+                'code' => 200,
+                'message' => 'success'
+            ]);
+        } else {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Gagal memulai ujian karena sudah dimulai sebelumnya..!'
+            ], 403);
+        }
+    }
 }
