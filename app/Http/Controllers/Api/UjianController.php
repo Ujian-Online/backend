@@ -80,18 +80,48 @@ class UjianController extends Controller
         // get user login
         $user = $request->user();
 
-        // Find Data by ID
-        return UjianAsesiAsesor::with([
-            'userasesi',
-            'userasesi.asesi',
-            'ujianjadwal',
-            'sertifikasi',
-            'soalpaket',
-            'ujianasesijawaban',
-        ])
-            ->where('id', $id)
+        // get ujian soal kalau dan tampilkan berdasarkan status ujian
+        $query = UjianAsesiAsesor::where('id', $id)
             ->where('asesi_id', $user->id)
             ->firstOrFail();
+
+        // hide jawaban kalau status bukan selesai
+        if($query->status != 'selesai') {
+            return UjianAsesiAsesor::with([
+                'userasesi',
+                'userasesi.asesi',
+                'ujianjadwal',
+                'sertifikasi',
+                'soalpaket',
+                'ujianasesijawaban' => function($query) {
+                    $query->select([
+                        'ujian_asesi_asesor_id',
+                        'soal_id',
+                        'asesi_id',
+                        'question',
+                        'question_type',
+                        'options_label',
+                        'urutan',
+                        'user_answer',
+                    ]);
+                },
+            ])
+                ->where('id', $id)
+                ->where('asesi_id', $user->id)
+                ->firstOrFail();
+        } else {
+            return UjianAsesiAsesor::with([
+                'userasesi',
+                'userasesi.asesi',
+                'ujianjadwal',
+                'sertifikasi',
+                'soalpaket',
+                'ujianasesijawaban',
+            ])
+                ->where('id', $id)
+                ->where('asesi_id', $user->id)
+                ->firstOrFail();
+        }
     }
 
     /**
