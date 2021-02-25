@@ -193,21 +193,27 @@ class OrderDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
+            Column::make('id')
+                ->width('5%'),
             Column::computed('name_asesi')
-                ->title('Asesi'),
+                ->title('Asesi')
+                ->width('20%'),
             Column::computed('sertifikasi_title')
-                ->title('Sertifikasi'),
+                ->title('Sertifikasi')
+                ->width('20%'),
             Column::computed('tuk')
                 ->title('TUK')
-                ->data('tuk.title'),
-            Column::make('tipe_sertifikasi'),
-            Column::make('status'),
+                ->data('tuk.title')
+                ->width('20%'),
+            Column::make('tipe_sertifikasi')
+                ->width('10%'),
+            Column::make('status')
+                ->width('10%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('15%')
+                ->width('5%')
                 ->addClass('text-center'),
         ];
     }
