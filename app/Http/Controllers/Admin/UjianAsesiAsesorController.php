@@ -9,6 +9,7 @@ use App\Order;
 use App\Sertifikasi;
 use App\UjianAsesiAsesor;
 use App\UjianJadwal;
+use App\User;
 use App\UserAsesi;
 use App\UserAsesor;
 use Exception;
@@ -100,6 +101,16 @@ class UjianAsesiAsesorController extends Controller
         $order->status = 'completed';
         $order->save();
 
+
+        // Notification to Asesor
+        if(!empty($dataInput['asesor_id'])) {
+            // get asesor detail
+            $userAsesor = User::where('type', 'assesor')->where('id', $dataInput['asesor_id'])->firstOrFail();
+
+            // Kirim Email ke Asesor
+            Mail::to($userAsesor->email)->send(new AsesorPaketUjianAsesi($query->id));
+        }
+
         // redirect to index table
         return redirect()
             ->route('admin.ujian.asesi.index')
@@ -188,15 +199,6 @@ class UjianAsesiAsesorController extends Controller
 
             // update data
             $query->update($dataInput);
-
-            // Notification to Asesor
-            if(!empty($dataInput['asesor_id'])) {
-                // get asesor detail
-                $userAsesor = User::where('type', 'assesor')->where('id', $dataInput['asesor_id'])->firstOrFail();
-
-                // Kirim Email ke Asesor
-                Mail::to($userAsesor->email)->send(new AsesorPaketUjianAsesi($id));
-            }
         } elseif($user->can('isAsesor')) {
             // validate input
             $request->validate([
