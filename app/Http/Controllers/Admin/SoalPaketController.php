@@ -62,12 +62,14 @@ class SoalPaketController extends Controller
         // validate input
         $request->validate([
             'title'             => 'required',
+            'durasi_ujian'      => 'required|date_format:H:i',
             'sertifikasi_id'    => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'title',
+            'durasi_ujian',
             'sertifikasi_id',
         ]);
 
@@ -219,12 +221,14 @@ class SoalPaketController extends Controller
         // validate input
         $request->validate([
             'title'             => 'required',
+            'durasi_ujian'      => 'required|date_format:H:i',
             'sertifikasi_id'    => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'title',
+            'durasi_ujian',
             'sertifikasi_id',
         ]);
 
