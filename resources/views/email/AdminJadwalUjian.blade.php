@@ -13,11 +13,11 @@ Pembayaran dari asesi telah dikonfirmasi, silahkan tentukan jadwal ujian untuk a
 | Nama | : | {{ !empty($asesi->asesi) ? $asesi->asesi->name : '' }} |
 @endcomponent
 
-@component('mail::button', ['url' => '', 'color' => 'success'])
+@component('mail::button', ['url' => route('admin.ujian.jadwal.index'), 'color' => 'success'])
 Pengaturan Jadwal Ujian
 @endcomponent
 
-@component('mail::button', ['url' => ''])
+@component('mail::button', ['url' => route('admin.ujian.asesi.index', ['status' => 'menunggu'])])
 Jadwal Ujian Asesi
 @endcomponent
 

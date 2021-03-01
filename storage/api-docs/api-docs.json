@@ -760,6 +760,59 @@
                 ]
             }
         },
+        "/api/ujian/jawaban/bulksave": {
+            "post": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Menjawab Pertanyaan Dari Ujian",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::bulkSave",
+                "requestBody": {
+                    "description": "Bulk Save Jawaban",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "ujian_id": {
+                                        "description": "ID Ujian",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "ids": {
+                                        "description": "ID Pertanyaan",
+                                        "type": "object",
+                                        "example": [
+                                            2,
+                                            5
+                                        ]
+                                    },
+                                    "answers": {
+                                        "description": "Jawaban Pertanyaan",
+                                        "type": "object",
+                                        "example": {
+                                            "2": "B",
+                                            "5": "C"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/user/me": {
             "get": {
                 "tags": [
