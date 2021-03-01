@@ -95,6 +95,7 @@ class UjianController extends Controller
                 'soalpaket',
                 'ujianasesijawaban' => function($query) {
                     $query->select([
+                        'id',
                         'ujian_asesi_asesor_id',
                         'soal_id',
                         'asesi_id',
