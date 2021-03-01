@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\OrderTukNotification;
 use App\Mail\OrderConfirmation;
 use App\Order;
 use App\Sertifikasi;
@@ -398,6 +399,9 @@ class OrderController extends Controller
             'media_url_bukti_transfer' => $urlFile,
             'status' => 'pending_verification',
         ]);
+
+        // kirim email ke tuk
+        OrderTukNotification::dispatch($user->id, $order->id, $order->tuk_id);
 
         // return response success
         return response()->json([
