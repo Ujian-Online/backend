@@ -62,14 +62,22 @@ class SoalPaketController extends Controller
         // validate input
         $request->validate([
             'title'             => 'required',
+            'durasi_ujian'      => 'required|date_format:H:i',
             'sertifikasi_id'    => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'title',
+            'durasi_ujian',
             'sertifikasi_id',
         ]);
+
+        // get user login (asesor)
+        $user = $request->user();
+        if($user->can('isAssesor')) {
+            $dataInput['asesor_id'] = $user->id;
+        }
 
         // save to database
         $query = SoalPaket::create($dataInput);
@@ -213,14 +221,22 @@ class SoalPaketController extends Controller
         // validate input
         $request->validate([
             'title'             => 'required',
+            'durasi_ujian'      => 'required|date_format:H:i',
             'sertifikasi_id'    => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
             'title',
+            'durasi_ujian',
             'sertifikasi_id',
         ]);
+
+        // get user login (asesor)
+        $user = $request->user();
+        if($user->can('isAssesor')) {
+            $dataInput['asesor_id'] = $user->id;
+        }
 
         // find by id and update
         $query = SoalPaket::findOrFail($id);

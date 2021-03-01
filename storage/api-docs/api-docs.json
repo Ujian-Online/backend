@@ -680,7 +680,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
             }
         },
         "/api/ujian/jawaban": {
@@ -706,6 +711,89 @@
                                         "description": "Jawaban Pertanyaan, Bisa untuk multiple_option atau essay",
                                         "type": "string",
                                         "example": "C"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/ujian/{id}/start": {
+            "post": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Start Ujian DateTime",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::start",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ujian id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/ujian/jawaban/bulksave": {
+            "post": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Menjawab Pertanyaan Dari Ujian",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::bulkSave",
+                "requestBody": {
+                    "description": "Bulk Save Jawaban",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "ujian_id": {
+                                        "description": "ID Ujian",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "ids": {
+                                        "description": "ID Pertanyaan",
+                                        "type": "object",
+                                        "example": [
+                                            2,
+                                            5
+                                        ]
+                                    },
+                                    "answers": {
+                                        "description": "Jawaban Pertanyaan",
+                                        "type": "object",
+                                        "example": {
+                                            "2": "B",
+                                            "5": "C"
+                                        }
                                     }
                                 },
                                 "type": "object"

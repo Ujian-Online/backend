@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\Admin\UjianAsesiAsesorDataTable;
 use App\Http\Controllers\Controller;
+use App\Mail\AsesorPaketUjianAsesi;
 use App\Order;
 use App\Sertifikasi;
 use App\UjianAsesiAsesor;
 use App\UjianJadwal;
+use App\User;
 use App\UserAsesi;
 use App\UserAsesor;
 use Exception;
@@ -17,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class UjianAsesiAsesorController extends Controller
@@ -97,6 +100,15 @@ class UjianAsesiAsesorController extends Controller
         // update order status ke complete
         $order->status = 'completed';
         $order->save();
+
+        // Notification to Asesor
+        if(!empty($dataInput['asesor_id'])) {
+            // get asesor detail
+            $userAsesor = User::where('type', 'assesor')->where('id', $dataInput['asesor_id'])->firstOrFail();
+
+            // Kirim Email ke Asesor
+            Mail::to($userAsesor->email)->send(new AsesorPaketUjianAsesi($query->id));
+        }
 
         // redirect to index table
         return redirect()
@@ -183,6 +195,9 @@ class UjianAsesiAsesorController extends Controller
                 'asesor_id',
                 'ujian_jadwal_id',
             ]);
+
+            // update data
+            $query->update($dataInput);
         } elseif($user->can('isAsesor')) {
             // validate input
             $request->validate([
@@ -197,13 +212,11 @@ class UjianAsesiAsesorController extends Controller
                 'is_kompeten',
                 'final_score_percentage',
             ]);
+
+            // update data
+            $query->update($dataInput);
         }
 
-
-
-
-        // update data
-        $query->update($dataInput);
 
         // redirect
         return redirect()

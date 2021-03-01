@@ -119,7 +119,7 @@ class UjianAsesiJawabanController extends Controller
         return view('admin.ujian.jawaban-form', [
             'title'     => 'Tampilkan Detail: ' . $query->question,
             'action'    => '#',
-            'isShow'    => route('admin.ujian.jawaban.edit', $id),
+            'isShow'    => true,
             'query'     => $query,
             'soals'     => $soals,
             'asesis'    => $asesis,

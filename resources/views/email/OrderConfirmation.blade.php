@@ -30,13 +30,13 @@ Mohon segera selesaikan pembayaran anda, agar bisa melanjutkan proses pendaftara
 
 ## Transfer ke Bank Melalui
 
-@foreach($order->tuk->bank as $bank)
 @component('mail::table')
-| |
-|-|
-| {{ $bank->bank_name }} - {{ $bank->account_name }} - {{ $bank->account_number }} |
-@endcomponent
+| Bank | Nama Rekening | Nomor Rekening |
+| ---- | ------------- | -------------- |
+@foreach($order->tuk->bank as $bank)
+| {{ $bank->bank_name }} | {{ $bank->account_name }} | {{ $bank->account_number }} |
 @endforeach
+@endcomponent
 
 @endif
 

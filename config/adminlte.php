@@ -123,7 +123,7 @@ return [
                 'active'    => 'admin.tuk.*',
                 'sub_menu'  => [
                     [
-                        'title'     => 'TUK',
+                        'title'     => 'Detail TUK',
                         'icon'      => 'fas fa-house-user',
                         'route'     => 'admin.tuk.index',
                         'active'    => [
@@ -147,7 +147,7 @@ return [
                 'active'    => 'admin.sertifikasi.*',
                 'sub_menu'  => [
                     [
-                        'title'     => 'Sertifikasi',
+                        'title'     => 'Detail Sertifikasi',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.index',
                         'active'    => [
@@ -158,16 +158,16 @@ return [
                         ],
                     ],
                     [
-                        'title'     => 'TUK',
-                        'icon'      => 'fas fa-list-ul',
-                        'route'     => 'admin.sertifikasi.tuk.index',
-                        'active'    => 'admin.sertifikasi.tuk.*',
-                    ],
-                    [
                         'title'     => 'Unit Kompetensi',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.uk.index',
                         'active'    => 'admin.sertifikasi.uk.*',
+                    ],
+                    [
+                        'title'     => 'Sertifikasi Ke TUK',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.tuk.index',
+                        'active'    => 'admin.sertifikasi.tuk.*',
                     ],
                     // [
                     //     'title'     => 'Unit Kompetensi Element',
@@ -182,12 +182,7 @@ return [
                 'icon'      => 'fas fa-user',
                 'active'    => 'admin.asesi.*',
                 'sub_menu'  => [
-                    [
-                        'title'     => 'Custom Data (APL-01)',
-                        'icon'      => 'fas fa-list-ol',
-                        'route'     => 'admin.asesi.customdata.index',
-                        'active'    => 'admin.asesi.customdata.*',
-                    ],
+
                     [
                         'title'     => 'APL-01',
                         'icon'      => 'fas fa-user',
@@ -212,6 +207,12 @@ return [
                     //     'route'     => 'admin.asesi.ukelement.index',
                     //     'active'    => 'admin.asesi.ukelement.*',
                     // ],
+                    [
+                        'title'     => 'Custom Data (APL-01)',
+                        'icon'      => 'fas fa-list-ol',
+                        'route'     => 'admin.asesi.customdata.index',
+                        'active'    => 'admin.asesi.customdata.*',
+                    ],
                 ],
             ],
             [
@@ -313,7 +314,7 @@ return [
                 'active'    => 'admin.sertifikasi.*',
                 'sub_menu'  => [
                     [
-                        'title'     => 'Sertifikasi',
+                        'title'     => 'Detail Sertifikasi',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.index',
                         'active'    => [
@@ -324,7 +325,7 @@ return [
                         ],
                     ],
                     [
-                        'title'     => 'TUK',
+                        'title'     => 'Sertifikasi Ke TUK',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.tuk.index',
                         'active'    => 'admin.sertifikasi.tuk.*',
@@ -368,7 +369,7 @@ return [
                 'active'    => 'admin.sertifikasi.*',
                 'sub_menu'  => [
                     [
-                        'title'     => 'Sertifikasi',
+                        'title'     => 'Detail Sertifikasi',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.index',
                         'active'    => [

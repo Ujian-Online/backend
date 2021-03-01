@@ -11,6 +11,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class APLCreate implements ShouldQueue
 {
@@ -56,7 +58,7 @@ class APLCreate implements ShouldQueue
         $apl01 = UserAsesi::where('user_id', $this->userId)->count();
 
         // only create once
-        if($apl01 != 0) {
+        if($apl01 == 0) {
             UserAsesi::create(['user_id' => $this->userId]);
         }
 
@@ -114,5 +116,16 @@ class APLCreate implements ShouldQueue
             AsesiUnitKompetensiDokumen::insert($asesiSertifikasiUK);
             AsesiSertifikasiUnitKompetensiElement::insert($asesiSertifikasiUKElement);
         }
+    }
+
+    /**
+     * The job failed to process.
+     *
+     * @param Exception $exception
+     * @return void
+     */
+    public function failed(Exception $exception)
+    {
+        Log::info($exception);
     }
 }

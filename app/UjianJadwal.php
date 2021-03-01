@@ -13,6 +13,8 @@ class UjianJadwal extends Model
      */
     protected $fillable = [
         'tanggal',
+        'jam_mulai',
+        'jam_berakhir',
         'title',
         'description',
     ];

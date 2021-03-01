@@ -34,8 +34,8 @@ class UjianAsesiJawabanDataTable extends DataTable
                 return view('layouts.pageTableAction', [
                     'title' => $query->id,
                     'url_show' => route('admin.ujian.jawaban.show', $query->id),
-                    'url_edit' => route('admin.ujian.jawaban.edit', $query->id),
-                    'url_destroy' => route('admin.ujian.jawaban.destroy', $query->id),
+//                    'url_edit' => route('admin.ujian.jawaban.edit', $query->id),
+//                    'url_destroy' => route('admin.ujian.jawaban.destroy', $query->id),
                 ]);
             });
     }
@@ -68,11 +68,7 @@ class UjianAsesiJawabanDataTable extends DataTable
                         ],
                         'dom' => 'Bfrtip',
                         'buttons' => [
-                            'pageLength',
-                            [
-                                'text' => '<i class="fas fa-plus-circle"></i> ' . trans('table.create'),
-                                'action' => $this->createButton()
-                            ]
+                            'pageLength'
                         ],
                     ])
                     ->setTableId('ujianasesijawaban-table')
