@@ -220,7 +220,24 @@ class UjianController extends Controller
         $answer = $request->input('answer');
 
         try {
-            $query = UjianAsesiAsesor::with(['ujianjadwal', 'soalpaket'])->where('id', $id)
+            // search jawaban data
+            $saveJawaban = UjianAsesiJawaban::where('id', $id)
+                ->select([
+                    'id',
+                    'ujian_asesi_asesor_id',
+                    'soal_id',
+                    'asesi_id',
+                    'question',
+                    'question_type',
+                    'options_label',
+                    'urutan',
+                    'user_answer',
+                ])
+                ->where('asesi_id', $user->id)
+                ->firstOrFail();
+
+            $query = UjianAsesiAsesor::with(['ujianjadwal', 'soalpaket'])
+                ->where('id', $saveJawaban->ujian_asesi_asesor_id)
                 ->where('asesi_id', $user->id)
                 ->firstOrFail();
 
@@ -258,21 +275,7 @@ class UjianController extends Controller
                 throw new Exception('Waktu Ujian Telah Berakhir.!');
             }
 
-            // search jawaban data
-            $saveJawaban = UjianAsesiJawaban::where('id', $id)
-                ->select([
-                    'id',
-                    'ujian_asesi_asesor_id',
-                    'soal_id',
-                    'asesi_id',
-                    'question',
-                    'question_type',
-                    'options_label',
-                    'urutan',
-                    'user_answer',
-                ])
-                ->where('asesi_id', $user->id)
-                ->firstOrFail();
+
 
             // update jawaban berdasarkan multiple options
             $saveJawaban->user_answer = $answer;
@@ -432,7 +435,8 @@ class UjianController extends Controller
         $user = $request->user();
 
         try {
-            $query = UjianAsesiAsesor::with(['ujianjadwal', 'soalpaket'])->where('id', $id)
+            $query = UjianAsesiAsesor::with(['ujianjadwal', 'soalpaket'])
+                ->where('id', $request->input('ujian_id'))
                 ->where('asesi_id', $user->id)
                 ->firstOrFail();
 
