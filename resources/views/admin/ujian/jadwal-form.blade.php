@@ -5,7 +5,7 @@
 
     <div class="form-row">
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             <label for="title">Title</label>
             <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title" placeholder="Title" value="{{ old('title') ?? $query->title ?? '' }}" @if(isset($isShow)) readonly @endif>
 
@@ -20,6 +20,24 @@
 
             @error('tanggal')
                 <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="jam_mulai">Jam Mulai</label>
+            <input type="time" class="form-control @error('jam_mulai') is-invalid @enderror" name="jam_mulai" id="jam_mulai" placeholder="Jam Mulai" value="{{ old('jam_mulai') ?? $query->jam_mulai ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('tanggal')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="jam_berakhir">Jam Berakhir</label>
+            <input type="time" class="form-control @error('jam_berakhir') is-invalid @enderror" name="jam_berakhir" id="jam_berakhir" placeholder="Jam Berakhir" value="{{ old('jam_berakhir') ?? $query->jam_berakhir ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('jam_berakhir')
+            <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
 

@@ -58,6 +58,8 @@ class UjianJadwalController extends Controller
         // validate input
         $request->validate([
             'tanggal'       => 'required|date',
+            'jam_mulai'     => 'required|date_format:H:i',
+            'jam_berakhir'  => 'required|date_format:H:i|after:jam_mulai',
             'title'         => 'required',
             'description'   => 'required',
         ]);
@@ -65,6 +67,8 @@ class UjianJadwalController extends Controller
         // get form data
         $dataInput = $request->only([
             'tanggal',
+            'jam_mulai',
+            'jam_berakhir',
             'title',
             'description',
         ]);
@@ -135,6 +139,8 @@ class UjianJadwalController extends Controller
         // validate input
         $request->validate([
             'tanggal'       => 'required|date',
+            'jam_mulai'     => 'required|date_format:H:i',
+            'jam_berakhir'  => 'required|date_format:H:i|after:jam_mulai',
             'title'         => 'required',
             'description'   => 'required',
         ]);
@@ -142,6 +148,8 @@ class UjianJadwalController extends Controller
         // get form data
         $dataInput = $request->only([
             'tanggal',
+            'jam_mulai',
+            'jam_berakhir',
             'title',
             'description',
         ]);

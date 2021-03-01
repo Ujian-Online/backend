@@ -21,6 +21,9 @@ class UjianJadwalDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('tanggal', function($query) {
+                return $query->tanggal ? \Carbon\Carbon::parse($query->tanggal)->format('d/m/Y') : '';
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
@@ -88,7 +91,8 @@ class UjianJadwalDataTable extends DataTable
         return [
             Column::make('title'),
             Column::make('tanggal'),
-            Column::make('description'),
+            Column::make('jam_mulai'),
+            Column::make('jam_berakhir'),
             Column::make('updated_at')
                 ->title('Update')
                 ->width('10%'),
