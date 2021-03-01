@@ -182,16 +182,23 @@ class UjianController extends Controller
         $answer = $request->input('answer');
 
         // search jawaban data
-        $query = UjianAsesiJawaban::where('id', $id)->where('asesi_id', $user->id)->firstOrFail();
+        $query = UjianAsesiJawaban::where('id', $id)
+            ->select([
+                'id',
+                'ujian_asesi_asesor_id',
+                'soal_id',
+                'asesi_id',
+                'question',
+                'question_type',
+                'options_label',
+                'urutan',
+                'user_answer',
+            ])
+            ->where('asesi_id', $user->id)
+            ->firstOrFail();
 
         // update jawaban berdasarkan multiple options
-        if($query->question_type == 'multiple_option') {
-            $query->answer_option = $answer;
-        } else {
-            $query->answer_essay = $answer;
-        }
-
-        // simpan jawaban
+        $query->user_answer = $answer;
         $query->save();
 
         // return save data
