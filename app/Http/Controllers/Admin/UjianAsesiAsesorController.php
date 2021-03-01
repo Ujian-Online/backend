@@ -101,7 +101,6 @@ class UjianAsesiAsesorController extends Controller
         $order->status = 'completed';
         $order->save();
 
-
         // Notification to Asesor
         if(!empty($dataInput['asesor_id'])) {
             // get asesor detail
