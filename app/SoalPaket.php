@@ -16,6 +16,7 @@ class SoalPaket extends Model
         'title',
         'sertifikasi_id',
         'asesor_id',
+        'durasi_ujian',
     ];
 
     /**
