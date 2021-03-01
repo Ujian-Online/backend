@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AsesorUjianSelesai;
 use App\UjianAsesiAsesor;
 use App\UjianAsesiJawaban;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UjianController extends Controller
 {
@@ -248,5 +250,94 @@ class UjianController extends Controller
                 'message' => 'Gagal memulai ujian karena sudah dimulai sebelumnya..!'
             ], 403);
         }
+    }
+
+    /**
+     * Bulk Save Jawaban
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Post(
+     *   path="/api/ujian/jawaban/bulksave",
+     *   tags={"Ujian"},
+     *   summary="Menjawab Pertanyaan Dari Ujian",
+     *   security={{"passport":{}}},
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Bulk Save Jawaban",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                @OA\Property(
+     *                     property="ujian_id",
+     *                     description="ID Ujian",
+     *                     type="integer",
+     *                     example="10"
+     *                 ),
+     *                @OA\Property(
+     *                     property="ids",
+     *                     description="ID Pertanyaan",
+     *                     type="object",
+     *                     example={2, 5}
+     *                 ),
+     *                @OA\Property(
+     *                     property="answers",
+     *                     description="Jawaban Pertanyaan",
+     *                     type="object",
+     *                     example={"2": "B", "5":"C"}
+     *                 ),
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     )
+     * )
+     */
+    public function bulkSave(Request $request)
+    {
+        // validate input
+        $request->validate([
+            'ujian_id'   => 'required',
+            'ids'        => 'required|array',
+            'answers'    => 'required|array'
+        ]);
+
+        // get user login
+        $user = $request->user();
+
+        // get all input
+        $ujian_id = $request->input('ujian_id');
+        $ids = $request->input('ids');
+        $answers = $request->input('answers');
+
+        // loop input based on id
+        foreach($ids as $id) {
+            $updateJawaban = UjianAsesiJawaban::where('id', $id)->where('asesi_id', $user->id)->firstOrFail();
+            $updateJawaban->user_answer = (isset($answers[$id]) and !empty($answers[$id])) ? $answers[$id] : null;
+            $updateJawaban->save();
+        }
+
+        // update ujian ke selesai
+        $ujian = UjianAsesiAsesor::with('userasesor')
+            ->where('id', $ujian_id)
+            ->where('asesi_id', $user->id)
+            ->firstOrFail();
+
+        // update status ke selesai
+        $ujian->status = 'selesai';
+
+        // kirim email ke  asesor
+        $asesorEmail = $ujian->userasesor->email;
+        Mail::to($asesorEmail)->send(new AsesorUjianSelesai($ujian_id));
+
+        // return response
+        return response()->json([
+            'code' => 200,
+            'message' => 'success'
+        ], 200);
     }
 }
