@@ -20,18 +20,19 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     public function dataTable($query)
     {
         return datatables()
-            ->eloquent($query)
+            ->collection($query)
             ->addColumn('status', function($query) {
-                $status = apl02_status($query->asesi_id, $query->sertifikasi_id);
+                $statusRaw = apl02_status($query->asesi_id, $query->sertifikasi_id);
+                $status = ucwords(str_replace('_', ' ', $statusRaw));
                 $statusHTML = '';
 
-                if($status == 'Isi Form') {
+                if($statusRaw == 'isi_form') {
                     $statusHTML = "<button type='button' class='btn btn-sm btn-primary'>$status</button>";
-                } elseif ($status == 'Menunggu Verifikasi') {
+                } elseif ($statusRaw == 'menunggu_verifikasi') {
                     $statusHTML = "<button type='button' class='btn btn-sm btn-warning'>$status</button>";
-                } elseif ($status == 'Form Di Tolak') {
+                } elseif ($statusRaw == 'form_ditolak') {
                     $statusHTML = "<button type='button' class='btn btn-sm btn-danger'>$status</button>";
-                } elseif ($status == 'Form Terverifikasi') {
+                } elseif ($statusRaw == 'form_terverifikasi') {
                     $statusHTML = "<button type='button' class='btn btn-sm btn-success'>$status</button>";
                 } else {
                     $statusHTML = $status;
@@ -74,18 +75,39 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
      * Get query source of dataTable.
      *
      * @param \App\AsesiUnitKompetensiDokumen $model
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return array
      */
     public function query(AsesiUnitKompetensiDokumen $model)
     {
-        return $model::with(['user', 'user.asesi', 'sertifikasi'])
+        // query ke database
+        $query = $model::with(['user', 'user.asesi', 'sertifikasi'])
             ->select([
                 'asesi_id',
                 'sertifikasis.id as sertifikasi_id',
                 'sertifikasis.title as sertifikasi_title'
             ])
             ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id')
-            ->groupBy( 'asesi_id', 'sertifikasi_id', 'sertifikasi_title');
+            ->groupBy( 'asesi_id', 'sertifikasi_id', 'sertifikasi_title')
+            ->get();
+
+        // variable untuk simpan data
+        $result = [];
+
+        // run search query
+        $status = request()->input('status');
+        if(!empty($status)) {
+            foreach ($query as $data) {
+                $getStatus = apl02_status($data->asesi_id, $data->sertifikasi_id);
+
+                if ($status == $getStatus) {
+                    $result[] = $data;
+                }
+            }
+        } else {
+            $result = $query;
+        }
+
+        return $result;
     }
 
     /**
@@ -97,6 +119,7 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     {
         return $this->builder()
                     ->parameters([
+                        'searching' => false,
                         'responsive' => true,
                         'autoWidth' => false,
                         'lengthMenu' => [
@@ -116,7 +139,7 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(2, 'desc')
+                    ->orderBy(0, 'asc')
                     ->buttons(
                         // Button::make('export'),
                         // Button::make('print'),
