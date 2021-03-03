@@ -98,13 +98,13 @@ if (!function_exists('upload_to_s3')) {
 
             // Bandingkan Total Status
             if($statusIsiForm > 0) {
-                $apl02Status = 'Isi Form';
+                $apl02Status = 'isi_form';
             } else if($statusMenungguVerifikasi > 0) {
-                $apl02Status = 'Menunggu Verifikasi';
+                $apl02Status = 'menunggu_verifikasi';
             } else if($statusFormDitolak > 0) {
-                $apl02Status = 'Form Di Tolak';
+                $apl02Status = 'form_ditolak';
             } else if($statsFormTerverifikasi) {
-                $apl02Status = 'Form Terverifikasi';
+                $apl02Status = 'form_terverifikasi';
             } else {
                 $apl02Status = '';
             }
