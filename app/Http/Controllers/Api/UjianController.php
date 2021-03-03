@@ -53,6 +53,56 @@ class UjianController extends Controller
     }
 
     /**
+     * Detail Ujian
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder
+     *
+     *  @OA\Get(
+     *   path="/api/ujian/detail/{id}",
+     *   tags={"Ujian"},
+     *   summary="Detail Ujian By ID",
+     *   security={{"passport":{}}},
+     *   @OA\Parameter(
+     *      name="id",
+     *      description="Ujian id",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *          type="integer"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response="200",
+     *      description="OK"
+     *   )
+     * )
+     */
+    public function detail(Request $request, $id)
+    {
+        // get user login
+        $user = $request->user();
+
+        return UjianAsesiAsesor::with([
+            'userasesi',
+            'userasesi.asesi',
+            'ujianjadwal',
+            'sertifikasi',
+            'soalpaket',
+        ])
+            ->select([
+                'ujian_asesi_asesors.*',
+                'user_asesors.name as asesor_name'
+            ])
+            ->leftJoin('user_asesors', 'user_asesors.user_id', '=', 'ujian_asesi_asesors.asesor_id')
+            ->where('ujian_asesi_asesors.id', $id)
+            ->where('ujian_asesi_asesors.asesi_id', $user->id)
+            ->firstOrFail();
+    }
+
+
+    /**
      * Ujian Soal dan Jawaban
      *
      * @param Request $request
@@ -60,7 +110,7 @@ class UjianController extends Controller
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\JsonResponse
      *
      * * @OA\Get(
-     *   path="/api/ujian/{id}",
+     *   path="/api/ujian/soal/{id}",
      *   tags={"Ujian"},
      *   summary="Detail Ujian Soal dan Jawaban By ID",
      *   security={{"passport":{}}},
