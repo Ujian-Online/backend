@@ -600,6 +600,20 @@
                 ]
             }
         },
+        "/api/pemegang-sertifikasi": {
+            "get": {
+                "tags": [
+                    "Sertifikasi"
+                ],
+                "summary": "Pemegang Sertifikasi Lists",
+                "operationId": "App\\Http\\Controllers\\Api\\PemegangSerifikasiController::index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/sertifikasi": {
             "get": {
                 "tags": [
