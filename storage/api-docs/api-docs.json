@@ -658,7 +658,37 @@
                 ]
             }
         },
-        "/api/ujian/{id}": {
+        "/api/ujian/detail/{id}": {
+            "get": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Detail Ujian By ID",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::detail",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ujian id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/ujian/soal/{id}": {
             "get": {
                 "tags": [
                     "Ujian"
