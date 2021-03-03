@@ -32,6 +32,7 @@ Route::name('api.')
         // List Sertifikasi
         Route::get('sertifikasi', 'Api\SertifikasiController@index')->name('sertifikasi');
         Route::get('sertifikasi/{id}', 'Api\SertifikasiController@show')->name('sertifikasi.show');
+        Route::get('pemegang-sertifikasi', 'Api\PemegangSerifikasiController@index')->name('pemegangsertifikasi.index');
 
         Route::middleware(['auth:api'])
             ->group(function () {
