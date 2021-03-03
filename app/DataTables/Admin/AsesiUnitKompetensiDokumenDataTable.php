@@ -70,8 +70,13 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     public function query(AsesiUnitKompetensiDokumen $model)
     {
         return $model::with(['user', 'user.asesi', 'sertifikasi'])
-            ->select(['asesi_id', 'sertifikasi_id'])
-            ->groupBy( 'asesi_id', 'sertifikasi_id');
+            ->select([
+                'asesi_id',
+                'sertifikasis.id as sertifikasi_id',
+                'sertifikasis.title as sertifikasi_title'
+            ])
+            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id')
+            ->groupBy( 'asesi_id', 'sertifikasi_id', 'sertifikasi_title');
     }
 
     /**
@@ -121,9 +126,9 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
             Column::computed('name_asesi')
                 ->title('Asesi')
                 ->width('10%'),
-            Column::computed('sertifikasi')
+            Column::computed('sertifikasi_title')
                 ->title('Sertifikasi')
-                ->data('sertifikasi.title'),
+                ->width('20%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
