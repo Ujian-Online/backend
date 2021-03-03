@@ -21,16 +21,24 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-//            ->addColumn('status', function($query) {
-//                $asesiukelement = $query->asesisertifikasiunitkompetensielement;
-//
-//                // return verified status
-//                if(isset($asesiukelement) and !empty($asesiukelement)) {
-//                    return $asesiukelement->is_verified ? 'Verified' : 'Unverified';
-//                } else {
-//                    return 'Unverified';
-//                }
-//            })
+            ->addColumn('status', function($query) {
+                $status = apl02_status($query->asesi_id, $query->sertifikasi_id);
+                $statusHTML = '';
+
+                if($status == 'Isi Form') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-primary'>$status</button>";
+                } elseif ($status == 'Menunggu Verifikasi') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-warning'>$status</button>";
+                } elseif ($status == 'Form Di Tolak') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-danger'>$status</button>";
+                } elseif ($status == 'Form Terverifikasi') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-success'>$status</button>";
+                } else {
+                    $statusHTML = $status;
+                }
+
+                return $statusHTML;
+            })
             ->addColumn('name_asesi', function($query) {
                 $name_asesi = $query->user->email;
 
@@ -58,7 +66,8 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                         'sertifikasiid' => $query->sertifikasi_id
                     ]),
                 ]);
-            });
+            })
+            ->rawColumns(['status']);
     }
 
     /**
@@ -125,10 +134,13 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
         return [
             Column::computed('name_asesi')
                 ->title('Asesi')
-                ->width('10%'),
+                ->width('30%'),
             Column::computed('sertifikasi_title')
                 ->title('Sertifikasi')
-                ->width('20%'),
+                ->width('40%'),
+            Column::computed('status')
+                ->title('Status')
+                ->width('15%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
