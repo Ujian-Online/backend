@@ -23,7 +23,7 @@ class UjianController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
      *   path="/api/ujian",
@@ -43,13 +43,46 @@ class UjianController extends Controller
         $user = $request->user();
 
         // query to jadwal ujian
-        return UjianAsesiAsesor::with([
+        $ujians = UjianAsesiAsesor::with([
             'userasesi',
             'userasesi.asesi',
             'sertifikasi',
             'ujianjadwal',
             'soalpaket'
-        ])->where('asesi_id', $user->id)->paginate(10);
+        ])->where('asesi_id', $user->id)->get();
+
+        // variable result
+        $result = [];
+
+        // looping detail ujian
+        foreach($ujians as $ujian) {
+            // ambil detail apl02 status
+            $apl02_status = apl02_status($user->id, $ujian->sertifikasi_id);
+            // varaible ujian status
+            $ujian_status = null;
+
+            if($ujian->status == 'paket_soal_assigned' and $apl02_status == 'menunggu_verifikasi') {
+                $ujian_status = 'menunggu_verifikasi_form_apl02';
+            } elseif($ujian->status == 'paket_soal_assigned' and $apl02_status == 'form_terverifikasi') {
+                $ujian_status = 'menunggu_jadwal_ujian';
+            } elseif($ujian->status == 'penilaian') {
+                $ujian_status = 'ujian_dalam_penilaian';
+            } elseif($ujian->status == 'selesai') {
+                if($ujian->is_kompeten) {
+                    $ujian_status = 'Kompeten';
+                } else {
+                    $ujian_status = 'Tidak Kompeten';
+                }
+            } else {
+                $ujian_status = '';
+            }
+
+            // merge data
+            $result[] = array_merge($ujian->toArray(), compact('ujian_status', 'apl02_status'));
+        }
+
+        // return response
+        return response()->json($result, 200);
     }
 
     /**
@@ -57,7 +90,7 @@ class UjianController extends Controller
      *
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder
+     * @return \Illuminate\Http\JsonResponse
      *
      *  @OA\Get(
      *   path="/api/ujian/detail/{id}",
@@ -84,7 +117,7 @@ class UjianController extends Controller
         // get user login
         $user = $request->user();
 
-        return UjianAsesiAsesor::with([
+        $ujian = UjianAsesiAsesor::with([
             'userasesi',
             'userasesi.asesi',
             'ujianjadwal',
@@ -99,6 +132,30 @@ class UjianController extends Controller
             ->where('ujian_asesi_asesors.id', $id)
             ->where('ujian_asesi_asesors.asesi_id', $user->id)
             ->firstOrFail();
+
+        // count soal pilihan ganda dan essay
+        $total_soal_essay = UjianAsesiJawaban::where('question_type', 'essay')
+            ->where('ujian_asesi_asesor_id', $ujian->id)
+            ->count();
+        $total_soal_pilihanganda = UjianAsesiJawaban::where('question_type', 'multiple_option')
+            ->where('ujian_asesi_asesor_id', $ujian->id)
+            ->count();
+        // total soal
+        $total_soal = (int) $total_soal_essay + (int) $total_soal_pilihanganda;
+
+        // apl02 detail
+        $apl02_status = apl02_status($user->id, $ujian->sertifikasi_id);
+
+        // merge array
+        $result = array_merge($ujian->toArray(), compact(
+            'apl02_status',
+            'total_soal',
+            'total_soal_essay',
+            'total_soal_pilihanganda'
+        ));
+
+        // return response
+        return response()->json($result, 200);
     }
 
 
