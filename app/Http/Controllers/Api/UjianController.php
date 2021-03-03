@@ -53,6 +53,56 @@ class UjianController extends Controller
     }
 
     /**
+     * Detail Ujian
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder
+     *
+     *  @OA\Get(
+     *   path="/api/ujian/detail/{id}",
+     *   tags={"Ujian"},
+     *   summary="Detail Ujian By ID",
+     *   security={{"passport":{}}},
+     *   @OA\Parameter(
+     *      name="id",
+     *      description="Ujian id",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *          type="integer"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response="200",
+     *      description="OK"
+     *   )
+     * )
+     */
+    public function detail(Request $request, $id)
+    {
+        // get user login
+        $user = $request->user();
+
+        return UjianAsesiAsesor::with([
+            'userasesi',
+            'userasesi.asesi',
+            'ujianjadwal',
+            'sertifikasi',
+            'soalpaket',
+        ])
+            ->select([
+                'ujian_asesi_asesors.*',
+                'user_asesors.name as asesor_name'
+            ])
+            ->leftJoin('user_asesors', 'user_asesors.user_id', '=', 'ujian_asesi_asesors.asesor_id')
+            ->where('ujian_asesi_asesors.id', $id)
+            ->where('ujian_asesi_asesors.asesi_id', $user->id)
+            ->firstOrFail();
+    }
+
+
+    /**
      * Ujian Soal dan Jawaban
      *
      * @param Request $request
@@ -60,7 +110,7 @@ class UjianController extends Controller
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\JsonResponse
      *
      * * @OA\Get(
-     *   path="/api/ujian/{id}",
+     *   path="/api/ujian/soal/{id}",
      *   tags={"Ujian"},
      *   summary="Detail Ujian Soal dan Jawaban By ID",
      *   security={{"passport":{}}},
@@ -355,19 +405,39 @@ class UjianController extends Controller
                 throw new Exception('Ujian Telah Berakhir.!');
             }
 
+            // waktu sekarang
+            $dateNow = now();
+
             if(empty($query->ujian_start)) {
                 // update start time
-                $query->ujian_start = now();
+                $query->ujian_start = $dateNow;
                 $query->save();
 
-                // return response ok
-                return response()->json([
-                    'code' => 200,
-                    'message' => 'success'
-                ]);
+                $ujian_start = $dateNow;
             } else {
-                throw new Exception('Gagal memulai ujian karena sudah dimulai sebelumnya..!');
+                $ujian_start = $query->ujian_start;
             }
+
+            // get time duration and parse
+            $durasiUjian = Carbon::parse($query->soalpaket->durasi_ujian);
+            // format to minutes
+            $durasiUjianMenit = ($durasiUjian->hour * 60) + $durasiUjian->minute;
+            // ujian jam di mulai + add minutes durasi ujian
+            $ujianBerakhir = Carbon::parse($ujian_start)->addMinutes($durasiUjianMenit);
+
+            // bandingkan waktu ujian dimulai dengan sekarang
+            $diffMinutes = $dateNow->diffInMinutes($ujianBerakhir);
+
+            // return response ok
+            return response()->json([
+                'code' => 200,
+                'message' => 'success',
+                'data' => [
+                    'ujian_start' => $ujian_start,
+                    'ujian_berakhir' => $ujianBerakhir->toDateTimeString(),
+                    'ujian_sisa_menit' => $diffMinutes,
+                ]
+            ]);
 
         } catch (Exception $e) {
             return response()->json([
