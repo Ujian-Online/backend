@@ -20,17 +20,26 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     public function dataTable($query)
     {
         return datatables()
-            ->eloquent($query)
-//            ->addColumn('status', function($query) {
-//                $asesiukelement = $query->asesisertifikasiunitkompetensielement;
-//
-//                // return verified status
-//                if(isset($asesiukelement) and !empty($asesiukelement)) {
-//                    return $asesiukelement->is_verified ? 'Verified' : 'Unverified';
-//                } else {
-//                    return 'Unverified';
-//                }
-//            })
+            ->collection($query)
+            ->addColumn('status', function($query) {
+                $statusRaw = apl02_status($query->asesi_id, $query->sertifikasi_id);
+                $status = ucwords(str_replace('_', ' ', $statusRaw));
+                $statusHTML = '';
+
+                if($statusRaw == 'isi_form') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-primary'>$status</button>";
+                } elseif ($statusRaw == 'menunggu_verifikasi') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-warning'>$status</button>";
+                } elseif ($statusRaw == 'form_ditolak') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-danger'>$status</button>";
+                } elseif ($statusRaw == 'form_terverifikasi') {
+                    $statusHTML = "<button type='button' class='btn btn-sm btn-success'>$status</button>";
+                } else {
+                    $statusHTML = $status;
+                }
+
+                return $statusHTML;
+            })
             ->addColumn('name_asesi', function($query) {
                 $name_asesi = $query->user->email;
 
@@ -58,20 +67,47 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                         'sertifikasiid' => $query->sertifikasi_id
                     ]),
                 ]);
-            });
+            })
+            ->rawColumns(['status']);
     }
 
     /**
      * Get query source of dataTable.
      *
      * @param \App\AsesiUnitKompetensiDokumen $model
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return array
      */
     public function query(AsesiUnitKompetensiDokumen $model)
     {
-        return $model::with(['user', 'user.asesi', 'sertifikasi'])
-            ->select(['asesi_id', 'sertifikasi_id'])
-            ->groupBy( 'asesi_id', 'sertifikasi_id');
+        // query ke database
+        $query = $model::with(['user', 'user.asesi', 'sertifikasi'])
+            ->select([
+                'asesi_id',
+                'sertifikasis.id as sertifikasi_id',
+                'sertifikasis.title as sertifikasi_title'
+            ])
+            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id')
+            ->groupBy( 'asesi_id', 'sertifikasi_id', 'sertifikasi_title')
+            ->get();
+
+        // variable untuk simpan data
+        $result = [];
+
+        // run search query
+        $status = request()->input('status');
+        if(!empty($status)) {
+            foreach ($query as $data) {
+                $getStatus = apl02_status($data->asesi_id, $data->sertifikasi_id);
+
+                if ($status == $getStatus) {
+                    $result[] = $data;
+                }
+            }
+        } else {
+            $result = $query;
+        }
+
+        return $result;
     }
 
     /**
@@ -83,6 +119,7 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
     {
         return $this->builder()
                     ->parameters([
+                        'searching' => false,
                         'responsive' => true,
                         'autoWidth' => false,
                         'lengthMenu' => [
@@ -102,7 +139,7 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(2, 'desc')
+                    ->orderBy(0, 'asc')
                     ->buttons(
                         // Button::make('export'),
                         // Button::make('print'),
@@ -120,10 +157,13 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
         return [
             Column::computed('name_asesi')
                 ->title('Asesi')
-                ->width('10%'),
-            Column::computed('sertifikasi')
+                ->width('30%'),
+            Column::computed('sertifikasi_title')
                 ->title('Sertifikasi')
-                ->data('sertifikasi.title'),
+                ->width('40%'),
+            Column::computed('status')
+                ->title('Status')
+                ->width('15%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)

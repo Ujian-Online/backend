@@ -32,6 +32,7 @@ Route::name('api.')
         // List Sertifikasi
         Route::get('sertifikasi', 'Api\SertifikasiController@index')->name('sertifikasi');
         Route::get('sertifikasi/{id}', 'Api\SertifikasiController@show')->name('sertifikasi.show');
+        Route::get('pemegang-sertifikasi', 'Api\PemegangSerifikasiController@index')->name('pemegangsertifikasi.index');
 
         Route::middleware(['auth:api'])
             ->group(function () {
@@ -53,7 +54,8 @@ Route::name('api.')
                 Route::get('ujian', 'Api\UjianController@jadwal')->name('ujian.jadwal');
                 Route::post('ujian/jawaban', 'Api\UjianController@jawaban')->name('ujian.jawaban');
                 Route::post('ujian/jawaban/bulksave', 'Api\UjianController@bulkSave')->name('ujian.bulkSave');
-                Route::get('ujian/{id}', 'Api\UjianController@soal')->name('ujian.soal');
+                Route::get('ujian/detail/{id}', 'Api\UjianController@detail')->name('ujian.detail');
+                Route::get('ujian/soal/{id}', 'Api\UjianController@soal')->name('ujian.soal');
                 Route::post('ujian/{id}/start', 'Api\UjianController@start')->name('ujian.start');
             });
     });

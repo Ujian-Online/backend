@@ -41,4 +41,76 @@ if (!function_exists('upload_to_s3')) {
 
         return $urlFile;
     }
+
+
+    // apl02 status helper
+    if(!function_exists('apl02_status')) {
+        /**
+         * Kalkulasi APL02 Status Berdasarkan Element
+         *
+         * @param $asesiId int
+         * @param $sertifikasiId int
+         * @return string
+         */
+        function apl02_status($asesiId, $sertifikasiId) {
+            // variable return status
+            $apl02Status = null;
+
+            // Ambil data dari database
+            $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::where('asesi_id', $asesiId)
+                ->get();
+
+            // apl02 status
+            $apl02StatusCount = [
+                'isi_form' => null,
+                'menunggu_verifikasi' => null,
+                'form_ditolak' => null,
+                'form_terverifikasi' => null,
+            ];
+
+            foreach($apl02Elements as $apl02Element) {
+                // [Isi form] (Kalau belum isi sama sekali)
+                if(empty($apl02Element->media_url)) {
+                    $apl02StatusCount['isi_form'][] = $apl02Element->id;
+                }
+
+                // Menunggu verifikasi [Update Form] (Kalau udah isi, tapi blum di verif semua)
+                if(!empty($apl02Element->media_url) and !$apl02Element->is_verified) {
+                    $apl02StatusCount['menunggu_verifikasi'][] = $apl02Element->id;
+                }
+
+                // Form ditolak [Update Form] (Kalau udah isi, tapi ada yg ditolak)
+                if(!empty($apl02Element->media_url) and !$apl02Element->is_verified and !empty($apl02Element->verification_note)) {
+                    $apl02StatusCount['form_ditolak'][] = $apl02Element->id;
+                }
+
+                // Form terverifikasi (Kalau udah verif semua)
+                if(!empty($apl02Element->media_url) and $apl02Element->is_verified) {
+                    $apl02StatusCount['form_terverifikasi'][] = $apl02Element->id;
+                }
+            }
+
+            // hitung total status
+            $statusIsiForm = count($apl02StatusCount['isi_form'] ?? []);
+            $statusMenungguVerifikasi = count($apl02StatusCount['menunggu_verifikasi'] ?? []);
+            $statusFormDitolak = count($apl02StatusCount['form_ditolak'] ?? []);
+            $statsFormTerverifikasi = count($apl02StatusCount['form_terverifikasi'] ?? []);
+
+            // Bandingkan Total Status
+            if($statusIsiForm > 0) {
+                $apl02Status = 'isi_form';
+            } else if($statusMenungguVerifikasi > 0) {
+                $apl02Status = 'menunggu_verifikasi';
+            } else if($statusFormDitolak > 0) {
+                $apl02Status = 'form_ditolak';
+            } else if($statsFormTerverifikasi) {
+                $apl02Status = 'form_terverifikasi';
+            } else {
+                $apl02Status = '';
+            }
+
+            // return status ke string
+            return $apl02Status;
+        }
+    }
 }
