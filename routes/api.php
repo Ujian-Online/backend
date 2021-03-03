@@ -53,7 +53,8 @@ Route::name('api.')
                 Route::get('ujian', 'Api\UjianController@jadwal')->name('ujian.jadwal');
                 Route::post('ujian/jawaban', 'Api\UjianController@jawaban')->name('ujian.jawaban');
                 Route::post('ujian/jawaban/bulksave', 'Api\UjianController@bulkSave')->name('ujian.bulkSave');
-                Route::get('ujian/{id}', 'Api\UjianController@soal')->name('ujian.soal');
+                Route::get('ujian/detail/{id}', 'Api\UjianController@detail')->name('ujian.detail');
+                Route::get('ujian/soal/{id}', 'Api\UjianController@soal')->name('ujian.soal');
                 Route::post('ujian/{id}/start', 'Api\UjianController@start')->name('ujian.start');
             });
     });
