@@ -405,19 +405,39 @@ class UjianController extends Controller
                 throw new Exception('Ujian Telah Berakhir.!');
             }
 
+            // waktu sekarang
+            $dateNow = now();
+
             if(empty($query->ujian_start)) {
                 // update start time
-                $query->ujian_start = now();
+                $query->ujian_start = $dateNow;
                 $query->save();
 
-                // return response ok
-                return response()->json([
-                    'code' => 200,
-                    'message' => 'success'
-                ]);
+                $ujian_start = $dateNow;
             } else {
-                throw new Exception('Gagal memulai ujian karena sudah dimulai sebelumnya..!');
+                $ujian_start = $query->ujian_start;
             }
+
+            // get time duration and parse
+            $durasiUjian = Carbon::parse($query->soalpaket->durasi_ujian);
+            // format to minutes
+            $durasiUjianMenit = ($durasiUjian->hour * 60) + $durasiUjian->minute;
+            // ujian jam di mulai + add minutes durasi ujian
+            $ujianBerakhir = Carbon::parse($ujian_start)->addMinutes($durasiUjianMenit);
+
+            // bandingkan waktu ujian dimulai dengan sekarang
+            $diffMinutes = $dateNow->diffInMinutes($ujianBerakhir);
+
+            // return response ok
+            return response()->json([
+                'code' => 200,
+                'message' => 'success',
+                'data' => [
+                    'ujian_start' => $ujian_start,
+                    'ujian_berakhir' => $ujianBerakhir->toDateTimeString(),
+                    'ujian_sisa_menit' => $diffMinutes,
+                ]
+            ]);
 
         } catch (Exception $e) {
             return response()->json([
