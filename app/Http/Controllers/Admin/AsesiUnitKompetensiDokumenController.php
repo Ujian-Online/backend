@@ -34,7 +34,9 @@ class AsesiUnitKompetensiDokumenController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Asesi APL-02 Lists'
+            'title' => 'Asesi APL-02 Lists',
+            'filter_route'  => route('admin.asesi.apl02.index'),
+            'filter_view'   => 'admin.assesi.apl02filter-form',
         ]);
     }
 
