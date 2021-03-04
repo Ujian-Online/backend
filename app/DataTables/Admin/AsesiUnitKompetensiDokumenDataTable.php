@@ -86,7 +86,7 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                 'sertifikasis.id as sertifikasi_id',
                 'sertifikasis.title as sertifikasi_title'
             ])
-            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id')
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id')
             ->groupBy( 'asesi_id', 'sertifikasi_id', 'sertifikasi_title')
             ->get();
 
