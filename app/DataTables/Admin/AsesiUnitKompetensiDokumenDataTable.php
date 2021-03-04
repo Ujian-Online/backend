@@ -41,30 +41,30 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                 return $statusHTML;
             })
             ->addColumn('name_asesi', function($query) {
-                $name_asesi = $query->user->email;
+                $name_asesi = (isset($query['user']) and !empty($query['user'])) ? $query['user']['email'] : '';
 
-                if(isset($query->user->asesi) and !empty($query->user->asesi) and isset($query->user->asesi->name) and !empty($query->user->asesi->name)) {
-                    $name_asesi = $query->user->asesi->name;
+                if(isset($query['user']['asesi']) and !empty($query['user']['asesi']) and isset($query['user']['asesi']['name']) and !empty($query['user']['asesi']['name'])) {
+                    $name_asesi = $query['user']['asesi']['name'];
                 }
 
                 return $name_asesi;
             })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
-                    'title' => (isset($query->user) and !empty($query->user)
-                                and isset($query->user->asesi) and !empty($query->user->asesi))
-                                ? $query->user->asesi->name : $query->asesi_id,
+                    'title' => (isset($query['user']) and !empty($query['user'])
+                                and isset($query['user']['asesi']) and !empty($query['user']['asesi']))
+                                ? $query['user']['asesi']['name'] : $query['asesi_id'],
                     'url_print' => route('admin.asesi.apl02.view', [
-                        'userid' => $query->asesi_id,
-                        'sertifikasiid' => $query->sertifikasi_id
+                        'userid' => $query['asesi_id'],
+                        'sertifikasiid' => $query['sertifikasi_id']
                     ]) . '?print=true',
                     'url_show' => route('admin.asesi.apl02.view', [
-                        'userid' => $query->asesi_id,
-                        'sertifikasiid' => $query->sertifikasi_id
+                        'userid' => $query['asesi_id'],
+                        'sertifikasiid' => $query['sertifikasi_id']
                     ]),
                     'url_edit' => route('admin.asesi.apl02.viewedit', [
-                        'userid' => $query->asesi_id,
-                        'sertifikasiid' => $query->sertifikasi_id
+                        'userid' => $query['asesi_id'],
+                        'sertifikasiid' => $query['sertifikasi_id']
                     ]),
                 ]);
             })
