@@ -57,7 +57,10 @@ if (!function_exists('upload_to_s3')) {
             $apl02Status = null;
 
             // Ambil data dari database
-            $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::where('asesi_id', $asesiId)
+            $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
+                ->where('asesi_sertifikasi_unit_kompetensi_elements.asesi_id', $asesiId)
+                ->where('asesi_unit_kompetensi_dokumens.asesi_id', $asesiId)
+                ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', $sertifikasiId)
                 ->get();
 
             // apl02 status
