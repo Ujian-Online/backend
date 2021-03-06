@@ -232,6 +232,7 @@ namespace App{
  *
  * @property int $id
  * @property string $title
+ * @property string $durasi_ujian
  * @property int $sertifikasi_id
  * @property int|null $asesor_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -405,6 +406,8 @@ namespace App{
  *
  * @property int $id
  * @property string $tanggal
+ * @property string $jam_mulai
+ * @property string $jam_berakhir
  * @property string $title
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
