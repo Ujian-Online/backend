@@ -483,13 +483,14 @@ class UjianController extends Controller
             $ujianBerakhir = Carbon::parse($ujian_start)->addMinutes($durasiUjianMenit);
 
             // bandingkan waktu ujian dimulai dengan sekarang
-            $diffMinutes = $dateNow->diffInMinutes($ujianBerakhir);
+            $diffMinutes = $dateNow->diffInMinutes($ujianBerakhir->toDateTimeString());
 
             // return response ok
             return response()->json([
                 'code' => 200,
                 'message' => 'success',
                 'data' => [
+                    'tanggal_jam_sekarang' => $dateNow->toDateTimeString(),
                     'ujian_start' => $ujian_start,
                     'ujian_berakhir' => $ujianBerakhir->toDateTimeString(),
                     'ujian_sisa_menit' => $diffMinutes,
