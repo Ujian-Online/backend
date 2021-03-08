@@ -30,6 +30,10 @@ Route::middleware(['auth'])
             Route::get('sertifikasi/search', 'Admin\SertifikasiController@search')->name('sertifikasi.search');
             Route::get('user/search', 'Admin\UserController@search')->name('user.search');
             Route::get('ujian/jadwal/search', 'Admin\UjianJadwalController@search')->name('ujian.jadwal.search');
+
+            Route::get('akun-saya', 'Admin\MyProfileController@show')->name('akun-saya.show');
+            Route::get('akun-saya/edit', 'Admin\MyProfileController@edit')->name('akun-saya.edit');
+            Route::patch('akun-saya', 'Admin\MyProfileController@update')->name('akun-saya.update');
         });
 
         // Route Can be Access For Admin or TUK
@@ -107,3 +111,6 @@ Route::middleware(['auth'])
 
         Route::get('sertifikasi', 'Admin\SertifikasiController@index')->name('sertifikasi.index')->middleware('can:isAdminTukAsesor');
     });
+
+
+Route::get('test', 'TestController@test');

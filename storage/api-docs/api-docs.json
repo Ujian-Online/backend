@@ -876,6 +876,48 @@
                 ]
             }
         },
+        "/api/user": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update Foto atau TTD",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::signature",
+                "requestBody": {
+                    "description": "Update Foto atau TTD",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "upload_profile": {
+                                        "description": "Upload Gambar Profile. Ekstensi: JPG/JPEG/PNG",
+                                        "type": "file",
+                                        "example": "profile.png"
+                                    },
+                                    "upload_sign": {
+                                        "description": "Upload TTD/Paraf. Ekstensi: JPG/JPEG/PNG",
+                                        "type": "file",
+                                        "example": "paraf.png"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/email/verify": {
             "post": {
                 "tags": [
