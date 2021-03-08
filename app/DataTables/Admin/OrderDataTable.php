@@ -91,6 +91,7 @@ class OrderDataTable extends DataTable
                 'orders.*',
                 'sertifikasis.title as sertifikasi_title'
             ])
+            ->join('users', 'users.id', '=', 'orders.asesi_id')
             ->join('sertifikasis', 'sertifikasis.id', '=', 'orders.sertifikasi_id');
 
         // get user active before apply filter
