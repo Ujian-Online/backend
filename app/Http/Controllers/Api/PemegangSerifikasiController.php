@@ -36,7 +36,8 @@ class PemegangSerifikasiController extends Controller
             ->join('users', 'users.id', '=', 'ujian_asesi_asesors.asesi_id')
             ->join('user_asesis', 'user_asesis.user_id', '=', 'ujian_asesi_asesors.asesi_id')
             ->join('sertifikasis', 'sertifikasis.id', '=', 'ujian_asesi_asesors.sertifikasi_id')
-            ->whereNotNull('ujian_asesi_asesors.ujian_start');
+            ->whereNotNull('ujian_asesi_asesors.ujian_start')
+            ->where('ujian_asesi_asesors.status', 'selesai');
 
         return datatables()
             ->eloquent($query)

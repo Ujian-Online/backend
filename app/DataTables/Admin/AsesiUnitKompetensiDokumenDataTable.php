@@ -22,8 +22,17 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
         return datatables()
             ->collection($query)
             ->addColumn('status', function($query) {
-                $statusRaw = apl02_status($query->asesi_id, $query->sertifikasi_id);
+
+                if(isset($query['apl02_status']) and !empty($query['apl02_status'])) {
+                    $statusRaw = $query['apl02_status'];
+                } else {
+                    $statusRaw = apl02_status($query['asesi_id'], $query['sertifikasi_id']);
+                }
+
+                // status replace
                 $status = ucwords(str_replace('_', ' ', $statusRaw));
+
+                // HTML Status
                 $statusHTML = '';
 
                 if($statusRaw == 'isi_form') {
@@ -82,7 +91,7 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
         // query ke database
         $query = $model::with(['user', 'user.asesi', 'sertifikasi'])
             ->select([
-                'asesi_id',
+                'asesi_unit_kompetensi_dokumens.asesi_id as asesi_id',
                 'sertifikasis.id as sertifikasi_id',
                 'sertifikasis.title as sertifikasi_title'
             ])
@@ -100,7 +109,9 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                 $getStatus = apl02_status($data->asesi_id, $data->sertifikasi_id);
 
                 if ($status == $getStatus) {
-                    $result[] = $data;
+                    $result[] = array_merge($data, [
+                        'apl02_status' => $getStatus
+                    ]);
                 }
             }
         } else {
