@@ -6,10 +6,10 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="email">Email</label>
-            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Email" value="{{ old('email') ?? $query->email ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Email" value="{{ old('email') ?? $query->email ?? '' }}" readonly>
 
             @error('email')
-                <div class="alert alert-danger">{{ $message }}</div>
+            <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="form-group col-md-6">
@@ -25,7 +25,7 @@
                     <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password" value="{{ $query->password ?? '' }}" @if(isset($isShow)) readonly @endif>
                 </div>
                 @error('password')
-                    <div class="alert alert-danger">{{ $message }}</div>
+                <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             @endif
 
@@ -43,55 +43,17 @@
                 <small id="helpNewPassword" class="text-muted">Kosongkan Form Jika Tidak Ingin Mengganti Password</small>
 
                 @error('newpassword')
-                    <div class="alert alert-danger">{{ $message }}</div>
+                <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             @endif
         </div>
         <div class="form-group col-md-6">
             <label for="type">Type</label>
-            <select class="form-control" name="type" id="type" @if(isset($isShow)) readonly @endif>
-
-                @foreach(config('options.user_type') as $type)
-                    <option
-                        value="{{ $type }}"
-
-                        @if(old('type') == $type)
-                            {{ __('selected') }}
-                        @elseif(isset($query->type) and !empty($query->type) and $query->type == $type)
-                            {{ __('selected') }}
-                        @endif
-                    >
-                        {{ ucfirst($type) }}
-                    </option>
-                @endforeach
-
-            </select>
-            @error('type')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <input type="text" class="form-control text-uppercase" value="{{ $query->type }}" readonly>
         </div>
         <div class="form-group col-md-6">
             <label for="inputStatus">Status</label>
-            <select class="form-control" name="status" id="inputStatus" @if(isset($isShow)) readonly @endif>
-
-                @foreach(config('options.user_status') as $status)
-                    <option
-                        value="{{ $status }}"
-
-                        @if(old('status') == $status)
-                            {{ __('selected') }}
-                        @elseif(isset($query->status) and !empty($query->status) and $query->status == $status)
-                            {{ __('selected') }}
-                        @endif
-                    >
-                        {{ ucfirst($status) }}
-                    </option>
-                @endforeach
-
-            </select>
-            @error('status')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <input type="text" class="form-control text-uppercase" value="{{ $query->status }}" readonly>
         </div>
 
         <div class="form-group col-md-6">
@@ -120,14 +82,14 @@
             </div>
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group centered col-md-6">
             <div class="row">
                 <div class="col-md-12">
-                    <label for="media_url_sign_user">TTD/Paraf</label>
+                    <label for="upload_sign">TTD/Paraf</label>
                 </div>
                 <div class="col-md-12">
                     @if(isset($isCreated) OR isset($isEdit))
-                        <input type="file" class="form-control-file @error('upload_sign') is-invalid @enderror" name="upload_sign" id="upload_profile" accept=".jpg,.jpeg,.png">
+                        <input type="file" class="form-control-file @error('upload_sign') is-invalid @enderror" name="upload_sign" id="upload_sign" accept=".jpg,.jpeg,.png">
                         <small id="helpFileUpload" class="text-muted">File Type: .jpg, .jpeg, .png</small>
 
                         @error('upload_sign')

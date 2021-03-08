@@ -290,6 +290,12 @@ return [
                     ],
                 ],
             ],
+            [
+                'title'     => 'Akun Saya',
+                'icon'      => 'fas fa-user',
+                'route'     => 'admin.akun-saya.show',
+                'active'    => 'admin.akun-saya.*',
+            ],
         ],
 
         /**
@@ -350,6 +356,12 @@ return [
                 'icon'      => 'fas fa-book-reader',
                 'route'     => 'admin.ujian.asesi.index',
                 'active'    => 'admin.ujian.asesi.*',
+            ],
+            [
+                'title'     => 'Akun Saya',
+                'icon'      => 'fas fa-user',
+                'route'     => 'admin.akun-saya.show',
+                'active'    => 'admin.akun-saya.*',
             ],
         ],
 
@@ -417,7 +429,13 @@ return [
                 'icon'      => 'fa fa-file-signature',
                 'url'       => '/admin/ujian-asesi/?status=penilaian',
                 'active'    => 'admin.ujian-asesi.*',
-            ]
+            ],
+            [
+                'title'     => 'Akun Saya',
+                'icon'      => 'fas fa-user',
+                'route'     => 'admin.akun-saya.show',
+                'active'    => 'admin.akun-saya.*',
+            ],
         ],
     ],
 ];
