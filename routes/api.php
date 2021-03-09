@@ -37,6 +37,7 @@ Route::name('api.')
         Route::middleware(['auth:api'])
             ->group(function () {
                 Route::get('user/me', 'Api\UserController@me')->name('me');
+                Route::post('user', 'Api\UserController@signature')->name('signature');
 
                 Route::get('order', 'Api\OrderController@index')->name('order.index');
                 Route::post('order', 'Api\OrderController@store')->name('order.store');
