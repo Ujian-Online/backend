@@ -57,18 +57,11 @@ class SertifikasiTukController extends Controller
      */
     public function create()
     {
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get tuk lists
-        $tuks = Tuk::all();
-
         // return view template create
         return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
             'title'         => 'Tambah Sertifikasi TUK Baru',
             'action'        => route('admin.sertifikasi.tuk.store'),
             'isCreated'     => true,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
         ]);
     }
 
@@ -84,7 +77,6 @@ class SertifikasiTukController extends Controller
         // validate input
         $request->validate([
             'sertifikasi_id'        => 'required',
-            'tuk_id'                => 'required',
             'tuk_price_baru'        => 'required',
             'tuk_price_perpanjang'  => 'required',
         ]);
@@ -97,6 +89,14 @@ class SertifikasiTukController extends Controller
             'tuk_price_perpanjang',
             'tuk_price_training',
         ]);
+
+        // get user login
+        $user = $request->user();
+
+        // get tuk id user if access by tuk
+        if($user->can('isTuk') and isset($user->tuk) and !empty($user->tuk)) {
+            $dataInput['tuk_id'] = $user->tuk->tuk_id;
+        }
 
         // cari sertifikasi dan tuk
         $search = SertifikasiTuk::where('sertifikasi_id', $dataInput['sertifikasi_id'])
@@ -122,18 +122,27 @@ class SertifikasiTukController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Application|Factory|Response|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         // Find Data by ID
-        $query = SertifikasiTuk::findOrFail($id);
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get tuk lists
-        $tuks = Tuk::all();
+        $query = SertifikasiTuk::where('id', $id);
+        // get user access
+        $user = $request->user();
+
+        // get tuk id user if access by tuk
+        $tukId = null;
+        if($user->can('isTuk') and isset($user->tuk) and !empty($user->tuk)) {
+            $tukId = $user->tuk->tuk_id;
+            $query = $query->where('tuk_id', $tukId);
+        }
+
+        // fetch data
+        $query = $query->firstOrFail();
 
         // return data to view
         return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
@@ -141,26 +150,34 @@ class SertifikasiTukController extends Controller
             'action'        => '#',
             'isShow'        => route('admin.sertifikasi.tuk.edit', $id),
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
+            'user'          => $user,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Application|Factory|Response|View
      */
-    public function edit(int $id)
+    public function edit(Request $request, int $id)
     {
         // Find Data by ID
-        $query = SertifikasiTuk::findOrFail($id);
-        // get sertifikasi lists
-        $sertifikasis = Sertifikasi::all();
-        // get tuk lists
-        $tuks = Tuk::all();
+        $query = SertifikasiTuk::where('id', $id);
+        // get user access
+        $user = $request->user();
+
+        // get tuk id user if access by tuk
+        $tukId = null;
+        if($user->can('isTuk') and isset($user->tuk) and !empty($user->tuk)) {
+            $tukId = $user->tuk->tuk_id;
+            $query = $query->where('tuk_id', $tukId);
+        }
+
+        // fetch data
+        $query = $query->firstOrFail();
 
         // return data to view
         return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
@@ -168,8 +185,7 @@ class SertifikasiTukController extends Controller
             'action'        => route('admin.sertifikasi.tuk.update', $id),
             'isEdit'        => true,
             'query'         => $query,
-            'sertifikasis'  => $sertifikasis,
-            'tuks'          => $tuks,
+            'user'          => $user,
         ]);
     }
 
@@ -186,7 +202,6 @@ class SertifikasiTukController extends Controller
         // validate input
         $request->validate([
             'sertifikasi_id'        => 'required',
-            'tuk_id'                => 'required',
             'tuk_price_baru'        => 'required',
             'tuk_price_perpanjang'  => 'required',
         ]);
@@ -201,7 +216,23 @@ class SertifikasiTukController extends Controller
         ]);
 
         // find by id and update
-        $query = SertifikasiTuk::findOrFail($id);
+        $query = SertifikasiTuk::where('id', $id);
+
+        // get user login
+        $user = $request->user();
+
+        // get tuk id user if access by tuk
+        $tukId = null;
+        if($user->can('isTuk') and isset($user->tuk) and !empty($user->tuk)) {
+            $tukId = $user->tuk->tuk_id;
+            $dataInput['tuk_id'] = $tukId;
+
+            // find by tuk_id
+            $query = $query->where('tuk_id', $tukId);
+        }
+
+        // get data
+        $query = $query->firstOrFail();
         // update data
         $query->update($dataInput);
 

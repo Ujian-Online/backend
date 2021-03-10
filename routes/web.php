@@ -42,6 +42,9 @@ Route::middleware(['auth'])
             Route::get('/order/search', 'Admin\OrderController@search')->name('order.search');
             Route::get('/order/{id}', 'Admin\OrderController@show')->name('order.show');
             Route::get('sertifikasi/tuk', 'Admin\SertifikasiTukController@index')->name('sertifikasi.tuk.index');
+            Route::get('sertifikasi/tuk/{id}', 'Admin\SertifikasiTukController@show')->name('sertifikasi.tuk.show');
+            Route::get('sertifikasi/tuk/{id}/edit', 'Admin\SertifikasiTukController@edit')->name('sertifikasi.tuk.edit');
+            Route::patch('sertifikasi/tuk/{id}', 'Admin\SertifikasiTukController@update')->name('sertifikasi.tuk.update');
             Route::resource('tuk/bank', 'Admin\TukBankController', ['as' => 'tuk']);
             Route::get('ujian/asesi', 'Admin\UjianAsesiAsesorController@index')->name('ujian.asesi.index');
         });
@@ -82,8 +85,8 @@ Route::middleware(['auth'])
             Route::get('tuk/search', 'Admin\TukController@search')->name('tuk.search');
             Route::resource('tuk', 'Admin\TukController');
 
-            Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi'])->except('index');
-            Route::resource('sertifikasi', 'Admin\SertifikasiController')->except('index');
+            Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi'])->only(['create', 'destroy']);
+            Route::resource('sertifikasi', 'Admin\SertifikasiController')->except(['show','index']);
 
             Route::resource('asesi/customdata', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);
             Route::resource('asesi/apl01', 'Admin\UserAsesiController', ['as' => 'asesi']);
@@ -110,7 +113,5 @@ Route::middleware(['auth'])
         });
 
         Route::get('sertifikasi', 'Admin\SertifikasiController@index')->name('sertifikasi.index')->middleware('can:isAdminTukAsesor');
+        Route::get('sertifikasi/{id}', 'Admin\SertifikasiController@show')->name('sertifikasi.show')->middleware('can:isAdminTukAsesor');
     });
-
-
-Route::get('test', 'TestController@test');

@@ -26,6 +26,13 @@ class SertifikasiTukDataTable extends DataTable
             })
             ->editColumn('tuk_price_perpanjang', function($query) {
                 return number_format($query->tuk_price_perpanjang, 0, ',', '.');
+            })
+            ->addColumn('action', function ($query) {
+                return view('layouts.pageTableAction', [
+                    'title' => $query->id,
+                    'url_show' => route('admin.sertifikasi.tuk.show', $query->id),
+                    'url_edit' => route('admin.sertifikasi.tuk.edit', $query->id),
+                ]);
             });
     }
 
@@ -94,6 +101,12 @@ class SertifikasiTukDataTable extends DataTable
                 ->title('Harga Baru'),
             Column::make('tuk_price_perpanjang')
                 ->title('Harga Perpanjang'),
+            Column::computed('action')
+                ->orderable(false)
+                ->exportable(false)
+                ->printable(false)
+                ->width('15%')
+                ->addClass('text-center'),
         ];
     }
 

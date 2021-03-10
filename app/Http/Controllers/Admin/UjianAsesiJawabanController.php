@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\Admin\UjianAsesiJawabanDataTable;
 use App\Http\Controllers\Controller;
 use App\Soal;
+use App\UjianAsesiAsesor;
 use App\UjianAsesiJawaban;
 use App\UserAsesi;
 use Exception;
@@ -29,7 +30,9 @@ class UjianAsesiJawabanController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Jadwal Ujian Jawaban Lists'
+            'title' => 'Jadwal Ujian Jawaban Lists',
+            'filter_route'  => route('admin.ujian.jawaban.index'),
+            'filter_view'   => 'admin.ujian.ujian-asesi-filter-form',
         ]);
     }
 
@@ -109,20 +112,55 @@ class UjianAsesiJawabanController extends Controller
     public function show(int $id)
     {
         // Find Data by ID
-        $query = UjianAsesiJawaban::findOrFail($id);
-        // get soal lists
-        $soals = Soal::all();
-        // get asesi lists
-        $asesis = UserAsesi::all();
+        $query = UjianAsesiAsesor::with([
+            'userasesi',
+            'userasesi.asesi',
+            'userasesor',
+            'userasesor.asesor',
+            'ujianjadwal',
+            'sertifikasi',
+            'ujianasesijawaban',
+            'soalpaket',
+            'order',
+            'order.tuk'
+        ])->findOrFail($id);
+
+        // pisahkan soal jawaban pilihan ganda dan essay kalau ada datanya
+        $soal_pilihangandas = [];
+        $soal_essays = [];
+        $total_nilai = 0;
+        $total_max = 0;
+        if(isset($query->ujianasesijawaban) and !empty($query->ujianasesijawaban)) {
+            foreach($query->ujianasesijawaban as $soal) {
+                if($soal->question_type == 'multiple_option') {
+                    // update object soal pilihan ganda
+                    $soal_pilihangandas[] = $soal;
+
+                    // update nilai asesi berdasarkan maxscore
+                    $total_nilai += $soal->max_score;
+                } else {
+                    // update object soal essay
+                    $soal_essays[] = $soal;
+
+                    // update nilai asesi berdasarkan final_score
+                    $total_nilai += $soal->final_score;
+                }
+
+                // update total max score semua soal
+                $total_max += $soal->max_score;
+            }
+        }
 
         // return data to view
-        return view('admin.ujian.jawaban-form', [
-            'title'     => 'Tampilkan Detail: ' . $query->question,
-            'action'    => '#',
-            'isShow'    => true,
-            'query'     => $query,
-            'soals'     => $soals,
-            'asesis'    => $asesis,
+        return view('asesor.ujian.penilaian-form', [
+            'title'                 => 'Ujian Asesi Detail: ' . $query->id,
+            'action'                => '#',
+            'isShow'                => false,
+            'query'                 => $query,
+            'soal_pilihangandas'    => $soal_pilihangandas,
+            'soal_essays'           => $soal_essays,
+            'total_nilai'           => $total_nilai,
+            'total_max'             => $total_max,
         ]);
     }
 

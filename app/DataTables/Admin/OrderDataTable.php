@@ -110,12 +110,12 @@ class OrderDataTable extends DataTable
 
             // tuk_id filter query
             if(isset($tuk_id) and !empty($tuk_id)) {
-                $query = $query->where('tuk_id', $tuk_id);
+                $query = $query->where('orders.tuk_id', $tuk_id);
             }
 
             // sertifikasi_id filter query
             if(isset($sertifikasi_id) and !empty($sertifikasi_id)) {
-                $query = $query->where('sertifikasi_id', $sertifikasi_id);
+                $query = $query->where('orders.sertifikasi_id', $sertifikasi_id);
             }
         }
 
@@ -123,7 +123,7 @@ class OrderDataTable extends DataTable
         if($user->can('isTuk')) {
             // get tuk id based from user id
             $tukid = $user->tuk->tuk_id;
-            $query = $query->where('tuk_id', $tukid);
+            $query = $query->where('orders.tuk_id', $tukid);
         }
 
         // get input filter for admin and tuk
@@ -133,17 +133,17 @@ class OrderDataTable extends DataTable
 
         // status filter query
         if(isset($status) and !empty($status)) {
-            $query = $query->where('status', $status);
+            $query = $query->where('orders.status', $status);
         }
 
         // dateFrom filter query
         if(isset($dateFrom) and !empty($dateFrom)) {
-            $query = $query->where('transfer_date', '>=', $dateFrom);
+            $query = $query->where('orders.transfer_date', '>=', $dateFrom);
         }
 
         // dateTo filter query
         if(isset($query) and !empty($dateTo)) {
-            $query = $query->where('transfer_date', '<=', $dateTo);
+            $query = $query->where('orders.transfer_date', '<=', $dateTo);
         }
 
         // return query

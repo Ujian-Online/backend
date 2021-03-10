@@ -157,6 +157,11 @@
                                         "type": "integer",
                                         "example": "1"
                                     },
+                                    "type": {
+                                        "description": "Informasikan apakah data yang di input itu baru atau perubahan, cek di index array type.! Input Type: 'new' or 'update'.",
+                                        "type": "string",
+                                        "example": "new"
+                                    },
                                     "value": {
                                         "description": "Value ini berbeda-beda inputannya,\n     *                         tergantung dari custom data, jika file upload, maka berupa file ekstensi: JPG/JPEG/PNG/PDF,\n     *                          jika dropdown maka sesuai value dari dropdown_option, jika text, maka text biasa.",
                                         "type": "file",
@@ -845,6 +850,36 @@
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/ujian/{id}/finish": {
+            "post": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Finish Status Ujian",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::finish",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ujian id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
