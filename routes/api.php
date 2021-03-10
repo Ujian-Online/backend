@@ -58,5 +58,6 @@ Route::name('api.')
                 Route::get('ujian/detail/{id}', 'Api\UjianController@detail')->name('ujian.detail');
                 Route::get('ujian/soal/{id}', 'Api\UjianController@soal')->name('ujian.soal');
                 Route::post('ujian/{id}/start', 'Api\UjianController@start')->name('ujian.start');
+                Route::post('ujian/{id}/finish', 'Api\UjianController@finish')->name('ujian.finish');
             });
     });
