@@ -99,7 +99,7 @@ class UjianAsesiPenilaianController extends Controller
         return view('asesor.ujian.penilaian-form', [
             'title'                 => 'Ujian Asesi Detail: ' . $query->id,
             'action'                => '#',
-            'isShow'                => route('admin.ujian-asesi.edit', $id),
+            'isShow'                => (isset($query->status) and $query->status != 'selesai') ? route('admin.ujian-asesi.edit', $id) : false,
             'query'                 => $query,
             'soal_pilihangandas'    => $soal_pilihangandas,
             'soal_essays'           => $soal_essays,
