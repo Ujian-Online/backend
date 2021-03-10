@@ -41,19 +41,43 @@ class Apl01Controller extends Controller
         $user = $request->user();
 
         // get data APL01
-        $asesi = UserAsesi::with('asesicustomdata')
-                ->where('user_id', $user->id)
-                ->first();
+        $asesi = UserAsesi::where('user_id', $user->id)
+                ->firstOrFail();
 
-        // get data apl01 form index
-        $asesicustomdata = AsesiCustomData::all();
+        // get data asesi custom data
+        $asesicustomdata = UserAsesiCustomData::select([
+            'user_asesi_custom_data.*',
+            'asesi_custom_data.dropdown_option as dropdown_option'
+        ])
+            ->leftJoin('asesi_custom_data', 'asesi_custom_data.title', '=', 'user_asesi_custom_data.title')
+            ->where('user_asesi_custom_data.asesi_id', $user->id)
+            ->get();
+
+        // get only title in asesi custom data
+        $asesiCDTitle = null;
+        $resultAsesiCustomData = null;
+        foreach($asesicustomdata as $acd) {
+            // title only
+            $asesiCDTitle[] = $acd->title;
+
+            // merge status custom data
+            $resultAsesiCustomData[] = array_merge($acd->toArray(), ['type' => 'update']);
+        }
+
+        // get data custom data index
+        $customdata = AsesiCustomData::whereNotIn('title', $asesiCDTitle)->get();
+
+        // set index custom data
+        $resultCustomData = null;
+        foreach($customdata as $cd) {
+            $resultCustomData[] = array_merge($cd->toArray(), ['type' => 'new']);
+        }
 
         // return response
         return response()->json([
             'data' => $asesi,
-            'customdata' => $asesicustomdata
+            'customdata' => array_merge($resultAsesiCustomData, $resultCustomData)
         ], 200);
-
     }
 
     /**
@@ -251,6 +275,12 @@ class Apl01Controller extends Controller
      *                     example="1"
      *                 ),
      *                 @OA\Property(
+     *                     property="type",
+     *                     description="Informasikan apakah data yang di input itu baru atau perubahan, cek di index array type.! Input Type: 'new' or 'update'.",
+     *                     type="string",
+     *                     example="new"
+     *                 ),
+     *                 @OA\Property(
      *                     property="value",
      *                     description="Value ini berbeda-beda inputannya,
      *                         tergantung dari custom data, jika file upload, maka berupa file ekstensi: JPG/JPEG/PNG/PDF,
@@ -284,8 +314,28 @@ class Apl01Controller extends Controller
 
         // get custom data id before validate
         $customdataid = $request->input('customdataid');
+        // get input type
+        $type = $request->input('type');
+        if(empty($type)) {
+            return response()->json([
+                'message' => 'Set form type sebelum mengupdate atau menyimpan data baru'
+            ], 403);
+        }
+
         // check index custom data
-        $customdata = AsesiCustomData::findOrFail($customdataid);
+        $customdata = null;
+        if($type == 'new') {
+            $customdata = AsesiCustomData::findOrFail($customdataid);
+        } else {
+            $customdata = UserAsesiCustomData::select([
+                'user_asesi_custom_data.*',
+                'asesi_custom_data.dropdown_option as dropdown_option'
+            ])
+                ->leftJoin('asesi_custom_data', 'asesi_custom_data.title', '=', 'user_asesi_custom_data.title')
+                ->where('user_asesi_custom_data.id', $customdataid)
+                ->where('user_asesi_custom_data.asesi_id', $user->id)
+                ->firstOrFail();
+        }
 
         // variable for save value
         $value = $request->input('value');
@@ -294,6 +344,7 @@ class Apl01Controller extends Controller
         if($customdata->input_type == 'upload_image') {
             $request->validate([
                 'customdataid'  => 'required',
+                'type'          => 'required|in:new,update',
                 'value'         => 'required|mimes:jpg,jpeg,png'
             ]);
 
@@ -302,6 +353,7 @@ class Apl01Controller extends Controller
         } else if($customdata->input_type == 'upload_pdf') {
             $request->validate([
                 'customdataid'  => 'required',
+                'type'          => 'required|in:new,update',
                 'value'         => 'required|mimes:pdf'
             ]);
 
@@ -310,21 +362,18 @@ class Apl01Controller extends Controller
         } else if($customdata->input_type == 'dropdown') {
             $request->validate([
                 'customdataid'  => 'required',
+                'type'          => 'required|in:new,update',
                 'value'         => 'required|in:' . $customdata->dropdown_option
             ]);
         }
 
-        // check asesi apl01 custom data, found or not, for update or create new element
-        $apl01customdata = UserAsesiCustomData::where('asesi_id', $user->id)
-            ->where('input_type', $customdata->input_type)->first();
-
         // update jika ada customdata
-        if($apl01customdata) {
-            $apl01customdata->value = $value;
-            $save = $apl01customdata->save();
+        if($type == 'update') {
+            $customdata->value = $value;
+            $customdata->save();
 
             // Kirim Email ke Admin
-            APL01AdminNotification::dispatch($user->id, $apl01customdata->id);
+            APL01AdminNotification::dispatch($user->id, $customdata->id);
         } else {
             // buat baru jika tidak ada customdata
             $save = UserAsesiCustomData::create([
