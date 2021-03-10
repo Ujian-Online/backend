@@ -50,7 +50,7 @@ if(!function_exists('apl02_status')) {
      *
      * @param $asesiId int
      * @param $sertifikasiId int
-     * @return string
+     * @return string isi_form|menunggu_verifikasi|form_ditolak|form_terverifikasi|null
      */
     function apl02_status($asesiId, $sertifikasiId) {
         // variable return status
