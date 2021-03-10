@@ -116,22 +116,3 @@ if(!function_exists('apl02_status')) {
         return $apl02Status;
     }
 }
-
-
-
-if (!function_exists('waktu_ujian_validate')) {
-    /**
-     * Validasi Waktu Ujian, Apakah sudah berakhir atau tidak
-     * Validasi :
-     * 1. Tanggal
-     * 2. Jam
-     * 3. Durasi Ujian Berakhir
-     *
-     * @param $ujianId {integer}
-     * @param $asesiId {integer}
-     */
-    function upload_to_s3($ujianId, $asesiId)
-    {
-        //
-    }
-}
