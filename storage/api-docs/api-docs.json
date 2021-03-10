@@ -862,6 +862,36 @@
                 ]
             }
         },
+        "/api/ujian/{id}/finish": {
+            "post": {
+                "tags": [
+                    "Ujian"
+                ],
+                "summary": "Finish Status Ujian",
+                "operationId": "App\\Http\\Controllers\\Api\\UjianController::finish",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ujian id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/user/me": {
             "get": {
                 "tags": [
