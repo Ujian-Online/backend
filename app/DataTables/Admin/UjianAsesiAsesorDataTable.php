@@ -70,15 +70,21 @@ class UjianAsesiAsesorDataTable extends DataTable
     public function query(UjianAsesiAsesor $model)
     {
         // default query
-        $query = $model->with([
-            'userasesi',
-            'userasesi.asesi',
-            'userasesor',
-            'userasesor.asesor',
-            'ujianjadwal',
-            'sertifikasi',
-            'order'
-        ]);
+        $query = $model->select([
+                'ujian_asesi_asesors.*'
+            ])
+            ->with([
+                'userasesi',
+                'userasesi.asesi',
+                'userasesor',
+                'userasesor.asesor',
+                'ujianjadwal',
+                'sertifikasi',
+                'order'
+            ])
+            ->join('users as uasesi', 'uasesi.id', '=', 'ujian_asesi_asesors.asesi_id')
+            ->join('users as uasesor', 'uasesor.id', '=', 'ujian_asesi_asesors.asesor_id')
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'ujian_asesi_asesors.sertifikasi_id');
 
         // get input filter
         $ujian_jadwal_id = request()->input('ujian_jadwal_id');
@@ -95,13 +101,13 @@ class UjianAsesiAsesorDataTable extends DataTable
         // filter by sertifikasi
         if(!empty($sertifikasi_id)) {
             $query = $query->whereHas('sertifikasi', function($query) use ($sertifikasi_id) {
-                $query->where('id', $sertifikasi_id);
+                $query->where('sertifikasis.id', $sertifikasi_id);
             });
         }
 
         // filter by ujian jadwal
         if(!empty($status)) {
-            $query = $query->where('status', $status);
+            $query = $query->where('ujian_asesi_asesors.status', $status);
         }
 
         return $query;
