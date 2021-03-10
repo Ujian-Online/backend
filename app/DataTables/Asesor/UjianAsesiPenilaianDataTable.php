@@ -66,21 +66,27 @@ class UjianAsesiPenilaianDataTable extends DataTable
     public function query(UjianAsesiAsesor $model)
     {
         // default query
-        $query = $model->with([
-            'userasesi',
-            'userasesi.asesi',
-            'ujianjadwal',
-            'sertifikasi'
-        ]);
+        $query = $model->select([
+                'ujian_asesi_asesors.*'
+            ])
+            ->with([
+                'userasesi',
+                'userasesi.asesi',
+                'ujianjadwal',
+                'sertifikasi'
+            ])
+            ->join('users as uasesi', 'uasesi.id', '=', 'ujian_asesi_asesors.asesi_id')
+            ->join('users as uasesor', 'uasesor.id', '=', 'ujian_asesi_asesors.asesor_id')
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'ujian_asesi_asesors.sertifikasi_id');
 
         // get filter input
         $status = request()->input('status');
 
         // filter status
         if(!empty($status) and in_array($status, ['penilaian', 'selesai'])) {
-            $query = $query->where('status', $status);
+            $query = $query->where('ujian_asesi_asesors.status', $status);
         } else {
-            $query = $query->whereIn('status', ['penilaian', 'selesai']);
+            $query = $query->whereIn('ujian_asesi_asesors.status', ['penilaian', 'selesai']);
         }
 
         return $query;
@@ -124,7 +130,6 @@ class UjianAsesiPenilaianDataTable extends DataTable
     protected function getColumns()
     {
         return [
-        // Asesi, Sertifikasi, Jadwal Ujian, Status(Butuh Penilaian, sudah dinilai), Kompeten
             Column::computed('name_asesi')
                 ->title('Asesi Name')
                 ->width('15%'),
