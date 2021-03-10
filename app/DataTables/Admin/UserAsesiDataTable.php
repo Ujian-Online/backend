@@ -57,7 +57,9 @@ class UserAsesiDataTable extends DataTable
     public function query(UserAsesi $model)
     {
         // create query variable
-        $query = $model::with('user');
+        $query = $model::select('user_asesis.*')
+            ->with('user')
+            ->join('users', 'users.id', '=', 'user_asesis.user_id');
 
         // get input filter
         $is_verified = request()->input('is_verified');
