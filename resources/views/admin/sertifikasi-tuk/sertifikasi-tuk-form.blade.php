@@ -15,6 +15,8 @@
             @enderror
         </div>
 
+        {{-- Only Show TUK ID if Access by Admin --}}
+        @can('isAdmin')
         <div class="form-group col-md-12">
             <label for="tuk_id">TUK ID</label>
             <select class="form-control @error('tuk_id') is-invalid @enderror"
@@ -25,6 +27,7 @@
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+        @endcan
 
         <div class="form-group bg-gray col-md-12" id="harga-original-sertifikasi" style="display: none;">
             <div class="form-row">
@@ -160,7 +163,7 @@
         // sertifikasi select2 with ajax query search
         $('#sertifikasi_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : ($user->type == 'admin' ? 'false' : 'true') }},
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
