@@ -639,4 +639,62 @@ class UjianController extends Controller
             ], 403);
         }
     }
+
+    /**
+     * Finish Ujian
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * * @OA\Post(
+     *   path="/api/ujian/{id}/finish",
+     *   tags={"Ujian"},
+     *   summary="Finish Status Ujian",
+     *   security={{"passport":{}}},
+     *   @OA\Parameter(
+     *      name="id",
+     *      description="Ujian id",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *          type="integer"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response="200",
+     *      description="OK"
+     *   )
+     * )
+     */
+    public function finish(Request $request, $id)
+    {
+        // get user login
+        $user = $request->user();
+
+        try {
+            // get detail ujian
+            $query = UjianAsesiAsesor::where('id', $id)
+                ->where('asesi_id', $user->id)
+                ->firstOrFail();
+
+            // only update if status paket_soal_assigned
+            if($query->status == 'paket_soal_assigned') {
+                $query->status = 'penilaian';
+                $query->save();
+            }
+
+            // return response ok
+            return response()->json([
+                'code' => 200,
+                'message' => 'success',
+            ]);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 403,
+                'message' => $e->getMessage()
+            ], 403);
+        }
+    }
 }
