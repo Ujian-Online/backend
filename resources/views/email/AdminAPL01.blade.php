@@ -27,19 +27,15 @@
 # APL01 Custom Data
 
 @component('mail::table')
-| Detail | File |
+| Detail | Data |
 |-|-|
-
 @if(!empty($customData))
-
 @if($customData->input_type == 'upload_image' OR $customData->input_type == 'upload_pdf')
 | {{ !empty($customData) ? $customData->title : '' }} | <a href="{{ !empty($customData) ? $customData->value : '#' }}" class="btn btn-sm btn-primary">Link</a> |
 @else
 | {{ !empty($customData) ? $customData->title : '' }} | {{ !empty($customData) ? $customData->value : '#' }} |
 @endif
-
 @endif
-
 @endcomponent
 @endif
 
