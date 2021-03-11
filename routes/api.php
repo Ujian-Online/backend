@@ -37,6 +37,7 @@ Route::name('api.')
         Route::middleware(['auth:api'])
             ->group(function () {
                 Route::get('user/me', 'Api\UserController@me')->name('me');
+                Route::post('user', 'Api\UserController@signature')->name('signature');
 
                 Route::get('order', 'Api\OrderController@index')->name('order.index');
                 Route::post('order', 'Api\OrderController@store')->name('order.store');
@@ -57,5 +58,6 @@ Route::name('api.')
                 Route::get('ujian/detail/{id}', 'Api\UjianController@detail')->name('ujian.detail');
                 Route::get('ujian/soal/{id}', 'Api\UjianController@soal')->name('ujian.soal');
                 Route::post('ujian/{id}/start', 'Api\UjianController@start')->name('ujian.start');
+                Route::post('ujian/{id}/finish', 'Api\UjianController@finish')->name('ujian.finish');
             });
     });

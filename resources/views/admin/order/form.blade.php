@@ -250,7 +250,7 @@
             {{-- <input type="text" class="form-control @error('media_url_bukti_transfer') is-invalid @enderror" name="media_url_bukti_transfer" id="media_url_bukti_transfer" placeholder="Bukti Transfer" value="{{ old('media_url_bukti_transfer') ?? $query->media_url_bukti_transfer ?? '' }}" readonly> --}}
 
             @if(isset($query->media_url_bukti_transfer) and !empty($query->media_url_bukti_transfer))
-                <a href="{{ $query->media_url_bukti_transfer }}" id="media_url_bukti_transfer" class="form-control btn btn-primary mt-2 mb-2">Buka Lampiran Bukti Transfer</a>
+                <a href="#" onclick="window.open('{{ $query->media_url_bukti_transfer }}', '', 'width=500,height=500');" id="media_url_bukti_transfer" class="form-control btn btn-primary mt-2 mb-2">Buka Lampiran Bukti Transfer</a>
             @else
                 <a href="#" id="media_url_bukti_transfer" class="form-control btn btn-danger mt-2 mb-2">Lampiran Bukti Transfer Tidak Di Temukan</a>
             @endif

@@ -3,7 +3,7 @@
 @section('form')
     <div class="form-row">
 
-        <a href="{{ request()->url() }}?print=true" class="btn btn-success mb-2"><i class="fas fa-print"></i> Cetak APL-01</a>
+        <a href="#" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');" class="btn btn-success mb-2"><i class="fas fa-print"></i> Cetak APL-01</a>
 
         <div class="form-group col-md-12">
             <label for="user_id">User ID</label>
