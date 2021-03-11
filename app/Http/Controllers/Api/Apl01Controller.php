@@ -76,7 +76,7 @@ class Apl01Controller extends Controller
         // return response
         return response()->json([
             'data' => $asesi,
-            'customdata' => array_merge($resultAsesiCustomData, $resultCustomData)
+            'customdata' => (!empty($resultAsesiCustomData) and !empty($resultCustomData)) ? array_merge($resultAsesiCustomData, $resultCustomData) : $resultCustomData,
         ], 200);
     }
 
