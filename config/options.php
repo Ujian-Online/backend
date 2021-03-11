@@ -24,6 +24,8 @@ return [
         1 => 'Pria',
     ],
     'user_assesi_pendidikan_terakhir' => [
+        'SD',
+        'SMP',
         'SMA',
         'SMK',
         'D1',
