@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class OrderTukNotification implements ShouldQueue
@@ -73,5 +74,16 @@ class OrderTukNotification implements ShouldQueue
         foreach($userTuk as $tuk) {
             Mail::to($tuk->user->email)->send(new OrderTuk($userAsesi, $order));
         }
+    }
+
+    /**
+     * The job failed to process.
+     *
+     * @param Exception $exception
+     * @return void
+     */
+    public function failed(Exception $exception)
+    {
+        Log::info($exception);
     }
 }
