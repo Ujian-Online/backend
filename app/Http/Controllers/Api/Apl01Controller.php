@@ -71,6 +71,14 @@ class Apl01Controller extends Controller
             $customdata = AsesiCustomData::all();
         }
 
+        if($customdata->count() == 0) {
+            // return response
+            return response()->json([
+                'data' => $asesi,
+                'customdata' => $resultAsesiCustomData,
+            ], 200);
+        }
+
         // set index custom data
         $resultCustomData = null;
         foreach($customdata as $cd) {
