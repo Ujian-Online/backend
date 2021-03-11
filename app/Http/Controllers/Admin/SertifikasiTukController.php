@@ -53,15 +53,20 @@ class SertifikasiTukController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param Request $request
      * @return Application|Factory|Response|View
      */
-    public function create()
+    public function create(Request $request)
     {
+        // get user login
+        $user = $request->user();
+
         // return view template create
         return view('admin.sertifikasi-tuk.sertifikasi-tuk-form', [
             'title'         => 'Tambah Sertifikasi TUK Baru',
             'action'        => route('admin.sertifikasi.tuk.store'),
             'isCreated'     => true,
+            'user'          => $user,
         ]);
     }
 
