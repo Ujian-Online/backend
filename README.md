@@ -16,6 +16,7 @@
     - [Fixed Owner Permission](#fixed-owner-permission)
       - [Nginx](#nginx)
       - [Apache](#apache)
+  - [CronJob](#cronjob)
 
 # Ujian Online Backend
 
@@ -117,4 +118,10 @@ chown -R www-data:www-data *
 
 ```bash
 chown -R apache:apache *
+```
+
+### CronJob
+
+```
+* * * * * cd /home/ubuntu/backend && php artisan schedule:run >> /dev/null 2>&1
 ```
