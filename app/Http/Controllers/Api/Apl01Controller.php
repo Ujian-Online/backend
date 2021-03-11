@@ -65,7 +65,11 @@ class Apl01Controller extends Controller
         }
 
         // get data custom data index
-        $customdata = AsesiCustomData::whereNotIn('title', $asesiCDTitle)->get();
+        if(!empty($asesiCDTitle)) {
+            $customdata = AsesiCustomData::whereNotIn('title', $asesiCDTitle)->get();
+        } else {
+            $customdata = AsesiCustomData::all();
+        }
 
         // set index custom data
         $resultCustomData = null;
