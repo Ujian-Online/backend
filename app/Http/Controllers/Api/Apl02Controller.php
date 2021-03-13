@@ -86,9 +86,13 @@ class Apl02Controller extends Controller
         $sertifikasi = Sertifikasi::findOrFail($id);
         // get UK Dokumen and Element
         $unitkompetensis = AsesiUnitKompetensiDokumen::with([
-                'asesisertifikasiunitkompetensielement' => function ($query) use ($user) {
-                    $query->where('asesi_id', $user->id);
-                }])
+                    'asesisertifikasiunitkompetensielement' => function ($query) use ($user) {
+                        $query->where('asesi_id', $user->id);
+                    },
+                    'asesisertifikasiunitkompetensielement.media' => function ($query) use ($user) {
+                        $query->where('asesi_id', $user->id);
+                    }
+                ])
                 ->where('asesi_id', $user->id)
                 ->where('sertifikasi_id', $id)
                 ->get();
