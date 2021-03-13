@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\AsesiSertifikasiUnitKompetensiElement;
+use App\AsesiSUKElementMedia;
 use App\AsesiUnitKompetensiDokumen;
 use App\Http\Controllers\Controller;
 use App\Sertifikasi;
@@ -124,8 +125,26 @@ class Apl02Controller extends Controller
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                @OA\Property(
-     *                     property="id",
+     *                     property="element_id",
      *                     description="ID Unit Kompetensi Element",
+     *                     type="integer",
+     *                     example="5"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="type",
+     *                     description="Informasikan apakah data yang di input itu baru atau perubahan, jika update maka harus input media_id, jika baru tidak perlu.! Input Type: 'new' or 'update'.",
+     *                     type="string",
+     *                     example="new"
+     *                 ),
+     *                @OA\Property(
+     *                     property="media_id",
+     *                     description="ID Media digunakan jika type update!",
+     *                     type="integer",
+     *                     example="5"
+     *                 ),
+     *                @OA\Property(
+     *                     property="description",
+     *                     description="Deskripsi File Upload, Digunakan untuk type: new/update",
      *                     type="integer",
      *                     example="5"
      *                 ),
@@ -147,29 +166,70 @@ class Apl02Controller extends Controller
     public function updateElement(Request $request) {
         // validate input
         $request->validate([
-            'id' => 'required',
-            'value' => 'required|mimes:jpg,jpeg,png,pdf'
+            'element_id'    => 'required',
+            'type'          => 'required|in:new,update',
+            'media_id'      => 'required_if:type,update',
+            'description'   => 'required',
+            'value'         => 'required|mimes:jpg,jpeg,png,pdf'
         ]);
-
-        // get input id
-        $id = $request->input('id');
 
         // get user login
         $user = $request->user();
 
-        // run upload data
-        $value = upload_to_s3($request->file('value'));
+        try {
+            // check type input
+            // create if new
+            // update just update media url
+            $type = $request->input('type');
 
-        // update data element
-        $query = AsesiSertifikasiUnitKompetensiElement::where('id', $id)
-            ->where('asesi_id', $user->id)
-            ->firstOrFail();
+            // get element id
+            $element_id = $request->input('element_id');
+            // get description
+            $description = $request->input('description');
 
-        // update kalau ada datanya
-        $query->media_url = $value;
-        $query->save();
+            // search element by user id first, if no elemtn, then will be fail
+            AsesiSertifikasiUnitKompetensiElement::where('id', $element_id)
+                ->where('asesi_id', $user->id)
+                ->firstOrFail();
 
-        // return response update data
-        return response()->json($query);
+            // save if type new
+            if($type == 'new') {
+                // upload file to s3
+                $value = upload_to_s3($request->file('value'));
+
+                $query = AsesiSUKElementMedia::create([
+                    'asesi_id' => $user->id,
+                    'asesi_suk_element_id' => $element_id,
+                    'description' => $description,
+                    'media_url' => $value,
+                ]);
+
+            // update if other than new
+            } else {
+                // get media id
+                $media_id = $request->input('media_id');
+
+                // search data by media id with asesi_id
+                $query = AsesiSUKElementMedia::where('id', $media_id)
+                    ->where('asesi_id', $user->id)
+                    ->firstOrFail();
+
+                // upload file to s3
+                $value = upload_to_s3($request->file('value'));
+
+                // update if found
+                $query->description = $description;
+                $query->media_url = $value;
+                $query->save();
+            }
+
+            // return response update data
+            return response()->json($query);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
