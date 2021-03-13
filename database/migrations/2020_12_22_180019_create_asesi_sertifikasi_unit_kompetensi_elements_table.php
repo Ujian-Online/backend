@@ -19,7 +19,6 @@ class CreateAsesiSertifikasiUnitKompetensiElementsTable extends Migration
             $table->bigInteger('unit_kompetensi_id');
             $table->text('desc');
             $table->text('upload_instruction');
-            $table->string('media_url')->nullable();
             $table->boolean('is_verified');
             $table->text('verification_note')->nullable();
             $table->timestamps();

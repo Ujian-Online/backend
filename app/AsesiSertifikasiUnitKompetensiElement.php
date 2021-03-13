@@ -17,7 +17,6 @@ class AsesiSertifikasiUnitKompetensiElement extends Model
         'unit_kompetensi_id',
         'desc',
         'upload_instruction',
-        'media_url',
         'is_verified',
         'verification_note',
     ];
