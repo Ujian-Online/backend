@@ -29,6 +29,24 @@ namespace App{
 
 namespace App{
 /**
+ * App\AsesiSUKElementMedia
+ *
+ * @property int $id
+ * @property int $asesi_id
+ * @property int $asesi_suk_element_id
+ * @property string|null $description
+ * @property string $media_url
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiSUKElementMedia newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiSUKElementMedia newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiSUKElementMedia query()
+ */
+	class AsesiSUKElementMedia extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\AsesiSertifikasiUnitKompetensiElement
  *
  * @property int $id
@@ -36,12 +54,13 @@ namespace App{
  * @property int $unit_kompetensi_id
  * @property string $desc
  * @property string $upload_instruction
- * @property string|null $media_url
  * @property bool $is_verified
  * @property string|null $verification_note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\UserAsesi|null $Asesi
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\AsesiSUKElementMedia[] $Media
+ * @property-read int|null $media_count
  * @property-read \App\SertifikasiUnitKompentensi|null $UnitKompentensi
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiSertifikasiUnitKompetensiElement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiSertifikasiUnitKompetensiElement newQuery()
