@@ -51,14 +51,4 @@ class AsesiUnitKompetensiDokumen extends Model
     {
         return $this->hasMany('App\AsesiSertifikasiUnitKompetensiElement', 'unit_kompetensi_id', 'unit_kompetensi_id');
     }
-
-    /**
-     * Get All Media For APL02
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function Media()
-    {
-        return $this->hasMany('App\AsesiSUKElementMedia', 'asesi_suk_element_id', 'id');
-    }
 }
