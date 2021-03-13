@@ -45,7 +45,7 @@ class AsesiUnitKompetensiDokumen extends Model
     /**
      * Relation to Table Sertifikasi Unit Kompentensi
      *
-     * @return HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function AsesiSertifikasiUnitKompetensiElement()
     {
