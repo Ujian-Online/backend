@@ -216,8 +216,23 @@
                         "multipart/form-data": {
                             "schema": {
                                 "properties": {
-                                    "id": {
+                                    "element_id": {
                                         "description": "ID Unit Kompetensi Element",
+                                        "type": "integer",
+                                        "example": "5"
+                                    },
+                                    "type": {
+                                        "description": "Informasikan apakah data yang di input itu baru atau perubahan, jika update maka harus input media_id, jika baru tidak perlu.! Input Type: 'new' or 'update'.",
+                                        "type": "string",
+                                        "example": "new"
+                                    },
+                                    "media_id": {
+                                        "description": "ID Media digunakan jika type update!",
+                                        "type": "integer",
+                                        "example": "5"
+                                    },
+                                    "description": {
+                                        "description": "Deskripsi File Upload, Digunakan untuk type: new/update",
                                         "type": "integer",
                                         "example": "5"
                                     },
