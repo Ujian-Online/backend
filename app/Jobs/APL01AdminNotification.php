@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class APL01AdminNotification implements ShouldQueue
@@ -64,5 +65,16 @@ class APL01AdminNotification implements ShouldQueue
         foreach ($userAdmins as $userAdmin) {
             Mail::to($userAdmin->email)->send(new AdminAPL01($userAdmin, $userAsesi, $userAsesiCustomData));
         }
+    }
+
+    /**
+     * The job failed to process.
+     *
+     * @param Exception $exception
+     * @return void
+     */
+    public function failed(Exception $exception)
+    {
+        Log::info($exception);
     }
 }

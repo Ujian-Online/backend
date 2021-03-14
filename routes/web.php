@@ -25,6 +25,9 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->group(function () {
 
+        Route::get('sertifikasi/tuk/create', 'Admin\SertifikasiTukController@create')->name('sertifikasi.tuk.create');
+        Route::post('sertifikasi/tuk', 'Admin\SertifikasiTukController@store')->name('sertifikasi.tuk.store');
+
         // Route Can be Access For Admin, TUK or Asesor
         Route::middleware('can:isAdminTukAsesor')->group(function () {
             Route::get('sertifikasi/search', 'Admin\SertifikasiController@search')->name('sertifikasi.search');
@@ -85,7 +88,7 @@ Route::middleware(['auth'])
             Route::get('tuk/search', 'Admin\TukController@search')->name('tuk.search');
             Route::resource('tuk', 'Admin\TukController');
 
-            Route::resource('sertifikasi/tuk', 'Admin\SertifikasiTukController', ['as' => 'sertifikasi'])->only(['create', 'destroy']);
+            Route::delete('sertifikasi/tuk/{id}', 'Admin\SertifikasiTukController@destroy')->name('sertifikasi.tuk.destroy');
             Route::resource('sertifikasi', 'Admin\SertifikasiController')->except(['show','index']);
 
             Route::resource('asesi/customdata', 'Admin\AsesiCustomDataController', ['as' => 'asesi']);

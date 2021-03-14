@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class JadwalUjianAdminNotification implements ShouldQueue
@@ -49,5 +50,16 @@ class JadwalUjianAdminNotification implements ShouldQueue
         foreach ($userAdmins as $userAdmin) {
             Mail::to($userAdmin->email)->send(new AdminJadwalUjian($userAsesi));
         }
+    }
+
+    /**
+     * The job failed to process.
+     *
+     * @param Exception $exception
+     * @return void
+     */
+    public function failed(Exception $exception)
+    {
+        Log::info($exception);
     }
 }

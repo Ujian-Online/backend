@@ -41,7 +41,8 @@ class Apl01Controller extends Controller
         $user = $request->user();
 
         // get data APL01
-        $asesi = UserAsesi::where('user_id', $user->id)
+        $asesi = UserAsesi::with('user')
+                ->where('user_id', $user->id)
                 ->firstOrFail();
 
         // get data asesi custom data

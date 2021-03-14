@@ -105,10 +105,10 @@
                         <thead>
                             <tr>
                                 <th width="5%" class="text-center" style="vertical-align: middle;">No.</th>
-                                <th width="60%" class="text-center" style="vertical-align: middle;">Element</th>
-                                <th width="10%" class="text-center" style="vertical-align: middle;">File</th>
+                                <th width="45%" class="text-center" style="vertical-align: middle;">Element</th>
+                                <th width="30%" class="text-center" style="vertical-align: middle;">File</th>
                                 <th width="5%" class="text-center" style="vertical-align: middle;">Verify (K/BK)</th>
-                                <th width="20%" class="text-center" style="vertical-align: middle;">Comment</th>
+                                <th width="15%" class="text-center" style="vertical-align: middle;">Comment</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -124,8 +124,17 @@
                                         <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
                                     </td>
                                     <td>
-                                        @if(isset($ukelement->media_url) and !empty($ukelement->media_url))
-                                            <a class="btn btn-sm btn-primary btn-block" href="{{ $ukelement->media_url }}">Buka File</a>
+                                        @if(count($ukelement->media) != 0)
+                                            @foreach($ukelement->media as $keymedia => $media)
+
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        {{ $key + 1 }}.{{$keymedia + 1}}. {{ucfirst($media->description)}}
+                                                        <button type="button" onclick="window.open('{{ $media->media_url }}', '', 'fullscreen=yes');"  class="btn btn-sm btn-primary btn-block">Buka File</button>
+                                                    </div>
+                                                </div>
+
+                                            @endforeach
                                         @else
                                             {{ _('File belum di unggah') }}
                                         @endif
