@@ -17,7 +17,6 @@ class AsesiSertifikasiUnitKompetensiElement extends Model
         'unit_kompetensi_id',
         'desc',
         'upload_instruction',
-        'media_url',
         'is_verified',
         'verification_note',
     ];
@@ -49,5 +48,15 @@ class AsesiSertifikasiUnitKompetensiElement extends Model
     public function UnitKompentensi()
     {
         return $this->hasOne('App\SertifikasiUnitKompentensi', 'id', 'unit_kompetensi_id');
+    }
+
+    /**
+     * Get All Media For APL02
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function Media()
+    {
+        return $this->hasMany('App\AsesiSUKElementMedia', 'asesi_suk_element_id', 'id');
     }
 }

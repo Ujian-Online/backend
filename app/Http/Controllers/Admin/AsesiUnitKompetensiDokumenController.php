@@ -260,9 +260,13 @@ class AsesiUnitKompetensiDokumenController extends Controller
         $sertifikasi = Sertifikasi::findOrFail($sertifikasiid);
         // get UK Dokumen and Element
         $unitkompetensis = AsesiUnitKompetensiDokumen::with([
-            'asesisertifikasiunitkompetensielement' => function ($query) use ($userid) {
-                $query->where('asesi_id', $userid);
-            }])
+                'asesisertifikasiunitkompetensielement' => function ($query) use ($userid) {
+                    $query->where('asesi_id', $userid);
+                },
+                'asesisertifikasiunitkompetensielement.media' => function ($query) use ($user) {
+                    $query->where('asesi_id', $user->id);
+                }
+            ])
             ->where('asesi_id', $userid)
             ->where('sertifikasi_id', $sertifikasiid)
             ->get();
@@ -317,9 +321,13 @@ class AsesiUnitKompetensiDokumenController extends Controller
         $sertifikasi = Sertifikasi::findOrFail($sertifikasiid);
         // get UK Dokumen and Element
         $unitkompetensis = AsesiUnitKompetensiDokumen::with([
-            'asesisertifikasiunitkompetensielement' => function ($query) use ($userid) {
-                $query->where('asesi_id', $userid);
-            }])
+                'asesisertifikasiunitkompetensielement' => function ($query) use ($userid) {
+                    $query->where('asesi_id', $userid);
+                },
+                'asesisertifikasiunitkompetensielement.media' => function ($query) use ($user) {
+                    $query->where('asesi_id', $user->id);
+                }
+            ])
             ->where('asesi_id', $userid)
             ->where('sertifikasi_id', $sertifikasiid)
             ->get();
