@@ -45,7 +45,7 @@ class Apl02Controller extends Controller
         return AsesiUnitKompetensiDokumen::with(['user', 'user.asesi', 'sertifikasi'])
             ->select(['asesi_id', 'sertifikasi_id'])
             ->where('asesi_id', $user->id)
-            ->groupBy( 'asesi_id', 'sertifikasi_id')
+            ->groupBy('asesi_id', 'sertifikasi_id')
             ->paginate(10);
     }
 
@@ -163,14 +163,15 @@ class Apl02Controller extends Controller
      *     )
      * )
      */
-    public function updateElement(Request $request) {
+    public function updateElement(Request $request)
+    {
         // validate input
         $request->validate([
             'element_id'    => 'required',
             'type'          => 'required|in:new,update',
             'media_id'      => 'required_if:type,update',
             'description'   => 'required',
-            'value'         => 'required|mimes:jpg,jpeg,png,pdf'
+            'value'         => 'required_if:type,new|mimes:jpg,jpeg,png,pdf'
         ]);
 
         // get user login
@@ -193,7 +194,7 @@ class Apl02Controller extends Controller
                 ->firstOrFail();
 
             // save if type new
-            if($type == 'new') {
+            if ($type == 'new') {
                 // upload file to s3
                 $value = upload_to_s3($request->file('value'));
 
@@ -214,12 +215,14 @@ class Apl02Controller extends Controller
                     ->where('asesi_id', $user->id)
                     ->firstOrFail();
 
-                // upload file to s3
-                $value = upload_to_s3($request->file('value'));
+                // upload file to s3 if value not empty
+                if ($request->file('value')) {
+                    $value = upload_to_s3($request->file('value'));
+                    $query->media_url = $value;
+                }
 
                 // update if found
                 $query->description = $description;
-                $query->media_url = $value;
                 $query->save();
             }
 
