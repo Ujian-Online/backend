@@ -15,10 +15,10 @@
                         <label for="status">Status</label>
                         <select class="form-control" name="status" id="status">
                             <option value="">Pilih Status</option>
-                            <option value="isi_form" @if(request()->input('status') == 'isi_form') {{ _('selected') }} @endif>Isi Form</option>
-                            <option value="menunggu_verifikasi" @if(request()->input('status') == 'menunggu_verifikasi') {{ _('selected') }} @endif>Menunggu Verifikasi</option>
-                            <option value="form_ditolak" @if(request()->input('status') == 'form_ditolak') {{ _('selected') }} @endif>Form Ditolak</option>
-                            <option value="form_terverifikasi" @if(request()->input('status') == 'form_terverifikasi') {{ _('selected') }} @endif>Form Terverifikasi</option>
+                            <option value="isi_form" @if(request()->input('status') == 'isi_form') {{ __('selected') }} @endif>Isi Form</option>
+                            <option value="menunggu_verifikasi" @if(request()->input('status') == 'menunggu_verifikasi') {{ __('selected') }} @endif>Menunggu Verifikasi</option>
+                            <option value="form_ditolak" @if(request()->input('status') == 'form_ditolak') {{ __('selected') }} @endif>Form Ditolak</option>
+                            <option value="form_terverifikasi" @if(request()->input('status') == 'form_terverifikasi') {{ __('selected') }} @endif>Form Terverifikasi</option>
                         </select>
                     </div>
                 </div>

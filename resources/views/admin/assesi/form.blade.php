@@ -260,12 +260,12 @@
                                         @elseif(isset($isEdit))
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="asesicustomdata[is_verified][{{$asesicustomdata->id}}]"
-                                                       id="asesicustomdata-is_verified-{{$asesicustomdata->id}}" value="1" @if($asesicustomdata->is_verified == 1) {{ _('checked') }} @endif>
+                                                       id="asesicustomdata-is_verified-{{$asesicustomdata->id}}" value="1" @if($asesicustomdata->is_verified == 1) {{ __('checked') }} @endif>
                                                 <label class="form-check-label">YES</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="asesicustomdata[is_verified][{{$asesicustomdata->id}}]"
-                                                       id="asesicustomdata-is_verified-{{$asesicustomdata->id}}" value="0" @if($asesicustomdata->is_verified == 0) {{ _('checked') }} @endif>
+                                                       id="asesicustomdata-is_verified-{{$asesicustomdata->id}}" value="0" @if($asesicustomdata->is_verified == 0) {{ __('checked') }} @endif>
                                                 <label class="form-check-label">NO</label>
                                             </div>
                                         @endif

@@ -100,7 +100,7 @@
                             @foreach(config('options.tuk_type') as $keyTukType => $tukType)
 
                                 @if($countKey > 0 )
-                                    {{ _('/') }}
+                                    {{ __('/') }}
                                 @endif
                                 @if($keyTukType == $tuk->type)
                                     {{ $tukType }}
@@ -262,8 +262,8 @@
                     <td width="25%">Score Ujian Hasil/Max</td>
                     <td width="2%">:</td>
                     <td class="text-bold">
-                        <span id="total-nilai"></span> {{ _(' / ') }}
-                        <span id="total-score"></span> {{ _(' = ') }}
+                        <span id="total-nilai"></span> {{ __(' / ') }}
+                        <span id="total-score"></span> {{ __(' = ') }}
                         <span id="final-score-precentage">
                             @if(isset($isShow))
                                 {{ $query->final_score_precentage }}
@@ -290,11 +290,11 @@
                             @endif
                         @elseif(isset($isEdit))
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="is_kompeten" value="1" @if(isset($query->is_kompeten) and $query->is_kompeten) {{ _('checked') }} @endif>
+                                <input class="form-check-input" type="radio" name="is_kompeten" value="1" @if(isset($query->is_kompeten) and $query->is_kompeten) {{ __('checked') }} @endif>
                                 <label class="form-check-label">Kompeten</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="is_kompeten" value="0" @if(isset($query->is_kompeten) and !$query->is_kompeten) {{ _('checked') }} @endif>
+                                <input class="form-check-input" type="radio" name="is_kompeten" value="0" @if(isset($query->is_kompeten) and !$query->is_kompeten) {{ __('checked') }} @endif>
                                 <label class="form-check-label">Tidak Kompeten</label>
                             </div>
                         @endif
