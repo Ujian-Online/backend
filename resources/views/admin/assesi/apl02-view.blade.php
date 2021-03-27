@@ -94,7 +94,7 @@
                             <tr>
                                 <td width="10%">Judul Unit</td>
                                 <td width="1px">:</td>
-                                <td>{{ $unitkompentensi->title }} @if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) ({{ $unitkompentensi->sub_title }}) @endif</td>
+                                <td>{{ $unitkompentensi->title }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -105,9 +105,10 @@
                         <thead>
                             <tr>
                                 <th width="5%" class="text-center" style="vertical-align: middle;">No.</th>
-                                <th width="45%" class="text-center" style="vertical-align: middle;">Element</th>
-                                <th width="30%" class="text-center" style="vertical-align: middle;">File</th>
+                                <th width="35%" class="text-center" style="vertical-align: middle;">@if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) {{ $unitkompentensi->sub_title }} @endif</th>
+                                <th width="25%" class="text-center" style="vertical-align: middle;">File</th>
                                 <th width="5%" class="text-center" style="vertical-align: middle;">Verify (K/BK)</th>
+                                <th width="20%" class="text-center" style="vertical-align: middle;">Bukti yang relevan</th>
                                 <th width="15%" class="text-center" style="vertical-align: middle;">Comment</th>
                             </tr>
                         </thead>
@@ -119,9 +120,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}.</td>
                                     <td>
-                                        <p class="text-bold">{{ $ukelement->desc }}</p>
-                                        <p>Bukti-Bukti Kompetensi:</p>
-                                        <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                        <p>{!! nl2br($ukelement->desc) !!}</p>
                                     </td>
                                     <td>
                                         @if(count($ukelement->media) != 0)
@@ -154,6 +153,9 @@
                                                 <label class="form-check-label">NO</label>
                                             </div>
                                         @endif
+                                    </td>
+                                    <td>
+                                        <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
                                     </td>
                                     <td>
                                         @if(isset($isShow))
