@@ -2,8 +2,12 @@
 
 @section('css')
 <style>
-    table, th, td {
-        border: 2px solid black;
+    td {
+        border: 1px solid black !important;
+    }
+
+    th {
+        border: 1px solid black !important;
     }
 </style>
 @endsection
@@ -140,55 +144,55 @@
             <div class="form-row">
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table">
                             <thead>
-                            <tr class="text-center">
-                                <th width="5%" style="vertical-align: middle;">ID</th>
-                                <th width="90%" style="vertical-align: middle;">Pertanyaan</th>
-                                <th width="5%" style="vertical-align: middle;">Score</th>
-                            </tr>
+                                <tr class="text-center">
+                                    <th width="5%" style="vertical-align: middle;">ID</th>
+                                    <th width="90%" style="vertical-align: middle;">Pertanyaan</th>
+                                    <th width="5%" style="vertical-align: middle;">Score</th>
+                                </tr>
                             </thead>
                             <tbody id="soal-pilihanganda-result">
-                            @if(isset($isShow) OR isset($isEdit))
-                                @foreach($soal_pilihangandas as $soal_pilihanganda)
-                                    <tr id="pilihanganda-{{ $soal_pilihanganda->id }}">
-                                        <input type="hidden" name="soal_pilihanganda_id[]" value="{{ $soal_pilihanganda->id }}">
-                                        <input type="hidden" class="total-nilai" value="{{ $soal_pilihanganda->max_score }}">
-                                        <input type="hidden" class="total-score" value="{{ $soal_pilihanganda->max_score }}">
-                                        <td class="text-center">{{ $soal_pilihanganda->urutan }}</td>
-                                        <td>
-                                            <p>{{ $soal_pilihanganda->question }}</p>
+                                @if(isset($isShow) OR isset($isEdit))
+                                    @foreach($soal_pilihangandas as $soal_pilihanganda)
+                                        <tr id="pilihanganda-{{ $soal_pilihanganda->id }}">
+                                            <input type="hidden" name="soal_pilihanganda_id[]" value="{{ $soal_pilihanganda->id }}">
+                                            <input type="hidden" class="total-nilai" value="{{ $soal_pilihanganda->max_score }}">
+                                            <input type="hidden" class="total-score" value="{{ $soal_pilihanganda->max_score }}">
+                                            <td class="text-center">{{ $soal_pilihanganda->urutan }}</td>
+                                            <td>
+                                                <p>{{ $soal_pilihanganda->question }}</p>
 
-                                            @if(isset($soal_pilihanganda->options_label) and !empty($soal_pilihanganda->options_label))
-                                                @foreach($soal_pilihanganda->options_label as $key_pil => $pilganda)
+                                                @if(isset($soal_pilihanganda->options_label) and !empty($soal_pilihanganda->options_label))
+                                                    @foreach($soal_pilihanganda->options_label as $key_pil => $pilganda)
 
-                                                    @if($key_pil == $soal_pilihanganda->answer_option and $soal_pilihanganda->answer_option == $soal_pilihanganda->user_answer)
-                                                        <span class="text-green text-bold">{{ $key_pil }}. {{ $pilganda }} <i class="fas fa-check-circle"></i></span>
-                                                    @elseif($key_pil == $soal_pilihanganda->user_answer and $soal_pilihanganda->answer_option != $soal_pilihanganda->user_answer)
-                                                        <span class="text-red text-bold">{{ $key_pil }}. {{ $pilganda }} <i class="fas fa-times-circle"></i></span>
-                                                    @elseif($key_pil == $soal_pilihanganda->answer_option)
-                                                        <span class="text-green text-bold">{{ $key_pil }}. {{ $pilganda }} <i class="fas fa-check-circle"></i></span>
-                                                    @else
-                                                        {{ $key_pil }}. {{ $pilganda }}
-                                                    @endif
+                                                        @if($key_pil == $soal_pilihanganda->answer_option and $soal_pilihanganda->answer_option == $soal_pilihanganda->user_answer)
+                                                            <span class="text-green text-bold">{{ $key_pil }}. {{ $pilganda }} <i class="fas fa-check-circle"></i></span>
+                                                        @elseif($key_pil == $soal_pilihanganda->user_answer and $soal_pilihanganda->answer_option != $soal_pilihanganda->user_answer)
+                                                            <span class="text-red text-bold">{{ $key_pil }}. {{ $pilganda }} <i class="fas fa-times-circle"></i></span>
+                                                        @elseif($key_pil == $soal_pilihanganda->answer_option)
+                                                            <span class="text-green text-bold">{{ $key_pil }}. {{ $pilganda }} <i class="fas fa-check-circle"></i></span>
+                                                        @else
+                                                            {{ $key_pil }}. {{ $pilganda }}
+                                                        @endif
 
-                                                    <br />
+                                                        <br />
 
-                                                @endforeach
-                                            @endif
+                                                    @endforeach
+                                                @endif
+                                            </td>
+                                            <td class="text-center">{{ $soal_pilihanganda->max_score }}</td>
+                                        </tr>
+                                    @endforeach
+
+                                    <tr>
+                                        <td>INFO</td>
+                                        <td colspan="2">
+                                            <span class="text-green text-bold"><i class="fas fa-check-circle"></i></span> = Jawaban Benar |
+                                            <span class="text-red text-bold"><i class="fas fa-times-circle"></i></span> = Jawaban Salah
                                         </td>
-                                        <td class="text-center">{{ $soal_pilihanganda->max_score }}</td>
                                     </tr>
-                                @endforeach
-
-                                <tr>
-                                    <td>INFO</td>
-                                    <td colspan="2">
-                                        <span class="text-green text-bold"><i class="fas fa-check-circle"></i></span> = Jawaban Benar |
-                                        <span class="text-red text-bold"><i class="fas fa-times-circle"></i></span> = Jawaban Salah
-                                    </td>
-                                </tr>
-                            @endif
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -204,7 +208,7 @@
             <div class="form-row">
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table">
                             <thead>
                             <tr class="text-center">
                                 <th width="5%" style="vertical-align: middle;">ID</th>
@@ -264,7 +268,7 @@
 
     <div class="form-row">
         <div class="table-responsive mt-2 mb-2">
-            <table class="table table-bordered">
+            <table class="table">
                 <tbody>
                 <tr>
                     <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
