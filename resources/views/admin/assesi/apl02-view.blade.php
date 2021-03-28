@@ -1,5 +1,17 @@
 @extends('layouts.pageForm')
 
+@section('css')
+<style>
+    td {
+        border: 1px solid black !important;
+    }
+
+    th {
+        border: 1px solid black !important;
+    }
+</style>
+@endsection
+
 @section('form')
     @include('layouts.alert')
 
