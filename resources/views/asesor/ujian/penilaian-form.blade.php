@@ -1,95 +1,42 @@
 @extends('layouts.pageForm')
 
+@section('css')
+<style>
+    table, th, td {
+        border: 2px solid black;
+    }
+</style>
+@endsection
+
 @section('form')
     @include('layouts.alert')
 
     <div class="form-row">
         <div class="table-responsive mt-2 mb-2">
-            <table class="table table-bordered">
+            <table class="table">
                 <tbody>
                     <tr>
-                        <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
-                            Detail Asesi
+                        <td width="15%" rowspan="3" style="vertical-align: middle;">
+                            <p class="text-center text-bold">Skema Sertifikasi</p>
+                            <p class="text-center">{{ __('KKNI/Okupasi/Klaster')}}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td width="15%">Nama</td>
-                        <td width="2%">:</td>
-                        <td class="text-bold">{{ (isset($query->userasesi->asesi) and !empty($query->userasesi->asesi)) ? $query->userasesi->asesi->name : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Email</td>
-                        <td width="2%">:</td>
-                        <td>{{ $query->userasesi->email }}</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
-                            Detail Asesor
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Nama</td>
-                        <td width="2%">:</td>
-                        <td class="text-bold">{{ (isset($query->userasesor->asesor) and !empty($query->userasesor->asesor)) ? $query->userasesor->asesor->name : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td width="15%">MET</td>
-                        <td width="2%">:</td>
-                        <td>{{ (isset($query->userasesor->asesor) and !empty($query->userasesor->asesor)) ? $query->userasesor->asesor->met : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
-                            Skema Sertifikasi
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Nomor</td>
+                        <td width="10%">Nomor</td>
                         <td width="2%">:</td>
                         <td>{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->nomor_skema : '' }}</td>
                     </tr>
                     <tr>
-                        <td width="15%">Judul</td>
+                        <td width="10%">Judul</td>
                         <td width="2%">:</td>
                         <td class="text-bold">{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->title : '' }}</td>
                     </tr>
                     <tr>
-                        <td rowspan="5" class="text-center text-bold"  style="vertical-align: middle;">
-                            Detail Ujian
+                        <td rowspan="2" colspan="2" style="vertical-align: middle;">
+                            TUK
                         </td>
                     </tr>
                     <tr>
-                        <td width="15%">Paket Soal</td>
-                        <td width="2%">:</td>
-                        <td>{{ (isset($query->soalpaket) and !empty($query->soalpaket)) ? $query->soalpaket->title : '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Tanggal Ujian</td>
-                        <td width="2%">:</td>
-                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d/m/Y') : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Judul Ujian</td>
-                        <td width="2%">:</td>
-                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? $query->ujianjadwal->title : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Deskripsi Ujian</td>
-                        <td width="2%">:</td>
-                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? $query->ujianjadwal->description : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
-                            Detail TUK
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Nama</td>
-                        <td width="2%">:</td>
-                        <td class="text-bold">{{ (isset($query->order->tuk) and !empty($query->order->tuk)) ? $query->order->tuk->title : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Type</td>
                         <td width="2%">:</td>
                         <td>
                             @php
@@ -114,10 +61,76 @@
                             @endforeach
                         </td>
                     </tr>
+                    <tr>
+                        <td rowspan="2" colspan="2" style="vertical-align: middle;">
+                            Nama Asesor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="2%">:</td>
+                        <td class="text-bold">{{ (isset($query->userasesor->asesor) and !empty($query->userasesor->asesor)) ? $query->userasesor->asesor->name : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" colspan="2" style="vertical-align: middle;">
+                            Nama Asesi
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="2%">:</td>
+                        <td class="text-bold">{{ (isset($query->userasesi->asesi) and !empty($query->userasesi->asesi)) ? $query->userasesi->asesi->name : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" colspan="2" style="vertical-align: middle;">
+                            Tanggal
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="2%">:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" colspan="2" style="vertical-align: middle;">
+                            Waktu
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="2%">:</td>
+                        <td></td>
+                    </tr>
+
+                    {{-- <tr>
+                        <td rowspan="5" class="text-center text-bold"  style="vertical-align: middle;">
+                            Detail Ujian
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Paket Soal</td>
+                        <td width="2%">:</td>
+                        <td>{{ (isset($query->soalpaket) and !empty($query->soalpaket)) ? $query->soalpaket->title : '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Tanggal Ujian</td>
+                        <td width="2%">:</td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d/m/Y') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Judul Ujian</td>
+                        <td width="2%">:</td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? $query->ujianjadwal->title : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Deskripsi Ujian</td>
+                        <td width="2%">:</td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? $query->ujianjadwal->description : '' }}</td>
+                    </tr> --}}
+
                 </tbody>
             </table>
+            <p class="text-bold">* Coret yang tidak perlu</p>
         </div>
     </div>
+
 
     <div class="card card-outline card-primary">
         <div class="card-header">
@@ -268,7 +281,7 @@
                             @if(isset($isShow))
                                 {{ $query->final_score_precentage }}
                             @endif
-                        </span>{{ _('%') }}
+                        </span>{{ __('%') }}
                     </td>
                 </tr>
                 <tr>
@@ -278,14 +291,14 @@
                         @if(isset($isShow))
                             @if(isset($query->is_kompeten) and in_array($query->is_kompeten, [0, 1]))
                                 @if($query->is_kompeten)
-                                    <span>Kompeten</span>{{ _(' / ') }}
+                                    <span>Kompeten</span>{{ __(' / ') }}
                                     <span style="text-decoration: line-through;">Tidak Kompeten</span>
                                 @else
-                                    <span style="text-decoration: line-through;">Kompeten</span>{{ _(' / ') }}
+                                    <span style="text-decoration: line-through;">Kompeten</span>{{ __(' / ') }}
                                     <span>Tidak Kompeten</span>
                                 @endif
                             @else
-                                <span>Kompeten</span>{{ _(' / ') }}
+                                <span>Kompeten</span>{{ __(' / ') }}
                                 <span>Tidak Kompeten</span>
                             @endif
                         @elseif(isset($isEdit))
