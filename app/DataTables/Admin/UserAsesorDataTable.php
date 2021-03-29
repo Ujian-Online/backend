@@ -40,7 +40,9 @@ class UserAsesorDataTable extends DataTable
      */
     public function query(UserAsesor $model)
     {
-        return $model->newQuery();
+        return $model::select('user_asesors.*')
+                ->with('user')
+                ->join('users', 'users.id', '=', 'user_asesors.user_id');
     }
 
     /**
