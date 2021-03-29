@@ -50,13 +50,16 @@ class SuratTugasDataTable extends DataTable
      */
     public function query(UjianAsesiAsesor $model)
     {
+        // get user login
+        $user = request()->user();
+
         // default query
         $query = $model->with([
             'userasesi',
             'userasesi.asesi',
             'ujianjadwal',
             'sertifikasi'
-        ]);
+        ])->where('asesor_id', $user->id);
 
         // get filter input
         $ujianjadwal = request()->input('ujian_jadwal_id');
