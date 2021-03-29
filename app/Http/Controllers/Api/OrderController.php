@@ -52,7 +52,7 @@ class OrderController extends Controller
         // get order detail
         return Order::with(['sertifikasi', 'tuk', 'user', 'user.asesi'])
             ->where('asesi_id', $user->id)
-            ->paginate(10);
+            ->get();
     }
 
 
