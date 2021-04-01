@@ -198,6 +198,15 @@ class UjianAsesiAsesorController extends Controller
 
             // update data
             $query->update($dataInput);
+
+            // Notification to Asesor
+            if(!empty($dataInput['asesor_id'])) {
+                // get asesor detail
+                $userAsesor = User::where('type', 'assesor')->where('id', $dataInput['asesor_id'])->firstOrFail();
+
+                // Kirim Email ke Asesor
+                Mail::to($userAsesor->email)->send(new AsesorPaketUjianAsesi($query->id));
+            }
         } elseif($user->can('isAsesor')) {
             // validate input
             $request->validate([
