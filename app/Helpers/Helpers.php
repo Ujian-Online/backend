@@ -78,17 +78,17 @@ if(!function_exists('apl02_status')) {
             }
 
             // Menunggu verifikasi [Update Form] (Kalau udah isi, tapi blum di verif semua)
-            if(!empty($apl02Element->media_url) and !$apl02Element->is_verified) {
+            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 0) {
                 $apl02StatusCount['menunggu_verifikasi'][] = $apl02Element->id;
             }
 
             // Form ditolak [Update Form] (Kalau udah isi, tapi ada yg ditolak)
-            if(!empty($apl02Element->media_url) and !$apl02Element->is_verified and !empty($apl02Element->verification_note)) {
+            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 0 and !empty($apl02Element->verification_note)) {
                 $apl02StatusCount['form_ditolak'][] = $apl02Element->id;
             }
 
             // Form terverifikasi (Kalau udah verif semua)
-            if(!empty($apl02Element->media_url) and $apl02Element->is_verified) {
+            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 1) {
                 $apl02StatusCount['form_terverifikasi'][] = $apl02Element->id;
             }
         }
