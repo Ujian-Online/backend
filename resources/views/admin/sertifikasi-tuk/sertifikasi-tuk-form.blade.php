@@ -163,7 +163,7 @@
         // sertifikasi select2 with ajax query search
         $('#sertifikasi_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : ($user->type == 'admin' ? 'false' : 'readonly') }},
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
