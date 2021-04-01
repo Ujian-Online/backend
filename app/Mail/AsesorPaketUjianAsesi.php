@@ -60,6 +60,6 @@ class AsesorPaketUjianAsesi extends Mailable implements ShouldQueue
         $asesiName = (!empty($this->asesi->asesi) and !empty($this->asesi->asesi->name)) ? $this->asesi->asesi->name : $this->asesi->email;
 
         return $this->markdown('email/AsesorPaketUjianAsesi')
-                ->subject('Tugas Baru untuk Asesi: ' . $asesiName);
+                ->subject('Anda mendapatkan tugas penilaian untuk Asesi Baru: ' . $asesiName);
     }
 }
