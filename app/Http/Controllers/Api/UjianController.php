@@ -69,9 +69,9 @@ class UjianController extends Controller
                 $ujian_status = 'ujian_dalam_penilaian';
             } elseif($ujian->status == 'selesai') {
                 if($ujian->is_kompeten) {
-                    $ujian_status = 'Kompeten';
+                    $ujian_status = 'kompeten';
                 } else {
-                    $ujian_status = 'Tidak Kompeten';
+                    $ujian_status = 'tidak_kompeten';
                 }
             } else {
                 $ujian_status = '';
