@@ -72,6 +72,10 @@ class SertifikasiTukDataTable extends DataTable
                         'dom' => 'Bfrtip',
                         'buttons' => [
                             'pageLength',
+                            [
+                                'text' => '<i class="fas fa-plus-circle"></i> ' . trans('table.create'),
+                                'action' => $this->createButton()
+                            ]
                         ],
                     ])
                     ->setTableId('sertifikasituk-table')
@@ -118,5 +122,19 @@ class SertifikasiTukDataTable extends DataTable
     protected function filename()
     {
         return 'SertifikasiTuk_' . date('YmdHis');
+    }
+
+    /**
+     * Custom Create Button Action
+     */
+    public function createButton()
+    {
+        // Create Route URL
+        $url = route('admin.sertifikasi.tuk.create');
+
+        // return function redirect
+        return 'function (e, dt, button, config) {
+            window.location = "'. $url .'";
+        }';
     }
 }
