@@ -18,7 +18,7 @@ Pengaturan Jadwal Ujian
 @endcomponent
 
 @component('mail::button', ['url' => route('admin.ujian.asesi.index', ['status' => 'menunggu'])])
-Jadwal Ujian Asesi
+Tentukan Asesor untuk Asesi tersebut
 @endcomponent
 
 Terima Kasih,<br>

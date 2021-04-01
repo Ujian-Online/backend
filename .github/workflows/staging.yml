@@ -41,7 +41,7 @@ jobs:
             composer install -q --no-interaction --no-dev
             find ${pwd} -type d ! -path "*bootstrap*" ! -path "*storage*" ! -path "*.git*" -print0 | xargs -0 chmod 0775
             find ${pwd} -type f ! -path "*bootstrap*" ! -path "*storage*" ! -path "*.git*" -print0 | xargs -0 chmod 0664
-            php artisan queue:restart
+            php artisan horizon:terminate
 
   done:
     runs-on: ubuntu-latest

@@ -8,7 +8,7 @@ Mohon segera selesaikan pembayaran anda, agar bisa melanjutkan proses pendaftara
 @component('mail::table')
 | | | |
 |-|-|-|
-| Nama | : | **{{ !empty($user->asesi) ? $user->asesi->name : $user->email }}** |
+| Nama | : | **{{ (!empty($user->asesi) and !empty($user->asesi->name)) ? $user->asesi->name : $user->email }}** |
 | Sertifikasi | : | {{ $order->sertifikasi->title }} |
 | TUK | : | {{ $order->tuk->title }} |
 | Training | : | {{ $order->tuk_price_training ? 'Yes' : 'No' }} |

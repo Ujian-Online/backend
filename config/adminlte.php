@@ -230,7 +230,18 @@ return [
                         'title'     => 'Jadwal Ujian Asesi',
                         'icon'      => 'fas fa-book-reader',
                         'route'     => 'admin.ujian.asesi.index',
-                        'active'    => 'admin.ujian.asesi.*',
+                        'active'    => [
+                            'admin.ujian.asesi.index',
+                            'admin.ujian.asesi.create',
+                            'admin.ujian.asesi.show',
+                            'admin.ujian.asesi.update',
+                        ],
+                    ],
+                    [
+                        'title'     => 'Asesi blm dpt Asesor',
+                        'icon'      => 'fas fa-book-open',
+                        'route'     => 'admin.ujian.asesi.waiting.index',
+                        'active'    => 'admin.ujian.asesi.waiting.index',
                     ],
                     [
                         'title'     => 'Asesi Jawaban',

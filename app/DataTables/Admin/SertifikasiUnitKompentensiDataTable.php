@@ -50,6 +50,10 @@ class SertifikasiUnitKompentensiDataTable extends DataTable
             $query = $query->where('sertifikasi_id', $sertifikasi_id);
         }
 
+        // order by sertifikasi_id
+        $query = $query->orderBy('sertifikasi_id', 'asc')
+            ->orderBy('order', 'asc');
+
         return $query;
     }
 

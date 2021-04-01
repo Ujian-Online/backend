@@ -51,8 +51,11 @@ class OrderController extends Controller
 
         // get order detail
         return Order::with(['sertifikasi', 'tuk', 'user', 'user.asesi'])
+            ->select(['orders.*'])
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'orders.sertifikasi_id')
             ->where('asesi_id', $user->id)
-            ->paginate(10);
+            ->orderBy('orders.id', 'desc')
+            ->paginate(1000);
     }
 
 

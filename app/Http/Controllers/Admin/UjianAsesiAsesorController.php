@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\DataTables\Admin\UjianAsesiAsesorDataTable;
+use App\DataTables\Admin\UjianAsesiBelumDapatAsesorDataTable;
 use App\Http\Controllers\Controller;
 use App\Mail\AsesorPaketUjianAsesi;
 use App\Order;
@@ -198,6 +199,15 @@ class UjianAsesiAsesorController extends Controller
 
             // update data
             $query->update($dataInput);
+
+            // Notification to Asesor
+            if(!empty($dataInput['asesor_id'])) {
+                // get asesor detail
+                $userAsesor = User::where('type', 'assesor')->where('id', $dataInput['asesor_id'])->firstOrFail();
+
+                // Kirim Email ke Asesor
+                Mail::to($userAsesor->email)->send(new AsesorPaketUjianAsesi($query->id));
+            }
         } elseif($user->can('isAsesor')) {
             // validate input
             $request->validate([
@@ -250,6 +260,17 @@ class UjianAsesiAsesorController extends Controller
         return response()->json([
             'code' => 200,
             'success' => true,
+        ]);
+    }
+
+    /**
+     * List Asesi yang belum ada asesor dengan status payment_verified
+     */
+    public function asesiBelumAdaAsesorIndex(UjianAsesiBelumDapatAsesorDataTable $dataTables)
+    {
+        // return index data with datatables services
+        return $dataTables->render('layouts.pageTable', [
+            'title' => 'Asesi Belum Dapat Asesor Lists',
         ]);
     }
 }

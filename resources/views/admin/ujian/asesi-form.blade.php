@@ -518,7 +518,7 @@
          */
 
             // default selected order_id from query URL
-        const order_id_default = '{{ old('order_id') ?? $query->order_id ?? null }}'
+        const order_id_default = '{{ old('order_id') ?? request()->input('order_id') ?? $query->order_id ?? null }}'
         // trigger load data if order_id not null
         if(order_id_default) {
             var orderSelected = $('#order_id');
