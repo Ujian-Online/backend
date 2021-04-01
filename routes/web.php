@@ -25,8 +25,7 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->group(function () {
 
-        Route::get('sertifikasi/tuk/create', 'Admin\SertifikasiTukController@create')->name('sertifikasi.tuk.create');
-        Route::post('sertifikasi/tuk', 'Admin\SertifikasiTukController@store')->name('sertifikasi.tuk.store');
+
 
         // Route Can be Access For Admin, TUK or Asesor
         Route::middleware('can:isAdminTukAsesor')->group(function () {
@@ -45,6 +44,8 @@ Route::middleware(['auth'])
             Route::get('/order/search', 'Admin\OrderController@search')->name('order.search');
             Route::get('/order/{id}', 'Admin\OrderController@show')->name('order.show');
             Route::get('sertifikasi/tuk', 'Admin\SertifikasiTukController@index')->name('sertifikasi.tuk.index');
+            Route::get('sertifikasi/tuk/create', 'Admin\SertifikasiTukController@create')->name('sertifikasi.tuk.create');
+            Route::post('sertifikasi/tuk', 'Admin\SertifikasiTukController@store')->name('sertifikasi.tuk.store');
             Route::get('sertifikasi/tuk/{id}', 'Admin\SertifikasiTukController@show')->name('sertifikasi.tuk.show');
             Route::get('sertifikasi/tuk/{id}/edit', 'Admin\SertifikasiTukController@edit')->name('sertifikasi.tuk.edit');
             Route::patch('sertifikasi/tuk/{id}', 'Admin\SertifikasiTukController@update')->name('sertifikasi.tuk.update');
