@@ -107,6 +107,7 @@ Route::middleware(['auth'])
             Route::resource('asesi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'asesi']);
 
             Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
+            Route::get('ujian/asesi-waiting', 'Admin\UjianAsesiAsesorController@asesiBelumAdaAsesorIndex')->name('ujian.asesi.waiting.index');
             Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian'])->except('index');
             Route::resource('ujian/jawaban', 'Admin\UjianAsesiJawabanController', ['as' => 'ujian'])->only(['index', 'show']);
 
