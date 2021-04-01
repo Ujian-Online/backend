@@ -15,8 +15,8 @@
                         <label for="is_verified">Is Verified</label>
                         <select class="form-control" name="is_verified" id="is_verified">
                             <option value="">Pilih Verified</option>
-                            <option value="1" @if(request()->input('is_verified') == 1) {{ _('selected') }} @endif>Yes</option>
-                            <option value="0" @if(request()->input('is_verified') == 0) {{ _('selected') }} @endif>No</option>
+                            <option value="1" @if(request()->input('is_verified') == 1) {{ __('selected') }} @endif>Yes</option>
+                            <option value="0" @if(request()->input('is_verified') == 0) {{ __('selected') }} @endif>No</option>
                         </select>
                     </div>
                 </div>
