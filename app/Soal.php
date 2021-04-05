@@ -12,6 +12,7 @@ class Soal extends Model
      * @var array
      */
     protected $fillable = [
+        'unit_kompetensi_id',
         'asesor_id',
         'question',
         'question_type',
@@ -23,5 +24,10 @@ class Soal extends Model
     public function SoalPilihanGanda()
     {
         return $this->hasMany('App\SoalPilihanGanda', 'soal_id', 'id')->orderBy('label', 'ASC');
+    }
+
+    public function UnitKompetensi()
+    {
+        return $this->hasOne('App\SertifikasiUnitKompetensi', 'id', 'unit_kompetensi_id');
     }
 }
