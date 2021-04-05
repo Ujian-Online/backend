@@ -116,3 +116,32 @@ if(!function_exists('apl02_status')) {
         return $apl02Status;
     }
 }
+
+if(!function_exists('soal_validate')) {
+    /**
+     * Soal Validation Based on Soal ID, Unit Kompetensi ID or Sertifikasi ID
+     *
+     * @param $soal_id
+     * @param null $unit_kompetensi_id
+     * @param null $sertifikasi_id
+     * @return mixed
+     */
+    function soal_validate($soal_id, $unit_kompetensi_id = null, $sertifikasi_id = null)
+    {
+        try {
+            return \App\Soal::select(['soals.*'])
+                ->leftJoin('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.id', '=', 'soals.unit_kompetensi_id')
+                ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
+                ->where('soals.id', $soal_id)
+                ->when($unit_kompetensi_id, function($query) use ($unit_kompetensi_id) {
+                    $query->where('unit_kompetensi_id', $unit_kompetensi_id);
+                })
+                ->when($sertifikasi_id, function($query) use ($sertifikasi_id) {
+                    $query->where('sertifikasis.id', $sertifikasi_id);
+                })
+                ->firstOrFail();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+}
