@@ -339,4 +339,43 @@ class SertifikasiUnitKompetensiController extends Controller
         // response result
         return response()->json($result, 200);
     }
+
+
+    public function searchWithSertifikasi(Request $request)
+    {
+        // get input from select2 search term
+        $q = $request->input('q');
+
+        // database query
+        $query = SertifikasiUnitKompentensi::select([
+            'sertifikasi_unit_kompentensis.id',
+            'sertifikasi_unit_kompentensis.title as unit_kompetensi_title',
+            'sertifikasis.title as sertifikasi_title',
+        ])
+            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
+            ->when($q, function($query) use ($q) {
+                if(is_numeric($q)) {
+                    $query->where('sertifikasi_unit_kompentensis.id', $q);
+                } else {
+                    $query->where('sertifikasi_unit_kompentensis.title', 'like', '%' . $q . '%')
+                            ->orWhere('sertifikasis.title', 'like', '%' . $q . '%');
+                }
+            });
+
+        // result variable
+        $result = [];
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => $data->sertifikasi_title . ' - ' . $data->unit_kompetensi_title,
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
+    }
 }
