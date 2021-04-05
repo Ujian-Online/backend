@@ -116,11 +116,13 @@ class SuratTugasController extends Controller
 
             // get soal from soalpaket for snapshot
             $soal_pakets = SoalPaket::with([
-                'soalpaketitem',
-                'soalpaketitem.soal',
-                'soalpaketitem.soal.soalpilihanganda'
-            ])->where('id', $dataInput['soal_paket_id'])
-            ->firstOrFail();
+                    'soalpaketitem',
+                    'soalpaketitem.soal',
+                    'soalpaketitem.soal.soalpilihanganda'
+                ])
+                ->where('id', $dataInput['soal_paket_id'])
+                ->where('sertifikasi_id', $request->input('sertifikasi_id'))
+                ->firstOrFail();
 
             // check if soal found
             if(isset($soal_pakets->soalpaketitem) and !empty($soal_pakets->soalpaketitem)) {
