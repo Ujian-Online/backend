@@ -186,7 +186,7 @@ return [
                     [
                         'title'     => 'APL-01',
                         'icon'      => 'fas fa-user',
-                        'url'       => '/admin/asesi/apl01?is_verified=false',
+                        'url'       => '/admin/asesi/apl01?is_verified=0',
                         'active'    => 'admin.asesi.apl01.*',
                     ],
                     // [
