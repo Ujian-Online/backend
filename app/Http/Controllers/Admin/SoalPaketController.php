@@ -344,12 +344,18 @@ class SoalPaketController extends Controller
 
         // get input from select2 search term
         $q = $request->input('q');
+        // sertifikasi id search
+        $sertifikasi_id = $request->input('sertifikasi_id');
 
         // check if query is numeric or not
         if(is_numeric($q)) {
             $query = $query->where('id', 'like', "%$q%");
         } else {
             $query = $query->where('title', 'like', "%$q%");
+        }
+
+        if(!empty($sertifikasi_id)) {
+            $query = $query->where('sertifikasi_id', $sertifikasi_id);
         }
 
         // limit search soal paket by asesor id if search by assesor
