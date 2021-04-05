@@ -45,12 +45,12 @@
             <label for="is_active">Is Active</label>
             <select class="form-control" name="is_active" id="is_active" @if(isset($isShow)) readonly @endif>
 
-                @if(old('is_active') == 1 or !empty($query->is_active) == 1))
+                @if(isset($isCreated))
                     <option value="1" selected>Yes</option>
                     <option value="0">No</option>
                 @else
-                    <option value="1">Yes</option>
-                    <option value="0" selected>No</option>
+                    <option value="1" @if(old('is_active') == 1 or !empty($query->is_active) == 1) {{ __('selected') }}@endif>Yes</option>
+                    <option value="0" @if(old('is_active') == 0 or !empty($query->is_active) == 0) {{ __('selected') }}@endif>No</option>
                 @endif
 
             </select>
