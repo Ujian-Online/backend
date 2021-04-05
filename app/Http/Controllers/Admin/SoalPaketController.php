@@ -92,24 +92,34 @@ class SoalPaketController extends Controller
         // loop soal pilihan ganda
         if(isset($soal_pilihangandas) and !empty($soal_pilihangandas)) {
             foreach($soal_pilihangandas as $soal_pilihanganda) {
-                $soal_paket_items[] = [
-                    'soal_paket_id' => $query->id,
-                    'soal_id' => $soal_pilihanganda,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+
+                // validate soal based on sertifikasi id
+                if(soal_validate($soal_pilihanganda, null, $dataInput['sertifikasi_id'])) {
+                    $soal_paket_items[] = [
+                        'soal_paket_id' => $query->id,
+                        'soal_id' => $soal_pilihanganda,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
             }
         }
 
         // loop soal essay
         if(isset($soal_essays) and !empty($soal_essays)) {
             foreach($soal_essays as $soal_essay) {
-                $soal_paket_items[] = [
-                    'soal_paket_id' => $query->id,
-                    'soal_id' => $soal_essay,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+
+                // validate soal based on sertifikasi id
+                if(soal_validate($soal_essay, null, $dataInput['sertifikasi_id'])) {
+                    $soal_paket_items[] = [
+                        'soal_paket_id' => $query->id,
+                        'soal_id' => $soal_essay,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
             }
         }
 
@@ -256,24 +266,34 @@ class SoalPaketController extends Controller
         // loop soal pilihan ganda
         if(isset($soal_pilihangandas) and !empty($soal_pilihangandas)) {
             foreach($soal_pilihangandas as $soal_pilihanganda) {
-                $soal_paket_items[] = [
-                    'soal_paket_id' => $query->id,
-                    'soal_id' => $soal_pilihanganda,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+
+                // validate soal based on sertifikasi id
+                if(soal_validate($soal_pilihanganda, null, $dataInput['sertifikasi_id'])) {
+                    $soal_paket_items[] = [
+                        'soal_paket_id' => $query->id,
+                        'soal_id' => $soal_pilihanganda,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
             }
         }
 
         // loop soal essay
         if(isset($soal_essays) and !empty($soal_essays)) {
             foreach($soal_essays as $soal_essay) {
-                $soal_paket_items[] = [
-                    'soal_paket_id' => $query->id,
-                    'soal_id' => $soal_essay,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+
+                // validate soal based on sertifikasi id
+                if(soal_validate($soal_essay, null, $dataInput['sertifikasi_id'])) {
+                    $soal_paket_items[] = [
+                        'soal_paket_id' => $query->id,
+                        'soal_id' => $soal_essay,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
             }
         }
 
