@@ -79,7 +79,7 @@
             <select class="form-control" name="status" id="status"
                 @if(isset($isShow)) readonly @endif
                 @if(isset($isEdit))
-                    {{ _('readonly') }}
+                    {{ __('readonly') }}
                 @endif
 
             >
@@ -111,10 +111,10 @@
                 @if(isset($isShow)) readonly @endif
                 @if(isset($isEdit))
                     @can('isAdmin')
-                        {{ _('readonly') }}
+                        {{ __('readonly') }}
                     @endcan
                     @if(isset($query->status) and !empty($query->status) and in_array($query->status, ['menunggu','paket_soal_assigned']))
-                        {{ _('readonly') }}
+                        {{ __('readonly') }}
                     @endif
                 @endif
             >
@@ -148,10 +148,10 @@
                    @if(isset($isShow)) readonly @endif
                    @if(isset($isEdit))
                        @can('isAdmin')
-                           {{ _('readonly') }}
+                           {{ __('readonly') }}
                        @endcan
                        @if(isset($query->status) and !empty($query->status) and $query->status != 'penilaian')
-                           {{ _('readonly') }}
+                           {{ __('readonly') }}
                        @endif
                    @endif
             >
@@ -495,7 +495,8 @@
                 cache: false,
                 data: function (data) {
                     return {
-                        q: data.term
+                        q: data.term,
+                        sertifikasi_id: $("#sertifikasi_id").val(),
                     }
                 },
                 processResults: function (response) {
