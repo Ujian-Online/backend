@@ -244,7 +244,8 @@
                     return {
                         q: data.term,
                         type: 'multiple_option',
-                        skip: soalpil()
+                        skip: soalpil(),
+                        sertifikasi_id: $('#sertifikasi_id').val(),
                     }
                 },
                 processResults: function (response) {
@@ -269,7 +270,8 @@
                     return {
                         q: data.term,
                         type: 'essay',
-                        skip: soalessay()
+                        skip: soalessay(),
+                        sertifikasi_id: $('#sertifikasi_id').val(),
                     }
                 },
                 processResults: function (response) {
