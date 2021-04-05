@@ -4,6 +4,18 @@
     @include('layouts.alert')
 
     <div class="form-row">
+
+        <div class="form-group col-md-12">
+            <label for="unit_kompetensi_id">Unit Kompetensi</label>
+            <select class="form-control @error('unit_kompetensi_id') is-invalid @enderror"
+                    name="unit_kompetensi_id" id="unit_kompetensi_id" data-placeholder="Unit Kompetensi">
+            </select>
+
+            @error('unit_kompetensi_id')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
         <div class="form-group col-md-12">
             <label for="question">Pertanyaan</label>
             <textarea class="form-control @error('question') is-invalid @enderror" name="question" id="question" cols="30" rows="3" @if(isset($isShow)) readonly @endif>{{ old('question') ?? ($query->question ?? '') }}</textarea>
@@ -156,5 +168,63 @@
         $('#question_type').on('change', () => {
             hide()
         })
+    </script>
+    <script>
+        /**
+         * Select2 with Ajax Start
+         * @type {string}
+         */
+
+        // default selected sertifikasi_id from query URL
+        const unitkompetensi_id_default = '{{ $query->unit_kompetensi_id ?? null }}'
+        // trigger load data if id not null
+        if(unitkompetensi_id_default) {
+            var ukSelected = $('#unit_kompetensi_id');
+            $.ajax({
+                url: '{{ route('admin.sertifikasi.uk.search.sertifikasi') }}' + '?q=' + unitkompetensi_id_default,
+                dataType: 'JSON',
+            }).then(function (data) {
+                // create the option and append to Select2
+                var option = new Option(data[0].text, data[0].id, true, true);
+                ukSelected.append(option).trigger('change');
+
+                // manually trigger the `select2:select` event
+                ukSelected.trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: data
+                    }
+                });
+            });
+        }
+
+        // select2 with ajax query search
+        $('#unit_kompetensi_id').select2({
+            theme: 'bootstrap4',
+            disabled: '{{ isset($isShow) and !empty($isShow) ? 'readonly' : 'false' }}',
+            allowClear: true,
+            minimumInputLength: 1,
+            ajax: {
+                url: '{{ route('admin.sertifikasi.uk.search.sertifikasi') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                data: function (data) {
+                    return {
+                        q: data.term
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
+        });
+
+        /**
+         * Select2 with Ajax End
+         * @type {string}
+         */
     </script>
 @endsection
