@@ -58,6 +58,7 @@ class SoalController extends Controller
     {
         // validate input
         $request->validate([
+            'unit_kompetensi_id' => 'required',
             'question'      => 'required',
             'question_type' => 'required',
             'max_score'     => 'required|numeric',
@@ -71,6 +72,7 @@ class SoalController extends Controller
 
         // get form data
         $dataInput = $request->only([
+            'unit_kompetensi_id',
             'question',
             'question_type',
             'max_score',
@@ -215,6 +217,7 @@ class SoalController extends Controller
     {
         // validate input
         $request->validate([
+            'unit_kompetensi_id' => 'required',
             'question'      => 'required',
             'max_score'     => 'required|numeric',
             'answer_essay'  => 'nullable|required_if:question_type,essay',
@@ -227,6 +230,7 @@ class SoalController extends Controller
 
         // get form data
         $dataInput = $request->only([
+            'unit_kompetensi_id',
             'question',
             'max_score',
             'answer_essay',
@@ -334,7 +338,10 @@ class SoalController extends Controller
     public function search(Request $request)
     {
         // database query
-        $query = new Soal();
+        $query = Soal::select(['soals.*'])
+            ->leftJoin('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.id', '=', 'soals.unit_kompetensi_id')
+            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id');
+
         // result variable
         $result = [];
 
@@ -342,23 +349,29 @@ class SoalController extends Controller
         $q = $request->input('q');
         $type = $request->input('type');
         $skip = $request->input('skip');
+        $sertifikasi_id = $request->input('sertifikasi_id');
 
         // return empty object if query is empty
         if(!empty($q) and is_numeric($q)) {
-            $query = $query->where('id', 'like', "%$q%");
+            $query = $query->where('soals.id', 'like', "%$q%");
         } else {
-            $query = $query->where('question', 'like', "%$q%");
+            $query = $query->where('soals.question', 'like', "%$q%");
         }
 
         // filter by type
         if(!empty($type)) {
             $questionType = ($type == 'multiple_option') ? 'multiple_option' : 'essay';
-            $query = $query->where('question_type', $questionType);
+            $query = $query->where('soals.question_type', $questionType);
         }
 
         // exclude or skip by id
         if(!empty($skip)) {
-            $query = $query->whereNotIn('id', explode(',', $skip));
+            $query = $query->whereNotIn('soals.id', explode(',', $skip));
+        }
+
+        // search by sertifikasi id
+        if(!empty($sertifikasi_id)) {
+            $query = $query->where('sertifikasis.id', $sertifikasi_id);
         }
 
         // check if data found or not
