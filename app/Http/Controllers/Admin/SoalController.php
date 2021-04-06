@@ -238,16 +238,13 @@ class SoalController extends Controller
         ]);
 
         // find by id and update
-        $query = Soal::findOrFail('id', $id);
+        $query = Soal::findOrFail($id);
 
         // get user login, and get asesor_id if loggin by asesor
         $user = $request->user();
         if($user->can('isAssesor') and $query->asesor_id != $user->id) {
             return redirect()->route('admin.soal.daftar.index')->withErrors('Anda tidak memiliki akses ke soal: [ID: ' . $query->id . '] ' . $query->question);
         }
-
-        // fetch data
-        $query = $query->firstOrFail();
 
         // update data
         $query->update($dataInput);
