@@ -57,16 +57,17 @@ if(!function_exists('apl02_status')) {
         $apl02Status = null;
 
         // Ambil data dari database
-        $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::with([
-            'media'     =>  function ($query) use ($asesiId) {
-                            $query->where('asesi_id', $asesiId);
-                        }
-            ])
-            ->join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
-            ->where('asesi_sertifikasi_unit_kompetensi_elements.asesi_id', $asesiId)
-            ->where('asesi_unit_kompetensi_dokumens.asesi_id', $asesiId)
-            ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', $sertifikasiId)
-            ->get();
+        $apl02Elements = \App\AsesiUnitKompetensiDokumen::with([
+            'asesisertifikasiunitkompetensielement' => function ($query) use ($asesiId) {
+                $query->where('asesi_id', $asesiId);
+            },
+            'asesisertifikasiunitkompetensielement.media' => function ($query) use ($asesiId) {
+                $query->where('asesi_id', $asesiId);
+            }
+        ])
+        ->where('asesi_id', $asesiId)
+        ->where('sertifikasi_id', $sertifikasiId)
+        ->firstOrFail();
 
         // apl02 status
         $apl02StatusCount = [
@@ -76,7 +77,7 @@ if(!function_exists('apl02_status')) {
             'form_terverifikasi' => null,
         ];
 
-        foreach($apl02Elements as $apl02Element) {
+        foreach($apl02Elements->asesisertifikasiunitkompetensielement as $apl02Element) {
             // [Isi form] (Kalau belum isi sama sekali)
             if(count($apl02Element->media) == 0) {
                 $apl02StatusCount['isi_form'][] = $apl02Element->id;
