@@ -57,7 +57,8 @@ if(!function_exists('apl02_status')) {
         $apl02Status = null;
 
         // Ambil data dari database
-        $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
+        $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::with(['media'])
+            ->join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
             ->where('asesi_sertifikasi_unit_kompetensi_elements.asesi_id', $asesiId)
             ->where('asesi_unit_kompetensi_dokumens.asesi_id', $asesiId)
             ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', $sertifikasiId)
@@ -73,22 +74,22 @@ if(!function_exists('apl02_status')) {
 
         foreach($apl02Elements as $apl02Element) {
             // [Isi form] (Kalau belum isi sama sekali)
-            if(empty($apl02Element->media_url)) {
+            if(count($apl02Element->media) == 0) {
                 $apl02StatusCount['isi_form'][] = $apl02Element->id;
             }
 
             // Menunggu verifikasi [Update Form] (Kalau udah isi, tapi blum di verif semua)
-            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 0) {
+            if(count($apl02Element->media) > 0 and $apl02Element->is_verified == 0) {
                 $apl02StatusCount['menunggu_verifikasi'][] = $apl02Element->id;
             }
 
             // Form ditolak [Update Form] (Kalau udah isi, tapi ada yg ditolak)
-            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 0 and !empty($apl02Element->verification_note)) {
+            if(count($apl02Element->media) > 0 and $apl02Element->is_verified == 0 and !empty($apl02Element->verification_note)) {
                 $apl02StatusCount['form_ditolak'][] = $apl02Element->id;
             }
 
             // Form terverifikasi (Kalau udah verif semua)
-            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 1) {
+            if(count($apl02Element->media) > 0 and $apl02Element->is_verified == 1) {
                 $apl02StatusCount['form_terverifikasi'][] = $apl02Element->id;
             }
         }
