@@ -352,7 +352,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'sertifikasi_unit_kompentensis.title as unit_kompetensi_title',
             'sertifikasis.title as sertifikasi_title',
         ])
-            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
             ->when($q, function($query) use ($q) {
                 if(is_numeric($q)) {
                     $query->where('sertifikasi_unit_kompentensis.id', $q);
