@@ -57,7 +57,11 @@ if(!function_exists('apl02_status')) {
         $apl02Status = null;
 
         // Ambil data dari database
-        $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::with(['media'])
+        $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::with([
+            'media'     =>  function ($query) use ($asesiId) {
+                            $query->where('asesi_id', $asesiId);
+                        }
+            ])
             ->join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
             ->where('asesi_sertifikasi_unit_kompetensi_elements.asesi_id', $asesiId)
             ->where('asesi_unit_kompetensi_dokumens.asesi_id', $asesiId)
