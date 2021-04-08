@@ -58,7 +58,7 @@ class SoalController extends Controller
     {
         // validate input
         $request->validate([
-            'unit_kompetensi_id' => 'required',
+            'unit_kompetensi_id' => 'required|exists:App\UnitKompetensi,id',
             'question'      => 'required',
             'question_type' => 'required',
             'max_score'     => 'required|numeric',
@@ -217,7 +217,7 @@ class SoalController extends Controller
     {
         // validate input
         $request->validate([
-            'unit_kompetensi_id' => 'required',
+            'unit_kompetensi_id' => 'required|exists:App\UnitKompetensi,id',
             'question'      => 'required',
             'max_score'     => 'required|numeric',
             'answer_essay'  => 'nullable|required_if:question_type,essay',
@@ -336,7 +336,8 @@ class SoalController extends Controller
     {
         // database query
         $query = Soal::select(['soals.*'])
-            ->leftJoin('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.id', '=', 'soals.unit_kompetensi_id')
+            ->leftJoin('unit_kompetensis', 'unit_kompetensis.id', '=', 'soals.unit_kompetensi_id')
+            ->leftJoin('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.unit_kompetensi_id', '=', 'soals.unit_kompetensi_id')
             ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id');
 
         // result variable
@@ -368,7 +369,7 @@ class SoalController extends Controller
 
         // search by sertifikasi id
         if(!empty($sertifikasi_id)) {
-            $query = $query->where('sertifikasis.id', $sertifikasi_id);
+            $query = $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id);
         }
 
         // check if data found or not
