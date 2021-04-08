@@ -28,6 +28,6 @@ class Soal extends Model
 
     public function UnitKompetensi()
     {
-        return $this->hasOne('App\SertifikasiUnitKompetensi', 'id', 'unit_kompetensi_id');
+        return $this->hasOne('App\UnitKompetensi', 'id', 'unit_kompetensi_id');
     }
 }
