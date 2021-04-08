@@ -181,7 +181,7 @@
         if(unitkompetensi_id_default) {
             var ukSelected = $('#unit_kompetensi_id');
             $.ajax({
-                url: '{{ route('admin.sertifikasi.uk.search.sertifikasi') }}' + '?q=' + unitkompetensi_id_default,
+                url: '{{ route('admin.sertifikasi.uk.search') }}' + '?q=' + unitkompetensi_id_default,
                 dataType: 'JSON',
             }).then(function (data) {
                 // create the option and append to Select2
@@ -205,7 +205,7 @@
             allowClear: true,
             minimumInputLength: 1,
             ajax: {
-                url: '{{ route('admin.sertifikasi.uk.search.sertifikasi') }}',
+                url: '{{ route('admin.sertifikasi.uk.search') }}',
                 dataType: 'JSON',
                 delay: 100,
                 cache: false,

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSertifikasiUnitKompentensisTable extends Migration
+class CreateUnitKompetensiElementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateSertifikasiUnitKompentensisTable extends Migration
      */
     public function up()
     {
-        Schema::create('sertifikasi_unit_kompentensis', function (Blueprint $table) {
+        Schema::create('unit_kompetensi_elements', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('sertifikasi_id');
             $table->bigInteger('unit_kompetensi_id');
+            $table->text('desc');
+            $table->text('upload_instruction');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateSertifikasiUnitKompentensisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sertifikasi_unit_kompentensis');
+        Schema::dropIfExists('unit_kompetensi_elements');
     }
 }

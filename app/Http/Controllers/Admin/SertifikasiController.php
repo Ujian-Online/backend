@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\Admin\SertifikasiDataTable;
 use App\Http\Controllers\Controller;
 use App\Sertifikasi;
+use App\SertifikasiUnitKompentensi;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,6 +75,8 @@ class SertifikasiController extends Controller
             'original_price_baru'       => 'required',
             'original_price_perpanjang' => 'required',
             'is_active'                 => 'required|boolean',
+            'unit_kompetensi_id'        => 'required|array',
+            'unit_kompetensi_id.*'      => 'required|integer|exists:App\UnitKompetensi,id',
         ]);
 
         // get form data
@@ -81,10 +86,26 @@ class SertifikasiController extends Controller
             'original_price_baru',
             'original_price_perpanjang',
             'is_active',
+            'unit_kompetensi_id',
         ]);
 
         // save to database
-        Sertifikasi::create($dataInput);
+        $sertifikasi = Sertifikasi::create($dataInput);
+
+        // save unit kompetensi sertifikasi
+        $uk_inputs = $dataInput['unit_kompetensi_id'];
+        $uks = [];
+        foreach($uk_inputs as $uk) {
+            $uks[] = [
+                'sertifikasi_id'        => $sertifikasi->id,
+                'unit_kompetensi_id'    => $uk,
+                'created_at'            => now(),
+                'updated_at'            => now()
+            ];
+        }
+
+        // bulk insert unit kompetensi for sertifikasi
+        SertifikasiUnitKompentensi::insert($uks);
 
         // redirect to index table
         return redirect()
@@ -100,12 +121,17 @@ class SertifikasiController extends Controller
      * @param Request $request
      * @param int $id
      *
-     * @return Sertifikasi|Sertifikasi[]|Application|Factory|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|Response|View
+     * @return Sertifikasi|Sertifikasi[]|Application|Factory|Collection|Model|Response|View
      */
     public function show(Request $request, int $id)
     {
         // Find Data by ID
-        $query = Sertifikasi::findOrFail($id);
+        $query = Sertifikasi::with([
+                'sertifikasiunitkompentensi',
+                'sertifikasiunitkompentensi.unitkompetensi'
+            ])
+            ->where('id', $id)
+            ->firstOrFail();
 
         // return json if request by ajax
         if($request->ajax()) {
@@ -162,6 +188,8 @@ class SertifikasiController extends Controller
             'original_price_baru'       => 'required',
             'original_price_perpanjang' => 'required',
             'is_active'                 => 'required|boolean',
+            'unit_kompetensi_id'        => 'required|array',
+            'unit_kompetensi_id.*'      => 'required|integer|exists:App\UnitKompetensi,id',
         ]);
 
         // get form data
@@ -171,12 +199,31 @@ class SertifikasiController extends Controller
             'original_price_baru',
             'original_price_perpanjang',
             'is_active',
+            'unit_kompetensi_id',
         ]);
 
         // find by id and update
         $query = Sertifikasi::findOrFail($id);
         // update data
         $query->update($dataInput);
+
+        // delete old data
+        SertifikasiUnitKompentensi::where('sertifikasi_id', $id)->delete();
+
+        // save unit kompetensi sertifikasi
+        $uk_inputs = $dataInput['unit_kompetensi_id'];
+        $uks = [];
+        foreach($uk_inputs as $uk) {
+            $uks[] = [
+                'sertifikasi_id'        => $query->id,
+                'unit_kompetensi_id'    => $uk,
+                'created_at'            => now(),
+                'updated_at'            => now()
+            ];
+        }
+
+        // bulk insert unit kompetensi for sertifikasi
+        SertifikasiUnitKompentensi::insert($uks);
 
         // redirect
         return redirect()

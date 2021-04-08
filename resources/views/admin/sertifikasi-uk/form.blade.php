@@ -6,13 +6,6 @@
     <div class="form-row">
 
         <div class="form-group col-md-12">
-            <label for="sertifikasi_id">Sertifikasi ID</label>
-            <select class="form-control @error('sertifikasi_id') is-invalid @enderror"
-                    name="sertifikasi_id" id="sertifikasi_id" data-placeholder="Pilih Sertifikasi ID">
-            </select>
-        </div>
-
-        <div class="form-group col-md-12">
             <label for="title">Title</label>
             <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title" placeholder="Title" value="{{ old('title') ?? $query->title ?? '' }}" @if(isset($isShow)) readonly @endif>
 
@@ -39,61 +32,65 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-6">
-            <label for="order">Urutan</label>
-            <input type="number" class="form-control @error('order') is-invalid @enderror" name="order" id="order" placeholder="Order" value="{{ old('order') ?? $query->order ?? '' }}" @if(isset($isShow)) readonly @endif>
+{{--        <div class="form-group col-md-6">--}}
+{{--            <label for="order">Urutan</label>--}}
+{{--            <input type="number" class="form-control @error('order') is-invalid @enderror" name="order" id="order" placeholder="Order" value="{{ old('order') ?? $query->order ?? '' }}" @if(isset($isShow)) readonly @endif>--}}
 
-            @error('order')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
+{{--            @error('order')--}}
+{{--                <div class="alert alert-danger">{{ $message }}</div>--}}
+{{--            @enderror--}}
+{{--        </div>--}}
     </div>
 
-    <h3>UK Element</h3>
-
-    @if(old('desc') && old('upload_instruction'))
-        @php
-            // fetch old input
-            $descs = old('desc');
-            $upload_instructions = old('upload_instruction');
-        @endphp
-        @foreach($descs as $key => $desc)
-            @include('admin.sertifikasi-uk.form-element', [
-                        'id' => str_replace('new-', '', $key),
-                        'desc' => $desc,
-                        'upload_instruction' => $upload_instructions[$key]
-                    ])
-        @endforeach
-    @endif
-
-    {{--  Load UK Element  --}}
-    @if(isset($isShow) OR isset($isEdit))
-        <div class="form-row mb-4">
-            @if(count($query->ukelement) > 0)
-                @foreach($query->ukelement as $ukelement)
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-tasks"></i> Unit Kompetensi Element</h3>
+        </div>
+        <div class="card-body">
+            @if(old('desc') && old('upload_instruction'))
+                @php
+                    // fetch old input
+                    $descs = old('desc');
+                    $upload_instructions = old('upload_instruction');
+                @endphp
+                @foreach($descs as $key => $desc)
                     @include('admin.sertifikasi-uk.form-element', [
-                        'view' => true,
-                        'show' => isset($isShow),
-                        'edit' => isset($isEdit),
-                        'ukelement' => $ukelement
-                    ])
+                                'id' => str_replace('new-', '', $key),
+                                'desc' => $desc,
+                                'upload_instruction' => $upload_instructions[$key]
+                            ])
                 @endforeach
             @endif
-        </div>
-    @endif
 
-    {{--  Save new UK Element  --}}
-    @if(isset($isCreated) OR isset($isEdit))
-        <div class="form-row mb-4" id="new-element"></div>
-        <div class="form-row">
-            @if(!isset($isShow))
-                <button type="button" id="tambah-element" class="btn btn-primary mb-4" onclick="">
-                    <i class="fas fa-plus-circle"></i> Tambah Element
-                </button>
+            {{--  Load UK Element  --}}
+            @if(isset($isShow) OR isset($isEdit))
+                <div class="form-row mb-4">
+                    @if(count($query->ukelement) > 0)
+                        @foreach($query->ukelement as $ukelement)
+                            @include('admin.sertifikasi-uk.form-element', [
+                                'view' => true,
+                                'show' => isset($isShow),
+                                'edit' => isset($isEdit),
+                                'ukelement' => $ukelement
+                            ])
+                        @endforeach
+                    @endif
+                </div>
+            @endif
+
+            {{--  Save new UK Element  --}}
+            @if(isset($isCreated) OR isset($isEdit))
+                <div class="form-row mb-4" id="new-element"></div>
+                <div class="form-row">
+                    @if(!isset($isShow))
+                        <button type="button" id="tambah-element" class="btn btn-primary mb-4" onclick="">
+                            <i class="fas fa-plus-circle"></i> Tambah Element
+                        </button>
+                    @endif
+                </div>
             @endif
         </div>
-    @endif
-
+    </div>
 @endsection
 
 @section('js')

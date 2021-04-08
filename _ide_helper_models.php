@@ -153,8 +153,10 @@ namespace App{
  * @property-read int|null $asesi_unit_kompetensi_dokumen_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiTuk[] $SertifikasiTuk
  * @property-read int|null $sertifikasi_tuk_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiUnitKompentensi[] $UnitKompentensi
- * @property-read int|null $unit_kompentensi_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiUnitKompentensi[] $SertifikasiUnitKompentensi
+ * @property-read int|null $sertifikasi_unit_kompentensi_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\UnitKompetensi[] $UnitKompetensi
+ * @property-read int|null $unit_kompetensi_count
  * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Sertifikasi query()
@@ -188,16 +190,12 @@ namespace App{
  * App\SertifikasiUnitKompentensi
  *
  * @property int $id
- * @property int $order
  * @property int $sertifikasi_id
- * @property string $kode_unit_kompetensi
- * @property string $title
- * @property string|null $sub_title
+ * @property int $unit_kompetensi_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Sertifikasi|null $Sertifikasi
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\SertifikasiUnitKompetensiElement[] $UKElement
- * @property-read int|null $u_k_element_count
+ * @property-read \App\UnitKompetensi|null $UnitKompetensi
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompentensi query()
@@ -209,12 +207,6 @@ namespace App{
 /**
  * App\SertifikasiUnitKompetensiElement
  *
- * @property int $id
- * @property int $unit_kompetensi_id
- * @property string $desc
- * @property string $upload_instruction
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\SertifikasiUnitKompentensi|null $UnitKompetensi
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement newQuery()
@@ -228,6 +220,7 @@ namespace App{
  * App\Soal
  *
  * @property int $id
+ * @property int $unit_kompetensi_id
  * @property int|null $asesor_id
  * @property string $question
  * @property string $question_type
@@ -238,6 +231,7 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\SoalPilihanGanda[] $SoalPilihanGanda
  * @property-read int|null $soal_pilihan_ganda_count
+ * @property-read \App\UnitKompetensi|null $UnitKompetensi
  * @method static \Illuminate\Database\Eloquent\Builder|Soal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Soal newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Soal query()
@@ -436,6 +430,44 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|UjianJadwal query()
  */
 	class UjianJadwal extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\UnitKompetensi
+ *
+ * @property int $id
+ * @property string $kode_unit_kompetensi
+ * @property string $title
+ * @property string|null $sub_title
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Sertifikasi|null $Sertifikasi
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\UnitKompetensiElement[] $UKElement
+ * @property-read int|null $u_k_element_count
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitKompetensi newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitKompetensi newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitKompetensi query()
+ */
+	class UnitKompetensi extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\UnitKompetensiElement
+ *
+ * @property int $id
+ * @property int $unit_kompetensi_id
+ * @property string $desc
+ * @property string $upload_instruction
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\UnitKompetensi|null $UnitKompetensi
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitKompetensiElement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitKompetensiElement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitKompetensiElement query()
+ */
+	class UnitKompetensiElement extends \Eloquent {}
 }
 
 namespace App{

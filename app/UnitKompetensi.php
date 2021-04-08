@@ -3,10 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class SertifikasiUnitKompentensi extends Model
+class UnitKompetensi extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -14,8 +13,9 @@ class SertifikasiUnitKompentensi extends Model
      * @var array
      */
     protected $fillable = [
-        'sertifikasi_id',
-        'unit_kompetensi_id',
+        'kode_unit_kompetensi',
+        'title',
+        'sub_title',
     ];
 
     /**
@@ -29,12 +29,12 @@ class SertifikasiUnitKompentensi extends Model
     }
 
     /**
-     * Relation to Table Unit Kompetensi
+     * Relation to Table Sertifikasi Unit Kompetensi Element
      *
-     * @return HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function UnitKompetensi()
+    public function UKElement()
     {
-        return $this->hasOne('App\UnitKompetensi', 'id', 'unit_kompetensi_id');
+        return $this->hasMany('App\UnitKompetensiElement', 'unit_kompetensi_id', 'id');
     }
 }

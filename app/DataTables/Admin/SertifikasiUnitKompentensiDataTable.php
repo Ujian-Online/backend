@@ -2,7 +2,7 @@
 
 namespace App\DataTables\Admin;
 
-use App\SertifikasiUnitKompentensi;
+use App\UnitKompetensi;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -34,27 +34,12 @@ class SertifikasiUnitKompentensiDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\SertifikasiUnitKompentensi $model
+     * @param \App\UnitKompetensi $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(SertifikasiUnitKompentensi $model)
+    public function query(UnitKompetensi $model)
     {
-        // create query variable
-        $query = $model::with('sertifikasi');
-
-        // get input filter
-        $sertifikasi_id = request()->input('sertifikasi_id');
-
-        // sertifikasi_id filter query
-        if(isset($sertifikasi_id) and !empty($sertifikasi_id)) {
-            $query = $query->where('sertifikasi_id', $sertifikasi_id);
-        }
-
-        // order by sertifikasi_id
-        $query = $query->orderBy('sertifikasi_id', 'asc')
-            ->orderBy('order', 'asc');
-
-        return $query;
+        return $model->newQuery();
     }
 
     /**
@@ -85,7 +70,7 @@ class SertifikasiUnitKompentensiDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(3, 'desc')
+                    ->orderBy(0, 'desc')
                     ->buttons(
                         // Button::make('export'),
                         // Button::make('print'),
@@ -101,17 +86,19 @@ class SertifikasiUnitKompentensiDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('title'),
-            Column::make('sub_title'),
-            Column::make('kode_unit_kompetensi'),
-            Column::make('updated_at')
-                ->title('Update')
-                ->width('10%'),
+            Column::make('id')
+                ->width('5%'),
+            Column::make('kode_unit_kompetensi')
+                ->width('20%'),
+            Column::make('title')
+                ->width('25%'),
+            Column::make('sub_title')
+                ->width('25%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('15%')
+                ->width('5%')
                 ->addClass('text-center'),
         ];
     }
@@ -123,7 +110,7 @@ class SertifikasiUnitKompentensiDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'SertifikasiUnitKompentensi_' . date('YmdHis');
+        return 'UnitKompentensi_' . date('YmdHis');
     }
 
     /**

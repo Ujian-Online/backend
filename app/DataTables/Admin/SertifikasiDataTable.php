@@ -30,7 +30,7 @@ class SertifikasiDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
-                    'url_sertifikasi_uk' => route('admin.sertifikasi.uk.index', ['sertifikasi_id' => $query->id ]),
+                    // 'url_sertifikasi_uk' => route('admin.sertifikasi.uk.index', ['sertifikasi_id' => $query->id ]),
                     'url_show' => route('admin.sertifikasi.show', $query->id),
                     'url_edit' => route('admin.sertifikasi.edit', $query->id),
                     'url_destroy' => route('admin.sertifikasi.destroy', $query->id),
@@ -77,7 +77,7 @@ class SertifikasiDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(0, 'asc')
+                    ->orderBy(0, 'desc')
                     ->buttons(
                         // Button::make('export'),
                         // Button::make('print'),
@@ -93,20 +93,23 @@ class SertifikasiDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('nomor_skema'),
-            Column::make('title'),
+            Column::make('id')
+                ->width('5%'),
+            Column::make('nomor_skema')
+                ->width('30%'),
+            Column::make('title')
+                ->width('30%'),
             Column::make('original_price_baru')
-                ->title('Harga Baru'),
+                ->title('Harga Baru')
+                ->width('15%'),
             Column::make('original_price_perpanjang')
-                ->title('Harga Perpanjang'),
-            Column::make('updated_at')
-                ->title('Update')
-                ->width('10%'),
+                ->title('Harga Perpanjang')
+                ->width('15%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('10%')
+                ->width('5%')
                 ->addClass('text-center'),
         ];
     }
