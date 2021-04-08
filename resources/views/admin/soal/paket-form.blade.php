@@ -234,7 +234,6 @@
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
             allowClear: true,
-            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('admin.soal.search') }}',
                 dataType: 'JSON',
