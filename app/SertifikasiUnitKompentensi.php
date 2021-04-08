@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class SertifikasiUnitKompentensi extends Model
@@ -13,20 +14,8 @@ class SertifikasiUnitKompentensi extends Model
      * @var array
      */
     protected $fillable = [
-        'order',
         'sertifikasi_id',
-        'kode_unit_kompetensi',
-        'title',
-        'sub_title',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'order' => 'int'
+        'unit_kompetensi_id',
     ];
 
     /**
@@ -40,12 +29,12 @@ class SertifikasiUnitKompentensi extends Model
     }
 
     /**
-     * Relation to Table Sertifikasi Unit Kompetensi Element
+     * Relation to Table Unit Kompetensi
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasOne
      */
-    public function UKElement()
+    public function UnitKompetensi()
     {
-        return $this->hasMany('App\SertifikasiUnitKompetensiElement', 'unit_kompetensi_id', 'id');
+        return $this->hasOne('App\UnitKompetensi', 'id', 'unit_kompetensi_id');
     }
 }

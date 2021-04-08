@@ -15,11 +15,8 @@ class CreateSertifikasiUnitKompentensisTable extends Migration
     {
         Schema::create('sertifikasi_unit_kompentensis', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('order');
             $table->bigInteger('sertifikasi_id');
-            $table->string('kode_unit_kompetensi');
-            $table->string('title');
-            $table->string('sub_title')->nullable();
+            $table->bigInteger('unit_kompetensi_id');
             $table->timestamps();
         });
     }
