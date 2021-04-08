@@ -34,7 +34,8 @@ class SertifikasiController extends Controller
             [
                 'sertifikasituk',
                 'sertifikasituk.tuk',
-                'unitkompentensi'
+                'sertifikasiunitkompentensi',
+                'sertifikasiunitkompentensi.unitkompetensi'
             ]
         )->where('is_active', 1);
 
@@ -75,7 +76,8 @@ class SertifikasiController extends Controller
             [
                 'sertifikasituk',
                 'sertifikasituk.tuk',
-                'unitkompentensi'
+                'sertifikasiunitkompentensi',
+                'sertifikasiunitkompentensi.unitkompetensi'
             ]
         )
             ->where('id', $id)
