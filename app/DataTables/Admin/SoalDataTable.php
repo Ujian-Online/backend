@@ -59,12 +59,9 @@ class SoalDataTable extends DataTable
     {
         return $model->select([
             'soals.*',
-            'sertifikasi_unit_kompentensis.sertifikasi_id',
-            'sertifikasi_unit_kompentensis.title as unit_kompetensi_title',
-            'sertifikasis.title as sertifikasi_title',
+            'unit_kompetensis.title as unit_kompetensi_title',
         ])
-            ->leftJoin('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.id', '=', 'soals.unit_kompetensi_id')
-            ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id');
+            ->leftJoin('unit_kompetensis', 'unit_kompetensis.id', '=', 'soals.unit_kompetensi_id');
     }
 
     /**
@@ -114,13 +111,10 @@ class SoalDataTable extends DataTable
             Column::make('id')
                 ->width('5%'),
             Column::make('question')
-                ->width('30%'),
-            Column::make('sertifikasi_title')
-                ->title('Sertifikasi')
-                ->width('25%'),
+                ->width('40%'),
             Column::make('unit_kompetensi_title')
                 ->title('Unit Kompetensi')
-                ->width('25%'),
+                ->width('40%'),
             Column::make('question_type')
                 ->title('Question Type')
                 ->width('10%'),
