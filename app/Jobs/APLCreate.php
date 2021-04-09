@@ -23,14 +23,14 @@ class APLCreate implements ShouldQueue
      *
      * @var int
      */
-    private $userId;
+    public $userId;
 
     /**
      * Sertifikasi ID
      *
      * @var int
      */
-    private $sertifikasiId;
+    public $sertifikasiId;
 
     /**
      * Create a new job instance.

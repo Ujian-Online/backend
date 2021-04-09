@@ -23,14 +23,14 @@ class APL01AdminNotification implements ShouldQueue
      *
      * @var Integer
      */
-    private $asesiId;
+    public $asesiId;
 
     /**
      * User Asesi Custom Data ID
      *
      * @var Integer
      */
-    private $customDataId;
+    public $customDataId;
 
     /**
      * Create a new job instance.

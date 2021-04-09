@@ -24,21 +24,21 @@ class OrderTukNotification implements ShouldQueue
      *
      * @var Integer
      */
-    private $asesiId;
+    public $asesiId;
 
     /**
      * Order ID
      *
      * @var Integer
      */
-    private $orderId;
+    public $orderId;
 
     /**
      * TUK ID
      *
      * @var Integer
      */
-    private $tukId;
+    public $tukId;
 
 
 

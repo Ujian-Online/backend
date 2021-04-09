@@ -22,7 +22,7 @@ class JadwalUjianAdminNotification implements ShouldQueue
      *
      * @var Integer
      */
-    private $asesiId;
+    public $asesiId;
 
     /**
      * Create a new job instance.
