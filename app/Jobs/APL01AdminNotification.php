@@ -56,7 +56,7 @@ class APL01AdminNotification implements ShouldQueue
         // get asesi custom data
         $userAsesiCustomData = null;
         if($this->customDataId) {
-            $userAsesiCustomData = UserAsesiCustomData::findOrFail($this->customDataId);
+            $userAsesiCustomData = UserAsesiCustomData::where('id', $this->customDataId)->firstOrFail();
         }
 
         // get user with admin access

@@ -43,7 +43,7 @@ class AsesorPaketUjianAsesi extends Mailable implements ShouldQueue
             'userasesi',
             'userasesi.asesi',
             'sertifikasi'
-        ])->findOrFail($ujianAsesiAsesor);
+        ])->where('id', $ujianAsesiAsesor)->firstOrFail();
 
         $this->ujianasesiasesor = $ujianAsesiAsesor;
         $this->asesi = $ujianAsesiAsesor->userasesi ?? null;

@@ -36,10 +36,10 @@ class OrderConfirmation extends Mailable implements ShouldQueue
     public function __construct(int $userId, int $orderId)
     {
         // assign data to object
-        $this->user = User::with('asesi')->findOrFail($userId);
+        $this->user = User::with('asesi')->where('id', $userId)->firstOrFail();
         $this->order = Order::with([
             'sertifikasi', 'tuk', 'tuk.bank', 'user', 'user.asesi'
-        ])->findOrFail($orderId);
+        ])->where('id', $orderId)->firstOrFail();
     }
 
     /**
