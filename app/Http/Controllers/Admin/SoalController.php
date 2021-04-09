@@ -335,7 +335,10 @@ class SoalController extends Controller
     public function search(Request $request)
     {
         // database query
-        $query = Soal::select(['soals.*'])
+        $query = Soal::select([
+                'soals.*',
+                'unit_kompetensis.kode_unit_kompetensi as kode_unit_kompetensi',
+            ])
             ->leftJoin('unit_kompetensis', 'unit_kompetensis.id', '=', 'soals.unit_kompetensi_id')
             ->leftJoin('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.unit_kompetensi_id', '=', 'soals.unit_kompetensi_id')
             ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id');
@@ -351,9 +354,11 @@ class SoalController extends Controller
 
         // return empty object if query is empty
         if(!empty($q) and is_numeric($q)) {
-            $query = $query->where('soals.id', 'like', "%$q%");
+            $query = $query->where('soals.id', 'like', "%$q%")
+                ->orWhere('unit_kompetensis.kode_unit_kompetensi', 'like', "%$q%");
         } else {
-            $query = $query->where('soals.question', 'like', "%$q%");
+            $query = $query->where('soals.question', 'like', "%$q%")
+                ->orWhere('unit_kompetensis.kode_unit_kompetensi', 'like', "%$q%");
         }
 
         // filter by type
@@ -377,7 +382,7 @@ class SoalController extends Controller
             foreach($query->get() as $data) {
                 $result[] = [
                     'id' => $data->id,
-                    'text' => '[ID: ' . $data->id . '] - ' . $data->question,
+                    'text' => '[' . $data->kode_unit_kompetensi . '] - ' . $data->question,
                 ];
             }
         }
