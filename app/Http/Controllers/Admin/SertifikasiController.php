@@ -279,9 +279,11 @@ class SertifikasiController extends Controller
 
         // check if query is numeric or not
         if(is_numeric($q)) {
-            $query = $query->where('id', 'like', "%$q%");
+            $query = $query->where('id', 'like', "%$q%")
+                        ->orWhere('nomor_skema', 'like', "%$q%");
         } else {
-            $query = $query->where('title', 'like', "%$q%");
+            $query = $query->where('title', 'like', "%$q%")
+                        ->orWhere('nomor_skema', 'like', "%$q%");
         }
 
         // check if data found or not
@@ -289,7 +291,7 @@ class SertifikasiController extends Controller
             foreach($query->get() as $data) {
                 $result[] = [
                     'id' => $data->id,
-                    'text' => '[ID: ' . $data->id . '] - ' . $data->title,
+                    'text' => '[' . $data->nomor_skema . '] ' . $data->title,
                 ];
             }
         }
