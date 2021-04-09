@@ -16,6 +16,16 @@ class SertifikasiUnitKompentensi extends Model
     protected $fillable = [
         'sertifikasi_id',
         'unit_kompetensi_id',
+        'order'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'order' => 'integer',
     ];
 
     /**

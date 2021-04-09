@@ -15,7 +15,6 @@ class CreateUnitKompetensisTable extends Migration
     {
         Schema::create('unit_kompetensis', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('order');
             $table->bigInteger('sertifikasi_id');
             $table->bigInteger('unit_kompetensi_id');
             $table->timestamps();

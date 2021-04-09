@@ -85,7 +85,7 @@ class APLCreate implements ShouldQueue
             $asesiSertifikasiUK[] = [
                 'asesi_id' => $this->userId,
                 'unit_kompetensi_id' => $sertifikasi->unit_kompetensi_id,
-                'order' => 0,
+                'order' => $sertifikasi->order,
                 'sertifikasi_id' => $sertifikasi->sertifikasi_id,
                 'kode_unit_kompetensi' => $sertifikasi->unitkompetensi->kode_unit_kompetensi,
                 'title' => $sertifikasi->unitkompetensi->title,
