@@ -49,8 +49,6 @@ class UjianController extends Controller
             'sertifikasi',
         ])->where('asesi_id', $user->id)->get();
 
-        return $ujians;
-
         // variable result
         $result = [];
 
