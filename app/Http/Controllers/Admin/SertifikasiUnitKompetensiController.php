@@ -311,9 +311,11 @@ class SertifikasiUnitKompetensiController extends Controller
 
         // check if query is numeric or not
         if(is_numeric($q)) {
-            $query = $query->where('id', 'like', "%$q%");
+            $query = $query->where('id', 'like', "%$q%")
+                    ->orWhere('kode_unit_kompetensi', 'like', "%$q%");
         } else {
-            $query = $query->where('title', 'like', "%$q%");
+            $query = $query->where('title', 'like', "%$q%")
+                    ->orWhere('kode_unit_kompetensi', 'like', "%$q%");
         }
 
         // check if data found or not
@@ -321,7 +323,7 @@ class SertifikasiUnitKompetensiController extends Controller
             foreach($query->get() as $data) {
                 $result[] = [
                     'id' => $data->id,
-                    'text' => '[ID: ' . $data->id . '] - ' . $data->title,
+                    'text' => '[ID: ' . $data->id . '] ' . $data->kode_unit_kompetensi . ' - ' .$data->title,
                 ];
             }
         }
