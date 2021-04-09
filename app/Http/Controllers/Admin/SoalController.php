@@ -354,11 +354,9 @@ class SoalController extends Controller
 
         // return empty object if query is empty
         if(!empty($q) and is_numeric($q)) {
-            $query = $query->where('soals.id', 'like', "%$q%")
-                ->orWhere('unit_kompetensis.kode_unit_kompetensi', 'like', "%$q%");
+            $query = $query->where('soals.id', 'like', "%$q%");
         } else {
-            $query = $query->where('soals.question', 'like', "%$q%")
-                ->orWhere('unit_kompetensis.kode_unit_kompetensi', 'like', "%$q%");
+            $query = $query->where('soals.question', 'like', "%$q%");
         }
 
         // filter by type
@@ -374,7 +372,9 @@ class SoalController extends Controller
 
         // search by sertifikasi id
         if(!empty($sertifikasi_id)) {
-            $query = $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id);
+            $query = $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id)
+                ->where('unit_kompetensis.kode_unit_kompetensi', 'like', "%$q%");
+
         }
 
         // check if data found or not
