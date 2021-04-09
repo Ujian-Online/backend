@@ -17,6 +17,7 @@ class CreateSertifikasiUnitKompentensisTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('sertifikasi_id');
             $table->bigInteger('unit_kompetensi_id');
+            $table->string('order');
             $table->timestamps();
         });
     }

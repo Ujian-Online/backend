@@ -95,10 +95,11 @@ class SertifikasiController extends Controller
         // save unit kompetensi sertifikasi
         $uk_inputs = $dataInput['unit_kompetensi_id'];
         $uks = [];
-        foreach($uk_inputs as $uk) {
+        foreach($uk_inputs as $key => $uk) {
             $uks[] = [
                 'sertifikasi_id'        => $sertifikasi->id,
                 'unit_kompetensi_id'    => $uk,
+                'order'                 => $key + 1,
                 'created_at'            => now(),
                 'updated_at'            => now()
             ];
@@ -213,10 +214,11 @@ class SertifikasiController extends Controller
         // save unit kompetensi sertifikasi
         $uk_inputs = $dataInput['unit_kompetensi_id'];
         $uks = [];
-        foreach($uk_inputs as $uk) {
+        foreach($uk_inputs as $key => $uk) {
             $uks[] = [
                 'sertifikasi_id'        => $query->id,
                 'unit_kompetensi_id'    => $uk,
+                'order'                 => $key + 1,
                 'created_at'            => now(),
                 'updated_at'            => now()
             ];

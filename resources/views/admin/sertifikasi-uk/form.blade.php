@@ -32,14 +32,14 @@
             @enderror
         </div>
 
-{{--        <div class="form-group col-md-6">--}}
-{{--            <label for="order">Urutan</label>--}}
-{{--            <input type="number" class="form-control @error('order') is-invalid @enderror" name="order" id="order" placeholder="Order" value="{{ old('order') ?? $query->order ?? '' }}" @if(isset($isShow)) readonly @endif>--}}
+        <div class="form-group col-md-6">
+            <label for="order">Urutan</label>
+            <input type="number" class="form-control @error('order') is-invalid @enderror" name="order" id="order" placeholder="Order" value="{{ old('order') ?? $query->order ?? '' }}" @if(isset($isShow)) readonly @endif>
 
-{{--            @error('order')--}}
-{{--                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--            @enderror--}}
-{{--        </div>--}}
+            @error('order')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
     </div>
 
     <div class="card card-outline card-primary">
