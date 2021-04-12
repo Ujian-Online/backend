@@ -20,24 +20,20 @@ class EmailVerification extends Mailable implements ShouldQueue
     public $token;
 
     /**
-     * User Data
-     *
-     * @var object
+     * @var Int
      */
-    public $user;
+    public $asesiId;
 
     /**
      * Create a new message instance.
      *
      * @param String $token User Token
-     * @param Object $user User Data
-     *
-     * @return void
+     * @param Int $asesiId
      */
-    public function __construct($token, User $user)
+    public function __construct($token, $asesiId)
     {
         $this->token    = $token;
-        $this->user     = $user;
+        $this->asesiId  = $asesiId;
     }
 
     /**
@@ -47,13 +43,14 @@ class EmailVerification extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        // generate expired url
-        $expired = now()->addDay()->timestamp;
+        // get asesi detail
+        $asesi = User::where('id', $this->asesiId)->firstOrFail();
 
         return $this->markdown('email/EmailVerification')
                 ->with([
                     'url' => env('FRONTEND_URL') .
-                            '/email/verification?token=' . $this->token
+                            '/email/verification?token=' . $this->token,
+                    'user' => $asesi,
                 ]);
     }
 }

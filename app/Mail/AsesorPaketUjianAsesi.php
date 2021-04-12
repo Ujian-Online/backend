@@ -14,6 +14,13 @@ class AsesorPaketUjianAsesi extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     /**
+     * Ujian Asesi Asesor ID
+     *
+     * @var Int
+     */
+    public $ujianasesiasesorId;
+
+    /**
      * Ujian Asesi Asesor
      *
      * @var UjianAsesiAsesor
@@ -39,15 +46,7 @@ class AsesorPaketUjianAsesi extends Mailable implements ShouldQueue
      */
     public function __construct($ujianAsesiAsesor)
     {
-        $ujianAsesiAsesor = UjianAsesiAsesor::with([
-            'userasesi',
-            'userasesi.asesi',
-            'sertifikasi'
-        ])->where('id', $ujianAsesiAsesor)->firstOrFail();
-
-        $this->ujianasesiasesor = $ujianAsesiAsesor;
-        $this->asesi = $ujianAsesiAsesor->userasesi ?? null;
-        $this->sertifikasi = $ujianAsesiAsesor->sertifikasi ?? null;
+        $this->ujianasesiasesorId = $ujianAsesiAsesor;
     }
 
     /**
@@ -57,6 +56,16 @@ class AsesorPaketUjianAsesi extends Mailable implements ShouldQueue
      */
     public function build()
     {
+        $ujianAsesiAsesor = UjianAsesiAsesor::with([
+            'userasesi',
+            'userasesi.asesi',
+            'sertifikasi'
+        ])->where('id', $this->ujianasesiasesorId)->firstOrFail();
+
+        $this->ujianasesiasesor = $ujianAsesiAsesor;
+        $this->asesi = $ujianAsesiAsesor->userasesi ?? null;
+        $this->sertifikasi = $ujianAsesiAsesor->sertifikasi ?? null;
+
         $asesiName = (!empty($this->asesi->asesi) and !empty($this->asesi->asesi->name)) ? $this->asesi->asesi->name : $this->asesi->email;
 
         return $this->markdown('email/AsesorPaketUjianAsesi')

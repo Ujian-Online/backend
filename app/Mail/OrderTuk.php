@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Order;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,28 +14,29 @@ class OrderTuk extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     /**
-     * User Detail with Asesi
-     * @var Object
+     * User ID of Asesi
+     *
+     * @var Integer
      */
-    public $asesi;
+    protected $asesiId;
 
     /**
-     * Order Object
+     * Order ID
      *
-     * @var Object
+     * @var Integer
      */
-    public $order;
+    protected $orderId;
 
     /**
      * Create a new message instance.
      *
-     * @param $asesi
-     * @param $order
+     * @param $asesiId
+     * @param $orderId
      */
-    public function __construct($asesi, $order)
+    public function __construct($asesiId, $orderId)
     {
-        $this->asesi = $asesi;
-        $this->order = $order;
+        $this->asesiId  = $asesiId;
+        $this->orderId  = $orderId;
     }
 
     /**
@@ -43,9 +46,20 @@ class OrderTuk extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        $asesiName = (!empty($this->asesi->asesi) and !empty($this->asesi->asesi->name)) ? $this->asesi->asesi->name : $this->asesi->email;
+        // get asesi detail
+        $asesi = User::with('asesi')->where('id', $this->asesiId)->firstOrFail();
+
+        // order detail
+        $order = Order::with('sertifikasi')->where('id', $this->orderId)->firstOrFail();
+
+        // get asesi detail
+        $asesiName = (!empty($asesi->asesi) and !empty($asesi->asesi->name)) ? $asesi->asesi->name : $asesi->email;
 
         return $this->markdown('email/OrderTuk')
-                ->subject('[Order ID: '. $this->order->id .'] Verifikasi Data Pembayaran Dari Asesi: ' . $asesiName);
+                ->subject('[Order ID: '. $order->id .'] Verifikasi Data Pembayaran Dari Asesi: ' . $asesiName)
+                ->with([
+                    'asesi' => $asesi,
+                    'order' => $order,
+                ]);
     }
 }

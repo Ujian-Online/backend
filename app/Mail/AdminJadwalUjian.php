@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -15,16 +16,16 @@ class AdminJadwalUjian extends Mailable implements ShouldQueue
      * User Detail with Asesi
      * @var Object
      */
-    public $asesi;
+    public $asesiId;
 
     /**
      * Create a new message instance.
      *
-     * @param $asesi
+     * @param $asesiId
      */
-    public function __construct($asesi)
+    public function __construct($asesiId)
     {
-        $this->asesi = $asesi;
+        $this->asesiId = $asesiId;
     }
 
     /**
@@ -34,9 +35,14 @@ class AdminJadwalUjian extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        $asesiName = (!empty($this->asesi->asesi) and !empty($this->asesi->asesi->name)) ? $this->asesi->asesi->name : $this->asesi->email;
+        // get asesi detail
+        $asesi = User::with('asesi')->where('id', $this->asesiId)->firstOrFail();
+        $asesiName = (!empty($asesi->asesi) and !empty($asesi->asesi->name)) ? $asesi->asesi->name : $asesi->email;
 
         return $this->markdown('email/AdminJadwalUjian')
-            ->subject('Tentukan Jadwal Ujian dan Asesor untuk Asesi: ' . $asesiName);
+            ->subject('Tentukan Jadwal Ujian dan Asesor untuk Asesi: ' . $asesiName)
+            ->with([
+                'asesi' => $asesi,
+            ]);
     }
 }
