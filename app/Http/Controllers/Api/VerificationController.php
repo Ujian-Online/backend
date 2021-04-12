@@ -105,7 +105,7 @@ class VerificationController extends Controller
             // If not, send email verification
             if (!$user->hasVerifiedEmail()) {
                 // Send Email Verification to User
-                Mail::to($user->email)->queue(new EmailVerification($token, $user));
+                Mail::to($user->email)->queue(new EmailVerification($token, $user->id));
             }
 
             // return error validate
