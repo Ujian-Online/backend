@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Mail\AdminAPL01;
 use App\User;
-use App\UserAsesiCustomData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,14 +22,14 @@ class APL01AdminNotification implements ShouldQueue
      *
      * @var Integer
      */
-    public $asesiId;
+    protected $asesiId;
 
     /**
      * User Asesi Custom Data ID
      *
      * @var Integer
      */
-    public $customDataId;
+    protected $customDataId;
 
     /**
      * Create a new job instance.
@@ -51,20 +50,12 @@ class APL01AdminNotification implements ShouldQueue
      */
     public function handle()
     {
-        // get asesi detail
-        $userAsesi = User::with('asesi')->where('id', $this->asesiId)->firstOrFail();
-        // get asesi custom data
-        $userAsesiCustomData = null;
-        if($this->customDataId) {
-            $userAsesiCustomData = UserAsesiCustomData::where('id', $this->customDataId)->firstOrFail();
-        }
-
         // get user with admin access
         $userAdmins = User::where('type', 'admin')->get();
 
         // loop all admin detail, and send them email
         foreach ($userAdmins as $userAdmin) {
-            Mail::to($userAdmin->email)->send(new AdminAPL01($userAdmin, $userAsesi, $userAsesiCustomData));
+            Mail::to($userAdmin->email)->send(new AdminAPL01($userAdmin->id, $this->asesiId, $this->customDataId));
         }
     }
 

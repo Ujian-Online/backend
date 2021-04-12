@@ -23,14 +23,14 @@ class APLCreate implements ShouldQueue
      *
      * @var int
      */
-    public $userId;
+    protected $userId;
 
     /**
      * Sertifikasi ID
      *
      * @var int
      */
-    public $sertifikasiId;
+    protected $sertifikasiId;
 
     /**
      * Create a new job instance.
@@ -59,7 +59,10 @@ class APLCreate implements ShouldQueue
 
         // only create once
         if($apl01 == 0) {
-            UserAsesi::create(['user_id' => $this->userId]);
+            UserAsesi::create([
+                'user_id' => $this->userId,
+                'is_verified' => false,
+            ]);
         }
 
         /**

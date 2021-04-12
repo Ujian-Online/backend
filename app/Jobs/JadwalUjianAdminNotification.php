@@ -22,7 +22,7 @@ class JadwalUjianAdminNotification implements ShouldQueue
      *
      * @var Integer
      */
-    public $asesiId;
+    protected $asesiId;
 
     /**
      * Create a new job instance.
@@ -41,15 +41,12 @@ class JadwalUjianAdminNotification implements ShouldQueue
      */
     public function handle()
     {
-        // get asesi detail
-        $userAsesi = User::with('asesi')->where('id', $this->asesiId)->firstOrFail();
-
         // get user with admin access
         $userAdmins = User::where('type', 'admin')->get();
 
         // loop all admin detail, and send them email
         foreach ($userAdmins as $userAdmin) {
-            Mail::to($userAdmin->email)->send(new AdminJadwalUjian($userAsesi));
+            Mail::to($userAdmin->email)->send(new AdminJadwalUjian($this->asesiId));
         }
     }
 

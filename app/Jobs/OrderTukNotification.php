@@ -3,8 +3,6 @@
 namespace App\Jobs;
 
 use App\Mail\OrderTuk;
-use App\Order;
-use App\User;
 use App\UserTuk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,23 +22,21 @@ class OrderTukNotification implements ShouldQueue
      *
      * @var Integer
      */
-    public $asesiId;
+    protected $asesiId;
 
     /**
      * Order ID
      *
      * @var Integer
      */
-    public $orderId;
+    protected $orderId;
 
     /**
      * TUK ID
      *
      * @var Integer
      */
-    public $tukId;
-
-
+    protected $tukId;
 
     /**
      * Create a new job instance.
@@ -63,17 +59,11 @@ class OrderTukNotification implements ShouldQueue
      */
     public function handle()
     {
-        // get asesi detail
-        $userAsesi = User::with('asesi')->where('id', $this->asesiId)->firstOrFail();
-
-        // order detail
-        $order = Order::with('sertifikasi')->where('id', $this->orderId)->firstOrFail();
-
         // get user tuk
         $userTuk = UserTuk::with('user')->where('tuk_id', $this->tukId)->get();
 
         foreach($userTuk as $tuk) {
-            Mail::to($tuk->user->email)->send(new OrderTuk($userAsesi, $order));
+            Mail::to($tuk->user->email)->send(new OrderTuk($this->asesiId, $this->orderId));
         }
     }
 
