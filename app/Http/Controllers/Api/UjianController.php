@@ -60,9 +60,9 @@ class UjianController extends Controller
             // varaible ujian status
             $ujian_status = null;
 
-            if($ujian->status == 'paket_soal_assigned' and $apl02_status == 'menunggu_verifikasi') {
+            if(in_array($ujian->status,['paket_soal_assigned', 'menunggu']) and $apl02_status == 'menunggu_verifikasi') {
                 $ujian_status = 'menunggu_verifikasi_form_apl02';
-            } elseif($ujian->status == 'paket_soal_assigned' and $apl02_status == 'form_terverifikasi') {
+            } elseif(in_array($ujian->status,['paket_soal_assigned', 'menunggu']) and $apl02_status == 'form_terverifikasi') {
                 $ujian_status = 'menunggu_jadwal_ujian';
             } elseif($ujian->status == 'penilaian') {
                 $ujian_status = 'ujian_dalam_penilaian';
