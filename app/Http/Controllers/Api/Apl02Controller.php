@@ -215,6 +215,9 @@ class Apl02Controller extends Controller
                         ])
                         ->firstOrFail();
 
+            // Simpan RedisKey= AsesiID + AsesorID + Sertifikasi_id
+            // timeout Redis = 10 Menit
+            // Cek apakah redis tersedia, kalau g ada -> Kirim Email dan Set Redisnya
             if(isset($ujian->userasesor) and !empty($ujian->userasesor)) {
                 Mail::to($ujian->userasesor->email)->send(new AsesorAPL02Notification($user->id, $sertifikasi_id));
             }
