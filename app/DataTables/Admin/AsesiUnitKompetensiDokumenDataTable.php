@@ -88,6 +88,9 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
      */
     public function query(AsesiUnitKompetensiDokumen $model)
     {
+        // get user login
+        $user = request()->user();
+
         // query ke database
         $query = $model::with(['user', 'user.asesi', 'sertifikasi'])
             ->select([
@@ -96,6 +99,15 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                 'sertifikasis.title as sertifikasi_title'
             ])
             ->join('sertifikasis', 'sertifikasis.id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id')
+            ->when($user, function($query) use ($user) {
+                if($user->type == 'assesor') {
+                    $query->join('ujian_asesi_asesors', function ($join) {
+                        $join->on('ujian_asesi_asesors.asesi_id', '=', 'asesi_unit_kompetensi_dokumens.asesi_id');
+                        $join->on('ujian_asesi_asesors.sertifikasi_id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id');
+                    })
+                    ->where('ujian_asesi_asesors.asesor_id', $user->id);
+                }
+            })
             ->groupBy( 'asesi_id', 'sertifikasi_id', 'sertifikasi_title')
             ->get();
 
