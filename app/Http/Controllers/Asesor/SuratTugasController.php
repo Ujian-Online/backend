@@ -98,21 +98,20 @@ class SuratTugasController extends Controller
     {
         // find by id and update
         $query = UjianAsesiAsesor::findOrFail($id);
+        $updateData = [];
 
         // validasi jika status menunggu
-        if($query->status == 'menunggu') {
+        if(in_array($query->status, [ 'menunggu', 'paket_soal_assigned' ])) {
             // validate input
             $request->validate([
-                'soal_paket_id' => 'required',
+                'soal_paket_id' => 'required'
             ]);
 
-            // get form data
-            $dataInput = $request->only([
-                'soal_paket_id',
-            ]);
-
-            // update status ke paket_soal_assigned
-            $dataInput['status'] = 'paket_soal_assigned';
+            // update data
+            $updateData = [
+                'soal_paket_id' => $request->input('soal_paket_id'),
+                'status' => 'paket_soal_assigned'
+            ];
 
             // get soal from soalpaket for snapshot
             $soal_pakets = SoalPaket::with([
@@ -120,12 +119,17 @@ class SuratTugasController extends Controller
                     'soalpaketitem.soal',
                     'soalpaketitem.soal.soalpilihanganda'
                 ])
-                ->where('id', $dataInput['soal_paket_id'])
-                ->where('sertifikasi_id', $request->input('sertifikasi_id'))
+                ->where('id', $request->input('soal_paket_id'))
+                ->where('sertifikasi_id', $query->sertifikasi_id)
                 ->firstOrFail();
 
             // check if soal found
             if(isset($soal_pakets->soalpaketitem) and !empty($soal_pakets->soalpaketitem)) {
+                // delete soal ketika ada perubahan status
+                UjianAsesiJawaban::where('ujian_asesi_asesor_id', $id)
+                    ->where('asesi_id', $query->asesi_id)
+                    ->delete();
+
                 // variable untuk simpan soal
                 $soal_lists = [];
 
@@ -176,14 +180,14 @@ class SuratTugasController extends Controller
             ]);
 
             // get form data
-            $dataInput = $request->only([
+            $updateData = $request->only([
                 'is_kompeten',
                 'final_score_percentage',
             ]);
         }
 
         // update data
-        $query->update($dataInput);
+        $query->update($updateData);
 
         // redirect
         return redirect()
