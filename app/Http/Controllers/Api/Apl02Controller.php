@@ -12,6 +12,7 @@ use App\UjianAsesiAsesor;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 
 class Apl02Controller extends Controller
 {
@@ -215,8 +216,21 @@ class Apl02Controller extends Controller
                         ])
                         ->firstOrFail();
 
+            // only send email if asesor found
             if(isset($ujian->userasesor) and !empty($ujian->userasesor)) {
-                Mail::to($ujian->userasesor->email)->send(new AsesorAPL02Notification($user->id, $sertifikasi_id));
+                // init redis connection
+                $redis = Redis::connection();
+                // redis key
+                $redisKey = 'notifasesor_id_' . $user->id . '_' . $ujian->userasesor->id . '_' . $sertifikasi_id;
+                // check redis data by redis key
+                $getStatus = $redis->get($redisKey);
+
+                // if redis data not found, then set redis
+                // and sending email to asesor
+                if(!$getStatus) {
+                    $redis->set($redisKey, 1, 'EX', (2 * 60));
+                    Mail::to($ujian->userasesor->email)->send(new AsesorAPL02Notification($user->id, $sertifikasi_id));
+                }
             }
 
             // save if type new
