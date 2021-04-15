@@ -437,6 +437,12 @@ return [
                 'active'    => 'admin.surat-tugas.*',
             ],
             [
+                'title'     => 'APL-02',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.apl02.index',
+                'active'    => 'admin.asesi.apl02.*',
+            ],
+            [
                 'title'     => 'Ujian Asesi (Penilaian)',
                 'icon'      => 'fa fa-file-signature',
                 'url'       => '/admin/ujian-asesi/?status=penilaian',
