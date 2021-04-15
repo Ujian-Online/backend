@@ -6,9 +6,11 @@ use App\AsesiSertifikasiUnitKompetensiElement;
 use App\AsesiSUKElementMedia;
 use App\AsesiUnitKompetensiDokumen;
 use App\Http\Controllers\Controller;
+use App\Mail\AsesorAPL02Notification;
 use App\Sertifikasi;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class Apl02Controller extends Controller
 {
@@ -192,6 +194,8 @@ class Apl02Controller extends Controller
             AsesiSertifikasiUnitKompetensiElement::where('id', $element_id)
                 ->where('asesi_id', $user->id)
                 ->firstOrFail();
+
+            // Mail::to(asesoremail)->send(new AsesorAPL02Notification())
 
             // save if type new
             if ($type == 'new') {
