@@ -49,8 +49,8 @@
                     <option value="1" selected>Yes</option>
                     <option value="0">No</option>
                 @else
-                    <option value="1" @if(old('is_active') == 1 or !empty($query->is_active) == 1) {{ __('selected') }}@endif>Yes</option>
-                    <option value="0" @if(old('is_active') == 0 or !empty($query->is_active) == 0) {{ __('selected') }}@endif>No</option>
+                    <option value="1" @if($query->is_active == 1) {{ __('selected') }}@endif>Yes</option>
+                    <option value="0" @if($query->is_active == 0) {{ __('selected') }}@endif>No</option>
                 @endif
 
             </select>
@@ -132,6 +132,15 @@
                 }
             },
         });
+
+        // get id unitkompetensi
+        function unitkompetensiid() {
+            const ids = $("input[name='unit_kompetensi_id[]']")
+                .map(function(){return $(this).val();}).get();
+
+            // convert array to string with comma separate
+            return ids.join();
+        }
 
         function deltr(id) {
             $(`#${id}`).remove();
