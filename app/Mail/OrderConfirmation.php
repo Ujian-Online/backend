@@ -14,18 +14,14 @@ class OrderConfirmation extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     /**
-     * User Data
-     *
-     * @var object
+     * @var Int
      */
-    public $user;
+    public $userId;
 
     /**
-     * Order Data
-     *
-     * @var object
+     * @var Int
      */
-    public $order;
+    public $orderId;
 
     /**
      * Create a new message instance.
@@ -35,11 +31,8 @@ class OrderConfirmation extends Mailable implements ShouldQueue
      */
     public function __construct(int $userId, int $orderId)
     {
-        // assign data to object
-        $this->user = User::with('asesi')->findOrFail($userId);
-        $this->order = Order::with([
-            'sertifikasi', 'tuk', 'tuk.bank', 'user', 'user.asesi'
-        ])->findOrFail($orderId);
+        $this->userId = $userId;
+        $this->orderId = $orderId;
     }
 
     /**
@@ -49,10 +42,18 @@ class OrderConfirmation extends Mailable implements ShouldQueue
      */
     public function build()
     {
+        // assign data to object
+        $user = User::with('asesi')->where('id', $this->userId)->firstOrFail();
+        $order = Order::with([
+            'sertifikasi', 'tuk', 'tuk.bank', 'user', 'user.asesi'
+        ])->where('id', $this->orderId)->firstOrFail();
+
         return $this->markdown('email/OrderConfirmation')
             ->with([
                 'url' => env('FRONTEND_URL') .
-                    '/member/order/' . $this->order->id
+                    '/member/order/' . $order->id,
+                'user' => $user,
+                'order' => $order,
             ]);
     }
 }

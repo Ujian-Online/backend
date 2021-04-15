@@ -20,24 +20,20 @@ class PasswordReset extends Mailable implements ShouldQueue
     public $token;
 
     /**
-     * User Data
-     *
-     * @var object
+     * @var Int
      */
-    public $user;
+    public $asesiId;
 
     /**
      * Create a new message instance.
      *
      * @param String $token User Token
-     * @param Object $user User Data
-     *
-     * @return void
+     * @param Int $asesiId User ID From Asesi
      */
-    public function __construct($token, User $user)
+    public function __construct($token, $asesiId)
     {
         $this->token    = $token;
-        $this->user     = $user;
+        $this->asesiId  = $asesiId;
     }
 
     /**
@@ -47,10 +43,14 @@ class PasswordReset extends Mailable implements ShouldQueue
      */
     public function build()
     {
+        // get asesi detail
+        $asesi = User::where('id', $this->asesiId)->firstOrFail();
+
         return $this->markdown('email/PasswordReset')
                 ->with([
                     'url' => env('FRONTEND_URL') .
-                            '/password/reset?token=' . $this->token
+                            '/password/reset?token=' . $this->token,
+                    'asesi' => $asesi,
                 ]);
     }
 }

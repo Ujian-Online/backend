@@ -56,6 +56,7 @@ Route::middleware(['auth'])
         // Asesor Access Only
         Route::middleware('can:isAdminAsesor')->group(function () {
             Route::get('sertifikasi/uk/search', 'Admin\SertifikasiUnitKompetensiController@search')->name('sertifikasi.uk.search');
+            Route::get('sertifikasi/uk/search/sertifikasi', 'Admin\SertifikasiUnitKompetensiController@searchWithSertifikasi')->name('sertifikasi.uk.search.sertifikasi');
             Route::resource('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController', ['as' => 'sertifikasi']);
             Route::get('sertifikasi/ukelement/rawform', 'Admin\SertifikasiUnitKompetensiElementController@rawForm')->name('ukelement.rawform');
             Route::resource('sertifikasi/ukelement', 'Admin\SertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);

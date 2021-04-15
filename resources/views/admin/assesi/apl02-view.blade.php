@@ -40,7 +40,7 @@
                                 @foreach(config('options.tuk_type') as $keyTukType => $tukType)
 
                                     @if($countKey > 0 )
-                                        {{ _('/') }}
+                                        {{ __('/') }}
                                     @endif
                                     @if($keyTukType == $tuk->type)
                                         {{ $tukType }}
@@ -136,7 +136,7 @@
 
                                             @endforeach
                                         @else
-                                            {{ _('File belum di unggah') }}
+                                            {{ __('File belum di unggah') }}
                                         @endif
                                     </td>
                                     <td>
@@ -145,12 +145,12 @@
                                         @elseif(isset($isEdit))
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="ukelement[is_verified][{{$ukelement->id}}]"
-                                                       id="ukelement-is_verified-{{$ukelement->id}}" value="1" @if($ukelement->is_verified == 1) {{ _('checked') }} @endif>
+                                                       id="ukelement-is_verified-{{$ukelement->id}}" value="1" @if($ukelement->is_verified == 1) {{ __('checked') }} @endif>
                                                 <label class="form-check-label">YES</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="ukelement[is_verified][{{$ukelement->id}}]"
-                                                       id="ukelement-is_verified-{{$ukelement->id}}" value="0" @if($ukelement->is_verified == 0) {{ _('checked') }} @endif>
+                                                       id="ukelement-is_verified-{{$ukelement->id}}" value="0" @if($ukelement->is_verified == 0) {{ __('checked') }} @endif>
                                                 <label class="form-check-label">NO</label>
                                             </div>
                                         @endif

@@ -24,6 +24,9 @@ class SoalDataTable extends DataTable
             ->editColumn('question_type', function ($query) {
                 return ucwords(str_replace('_', ' ', $query->question_type));
             })
+            ->editColumn('kode_uk', function ($query) {
+                return $query->unit_kompetensi_kode_unit_kompetensi . "<br />" . $query->unit_kompetensi_title;
+            })
             ->addColumn('action', function ($query) {
                 // get user login
                 $user = request()->user();
@@ -46,7 +49,8 @@ class SoalDataTable extends DataTable
                                 null
                         ),
                 ]);
-            });
+            })
+            ->rawColumns(['kode_uk']);
     }
 
     /**
@@ -57,7 +61,12 @@ class SoalDataTable extends DataTable
      */
     public function query(Soal $model)
     {
-        return $model->newQuery();
+        return $model->select([
+                'soals.*',
+                'unit_kompetensis.title as unit_kompetensi_title',
+                'unit_kompetensis.kode_unit_kompetensi as unit_kompetensi_kode_unit_kompetensi',
+            ])
+            ->leftJoin('unit_kompetensis', 'unit_kompetensis.id', '=', 'soals.unit_kompetensi_id');
     }
 
     /**
@@ -107,18 +116,19 @@ class SoalDataTable extends DataTable
             Column::make('id')
                 ->width('5%'),
             Column::make('question')
-                ->width('60%'),
+                ->width('40%'),
+            Column::make('kode_uk')
+                ->title('Unit Kompetensi')
+                ->data('kode_uk')
+                ->width('40%'),
             Column::make('question_type')
                 ->title('Question Type')
-                ->width('10%'),
-            Column::make('updated_at')
-                ->title('Update')
                 ->width('10%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('15%')
+                ->width('5%')
                 ->addClass('text-center'),
         ];
     }

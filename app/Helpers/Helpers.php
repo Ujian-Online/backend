@@ -57,11 +57,17 @@ if(!function_exists('apl02_status')) {
         $apl02Status = null;
 
         // Ambil data dari database
-        $apl02Elements = \App\AsesiSertifikasiUnitKompetensiElement::join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
-            ->where('asesi_sertifikasi_unit_kompetensi_elements.asesi_id', $asesiId)
-            ->where('asesi_unit_kompetensi_dokumens.asesi_id', $asesiId)
-            ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', $sertifikasiId)
-            ->get();
+        $apl02Elements = \App\AsesiUnitKompetensiDokumen::with([
+            'asesisertifikasiunitkompetensielement' => function ($query) use ($asesiId) {
+                $query->where('asesi_id', $asesiId);
+            },
+            'asesisertifikasiunitkompetensielement.media' => function ($query) use ($asesiId) {
+                $query->where('asesi_id', $asesiId);
+            }
+        ])
+        ->where('asesi_id', $asesiId)
+        ->where('sertifikasi_id', $sertifikasiId)
+        ->firstOrFail();
 
         // apl02 status
         $apl02StatusCount = [
@@ -71,24 +77,24 @@ if(!function_exists('apl02_status')) {
             'form_terverifikasi' => null,
         ];
 
-        foreach($apl02Elements as $apl02Element) {
+        foreach($apl02Elements->asesisertifikasiunitkompetensielement as $apl02Element) {
             // [Isi form] (Kalau belum isi sama sekali)
-            if(empty($apl02Element->media_url)) {
+            if(count($apl02Element->media) == 0) {
                 $apl02StatusCount['isi_form'][] = $apl02Element->id;
             }
 
             // Menunggu verifikasi [Update Form] (Kalau udah isi, tapi blum di verif semua)
-            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 0) {
+            if(count($apl02Element->media) > 0 and $apl02Element->is_verified == 0) {
                 $apl02StatusCount['menunggu_verifikasi'][] = $apl02Element->id;
             }
 
             // Form ditolak [Update Form] (Kalau udah isi, tapi ada yg ditolak)
-            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 0 and !empty($apl02Element->verification_note)) {
+            if(count($apl02Element->media) > 0 and $apl02Element->is_verified == 0 and !empty($apl02Element->verification_note)) {
                 $apl02StatusCount['form_ditolak'][] = $apl02Element->id;
             }
 
             // Form terverifikasi (Kalau udah verif semua)
-            if(!empty($apl02Element->media_url) and $apl02Element->is_verified == 1) {
+            if(count($apl02Element->media) > 0 and $apl02Element->is_verified == 1) {
                 $apl02StatusCount['form_terverifikasi'][] = $apl02Element->id;
             }
         }
@@ -114,5 +120,34 @@ if(!function_exists('apl02_status')) {
 
         // return status ke string
         return $apl02Status;
+    }
+}
+
+if(!function_exists('soal_validate')) {
+    /**
+     * Soal Validation Based on Soal ID, Unit Kompetensi ID or Sertifikasi ID
+     *
+     * @param $soal_id
+     * @param null $unit_kompetensi_id
+     * @param null $sertifikasi_id
+     * @return mixed
+     */
+    function soal_validate($soal_id, $unit_kompetensi_id = null, $sertifikasi_id = null)
+    {
+        try {
+            return \App\Soal::select(['soals.*'])
+                ->leftJoin('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.id', '=', 'soals.unit_kompetensi_id')
+                ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
+                ->where('soals.id', $soal_id)
+                ->when($unit_kompetensi_id, function($query) use ($unit_kompetensi_id) {
+                    $query->where('unit_kompetensi_id', $unit_kompetensi_id);
+                })
+                ->when($sertifikasi_id, function($query) use ($sertifikasi_id) {
+                    $query->where('sertifikasis.id', $sertifikasi_id);
+                })
+                ->firstOrFail();
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

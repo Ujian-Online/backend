@@ -47,8 +47,6 @@ class UjianController extends Controller
             'userasesi',
             'userasesi.asesi',
             'sertifikasi',
-            'ujianjadwal',
-            'soalpaket'
         ])->where('asesi_id', $user->id)->get();
 
         // variable result

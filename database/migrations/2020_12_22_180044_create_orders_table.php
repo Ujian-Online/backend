@@ -26,9 +26,9 @@ class CreateOrdersTable extends Migration
             $table->string('sertifikat_media_url_old')->nullable();
             $table->string('sertifikat_media_url_new')->nullable();
             $table->string('kode_sertifikat')->nullable();
-            $table->float('original_price');
-            $table->float('tuk_price');
-            $table->float('tuk_price_training')->nullable();
+            $table->float('original_price', 12);
+            $table->float('tuk_price', 12);
+            $table->float('tuk_price_training', 12)->nullable();
             $table->string('status'); // @see config('options.orders_status')
             $table->text('comment_rejected')->nullable();
             $table->text('comment_verification')->nullable();

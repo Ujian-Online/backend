@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\User;
+use App\UserAsesiCustomData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,37 +14,38 @@ class AdminAPL01 extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     /**
-     * Admin Detail
+     * User ID of User Admin
      *
-     * @var Object
+     * @var Integer
      */
-    public $admin;
+    public $adminId;
 
     /**
-     * User Detail with Asesi
-     * @var Object
+     * User ID of Asesi
+     *
+     * @var Integer
      */
-    public $asesi;
+    public $asesiId;
 
     /**
-     * Custom Data Detail
+     * User Asesi Custom Data ID
      *
-     * @var Object
+     * @var Integer
      */
-    public $customData;
+    public $customDataId;
 
     /**
      * Create a new message instance.
      *
-     * @param $admin
-     * @param $asesi
-     * @param $customData
+     * @param $adminId
+     * @param $asesiId
+     * @param $customDataId
      */
-    public function __construct($admin, $asesi, $customData)
+    public function __construct($adminId, $asesiId, $customDataId)
     {
-        $this->admin = $admin;
-        $this->asesi = $asesi;
-        $this->customData = $customData;
+        $this->adminId = $adminId;
+        $this->asesiId = $asesiId;
+        $this->customDataId = $customDataId;
     }
 
     /**
@@ -52,9 +55,26 @@ class AdminAPL01 extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        $asesiName = (!empty($this->asesi->asesi) and !empty($this->asesi->asesi->name)) ? $this->asesi->asesi->name : $this->asesi->email;
+        // get admin
+        $admin = User::where('id', $this->adminId)->where('type', 'admin')->firstOrFail();
+
+        // get asesi detail
+        $asesi = User::with('asesi')->where('id', $this->asesiId)->firstOrFail();
+
+        // get asesi custom data
+        $customData = null;
+        if($this->customDataId) {
+            $customData = UserAsesiCustomData::where('id', $this->customDataId)->firstOrFail();
+        }
+
+        $asesiName = (!empty($asesi->asesi) and !empty($asesi->asesi->name)) ? $asesi->asesi->name : $asesi->email;
 
         return $this->markdown('email/AdminAPL01')
-            ->subject('Update Data Asesi Perlu di Verifikasi: ' . $asesiName);
+            ->subject('Update Data Asesi Perlu di Verifikasi: ' . $asesiName)
+            ->with([
+                'admin' => $admin,
+                'asesi' => $asesi,
+                '$customData' => $customData
+            ]);
     }
 }

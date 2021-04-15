@@ -235,4 +235,56 @@ class Apl02Controller extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Delete Asesi Sertifikasi Unit Kompetensi Media Element
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * * @OA\Delete(
+     *   path="/api/apl02/{id}",
+     *   tags={"APL02"},
+     *   summary="Delete APL02 Unit Kompetensi Element Media",
+     *   @OA\Parameter(
+     *      name="id",
+     *      description="Media ID",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *          type="integer"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response="200",
+     *      description="OK"
+     *   )
+     * )
+     */
+    public function deleteElement(Request $request, $id)
+    {
+        try {
+            // get user login
+            $user = $request->user();
+
+            $query = AsesiSUKElementMedia::where('id', $id)
+                ->where('asesi_id', $user->id)
+                ->firstOrFail();
+
+            // delete data
+            $query->delete();
+
+            // return response
+            return response()->json([
+                'code' => 200,
+                'message' => 'success'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

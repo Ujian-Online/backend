@@ -163,7 +163,7 @@
                                         "example": "new"
                                     },
                                     "value": {
-                                        "description": "Value ini berbeda-beda inputannya,\n     *                         tergantung dari custom data, jika file upload, maka berupa file ekstensi: JPG/JPEG/PNG/PDF,\n     *                          jika dropdown maka sesuai value dari dropdown_option, jika text, maka text biasa.",
+                                        "description": "Value ini berbeda-beda inputannya,\r\n     *                         tergantung dari custom data, jika file upload, maka berupa file ekstensi: JPG/JPEG/PNG/PDF,\r\n     *                          jika dropdown maka sesuai value dari dropdown_option, jika text, maka text biasa.",
                                         "type": "file",
                                         "example": "scan_ijazah.pdf"
                                     }
@@ -271,6 +271,29 @@
                         "name": "id",
                         "in": "path",
                         "description": "Sertifikasi id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "APL02"
+                ],
+                "summary": "Delete APL02 Unit Kompetensi Element Media",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl02Controller::deleteElement",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Media ID",
                         "required": true,
                         "schema": {
                             "type": "integer"

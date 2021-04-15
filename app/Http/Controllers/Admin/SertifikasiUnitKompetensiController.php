@@ -7,9 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Sertifikasi;
 use App\SertifikasiUnitKompentensi;
 use App\SertifikasiUnitKompetensiElement;
+use App\UnitKompetensi;
+use App\UnitKompetensiElement;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,9 +33,7 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
-            'title' => 'Sertifikasi Unit Kompetensi Lists',
-            'filter_route' => route('admin.sertifikasi.uk.index'),
-            'filter_view' => 'admin.sertifikasi-uk.filter-form',
+            'title' => 'Unit Kompetensi Lists',
         ]);
     }
 
@@ -61,23 +63,19 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // validate input
         $request->validate([
-            'order'                 => 'required',
-            'sertifikasi_id'        => 'required',
             'kode_unit_kompetensi'  => 'required',
             'title'                 => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'order',
-            'sertifikasi_id',
             'kode_unit_kompetensi',
             'title',
             'sub_title',
         ]);
 
         // save to database
-        $query = SertifikasiUnitKompentensi::create($dataInput);
+        $query = UnitKompetensi::create($dataInput);
 
         /**
          * UK Element Save to Database Start
@@ -102,7 +100,7 @@ class SertifikasiUnitKompetensiController extends Controller
             }
 
             // save to database with insert for bulk
-            SertifikasiUnitKompetensiElement::insert($uk_element);
+            UnitKompetensiElement::insert($uk_element);
         }
 
         /**
@@ -128,18 +126,24 @@ class SertifikasiUnitKompetensiController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|Builder|Model|Response|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         // Find Data by ID
-        $query = SertifikasiUnitKompentensi::with('ukelement')->where('id', $id)->firstOrFail();
+        $query = UnitKompetensi::with('ukelement')->where('id', $id)->firstOrFail();
+
+        // return json if request by ajax
+        if($request->ajax()) {
+            return $query;
+        }
 
         // return data to view
         return view('admin.sertifikasi-uk.form', [
-            'title'         => 'Tampilkan Detail: ' . $query->title,
+            'title'         => 'Detail: ' . $query->title,
             'action'        => '#',
             'isShow'        => route('admin.sertifikasi.uk.edit', $id),
             'query'         => $query,
@@ -156,7 +160,7 @@ class SertifikasiUnitKompetensiController extends Controller
     public function edit(int $id)
     {
         // Find Data by ID
-        $query = SertifikasiUnitKompentensi::with('ukelement')->where('id', $id)->firstOrFail();
+        $query = UnitKompetensi::with('ukelement')->where('id', $id)->firstOrFail();
 
         // return data to view
         return view('admin.sertifikasi-uk.form', [
@@ -179,23 +183,19 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // validate input
         $request->validate([
-            'order'                 => 'required',
-            'sertifikasi_id'        => 'required',
             'kode_unit_kompetensi'  => 'required',
             'title'                 => 'required',
         ]);
 
         // get form data
         $dataInput = $request->only([
-            'order',
-            'sertifikasi_id',
             'kode_unit_kompetensi',
             'title',
             'sub_title',
         ]);
 
         // find by id and update
-        $query = SertifikasiUnitKompentensi::findOrFail($id);
+        $query = UnitKompetensi::findOrFail($id);
         // update data
         $query->update($dataInput);
 
@@ -238,12 +238,12 @@ class SertifikasiUnitKompetensiController extends Controller
         }
 
         // run save new data in bulk
-        SertifikasiUnitKompetensiElement::insert($uk_element_new);
+        UnitKompetensiElement::insert($uk_element_new);
 
         // run query update based on array
         foreach($uk_element_update as $uk_update_key => $uk_update) {
             // update uk element from database
-            SertifikasiUnitKompetensiElement::where('id', $uk_update_key)
+            UnitKompetensiElement::where('id', $uk_update_key)
                 ->update([
                     'desc' => $uk_update['desc'],
                     'upload_instruction' => $uk_update['upload_instruction']
@@ -251,7 +251,7 @@ class SertifikasiUnitKompetensiController extends Controller
         }
 
         // run delete query in bulk
-        SertifikasiUnitKompetensiElement::whereIn('id', $uk_element_delete)->delete();
+        UnitKompetensiElement::whereIn('id', $uk_element_delete)->delete();
 
         /**
          * UK Element Save to Database End
@@ -275,11 +275,11 @@ class SertifikasiUnitKompetensiController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $query = SertifikasiUnitKompentensi::findOrFail($id);
+        $query = UnitKompetensi::findOrFail($id);
         $query->delete();
 
         // delete UK Element too
-        SertifikasiUnitKompetensiElement::where('unit_kompetensi_id', $id)->delete();
+        UnitKompetensiElement::where('unit_kompetensi_id', $id)->delete();
 
         // return response json if success
         return response()->json([
@@ -297,14 +297,12 @@ class SertifikasiUnitKompetensiController extends Controller
     public function search(Request $request)
     {
         // database query
-        $query = new SertifikasiUnitKompentensi();
+        $query = new UnitKompetensi();
         // result variable
         $result = [];
 
         // get input from select2 search term
         $q = $request->input('q');
-        // sertifikasi query
-        $sertifikasi_id = $request->input('sertifikasi_id');
 
         // return empty object if query is empty
         if(empty($q)) {
@@ -313,17 +311,11 @@ class SertifikasiUnitKompetensiController extends Controller
 
         // check if query is numeric or not
         if(is_numeric($q)) {
-
-            // cari sertifikasi id kalau di query statusnya true atau 1
-            if($sertifikasi_id) {
-                $query = $query->where('sertifikasi_id', $q);
-            } else {
-                // cari hanya id unit kompetensi
-                $query = $query->where('id', 'like', "%$q%");
-            }
-
+            $query = $query->where('id', 'like', "%$q%")
+                    ->orWhere('kode_unit_kompetensi', 'like', "%$q%");
         } else {
-            $query = $query->where('title', 'like', "%$q%");
+            $query = $query->where('title', 'like', "%$q%")
+                    ->orWhere('kode_unit_kompetensi', 'like', "%$q%");
         }
 
         // check if data found or not
@@ -331,7 +323,46 @@ class SertifikasiUnitKompetensiController extends Controller
             foreach($query->get() as $data) {
                 $result[] = [
                     'id' => $data->id,
-                    'text' => '[ID: ' . $data->id . '] - ' . $data->title,
+                    'text' => '[ID: ' . $data->id . '] ' . $data->kode_unit_kompetensi . ' - ' .$data->title,
+                ];
+            }
+        }
+
+        // response result
+        return response()->json($result, 200);
+    }
+
+
+    public function searchWithSertifikasi(Request $request)
+    {
+        // get input from select2 search term
+        $q = $request->input('q');
+
+        // database query
+        $query = SertifikasiUnitKompentensi::select([
+            'sertifikasi_unit_kompentensis.id',
+            'sertifikasi_unit_kompentensis.title as unit_kompetensi_title',
+            'sertifikasis.title as sertifikasi_title',
+        ])
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
+            ->when($q, function($query) use ($q) {
+                if(is_numeric($q)) {
+                    $query->where('sertifikasi_unit_kompentensis.id', $q);
+                } else {
+                    $query->where('sertifikasi_unit_kompentensis.title', 'like', '%' . $q . '%')
+                            ->orWhere('sertifikasis.title', 'like', '%' . $q . '%');
+                }
+            });
+
+        // result variable
+        $result = [];
+
+        // check if data found or not
+        if($query->count() != 0) {
+            foreach($query->get() as $data) {
+                $result[] = [
+                    'id' => $data->id,
+                    'text' => $data->sertifikasi_title . ' - ' . $data->unit_kompetensi_title,
                 ];
             }
         }

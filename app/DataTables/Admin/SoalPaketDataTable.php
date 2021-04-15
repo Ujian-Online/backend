@@ -21,6 +21,9 @@ class SoalPaketDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->addColumn('total_soal', function ($query) {
+                return (isset($query->soalpaketitem) and !empty($query->soalpaketitem)) ? count($query->soalpaketitem) : 0;
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
@@ -40,7 +43,7 @@ class SoalPaketDataTable extends DataTable
     public function query(SoalPaket $model)
     {
         // default query
-        $query = $model->with('sertifikasi');
+        $query = $model->with(['sertifikasi', 'soalpaketitem']);
 
         // get user login
         $user = request()->user();
@@ -106,19 +109,23 @@ class SoalPaketDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
-            Column::make('title'),
+            Column::make('id')
+                ->width('5%'),
+            Column::make('title')
+                ->width('35%'),
             Column::computed('sertifikasi')
                 ->title('Sertifikasi')
-                ->data('sertifikasi.title'),
-            Column::make('updated_at')
-                ->title('Update')
+                ->data('sertifikasi.title')
+                ->width('35%'),
+            Column::make('total_soal')
+                ->width('10%'),
+            Column::make('durasi_ujian')
                 ->width('10%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->width('15%')
+                ->width('5%')
                 ->addClass('text-center'),
         ];
     }

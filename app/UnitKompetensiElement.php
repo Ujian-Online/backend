@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Soal extends Model
+class UnitKompetensiElement extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,19 +14,15 @@ class Soal extends Model
      */
     protected $fillable = [
         'unit_kompetensi_id',
-        'asesor_id',
-        'question',
-        'question_type',
-        'max_score',
-        'answer_essay',
-        'answer_option'
+        'desc',
+        'upload_instruction',
     ];
 
-    public function SoalPilihanGanda()
-    {
-        return $this->hasMany('App\SoalPilihanGanda', 'soal_id', 'id')->orderBy('label', 'ASC');
-    }
-
+    /**
+     * Relation to Table Sertifikasi Unit Kompentensi
+     *
+     * @return HasOne
+     */
     public function UnitKompetensi()
     {
         return $this->hasOne('App\UnitKompetensi', 'id', 'unit_kompetensi_id');

@@ -61,7 +61,7 @@ class PasswordController extends Controller
         $token = $user->createToken('Api')->accessToken;
 
         // kalau user di temukan, kirim email reset password
-        Mail::to($user->email)->send(new PasswordReset($token, $user));
+        Mail::to($user->email)->send(new PasswordReset($token, $user->id));
 
         // array response
         $response = [

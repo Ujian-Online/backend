@@ -234,7 +234,6 @@
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
             allowClear: true,
-            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('admin.soal.search') }}',
                 dataType: 'JSON',
@@ -244,7 +243,8 @@
                     return {
                         q: data.term,
                         type: 'multiple_option',
-                        skip: soalpil()
+                        skip: soalpil(),
+                        sertifikasi_id: $('#sertifikasi_id').val(),
                     }
                 },
                 processResults: function (response) {
@@ -269,7 +269,8 @@
                     return {
                         q: data.term,
                         type: 'essay',
-                        skip: soalessay()
+                        skip: soalessay(),
+                        sertifikasi_id: $('#sertifikasi_id').val(),
                     }
                 },
                 processResults: function (response) {

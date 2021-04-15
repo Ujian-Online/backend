@@ -23,14 +23,14 @@ class APLCreate implements ShouldQueue
      *
      * @var int
      */
-    private $userId;
+    protected $userId;
 
     /**
      * Sertifikasi ID
      *
      * @var int
      */
-    private $sertifikasiId;
+    protected $sertifikasiId;
 
     /**
      * Create a new job instance.
@@ -59,7 +59,10 @@ class APLCreate implements ShouldQueue
 
         // only create once
         if($apl01 == 0) {
-            UserAsesi::create(['user_id' => $this->userId]);
+            UserAsesi::create([
+                'user_id' => $this->userId,
+                'is_verified' => false,
+            ]);
         }
 
         /**
@@ -67,8 +70,12 @@ class APLCreate implements ShouldQueue
          */
 
         // ambil detail unit kompetensi dan unit kompetensi element dari sertifikasi id
-        $sertifikasiUK = SertifikasiUnitKompentensi::with('ukelement')
-            ->where('sertifikasi_id', $this->sertifikasiId)->get();
+        $sertifikasiUK = SertifikasiUnitKompentensi::with([
+                'unitkompetensi',
+                'unitkompetensi.ukelement'
+            ])
+            ->where('sertifikasi_id', $this->sertifikasiId)
+            ->get();
 
         // buat variable array untuk simpan detail sertifikasi unit kompetensi element
         $asesiSertifikasiUK = [];
@@ -76,24 +83,24 @@ class APLCreate implements ShouldQueue
         $asesiSertifikasiUKElement = [];
 
         // loop sertifikasi unit kompetensi dan unit kompetensi element
-        foreach($sertifikasiUK as $uk) {
+        foreach($sertifikasiUK as $key => $sertifikasi) {
             // update asesi unit kompetensi
             $asesiSertifikasiUK[] = [
                 'asesi_id' => $this->userId,
-                'unit_kompetensi_id' => $uk->id,
-                'order' => $uk->order,
-                'sertifikasi_id' => $uk->sertifikasi_id,
-                'kode_unit_kompetensi' => $uk->kode_unit_kompetensi,
-                'title' => $uk->title,
-                'sub_title' => $uk->sub_title,
+                'unit_kompetensi_id' => $sertifikasi->unit_kompetensi_id,
+                'order' => $sertifikasi->order,
+                'sertifikasi_id' => $sertifikasi->sertifikasi_id,
+                'kode_unit_kompetensi' => $sertifikasi->unitkompetensi->kode_unit_kompetensi,
+                'title' => $sertifikasi->unitkompetensi->title,
+                'sub_title' => $sertifikasi->unitkompetensi->sub_title,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
 
             // check apakah ada element di dalam unit kompetensi atau tidak
-            if(isset($uk->ukelement) and !empty($uk->ukelement)) {
+            if(isset($sertifikasi->unitkompetensi->ukelement) and !empty($sertifikasi->unitkompetensi->ukelement)) {
                 // kalau ada ukelement, maka looping datanya untuk di simpan ke asesi
-                foreach($uk->ukelement as $ukelement) {
+                foreach($sertifikasi->unitkompetensi->ukelement as $ukelement) {
                     // update uk element ke asesi
                     $asesiSertifikasiUKElement[] = [
                         'asesi_id' => $this->userId,

@@ -113,7 +113,7 @@
                         @if($query->media_url)
                             <img src="{{ $query->media_url }}" class="img-thumbnail img-fluid" alt="" />
                         @else
-                            <p>{{ _('Tidak ada Profile Picture') }}</p>
+                            <p>{{ __('Tidak ada Profile Picture') }}</p>
                         @endif
                     @endif
                 </div>
@@ -139,7 +139,7 @@
                         @if($query->media_url_sign_user)
                             <img src="{{ $query->media_url_sign_user }}" class="img-thumbnail img-fluid" alt="" />
                         @else
-                            <p>{{ _('Tidak ada TTD/Paraf') }}</p>
+                            <p>{{ __('Tidak ada TTD/Paraf') }}</p>
                         @endif
                     @endif
                 </div>
