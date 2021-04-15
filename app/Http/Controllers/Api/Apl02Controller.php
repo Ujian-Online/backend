@@ -6,9 +6,12 @@ use App\AsesiSertifikasiUnitKompetensiElement;
 use App\AsesiSUKElementMedia;
 use App\AsesiUnitKompetensiDokumen;
 use App\Http\Controllers\Controller;
+use App\Mail\AsesorAPL02Notification;
 use App\Sertifikasi;
+use App\UjianAsesiAsesor;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class Apl02Controller extends Controller
 {
@@ -125,6 +128,12 @@ class Apl02Controller extends Controller
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                @OA\Property(
+     *                     property="sertifikasi_id",
+     *                     description="Sertifikasi ID",
+     *                     type="integer",
+     *                     example="1"
+     *                 ),
+     *                @OA\Property(
      *                     property="element_id",
      *                     description="ID Unit Kompetensi Element",
      *                     type="integer",
@@ -167,6 +176,7 @@ class Apl02Controller extends Controller
     {
         // validate input
         $request->validate([
+            'sertifikasi_id' => 'required',
             'element_id'    => 'required',
             'type'          => 'required|in:new,update',
             'media_id'      => 'required_if:type,update',
@@ -183,6 +193,8 @@ class Apl02Controller extends Controller
             // update just update media url
             $type = $request->input('type');
 
+            // get sertifikasi id
+            $sertifikasi_id = $request->input('sertifikasi_id');
             // get element id
             $element_id = $request->input('element_id');
             // get description
@@ -192,6 +204,20 @@ class Apl02Controller extends Controller
             AsesiSertifikasiUnitKompetensiElement::where('id', $element_id)
                 ->where('asesi_id', $user->id)
                 ->firstOrFail();
+
+            // get ujian status
+            $ujian = UjianAsesiAsesor::with('userasesor')
+                        ->where('asesi_id', $user->id)
+                        ->where('sertifikasi_id', $sertifikasi_id)
+                        ->whereIn('status', [
+                            'menunggu',
+                            'paket_soal_assigned',
+                        ])
+                        ->firstOrFail();
+
+            if(isset($ujian->userasesor) and !empty($ujian->userasesor)) {
+                Mail::to($ujian->userasesor->email)->send(new AsesorAPL02Notification($user->id, $sertifikasi_id));
+            }
 
             // save if type new
             if ($type == 'new') {

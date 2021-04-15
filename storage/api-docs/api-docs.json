@@ -216,6 +216,11 @@
                         "multipart/form-data": {
                             "schema": {
                                 "properties": {
+                                    "sertifikasi_id": {
+                                        "description": "Sertifikasi ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
                                     "element_id": {
                                         "description": "ID Unit Kompetensi Element",
                                         "type": "integer",
