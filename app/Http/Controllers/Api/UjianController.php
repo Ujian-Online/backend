@@ -47,6 +47,7 @@ class UjianController extends Controller
             'userasesi',
             'userasesi.asesi',
             'sertifikasi',
+            'ujianjadwal',
         ])->where('asesi_id', $user->id)->get();
 
         // variable result
@@ -116,12 +117,12 @@ class UjianController extends Controller
         $user = $request->user();
 
         $ujian = UjianAsesiAsesor::with([
-            'userasesi',
-            'userasesi.asesi',
-            'ujianjadwal',
-            'sertifikasi',
-            'soalpaket',
-        ])
+                'userasesi',
+                'userasesi.asesi',
+                'ujianjadwal',
+                'sertifikasi',
+                'soalpaket',
+            ])
             ->select([
                 'ujian_asesi_asesors.*',
                 'user_asesors.name as asesor_name'
