@@ -486,7 +486,7 @@
         // soal select2 with ajax query search
         $('#soal_paket_id').select2({
             theme: 'bootstrap4',
-            disabled: {{ (isset($isEdit) and !empty($isEdit) and request()->user()->can('isAssesor') and isset($query->status) and !empty($query->status) and $query->status == 'menunggu') ? 'false' : 'true' }},
+            disabled: {{ (isset($isEdit) and !empty($isEdit) and request()->user()->can('isAssesor') and isset($query->status) and !empty($query->status) and in_array($query->status, ['menunggu', 'paket_soal_assigned'])) ? 'false' : 'true' }},
             allowClear: true,
             ajax: {
                 url: '{{ route('admin.soal.paket.search') }}',
