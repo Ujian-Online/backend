@@ -154,6 +154,7 @@ return [
                             'admin.sertifikasi.index',
                             'admin.sertifikasi.create',
                             'admin.sertifikasi.show',
+                            'admin.sertifikasi.edit',
                             'admin.sertifikasi.update',
                         ],
                     ],
