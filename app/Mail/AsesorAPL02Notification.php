@@ -15,18 +15,16 @@ class AsesorAPL02Notification extends Mailable implements ShouldQueue
 
     public $asesiId;
     public $sertifikasiId;
-    public $asesorId;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($asesiId, $sertifikasiId, $asesorId)
+    public function __construct($asesiId, $sertifikasiId)
     {
         $this->asesiId = $asesiId;
         $this->sertifikasiId = $sertifikasiId;
-        $this->asesorId = $asesorId;
     }
 
     /**
