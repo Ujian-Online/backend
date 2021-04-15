@@ -106,10 +106,10 @@ if(!function_exists('apl02_status')) {
         $statsFormTerverifikasi = count($apl02StatusCount['form_terverifikasi'] ?? []);
 
         // Bandingkan Total Status
-        if($statusIsiForm > 0) {
-            $apl02Status = 'isi_form';
-        } else if($statusMenungguVerifikasi > 0) {
+        if($statusMenungguVerifikasi > 0) {
             $apl02Status = 'menunggu_verifikasi';
+        } else if($statusIsiForm > 0) {
+            $apl02Status = 'isi_form';
         } else if($statusFormDitolak > 0) {
             $apl02Status = 'form_ditolak';
         } else if($statsFormTerverifikasi) {
