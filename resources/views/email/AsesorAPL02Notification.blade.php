@@ -12,7 +12,7 @@ Tolong lakukan verifikasi data APL02 milik Asesi
 | Sertifikasi | : | {{ $sertifikasi->title }} |
 @endcomponent
 
-@component('mail::button', ['url' => route('admin.asesi.apl02.view', ['userid' => $asesi->id, 'sertifikasiid' => $query['sertifikasi_id']])])
+@component('mail::button', ['url' => route('admin.asesi.apl02.view', ['userid' => $asesi->id, 'sertifikasiid' => $sertifikasi->id])])
 Verfikasi data APL02 Klik di sini
 @endcomponent
 
