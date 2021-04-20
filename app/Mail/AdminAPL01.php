@@ -74,7 +74,7 @@ class AdminAPL01 extends Mailable implements ShouldQueue
             ->with([
                 'admin' => $admin,
                 'asesi' => $asesi,
-                '$customData' => $customData
+                'customData' => $customData
             ]);
     }
 }
