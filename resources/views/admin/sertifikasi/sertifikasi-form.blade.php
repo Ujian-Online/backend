@@ -104,35 +104,6 @@
 
 @section('js')
     <script>
-        /**
-         * Select2 with Ajax Start
-         * @type {string}
-         */
-
-        // select2 with ajax query search
-        $('#unit_kompetensi').select2({
-            theme: 'bootstrap4',
-            disabled: '{{ isset($isShow) and !empty($isShow) ? 'readonly' : 'false' }}',
-            allowClear: true,
-            minimumInputLength: 1,
-            ajax: {
-                url: '{{ route('admin.sertifikasi.uk.search') }}',
-                dataType: 'JSON',
-                delay: 100,
-                cache: false,
-                data: function (data) {
-                    return {
-                        q: data.term
-                    }
-                },
-                processResults: function (response) {
-                    return {
-                        results: response
-                    }
-                }
-            },
-        });
-
         // get id unitkompetensi
         function unitkompetensiid() {
             const ids = $("input[name='unit_kompetensi_id[]']")
@@ -146,6 +117,37 @@
             $(`#${id}`).remove();
             $("#unit_kompetensi").val('').trigger('change');
         }
+    </script>
+    <script>
+        /**
+         * Select2 with Ajax Start
+         * @type {string}
+         */
+
+        // select2 with ajax query search
+        $('#unit_kompetensi').select2({
+            theme: 'bootstrap4',
+            disabled: '{{ isset($isShow) and !empty($isShow) ? 'readonly' : 'false' }}',
+            allowClear: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{{ route('admin.sertifikasi.uk.search') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                data: function (data) {
+                    return {
+                        q: data.term,
+                        skip: unitkompetensiid()
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
+        });
 
         $('#unit_kompetensi').on('change', async function() {
             const me = $(this)

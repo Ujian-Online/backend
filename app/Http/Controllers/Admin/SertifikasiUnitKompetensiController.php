@@ -296,35 +296,47 @@ class SertifikasiUnitKompetensiController extends Controller
      */
     public function search(Request $request)
     {
-        // database query
-        $query = new UnitKompetensi();
         // result variable
         $result = [];
 
         // get input from select2 search term
         $q = $request->input('q');
+        $skip = $request->input('skip');
 
-        // return empty object if query is empty
-        if(empty($q)) {
-            return response()->json($result, 200);
-        }
-
-        // check if query is numeric or not
-        if(is_numeric($q)) {
-            $query = $query->where('id', 'like', "%$q%")
-                    ->orWhere('kode_unit_kompetensi', 'like', "%$q%");
-        } else {
-            $query = $query->where('title', 'like', "%$q%")
-                    ->orWhere('kode_unit_kompetensi', 'like', "%$q%");
-        }
+        $query = UnitKompetensi::when($skip, function ($query) use ($skip) {
+                return $query->whereNotIn('id', explode(',', $skip));
+            })
+            ->when($q, function ($query) use ($q) {
+                // check if query is numeric or not
+                if(is_numeric($q)) {
+                    return $query->where('id', 'like', "%$q%")
+                        ->orWhere('kode_unit_kompetensi', 'like', "%$q%");
+                } else {
+                    return $query->where('title', 'like', "%$q%")
+                        ->orWhere('kode_unit_kompetensi', 'like', "%$q%");
+                }
+            });
 
         // check if data found or not
         if($query->count() != 0) {
             foreach($query->get() as $data) {
-                $result[] = [
-                    'id' => $data->id,
-                    'text' => '[ID: ' . $data->id . '] ' . $data->kode_unit_kompetensi . ' - ' .$data->title,
-                ];
+                // check if skip id is not null
+                if(!empty($skip)) {
+                    // if id not in array skip, then print result
+                    if(!in_array($data->id, explode(',', $skip))) {
+                        $result[] = [
+                            'id' => $data->id,
+                            'text' => '[ID: ' . $data->id . '] ' . $data->kode_unit_kompetensi . ' - ' .$data->title,
+                        ];
+                    }
+                } else {
+                    // return default if null
+                    $result[] = [
+                        'id' => $data->id,
+                        'text' => '[ID: ' . $data->id . '] ' . $data->kode_unit_kompetensi . ' - ' .$data->title,
+                    ];
+                }
+
             }
         }
 
