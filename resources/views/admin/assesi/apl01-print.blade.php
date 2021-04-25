@@ -74,11 +74,6 @@
                                         <td width="75%" class="dash">{{ $query->address }}</td>
                                     </tr>
                                     <tr>
-                                        <td width="20%">{{ trans('form.phone_number') }}</td>
-                                        <td width="2%">:</td>
-                                        <td width="75%" class="dash">{{ $query->phone_number }}</td>
-                                    </tr>
-                                    <tr>
                                         <td width="20%">{{ __('No. Telpon/Email') }}</td>
                                         <td width="2%">:</td>
                                         <td width="75%">
