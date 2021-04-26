@@ -245,5 +245,5 @@
 @endsection
 
 @section('js')
-{{--    <script>window.print();</script>--}}
+    <script>window.print();</script>
 @endsection
