@@ -1,5 +1,17 @@
 @extends('layouts.pageForm')
 
+@section('css')
+    <style>
+        td {
+            border: 1px solid black !important;
+        }
+
+        th {
+            border: 1px solid black !important;
+        }
+    </style>
+@endsection
+
 @section('form')
     @include('layouts.alert')
 
@@ -28,10 +40,10 @@
                         <td>{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->nomor_skema : '' }}</td>
                     </tr>
                     @if(isset($tuk) and !empty($tuk))
-                    <tr>
-                        <td colspan="2">TUK</td>
-                        <td>:</td>
-                        <td>
+                        <tr>
+                            <td colspan="2">TUK</td>
+                            <td>:</td>
+                            <td>
 
                                 @php
                                     // untuk hitung loop buat strip (/)
@@ -53,8 +65,8 @@
                                     @endphp
                                 @endforeach
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     @endif
                     {{--<tr>--}}
                     {{--<td colspan="2">Nama Asesor</td>--}}
@@ -79,12 +91,12 @@
 
         </div>
 
-    @if(isset($unitkompetensis) and !empty($unitkompetensis))
-        @foreach($unitkompetensis as $unitkompentensi)
-            <div class="form-group col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <tbody>
+        @if(isset($unitkompetensis) and !empty($unitkompetensis))
+            @foreach($unitkompetensis as $unitkompentensi)
+                <div class="form-group col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
                             <tr>
                                 <td rowspan="2" width="10%" class="bg-success">Unit Kompetensi Nomor: {{ $unitkompentensi->order }}</td>
                                 <td width="10%">Kode Unit</td>
@@ -94,24 +106,25 @@
                             <tr>
                                 <td width="10%">Judul Unit</td>
                                 <td width="1px">:</td>
-                                <td>{{ $unitkompentensi->title }} @if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) ({{ $unitkompentensi->sub_title }}) @endif</td>
+                                <td>{{ $unitkompentensi->title }}</td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                @if(isset($unitkompentensi->asesisertifikasiunitkompetensielement) and !empty($unitkompentensi->asesisertifikasiunitkompetensielement))
-                    <table class="table table-bordered">
-                        <thead>
+                    @if(isset($unitkompentensi->asesisertifikasiunitkompetensielement) and !empty($unitkompentensi->asesisertifikasiunitkompetensielement))
+                        <table class="table table-bordered">
+                            <thead>
                             <tr>
                                 <th width="5%" class="text-center" style="vertical-align: middle;">No.</th>
-                                <th width="45%" class="text-center" style="vertical-align: middle;">Element</th>
-                                <th width="30%" class="text-center" style="vertical-align: middle;">File</th>
+                                <th width="35%" class="text-center" style="vertical-align: middle;">@if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) {{ $unitkompentensi->sub_title }} @endif</th>
+                                <th width="10%" class="text-center" style="vertical-align: middle;">File</th>
                                 <th width="5%" class="text-center" style="vertical-align: middle;">Verify (K/BK)</th>
-                                <th width="15%" class="text-center" style="vertical-align: middle;">Comment</th>
+                                <th width="25%" class="text-center" style="vertical-align: middle;">Bukti yang relevan</th>
+                                <th width="25%" class="text-center" style="vertical-align: middle;">Comment</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             @foreach($unitkompentensi->asesisertifikasiunitkompetensielement as $key => $ukelement)
                                 {{-- Hidden Input ID Element--}}
                                 <input type="hidden" name="ukelement[id][]" value="{{ $ukelement->id }}">
@@ -119,9 +132,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}.</td>
                                     <td>
-                                        <p class="text-bold">{{ $ukelement->desc }}</p>
-                                        <p>Bukti-Bukti Kompetensi:</p>
-                                        <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                        <p>{!! nl2br($ukelement->desc) !!}</p>
                                     </td>
                                     <td>
                                         @if(count($ukelement->media) != 0)
@@ -146,14 +157,17 @@
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="ukelement[is_verified][{{$ukelement->id}}]"
                                                        id="ukelement-is_verified-{{$ukelement->id}}" value="1" @if($ukelement->is_verified == 1) {{ __('checked') }} @endif>
-                                                <label class="form-check-label">YES</label>
+                                                <label class="form-check-label">K</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="ukelement[is_verified][{{$ukelement->id}}]"
                                                        id="ukelement-is_verified-{{$ukelement->id}}" value="0" @if($ukelement->is_verified == 0) {{ __('checked') }} @endif>
-                                                <label class="form-check-label">NO</label>
+                                                <label class="form-check-label">BK</label>
                                             </div>
                                         @endif
+                                    </td>
+                                    <td>
+                                        <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
                                     </td>
                                     <td>
                                         @if(isset($isShow))
@@ -166,12 +180,12 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
-                    </table>
-                @endif
-            </div>
-        @endforeach
-    @endif
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+            @endforeach
+        @endif
 
 
     </div>
