@@ -10,6 +10,7 @@ use App\Order;
 use App\Sertifikasi;
 use App\SertifikasiUnitKompentensi;
 use App\SertifikasiUnitKompetensiElement;
+use App\UjianAsesiAsesor;
 use App\User;
 use App\UserAsesi;
 use Exception;
@@ -304,6 +305,12 @@ class AsesiUnitKompetensiDokumenController extends Controller
         // get tuk detail based on order
         $tuk = (isset($order) & !empty($order)) ? $order->tuk : null;
 
+        $ujianasesiasesor = UjianAsesiAsesor::with(['userasesor', 'userasesor.asesor'])
+            ->where('asesi_id', $userid)
+            ->where('sertifikasi_id', $sertifikasiid)
+            ->where('order_id', $order->id)
+            ->firstOrFail();
+
         // return data to view
         return view($printMode ?  'admin.assesi.apl02-print' : 'admin.assesi.apl02-view', [
             'title'             => 'Detail Asesi APL-02: ' . $name,
@@ -318,6 +325,7 @@ class AsesiUnitKompetensiDokumenController extends Controller
             'unitkompetensis'   => $unitkompetensis,
             'order'             => $order,
             'tuk'               => $tuk,
+            'ujianasesiasesor'  => $ujianasesiasesor,
         ]);
     }
 
