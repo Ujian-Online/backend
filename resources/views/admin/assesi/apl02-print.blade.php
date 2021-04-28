@@ -113,6 +113,11 @@
                                     <td class="text-center">Bukti yang relevan</td>
                                 </tr>
 
+                                @php
+                                    // untuk buat nomor media id
+                                    $mediaKeyID = 0;
+                                @endphp
+
                                 @foreach($unitkompentensi->asesisertifikasiunitkompetensielement as $key => $ukelement)
                                     {{-- Hidden Input ID Element--}}
                                     <input type="hidden" name="ukelement[id][]" value="{{ $ukelement->id }}">
@@ -120,6 +125,7 @@
                                     <tr>
                                         <td>
                                             <p>{!! nl2br($ukelement->desc) !!}</p>
+                                            <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
                                         </td>
                                         <td class="text-center" style="vertical-align: middle;">
                                             <input type="checkbox" @if($ukelement->is_verified) {{__('checked')}} @endif onclick="return false;" />
@@ -128,7 +134,22 @@
                                             <input type="checkbox" @if(!$ukelement->is_verified) {{__('checked')}} @endif onclick="return false;" />
                                         </td>
                                         <td>
-                                            <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                            @if(count($ukelement->media) != 0)
+                                                @foreach($ukelement->media as $keymedia => $media)
+
+                                                    @php
+                                                        // untuk buat nomor media id
+                                                        $mediaKeyID = $mediaKeyID+1
+                                                    @endphp
+
+                                                    <span>
+                                                        {{ $unitkompentensi->order }}.{{$mediaKeyID}}. {{ucfirst($media->description)}}
+                                                    </span><br/>
+
+                                                @endforeach
+                                            @else
+                                                {{ __('File belum di unggah') }}
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
