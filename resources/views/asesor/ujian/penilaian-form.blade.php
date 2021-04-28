@@ -4,9 +4,51 @@
     @include('layouts.alert')
 
     <div class="form-row">
+
+        @if(isset($isShow))
+            <div class="btn-group">
+                <button type="button" class="btn bg-gradient-success disabled">
+                    <i class="fas fa-print"></i> Cetak
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_pilihan_ganda', '', 'fullscreen=yes');">
+                    FR.IA.05
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_pilihan_ganda', '', 'fullscreen=yes');">
+                    FR.IA.05.A
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_pilihan_ganda', '', 'fullscreen=yes');">
+                    FR.IA.05.B
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_essay', '', 'fullscreen=yes');">
+                    FR.IA.06
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_essay', '', 'fullscreen=yes');">
+                    FR.IA.06.A
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_essay', '', 'fullscreen=yes');">
+                    FR.IA.05.B
+                </button>
+            </div>
+        @endif
+
         <div class="table-responsive mt-2 mb-2">
             <table class="table table-bordered">
                 <tbody>
+                    <tr>
+                        <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
+                            Skema Sertifikasi
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Nomor</td>
+                        <td width="2%">:</td>
+                        <td>{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->nomor_skema : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Judul</td>
+                        <td width="2%">:</td>
+                        <td class="text-bold">{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->title : '' }}</td>
+                    </tr>
                     <tr>
                         <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
                             Detail Asesi
@@ -38,21 +80,6 @@
                         <td>{{ (isset($query->userasesor->asesor) and !empty($query->userasesor->asesor)) ? $query->userasesor->asesor->met : '' }}</td>
                     </tr>
                     <tr>
-                        <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
-                            Skema Sertifikasi
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Nomor</td>
-                        <td width="2%">:</td>
-                        <td>{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->nomor_skema : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Judul</td>
-                        <td width="2%">:</td>
-                        <td class="text-bold">{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->title : '' }}</td>
-                    </tr>
-                    <tr>
                         <td rowspan="5" class="text-center text-bold"  style="vertical-align: middle;">
                             Detail Ujian
                         </td>
@@ -76,7 +103,7 @@
                     <tr>
                         <td width="15%">Deskripsi Ujian</td>
                         <td width="2%">:</td>
-                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? $query->ujianjadwal->description : '' }}</td>
+                        <td>{!! (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? nl2br($query->ujianjadwal->description) : '' !!}</td>
                     </tr>
                     <tr>
                         <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
