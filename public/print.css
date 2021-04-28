@@ -1,0 +1,11 @@
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid black !important;
+}
+
+@media print {
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid black !important;
+    }
+}
