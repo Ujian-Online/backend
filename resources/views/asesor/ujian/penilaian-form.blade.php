@@ -36,6 +36,21 @@
                 <tbody>
                     <tr>
                         <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
+                            Skema Sertifikasi
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Nomor</td>
+                        <td width="2%">:</td>
+                        <td>{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->nomor_skema : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Judul</td>
+                        <td width="2%">:</td>
+                        <td class="text-bold">{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->title : '' }}</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
                             Detail Asesi
                         </td>
                     </tr>
@@ -65,21 +80,6 @@
                         <td>{{ (isset($query->userasesor->asesor) and !empty($query->userasesor->asesor)) ? $query->userasesor->asesor->met : '' }}</td>
                     </tr>
                     <tr>
-                        <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
-                            Skema Sertifikasi
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Nomor</td>
-                        <td width="2%">:</td>
-                        <td>{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->nomor_skema : '' }}</td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Judul</td>
-                        <td width="2%">:</td>
-                        <td class="text-bold">{{ (isset($query->sertifikasi) and !empty($query->sertifikasi)) ? $query->sertifikasi->title : '' }}</td>
-                    </tr>
-                    <tr>
                         <td rowspan="5" class="text-center text-bold"  style="vertical-align: middle;">
                             Detail Ujian
                         </td>
@@ -103,7 +103,7 @@
                     <tr>
                         <td width="15%">Deskripsi Ujian</td>
                         <td width="2%">:</td>
-                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? $query->ujianjadwal->description : '' }}</td>
+                        <td>{!! (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? nl2br($query->ujianjadwal->description) : '' !!}</td>
                     </tr>
                     <tr>
                         <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;">
