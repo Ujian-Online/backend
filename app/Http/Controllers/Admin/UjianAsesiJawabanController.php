@@ -191,6 +191,12 @@ class UjianAsesiJawabanController extends Controller
                 $pageView = 'asesor.ujian.penilaian-print-pil-ganda-jawaban';
             } else if($page && $page == 'jawaban_asesi_pilihan_ganda') {
                 $pageView = 'asesor.ujian.penilaian-print-pil-ganda-jawaban-asesi';
+            } else if($page && $page == 'soal_essay') {
+                $pageView = 'asesor.ujian.penilaian-print-essay';
+            } else if($page && $page == 'jawaban_essay') {
+                $pageView = 'asesor.ujian.penilaian-print-essay-jawaban';
+            } else if($page && $page == 'jawaban_asesi_essay') {
+                $pageView = 'asesor.ujian.penilaian-print-essay-jawaban-asesi';
             }
         }
 
