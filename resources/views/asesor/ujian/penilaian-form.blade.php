@@ -4,6 +4,22 @@
     @include('layouts.alert')
 
     <div class="form-row">
+
+        <div class="btn-group">
+            <button type="button" class="btn bg-gradient-success disabled">
+                <i class="fas fa-print"></i> Cetak
+            </button>
+            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_pilihan_ganda', '', 'fullscreen=yes');">
+                FR.IA.05
+            </button>
+            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_pilihan_ganda', '', 'fullscreen=yes');">
+                FR.IA.05.A
+            </button>
+            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_pilihan_ganda', '', 'fullscreen=yes');">
+                FR.IA.05.B
+            </button>
+        </div>
+
         <div class="table-responsive mt-2 mb-2">
             <table class="table table-bordered">
                 <tbody>
