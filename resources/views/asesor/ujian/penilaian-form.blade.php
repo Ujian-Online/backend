@@ -5,20 +5,31 @@
 
     <div class="form-row">
 
-        <div class="btn-group">
-            <button type="button" class="btn bg-gradient-success disabled">
-                <i class="fas fa-print"></i> Cetak
-            </button>
-            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_pilihan_ganda', '', 'fullscreen=yes');">
-                FR.IA.05
-            </button>
-            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_pilihan_ganda', '', 'fullscreen=yes');">
-                FR.IA.05.A
-            </button>
-            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_pilihan_ganda', '', 'fullscreen=yes');">
-                FR.IA.05.B
-            </button>
-        </div>
+        @if(isset($isShow))
+            <div class="btn-group">
+                <button type="button" class="btn bg-gradient-success disabled">
+                    <i class="fas fa-print"></i> Cetak
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_pilihan_ganda', '', 'fullscreen=yes');">
+                    FR.IA.05
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_pilihan_ganda', '', 'fullscreen=yes');">
+                    FR.IA.05.A
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_pilihan_ganda', '', 'fullscreen=yes');">
+                    FR.IA.05.B
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_essay', '', 'fullscreen=yes');">
+                    FR.IA.06
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_essay', '', 'fullscreen=yes');">
+                    FR.IA.06.A
+                </button>
+                <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_essay', '', 'fullscreen=yes');">
+                    FR.IA.05.B
+                </button>
+            </div>
+        @endif
 
         <div class="table-responsive mt-2 mb-2">
             <table class="table table-bordered">
