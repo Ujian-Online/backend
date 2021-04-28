@@ -2,10 +2,16 @@
 .table-bordered td {
     border: 1px solid black !important;
 }
+.dash {
+    border-bottom: 1px dashed #000000 !important;
+}
 
 @media print {
     .table-bordered th,
     .table-bordered td {
         border: 1px solid black !important;
+    }
+    .dash {
+        border-bottom: 1px dashed #000000 !important;
     }
 }
