@@ -21,8 +21,8 @@
                         <span class="text-bold">Data Pribadi</span>
 
                         <div>
-                            <div class="table-responsive mt-2 mb-2">
-                                <table class="table-sm" style="table-layout: fixed; width: 850px;">
+                            <div class="mt-2 mb-2">
+                                <table class="table-sm">
                                     <tbody>
                                     <tr>
                                         <td width="20%">{{ trans('form.name') }}</td>
@@ -206,7 +206,7 @@
 
                 <h3>Asesi Custom Data</h3>
 
-                <div class="table-responsive mt-2 mb-2">
+                <div class="mt-2 mb-2">
                     <table class="table table-bordered">
                         <thead>
                         <tr>

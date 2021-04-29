@@ -5,6 +5,12 @@
 
     <div class="form-row">
 
+        @if(isset($isShow))
+            <button type="button" class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
+                <i class="fas fa-print"></i> Cetak FR.AK.01</a>
+            </button>
+        @endif
+
         <div class="form-group col-md-12">
             <label for="ujian_jadwal_id">Jadwal Ujian</label>
             <select class="form-control @error('ujian_jadwal_id') is-invalid @enderror"
