@@ -36,6 +36,7 @@ class SuratTugasDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
+                    'url_print' => route('admin.surat-tugas.show', $query->id) . '?print=true',
                     'url_show' => route('admin.surat-tugas.show', $query->id),
                     'url_edit' => route('admin.surat-tugas.edit', $query->id),
                 ]);
