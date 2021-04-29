@@ -19,7 +19,11 @@
 
         <div class="form-group col-md-12">
 
-            <a href="#" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');" class="btn btn-success"><i class="fas fa-print"></i> Cetak APL-02</a>
+            @if(isset($isShow))
+                <button class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
+                    <i class="fas fa-print"></i> Cetak APL-02</a>
+                </button>
+            @endif
 
             <div class="table-responsive mt-2 mb-2">
                 <table class="table table-bordered">
