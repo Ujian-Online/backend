@@ -306,6 +306,10 @@
         {{--    }--}}
         {{--});--}}
 
+        $('#user_id').select2({
+            theme: 'bootstrap4',
+            disabled: 'readOnly'
+        });
         $('select').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
