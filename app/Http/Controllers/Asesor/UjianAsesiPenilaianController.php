@@ -53,8 +53,11 @@ class UjianAsesiPenilaianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        // get user login
+        $user = $request->user();
+
         // Find Data by ID
         $query = UjianAsesiAsesor::with([
             'userasesi',
@@ -67,7 +70,12 @@ class UjianAsesiPenilaianController extends Controller
             'soalpaket',
             'order',
             'order.tuk'
-        ])->findOrFail($id);
+        ])->where('id', $id)
+        ->where('asesor_id', $user->id)
+        ->firstOrFail();
+
+        // uk soal
+        $uk_soals = [];
 
         // pisahkan soal jawaban pilihan ganda dan essay kalau ada datanya
         $soal_pilihangandas = [];
@@ -76,6 +84,27 @@ class UjianAsesiPenilaianController extends Controller
         $total_max = 0;
         if(isset($query->ujianasesijawaban) and !empty($query->ujianasesijawaban)) {
             foreach($query->ujianasesijawaban as $soal) {
+                // unit kompetensi
+                $uk_id = null;
+
+                // save uk from soal detail
+                if(isset($soal->soal) and !empty($soal->soal->unitkompetensi)) {
+                    // get uk id
+                    $uk_id = $soal->soal->unitkompetensi->id;
+
+                    // save to uk soal
+                    if(!isset($uk_soals[$uk_id])) {
+                        $uk_soals[$uk_id] = $soal->soal->unitkompetensi->toArray();
+                    }
+
+                    // save soal to uk
+                    if($soal->question_type == 'multiple_option') {
+                        $uk_soals[$uk_id]['pilihan_ganda'][] = $soal;
+                    } else {
+                        $uk_soals[$uk_id]['essay'][] = $soal;
+                    }
+                }
+
                 if($soal->question_type == 'multiple_option') {
                     // update object soal pilihan ganda
                     $soal_pilihangandas[] = $soal;
@@ -95,8 +124,30 @@ class UjianAsesiPenilaianController extends Controller
             }
         }
 
+        // print mode
+        $printMode = $request->input('print') ? true : false;
+        $pageView = 'asesor.ujian.penilaian-form';
+
+        if($printMode) {
+            $page = $request->input('page');
+
+            if($page && $page == 'soal_pilihan_ganda') {
+                $pageView = 'asesor.ujian.penilaian-print-pil-ganda';
+            } else if($page && $page == 'jawaban_pilihan_ganda') {
+                $pageView = 'asesor.ujian.penilaian-print-pil-ganda-jawaban';
+            } else if($page && $page == 'jawaban_asesi_pilihan_ganda') {
+                $pageView = 'asesor.ujian.penilaian-print-pil-ganda-jawaban-asesi';
+            } else if($page && $page == 'soal_essay') {
+                $pageView = 'asesor.ujian.penilaian-print-essay';
+            } else if($page && $page == 'jawaban_essay') {
+                $pageView = 'asesor.ujian.penilaian-print-essay-jawaban';
+            } else if($page && $page == 'jawaban_asesi_essay') {
+                $pageView = 'asesor.ujian.penilaian-print-essay-jawaban-asesi';
+            }
+        }
+
         // return data to view
-        return view('asesor.ujian.penilaian-form', [
+        return view($pageView, [
             'title'                 => 'Ujian Asesi Detail: ' . $query->id,
             'action'                => '#',
             'isShow'                => (isset($query->status) and $query->status != 'selesai') ? route('admin.ujian-asesi.edit', $id) : false,
@@ -105,6 +156,7 @@ class UjianAsesiPenilaianController extends Controller
             'soal_essays'           => $soal_essays,
             'total_nilai'           => $total_nilai,
             'total_max'             => $total_max,
+            'uk_soals'              => $uk_soals,
         ]);
     }
 

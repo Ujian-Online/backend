@@ -10,6 +10,7 @@ use App\Order;
 use App\Sertifikasi;
 use App\SertifikasiUnitKompentensi;
 use App\SertifikasiUnitKompetensiElement;
+use App\UjianAsesiAsesor;
 use App\User;
 use App\UserAsesi;
 use Exception;
@@ -254,8 +255,10 @@ class AsesiUnitKompetensiDokumenController extends Controller
      */
     public function apl02View(Request $request, int $userid, int $sertifikasiid)
     {
+        // cek apakah yang login itu asesor atau admin
+        $whoLogin = request()->user();
         // get user asesi detail
-        $user = User::with('asesi')->findOrFail($userid);
+        $user = User::with('asesi')->where('id', $userid)->firstOrFail();
         // get sertifikasi detail
         $sertifikasi = Sertifikasi::findOrFail($sertifikasiid);
         // get UK Dokumen and Element
@@ -267,13 +270,27 @@ class AsesiUnitKompetensiDokumenController extends Controller
                     $query->where('asesi_id', $user->id);
                 }
             ])
-            ->where('asesi_id', $userid)
-            ->where('sertifikasi_id', $sertifikasiid)
+            ->when($whoLogin, function($query) use ($whoLogin) {
+                if($whoLogin->type == 'assesor') {
+                    $query->join('ujian_asesi_asesors', function ($join) {
+                        $join->on('ujian_asesi_asesors.asesi_id', '=', 'asesi_unit_kompetensi_dokumens.asesi_id');
+                        $join->on('ujian_asesi_asesors.sertifikasi_id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id');
+                    })
+                    ->where('ujian_asesi_asesors.asesor_id', $whoLogin->id);
+                }
+            })
+            ->where('asesi_unit_kompetensi_dokumens.asesi_id', $userid)
+            ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', $sertifikasiid)
             ->get();
+
+        // return error if data not found
+        if(count($unitkompetensis) == 0) {
+            abort(404);
+        }
 
         // get name from asesi object
         $name = $user->email;
-        if(isset($user->asesi) and !empty($user->asesi)) {
+        if(isset($user->asesi) and !empty($user->asesi) and !empty($user->asesi->name)) {
             $name = $user->asesi->name;
         }
 
@@ -287,6 +304,12 @@ class AsesiUnitKompetensiDokumenController extends Controller
             ->first();
         // get tuk detail based on order
         $tuk = (isset($order) & !empty($order)) ? $order->tuk : null;
+
+        $ujianasesiasesor = UjianAsesiAsesor::with(['userasesor', 'userasesor.asesor'])
+            ->where('asesi_id', $userid)
+            ->where('sertifikasi_id', $sertifikasiid)
+            ->where('order_id', $order->id)
+            ->firstOrFail();
 
         // return data to view
         return view($printMode ?  'admin.assesi.apl02-print' : 'admin.assesi.apl02-view', [
@@ -302,6 +325,7 @@ class AsesiUnitKompetensiDokumenController extends Controller
             'unitkompetensis'   => $unitkompetensis,
             'order'             => $order,
             'tuk'               => $tuk,
+            'ujianasesiasesor'  => $ujianasesiasesor,
         ]);
     }
 
@@ -315,6 +339,8 @@ class AsesiUnitKompetensiDokumenController extends Controller
      */
     public function apl02ViewEdit(Request $request, int $userid, int $sertifikasiid)
     {
+        // cek apakah yang login itu asesor atau admin
+        $whoLogin = request()->user();
         // get user asesi detail
         $user = User::with('asesi')->findOrFail($userid);
         // get sertifikasi detail
@@ -328,9 +354,23 @@ class AsesiUnitKompetensiDokumenController extends Controller
                     $query->where('asesi_id', $user->id);
                 }
             ])
-            ->where('asesi_id', $userid)
-            ->where('sertifikasi_id', $sertifikasiid)
+            ->when($whoLogin, function($query) use ($whoLogin) {
+                if($whoLogin->type == 'assesor') {
+                    $query->join('ujian_asesi_asesors', function ($join) {
+                        $join->on('ujian_asesi_asesors.asesi_id', '=', 'asesi_unit_kompetensi_dokumens.asesi_id');
+                        $join->on('ujian_asesi_asesors.sertifikasi_id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id');
+                    })
+                    ->where('ujian_asesi_asesors.asesor_id', $whoLogin->id);
+                }
+            })
+            ->where('asesi_unit_kompetensi_dokumens.asesi_id', $userid)
+            ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', $sertifikasiid)
             ->get();
+
+        // return error if data not found
+        if(count($unitkompetensis) == 0) {
+            abort(404);
+        }
 
         // get name from asesi object
         $name = $user->email;
@@ -365,6 +405,27 @@ class AsesiUnitKompetensiDokumenController extends Controller
         $request->validate([
             'ukelement' => 'required|array'
         ]);
+
+        // cek apakah yang login itu asesor atau admin
+        $whoLogin = request()->user();
+        // cek data apakah yg update asesor atau admin
+        $unitkompetensis = AsesiUnitKompetensiDokumen::when($whoLogin, function($query) use ($whoLogin) {
+                if($whoLogin->type == 'assesor') {
+                    $query->join('ujian_asesi_asesors', function ($join) {
+                        $join->on('ujian_asesi_asesors.asesi_id', '=', 'asesi_unit_kompetensi_dokumens.asesi_id');
+                        $join->on('ujian_asesi_asesors.sertifikasi_id', '=', 'asesi_unit_kompetensi_dokumens.sertifikasi_id');
+                    })
+                        ->where('ujian_asesi_asesors.asesor_id', $whoLogin->id);
+                }
+            })
+            ->where('asesi_unit_kompetensi_dokumens.asesi_id', $userid)
+            ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', $sertifikasiid)
+            ->first();
+
+        // return error if data not found
+        if(!$unitkompetensis) {
+            abort(404);
+        }
 
         // get uk element data
         $ukelements = $request->input('ukelement');

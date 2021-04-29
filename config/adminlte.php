@@ -154,6 +154,7 @@ return [
                             'admin.sertifikasi.index',
                             'admin.sertifikasi.create',
                             'admin.sertifikasi.show',
+                            'admin.sertifikasi.edit',
                             'admin.sertifikasi.update',
                         ],
                     ],
@@ -434,6 +435,12 @@ return [
                 'icon'      => 'fa fa-file-signature',
                 'url'       => '/admin/surat-tugas/?status=menunggu',
                 'active'    => 'admin.surat-tugas.*',
+            ],
+            [
+                'title'     => 'APL-02',
+                'icon'      => 'fas fa-list-ol',
+                'route'     => 'admin.asesi.apl02.index',
+                'active'    => 'admin.asesi.apl02.*',
             ],
             [
                 'title'     => 'Ujian Asesi (Penilaian)',

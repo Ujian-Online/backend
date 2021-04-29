@@ -3,7 +3,11 @@
 @section('form')
     <div class="form-row">
 
-        <a href="#" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');" class="btn btn-success mb-2"><i class="fas fa-print"></i> Cetak APL-01</a>
+        @if(isset($isShow))
+            <button class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
+                <i class="fas fa-print"></i> Cetak APL-01</a>
+            </button>
+        @endif
 
         <div class="form-group col-md-12">
             <label for="user_id">User ID</label>
@@ -306,6 +310,10 @@
         {{--    }--}}
         {{--});--}}
 
+        $('#user_id').select2({
+            theme: 'bootstrap4',
+            disabled: 'readOnly'
+        });
         $('select').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}

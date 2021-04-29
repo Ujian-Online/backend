@@ -15,7 +15,7 @@ return [
     'has_job' => 'Status Kerja',
     'job_title' => 'Bidang Pekerjaan',
     'job_address' => 'Alamat/Lokasi Kerja',
-    'nik' => 'Nomor Induk KTP',
+    'nik' => 'No. KTP/NIK/Paspor',
     'note_admin' => 'Catatan Admin',
     'verification_note' => 'Catatan Verifikasi',
     'media_url_sign_user' => 'Tanda Tangan User',

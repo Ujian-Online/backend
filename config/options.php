@@ -20,8 +20,8 @@ return [
         'suspend'
     ],
     'user_assesi_gender' => [
-        0 => 'Wanita',
         1 => 'Pria',
+        0 => 'Wanita',
     ],
     'user_assesi_pendidikan_terakhir' => [
         'SD',

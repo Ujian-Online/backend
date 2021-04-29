@@ -1,5 +1,17 @@
 @extends('layouts.pageForm')
 
+@section('css')
+    <style>
+        td {
+            border: 1px solid black !important;
+        }
+
+        th {
+            border: 1px solid black !important;
+        }
+    </style>
+@endsection
+
 @section('form')
     @include('layouts.alert')
 
@@ -7,14 +19,18 @@
 
         <div class="form-group col-md-12">
 
-            <a href="#" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');" class="btn btn-success"><i class="fas fa-print"></i> Cetak APL-02</a>
+            @if(isset($isShow))
+                <button class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
+                    <i class="fas fa-print"></i> Cetak APL-02</a>
+                </button>
+            @endif
 
             <div class="table-responsive mt-2 mb-2">
                 <table class="table table-bordered">
                     <tbody>
                     <tr>
                         <td rowspan="3" class="text-center text-bold bg-success"  style="vertical-align: middle;">
-                            Skema Sertifikasi
+                            Skema Sertifikasi<br/>(KKNI/Okupasi/Klaster)
                         </td>
                     </tr>
                     <tr>
@@ -27,64 +43,64 @@
                         <td>:</td>
                         <td>{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->nomor_skema : '' }}</td>
                     </tr>
-                    @if(isset($tuk) and !empty($tuk))
-                    <tr>
-                        <td colspan="2">TUK</td>
-                        <td>:</td>
-                        <td>
+{{--                    @if(isset($tuk) and !empty($tuk))--}}
+{{--                        <tr>--}}
+{{--                            <td colspan="2">TUK</td>--}}
+{{--                            <td>:</td>--}}
+{{--                            <td>--}}
 
-                                @php
-                                    // untuk hitung loop buat strip (/)
-                                    $countKey = 0;
-                                @endphp
-                                @foreach(config('options.tuk_type') as $keyTukType => $tukType)
+{{--                                @php--}}
+{{--                                    // untuk hitung loop buat strip (/)--}}
+{{--                                    $countKey = 0;--}}
+{{--                                @endphp--}}
+{{--                                @foreach(config('options.tuk_type') as $keyTukType => $tukType)--}}
 
-                                    @if($countKey > 0 )
-                                        {{ __('/') }}
-                                    @endif
-                                    @if($keyTukType == $tuk->type)
-                                        {{ $tukType }}
-                                    @else
-                                        <span style="text-decoration: line-through;">{{ $tukType }}</span>
-                                    @endif
+{{--                                    @if($countKey > 0 )--}}
+{{--                                        {{ __('/') }}--}}
+{{--                                    @endif--}}
+{{--                                    @if($keyTukType == $tuk->type)--}}
+{{--                                        {{ $tukType }}--}}
+{{--                                    @else--}}
+{{--                                        <span style="text-decoration: line-through;">{{ $tukType }}</span>--}}
+{{--                                    @endif--}}
 
-                                    @php
-                                        $countKey = $countKey+1
-                                    @endphp
-                                @endforeach
+{{--                                    @php--}}
+{{--                                        $countKey = $countKey+1--}}
+{{--                                    @endphp--}}
+{{--                                @endforeach--}}
 
-                        </td>
-                    </tr>
-                    @endif
+{{--                            </td>--}}
+{{--                        </tr>--}}
+{{--                    @endif--}}
                     {{--<tr>--}}
                     {{--<td colspan="2">Nama Asesor</td>--}}
                     {{--<td>:</td>--}}
                     {{--<td></td>--}}
                     {{--</tr>--}}
-                    <tr>
-                        <td colspan="2">Nama</td>
-                        <td>:</td>
-                        <td>{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '' }}</td>
-                    </tr>
-                    @if(isset($order) and !empty($order))
-                        <tr>
-                            <td colspan="2">Tanggal</td>
-                            <td>:</td>
-                            <td>{{ (isset($order) and !empty($order)) ? \Carbon\Carbon::parse($order->created_at)->format('d F Y') : '' }}</td>
-                        </tr>
-                    @endif
+{{--                    <tr>--}}
+{{--                        <td colspan="2">Nama</td>--}}
+{{--                        <td>:</td>--}}
+{{--                        <td>{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '' }}</td>--}}
+{{--                    </tr>--}}
+{{--                    @if(isset($order) and !empty($order))--}}
+{{--                        <tr>--}}
+{{--                            <td colspan="2">Tanggal</td>--}}
+{{--                            <td>:</td>--}}
+{{--                            <td>{{ (isset($order) and !empty($order)) ? \Carbon\Carbon::parse($order->created_at)->format('d F Y') : '' }}</td>--}}
+{{--                        </tr>--}}
+{{--                    @endif--}}
                     </tbody>
                 </table>
             </div>
 
         </div>
 
-    @if(isset($unitkompetensis) and !empty($unitkompetensis))
-        @foreach($unitkompetensis as $unitkompentensi)
-            <div class="form-group col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <tbody>
+        @if(isset($unitkompetensis) and !empty($unitkompetensis))
+            @foreach($unitkompetensis as $unitkompentensi)
+                <div class="form-group col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
                             <tr>
                                 <td rowspan="2" width="10%" class="bg-success">Unit Kompetensi Nomor: {{ $unitkompentensi->order }}</td>
                                 <td width="10%">Kode Unit</td>
@@ -94,24 +110,31 @@
                             <tr>
                                 <td width="10%">Judul Unit</td>
                                 <td width="1px">:</td>
-                                <td>{{ $unitkompentensi->title }} @if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) ({{ $unitkompentensi->sub_title }}) @endif</td>
+                                <td>{{ $unitkompentensi->title }}</td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                @if(isset($unitkompentensi->asesisertifikasiunitkompetensielement) and !empty($unitkompentensi->asesisertifikasiunitkompetensielement))
-                    <table class="table table-bordered">
-                        <thead>
+                    @if(isset($unitkompentensi->asesisertifikasiunitkompetensielement) and !empty($unitkompentensi->asesisertifikasiunitkompetensielement))
+                        <table class="table table-bordered">
+                            <thead>
                             <tr>
                                 <th width="5%" class="text-center" style="vertical-align: middle;">No.</th>
-                                <th width="45%" class="text-center" style="vertical-align: middle;">Element</th>
-                                <th width="30%" class="text-center" style="vertical-align: middle;">File</th>
-                                <th width="5%" class="text-center" style="vertical-align: middle;">Verify (K/BK)</th>
-                                <th width="15%" class="text-center" style="vertical-align: middle;">Comment</th>
+                                <th width="35%" class="text-center" style="vertical-align: middle;">@if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) {{ $unitkompentensi->sub_title }} @endif</th>
+                                <td width="5%" class="text-center">K</td>
+                                <td width="5%" class="text-center">BK</td>
+                                <th width="25%" class="text-center" style="vertical-align: middle;">Bukti yang relevan</th>
+                                <th width="25%" class="text-center" style="vertical-align: middle;">Comment</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
+
+                            @php
+                                // untuk buat nomor media id
+                                $mediaKeyID = 0;
+                            @endphp
+
                             @foreach($unitkompentensi->asesisertifikasiunitkompetensielement as $key => $ukelement)
                                 {{-- Hidden Input ID Element--}}
                                 <input type="hidden" name="ukelement[id][]" value="{{ $ukelement->id }}">
@@ -119,40 +142,46 @@
                                 <tr>
                                     <td>{{ $key + 1 }}.</td>
                                     <td>
-                                        <p class="text-bold">{{ $ukelement->desc }}</p>
-                                        <p>Bukti-Bukti Kompetensi:</p>
+                                        <p class="text-bold">{!! nl2br($ukelement->desc) !!}</p>
                                         <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                    </td>
+                                    <td class="text-center">
+                                        @if(isset($isShow))
+                                            <input type="checkbox" name="ukelement[is_verified][{{$ukelement->id}}]" id="ukelement-is_verified-{{$ukelement->id}}" @if($ukelement->is_verified) {{__('checked')}} @endif onclick="return false;" />
+                                        @else
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="ukelement[is_verified][{{$ukelement->id}}]"
+                                                       id="ukelement-is_verified-{{$ukelement->id}}" value="1" @if($ukelement->is_verified == 1) {{ __('checked') }} @endif>
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if(isset($isShow))
+                                            <input type="checkbox" name="ukelement[is_verified][{{$ukelement->id}}]" id="ukelement-is_verified-{{$ukelement->id}}" @if(!$ukelement->is_verified) {{__('checked')}} @endif onclick="return false;" />
+                                        @else
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="ukelement[is_verified][{{$ukelement->id}}]"
+                                                       id="ukelement-is_verified-{{$ukelement->id}}" value="0" @if($ukelement->is_verified == 0) {{ __('checked') }} @endif>
+                                            </div>
+                                        @endif
                                     </td>
                                     <td>
                                         @if(count($ukelement->media) != 0)
                                             @foreach($ukelement->media as $keymedia => $media)
 
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        {{ $key + 1 }}.{{$keymedia + 1}}. {{ucfirst($media->description)}}
-                                                        <button type="button" onclick="window.open('{{ $media->media_url }}', '', 'fullscreen=yes');"  class="btn btn-sm btn-primary btn-block">Buka File</button>
-                                                    </div>
-                                                </div>
+                                                @php
+                                                    // untuk buat nomor media id
+                                                    $mediaKeyID = $mediaKeyID+1
+                                                @endphp
+
+                                                <p>
+                                                    {{ $unitkompentensi->order }}.{{$mediaKeyID}}. {{ucfirst($media->description)}}
+                                                    <button type="button" onclick="window.open('{{ $media->media_url }}', '', 'fullscreen=yes');"  class="btn btn-sm btn-primary btn-block">Buka File</button>
+                                                </p>
 
                                             @endforeach
                                         @else
                                             {{ __('File belum di unggah') }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if(isset($isShow))
-                                            {{ $ukelement->is_verified ? 'YES' : 'NO' }}
-                                        @elseif(isset($isEdit))
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="ukelement[is_verified][{{$ukelement->id}}]"
-                                                       id="ukelement-is_verified-{{$ukelement->id}}" value="1" @if($ukelement->is_verified == 1) {{ __('checked') }} @endif>
-                                                <label class="form-check-label">YES</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="ukelement[is_verified][{{$ukelement->id}}]"
-                                                       id="ukelement-is_verified-{{$ukelement->id}}" value="0" @if($ukelement->is_verified == 0) {{ __('checked') }} @endif>
-                                                <label class="form-check-label">NO</label>
-                                            </div>
                                         @endif
                                     </td>
                                     <td>
@@ -166,12 +195,12 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
-                    </table>
-                @endif
-            </div>
-        @endforeach
-    @endif
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+            @endforeach
+        @endif
 
 
     </div>

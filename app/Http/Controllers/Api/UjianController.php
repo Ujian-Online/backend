@@ -47,6 +47,7 @@ class UjianController extends Controller
             'userasesi',
             'userasesi.asesi',
             'sertifikasi',
+            'ujianjadwal',
         ])->where('asesi_id', $user->id)->get();
 
         // variable result
@@ -59,9 +60,9 @@ class UjianController extends Controller
             // varaible ujian status
             $ujian_status = null;
 
-            if($ujian->status == 'paket_soal_assigned' and $apl02_status == 'menunggu_verifikasi') {
+            if(in_array($ujian->status,['paket_soal_assigned', 'menunggu']) and $apl02_status == 'menunggu_verifikasi') {
                 $ujian_status = 'menunggu_verifikasi_form_apl02';
-            } elseif($ujian->status == 'paket_soal_assigned' and $apl02_status == 'form_terverifikasi') {
+            } elseif(in_array($ujian->status,['paket_soal_assigned', 'menunggu']) and $apl02_status == 'form_terverifikasi') {
                 $ujian_status = 'menunggu_jadwal_ujian';
             } elseif($ujian->status == 'penilaian') {
                 $ujian_status = 'ujian_dalam_penilaian';
@@ -116,12 +117,12 @@ class UjianController extends Controller
         $user = $request->user();
 
         $ujian = UjianAsesiAsesor::with([
-            'userasesi',
-            'userasesi.asesi',
-            'ujianjadwal',
-            'sertifikasi',
-            'soalpaket',
-        ])
+                'userasesi',
+                'userasesi.asesi',
+                'ujianjadwal',
+                'sertifikasi',
+                'soalpaket',
+            ])
             ->select([
                 'ujian_asesi_asesors.*',
                 'user_asesors.name as asesor_name'

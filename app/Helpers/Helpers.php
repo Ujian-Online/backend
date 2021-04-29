@@ -106,10 +106,10 @@ if(!function_exists('apl02_status')) {
         $statsFormTerverifikasi = count($apl02StatusCount['form_terverifikasi'] ?? []);
 
         // Bandingkan Total Status
-        if($statusIsiForm > 0) {
-            $apl02Status = 'isi_form';
-        } else if($statusMenungguVerifikasi > 0) {
+        if($statusMenungguVerifikasi > 0) {
             $apl02Status = 'menunggu_verifikasi';
+        } else if($statusIsiForm > 0) {
+            $apl02Status = 'isi_form';
         } else if($statusFormDitolak > 0) {
             $apl02Status = 'form_ditolak';
         } else if($statsFormTerverifikasi) {
@@ -136,11 +136,11 @@ if(!function_exists('soal_validate')) {
     {
         try {
             return \App\Soal::select(['soals.*'])
-                ->leftJoin('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.id', '=', 'soals.unit_kompetensi_id')
+                ->join('sertifikasi_unit_kompentensis', 'sertifikasi_unit_kompentensis.unit_kompetensi_id', '=', 'soals.unit_kompetensi_id')
                 ->leftJoin('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
                 ->where('soals.id', $soal_id)
                 ->when($unit_kompetensi_id, function($query) use ($unit_kompetensi_id) {
-                    $query->where('unit_kompetensi_id', $unit_kompetensi_id);
+                    $query->where('soals.unit_kompetensi_id', $unit_kompetensi_id);
                 })
                 ->when($sertifikasi_id, function($query) use ($sertifikasi_id) {
                     $query->where('sertifikasis.id', $sertifikasi_id);
