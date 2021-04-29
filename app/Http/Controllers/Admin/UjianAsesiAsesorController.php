@@ -122,17 +122,36 @@ class UjianAsesiAsesorController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param int $id
      *
      * @return Application|Factory|Response|View
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         // Find Data by ID
-        $query = UjianAsesiAsesor::findOrFail($id);
+        $query = UjianAsesiAsesor::with([
+            'userasesi',
+            'userasesi.asesi',
+            'userasesor',
+            'userasesor.asesor',
+            'ujianjadwal',
+            'sertifikasi',
+            'order',
+            'order.tuk'
+        ])
+            ->where('id', $id)->firstOrFail();
+
+        // print mode
+        $printMode = $request->input('print') ? true : false;
+        $pageView = 'admin.ujian.asesi-form';
+
+        if($printMode) {
+            $pageView = 'admin.ujian.persetujuan-asesi-print';
+        }
 
         // return data to view
-        return view('admin.ujian.asesi-form', [
+        return view($pageView, [
             'title'         => 'Tampilkan Detail: ' . $query->id,
             'action'        => '#',
             'isShow'        => route('admin.ujian.asesi.edit', $id),
