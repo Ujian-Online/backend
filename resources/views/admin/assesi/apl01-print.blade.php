@@ -189,7 +189,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="row">
-                                                    <div class="col-1">Email :</div>
+                                                    <div class="col-md-2">Email :</div>
                                                     <div class="col dash">{{ $query->company_email ?? '' }}</div>
                                                 </div>
                                             </div>
