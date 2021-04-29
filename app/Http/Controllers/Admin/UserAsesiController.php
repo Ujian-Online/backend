@@ -130,10 +130,12 @@ class UserAsesiController extends Controller
     {
         // query get data
         $query = UserAsesi::with('asesicustomdata')->where('id', $id)->firstOrFail();
-        // get users list when not found in user asesi and type asesi
-        $users = User::where('id', $query->user_id)->get();
-
         $printMode = $request->input('print');
+        if($printMode) {
+            $users = User::where('id', $query->user_id)->firstOrFail();
+        } else {
+            $users = User::where('id', $query->user_id)->get();
+        }
 
         // return data to view
         return view($printMode ? 'admin.assesi.apl01-print' : 'admin.assesi.form', [
