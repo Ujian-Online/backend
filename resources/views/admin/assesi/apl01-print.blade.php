@@ -154,8 +154,8 @@
                     <li>
                         <span class="text-bold">Data Pekerjaan Sekarang</span>
 
-                        <div class="table-responsive mt-2 mb-2">
-                            <table class="table-sm" style="table-layout: fixed; width: 850px;">
+                        <div class="mt-2 mb-2">
+                            <table class="table-sm">
                                 <tbody>
                                 <tr>
                                     <td width="20%">{{ __('Nama Institusi/ Perusahaan') }}</td>
