@@ -11,7 +11,7 @@
     <div class="container">
         <div class="form-row">
             <div class="form-group col-md-12">
-                <div class="table-responsive mt-2 mb-2">
+                <div class="mt-2 mb-2">
                     <table class="table table-bordered">
                         <tbody>
                             <tr>
@@ -21,12 +21,12 @@
                             </tr>
                             <tr>
                                 <td>Judul</td>
-                                <td>:</td>
+                                <td width="1%">:</td>
                                 <td class="text-bold">{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->title : '' }}</td>
                             </tr>
                             <tr>
                                 <td>Nomor</td>
-                                <td>:</td>
+                                <td width="1%">:</td>
                                 <td class="text-bold">{{ (isset($sertifikasi) and !empty($sertifikasi)) ? $sertifikasi->nomor_skema : '' }}</td>
                             </tr>
                             {{--                    @if(isset($tuk) and !empty($tuk))--}}
@@ -75,6 +75,28 @@
                             {{--                            <td>{{ (isset($order) and !empty($order)) ? \Carbon\Carbon::parse($order->created_at)->format('d F Y') : '' }}</td>--}}
                             {{--                        </tr>--}}
                             {{--                    @endif--}}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-2 mb-2">
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <td class="bg-orange text-bold">
+                                PANDUAN ASESMEN MANDIRI
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="text-bold">Instruksi:</span>
+                                <ul>
+                                    <li>Baca setiap pertanyaan di kolom sebelah kiri</li>
+                                    <li>Beri tanda centang (√) pada kotak jika Anda yakin dapat melakukan tugas yang dijelaskan.</li>
+                                    <li>Isi kolom di sebelah kanan dengan mendaftar bukti yang Anda miliki untuk menunjukkan bahwa Anda melakukan tugas-tugas ini.</li>
+                                </ul>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -163,7 +185,7 @@
                                 </td>
                                 <td>
                                     <p>Tanggal:</p>
-                                    <p>{{ now()->format('d-m-Y') }}</p>
+                                    <p>{{ now()->format('d/m/Y') }}</p>
                                 </td>
                                 <td>
                                     <p>Tanda Tangan Asesi:</p>
@@ -190,7 +212,7 @@
                                 </td>
                                 <td>
                                     <p>Tanda Tangan dan Tanggal:</p>
-                                    <p>{{ now()->format('d-m-Y') }}</p>
+                                    <p>{{ now()->format('d/m/Y') }}</p>
                                     <p>
                                         @if(isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor) and !empty($ujianasesiasesor->userasesor->media_url_sign_user))
                                             <img height="70px" width="70px" src="{{ (isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor)) ? $ujianasesiasesor->userasesor->media_url_sign_user : '' }}">
