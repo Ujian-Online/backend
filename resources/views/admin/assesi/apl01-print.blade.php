@@ -10,6 +10,8 @@
 @section('body')
     <div class="container">
         <div class="form-row">
+            <h3>FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h3>
+
             <div class="form-group col-md-12">
 
                 <p class="text-bold">Bagian 1 : Rincian Data Pemohon Sertifikasi</p>
@@ -80,7 +82,7 @@
                                                 <div class="col-md-6">
                                                     <div class="row">
                                                         <div class="col-md-3">Rumah:</div>
-                                                        <div class="col dash">{{ $query->phone_number ?? '' }}</div>
+                                                        <div class="col dash"></div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -92,7 +94,7 @@
                                                 <div class="col-md-6">
                                                     <div class="row">
                                                         <div class="col-md-3">Kantor:</div>
-                                                        <div class="col dash">{{ $query->phone_number ?? '' }}</div>
+                                                        <div class="col dash"></div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -184,7 +186,7 @@
                                             <div class="col-md-6">
                                                 <div class="row">
                                                     <div class="col-2">Fax :</div>
-                                                    <div class="col dash">{{ $query->company_phone ?? '' }}</div>
+                                                    <div class="col dash"></div>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -203,36 +205,35 @@
                 </ol>
                 </p>
 
-
-                <h3>Asesi Custom Data</h3>
+                <p class="text-bold">Bagian 2 : Bukti Kelengkapan Pemohon</p>
+                <p class="text-bold">Bukti Persyaratan Dasar Pemohon</p>
 
                 <div class="mt-2 mb-2">
                     <table class="table table-bordered">
                         <thead>
-                        <tr>
-                            <th width="40%">Title</th>
-                            <th width="25%">Data</th>
-                            <th width="10%">Verified</th>
-                            <th width="30%">Vertification Note</th>
-                        </tr>
+                            <tr>
+                                <th rowspan="2" width="5%" class="text-center" style="vertical-align: middle;">No.</th>
+                                <th rowspan="2" width="40%" class="text-center" style="vertical-align: middle;">Bukti Persyaratan Dasar</th>
+                                <th colspan="2" width="25%" class="text-center" style="vertical-align: middle;">Ada</th>
+                                <th rowspan="2" width="25%" class="text-center" style="vertical-align: middle;">Tidak Ada</th>
+                            </tr>
+                            <tr>
+                                <th width="15%" class="text-center" style="vertical-align: middle;">Memenuhi Syarat </th>
+                                <th width="15%" class="text-center" style="vertical-align: middle;">Tidak Memenuhi Syarat </th>
+                            </tr>
                         </thead>
                         <tbody>
 
-                        @foreach($query->asesicustomdata as $asesicustomdata)
+                        @foreach($query->asesicustomdata as $key => $asesicustomdata)
                             <tr id="asesicustomdata-{{ $asesicustomdata->id }}">
+                                <th scope="row" class="text-center" style="vertical-align: middle;">{{ $key+1 }}.</th>
                                 <th scope="row">{{ $asesicustomdata->title }}</th>
-                                <td>
-                                    @if(in_array($asesicustomdata->input_type, ['upload_image', 'upload_pdf']))
-                                        @if(!empty($asesicustomdata->value))
-                                            {{$asesicustomdata->value}}
-                                        @else
-                                            File Belum di Unggah
-                                        @endif
-                                    @else
-                                        {{ $asesicustomdata->value }}
-                                    @endif
+                                <td class="text-center" style="vertical-align: middle;">
+                                    <input type="checkbox" @if($asesicustomdata->is_verified) {{__('checked')}} @endif onclick="return false;" />
                                 </td>
-                                <td>{{ $asesicustomdata->is_verified ? 'YES' : 'NO' }}</td>
+                                <td class="text-center" style="vertical-align: middle;">
+                                    <input type="checkbox" @if(!$asesicustomdata->is_verified) {{__('checked')}} @endif onclick="return false;" />
+                                </td>
                                 <td>{{ $asesicustomdata->verification_note }}</td>
                             </tr>
                         @endforeach
@@ -246,5 +247,5 @@
 @endsection
 
 @section('js')
-{{--    <script>window.print();</script>--}}
+    <script>window.print();</script>
 @endsection
