@@ -241,6 +241,67 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="mt-2 mb-2">
+                    <table class="table table-bordered table-sm">
+                        <tbody>
+                            <tr>
+                                <td rowspan="4" width="50%">
+                                    <b>Rekomendasi (diisi oleh LSP):</b><br/>
+                                    Berdasarkan ketentuan persyaratan dasar, maka pemohon:<br/>
+                                    @if($query->is_verified)
+                                        <b>Diterima/ <span style="text-decoration: line-through;">Tidak Diterima</span></b>
+                                    @else
+                                        <b><span style="text-decoration: line-through;">Diterima</span>/ Tidak diterima</b>
+                                    @endif
+                                    *) sebagai peserta  sertifikasi<br/>
+                                    * coret yang tidak sesuai
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" class="text-bold">Pemohon/ Kandidat :</td>
+                            </tr>
+                            <tr>
+                                <td width="20%">Nama</td>
+                                <td width="30%">{{ $query->name }}</td>
+                            </tr>
+                            <tr>
+                                <td width="20%">Tanda Tangan/ Tanggal</td>
+                                <td width="30%">
+                                    <p>
+                                        @if(isset($users->media_url_sign_user) and !empty($users->media_url_sign_user))
+                                            <img src="{{ $users->media_url_sign_user }}">
+                                        @else
+                                            {{ __('-') }}
+                                        @endif
+                                    </p>
+                                    <p>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold">Catatan:</td>
+                                <td colspan="2" class="text-bold">Admin LSP:</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4" width="50%">
+                                    {!! $query->verification_note !!}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="20%">Nama</td>
+                                <td width="30%"></td>
+                            </tr>
+                            <tr>
+                                <td width="20%">No Reg</td>
+                                <td width="30%"></td>
+                            </tr>
+                            <tr>
+                                <td width="20%">Tanda Tangan/ Tanggal</td>
+                                <td width="30%"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
