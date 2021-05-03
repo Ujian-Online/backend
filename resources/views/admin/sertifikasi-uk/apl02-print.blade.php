@@ -1,6 +1,6 @@
 @extends('layouts.adminlte.master')
 @section('title')
-    {{ __('Preview FR.APL.02') }} - {{ $query->title }}
+    {{ __('Draft FR.APL.02') }} - {{ $query->title }}
 @endsection
 
 @section('css')
@@ -10,6 +10,8 @@
 @section('body')
     <div class="container">
         <div class="form-row">
+            <h3>FR.APL.02. ASESMEN MANDIRI</h3>
+
             <div class="form-group col-md-12">
                 <div class="mt-2 mb-2">
                     <table class="table table-bordered">
@@ -28,6 +30,28 @@
                             <td>Nomor</td>
                             <td width="1%">:</td>
                             <td class="text-bold">{{ $query->nomor_skema ?? '' }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-2 mb-2">
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <td class="bg-orange text-bold">
+                                PANDUAN ASESMEN MANDIRI
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="text-bold">Instruksi:</span>
+                                <ul>
+                                    <li>Baca setiap pertanyaan di kolom sebelah kiri</li>
+                                    <li>Beri tanda centang (√) pada kotak jika Anda yakin dapat melakukan tugas yang dijelaskan.</li>
+                                    <li>Isi kolom di sebelah kanan dengan mendaftar bukti yang Anda miliki untuk menunjukkan bahwa Anda melakukan tugas-tugas ini.</li>
+                                </ul>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
