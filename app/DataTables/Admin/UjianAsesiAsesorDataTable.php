@@ -54,6 +54,7 @@ class UjianAsesiAsesorDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
+                    'url_print' => route('admin.ujian.asesi.show', $query->id) . '?print=true',
                     'url_show' => route('admin.ujian.asesi.show', $query->id),
                     'url_edit' => route('admin.ujian.asesi.edit', $query->id),
                     'url_destroy' => route('admin.ujian.asesi.destroy', $query->id),

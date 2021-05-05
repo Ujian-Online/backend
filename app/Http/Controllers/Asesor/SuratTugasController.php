@@ -53,13 +53,36 @@ class SuratTugasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        // get user login
+        $user = $request->user();
+
         // Find Data by ID
-        $query = UjianAsesiAsesor::findOrFail($id);
+        $query = UjianAsesiAsesor::with([
+            'userasesi',
+            'userasesi.asesi',
+            'userasesor',
+            'userasesor.asesor',
+            'ujianjadwal',
+            'sertifikasi',
+            'order',
+            'order.tuk'
+        ])
+            ->where('id', $id)
+            ->where('asesor_id', $user->id)
+            ->firstOrFail();
+
+        // print mode
+        $printMode = $request->input('print') ? true : false;
+        $pageView = 'admin.ujian.asesi-form';
+
+        if($printMode) {
+            $pageView = 'admin.ujian.persetujuan-asesi-print';
+        }
 
         // return data to view
-        return view('admin.ujian.asesi-form', [
+        return view($pageView, [
             'title'         => 'Tampilkan Detail: ' . $query->id,
             'action'        => '#',
             'isShow'        => route('admin.surat-tugas.edit', $id),

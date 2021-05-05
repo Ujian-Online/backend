@@ -75,6 +75,9 @@ Route::middleware(['auth'])
             Route::patch('asesi/apl02/update/{userid}/{sertifikasiid}', 'Admin\AsesiUnitKompetensiDokumenController@apl02ViewUpdate')
                 ->name('asesi.apl02.viewupdate');
             Route::resource('asesi/apl02', 'Admin\AsesiUnitKompetensiDokumenController', ['as' => 'asesi']);
+
+            // draft apl02
+            Route::resource('draft-apl02', 'Admin\DraftAPL02Controller', ['as' => 'sertifikasi'])->only(['index', 'show']);
         });
 
         // Asesor Access Only

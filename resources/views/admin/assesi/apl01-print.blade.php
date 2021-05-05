@@ -10,6 +10,8 @@
 @section('body')
     <div class="container">
         <div class="form-row">
+            <h3>FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h3>
+
             <div class="form-group col-md-12">
 
                 <p class="text-bold">Bagian 1 : Rincian Data Pemohon Sertifikasi</p>
@@ -21,8 +23,8 @@
                         <span class="text-bold">Data Pribadi</span>
 
                         <div>
-                            <div class="table-responsive mt-2 mb-2">
-                                <table class="table-sm" style="table-layout: fixed; width: 850px;">
+                            <div class="mt-2 mb-2">
+                                <table class="table-sm">
                                     <tbody>
                                     <tr>
                                         <td width="20%">{{ trans('form.name') }}</td>
@@ -80,7 +82,7 @@
                                                 <div class="col-md-6">
                                                     <div class="row">
                                                         <div class="col-md-3">Rumah:</div>
-                                                        <div class="col dash">{{ $query->phone_number ?? '' }}</div>
+                                                        <div class="col dash"></div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -92,7 +94,7 @@
                                                 <div class="col-md-6">
                                                     <div class="row">
                                                         <div class="col-md-3">Kantor:</div>
-                                                        <div class="col dash">{{ $query->phone_number ?? '' }}</div>
+                                                        <div class="col dash"></div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -152,8 +154,8 @@
                     <li>
                         <span class="text-bold">Data Pekerjaan Sekarang</span>
 
-                        <div class="table-responsive mt-2 mb-2">
-                            <table class="table-sm" style="table-layout: fixed; width: 850px;">
+                        <div class="mt-2 mb-2">
+                            <table class="table-sm">
                                 <tbody>
                                 <tr>
                                     <td width="20%">{{ __('Nama Institusi/ Perusahaan') }}</td>
@@ -184,7 +186,7 @@
                                             <div class="col-md-6">
                                                 <div class="row">
                                                     <div class="col-2">Fax :</div>
-                                                    <div class="col dash">{{ $query->company_phone ?? '' }}</div>
+                                                    <div class="col dash"></div>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -203,40 +205,100 @@
                 </ol>
                 </p>
 
+                <p class="text-bold">Bagian 2 : Bukti Kelengkapan Pemohon</p>
+                <p class="text-bold">Bukti Persyaratan Dasar Pemohon</p>
 
-                <h3>Asesi Custom Data</h3>
-
-                <div class="table-responsive mt-2 mb-2">
+                <div class="mt-2 mb-2">
                     <table class="table table-bordered">
                         <thead>
-                        <tr>
-                            <th width="40%">Title</th>
-                            <th width="25%">Data</th>
-                            <th width="10%">Verified</th>
-                            <th width="30%">Vertification Note</th>
-                        </tr>
+                            <tr>
+                                <th rowspan="2" width="5%" class="text-center" style="vertical-align: middle;">No.</th>
+                                <th rowspan="2" width="40%" class="text-center" style="vertical-align: middle;">Bukti Persyaratan Dasar</th>
+                                <th colspan="2" width="25%" class="text-center" style="vertical-align: middle;">Ada</th>
+                                <th rowspan="2" width="25%" class="text-center" style="vertical-align: middle;">Tidak Ada</th>
+                            </tr>
+                            <tr>
+                                <th width="15%" class="text-center" style="vertical-align: middle;">Memenuhi Syarat </th>
+                                <th width="15%" class="text-center" style="vertical-align: middle;">Tidak Memenuhi Syarat </th>
+                            </tr>
                         </thead>
                         <tbody>
 
-                        @foreach($query->asesicustomdata as $asesicustomdata)
+                        @foreach($query->asesicustomdata as $key => $asesicustomdata)
                             <tr id="asesicustomdata-{{ $asesicustomdata->id }}">
+                                <th scope="row" class="text-center" style="vertical-align: middle;">{{ $key+1 }}.</th>
                                 <th scope="row">{{ $asesicustomdata->title }}</th>
-                                <td>
-                                    @if(in_array($asesicustomdata->input_type, ['upload_image', 'upload_pdf']))
-                                        @if(!empty($asesicustomdata->value))
-                                            {{$asesicustomdata->value}}
-                                        @else
-                                            File Belum di Unggah
-                                        @endif
-                                    @else
-                                        {{ $asesicustomdata->value }}
-                                    @endif
+                                <td class="text-center" style="vertical-align: middle;">
+                                    <input type="checkbox" @if($asesicustomdata->is_verified) {{__('checked')}} @endif onclick="return false;" />
                                 </td>
-                                <td>{{ $asesicustomdata->is_verified ? 'YES' : 'NO' }}</td>
+                                <td class="text-center" style="vertical-align: middle;">
+                                    <input type="checkbox" @if(!$asesicustomdata->is_verified) {{__('checked')}} @endif onclick="return false;" />
+                                </td>
                                 <td>{{ $asesicustomdata->verification_note }}</td>
                             </tr>
                         @endforeach
 
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-2 mb-2">
+                    <table class="table table-bordered table-sm">
+                        <tbody>
+                            <tr>
+                                <td rowspan="4" width="50%">
+                                    <b>Rekomendasi (diisi oleh LSP):</b><br/>
+                                    Berdasarkan ketentuan persyaratan dasar, maka pemohon:<br/>
+                                    @if($query->is_verified)
+                                        <b>Diterima/ <span style="text-decoration: line-through;">Tidak Diterima</span></b>
+                                    @else
+                                        <b><span style="text-decoration: line-through;">Diterima</span>/ Tidak diterima</b>
+                                    @endif
+                                    *) sebagai peserta  sertifikasi<br/>
+                                    * coret yang tidak sesuai
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" class="text-bold">Pemohon/ Kandidat :</td>
+                            </tr>
+                            <tr>
+                                <td width="20%">Nama</td>
+                                <td width="30%">{{ $query->name }}</td>
+                            </tr>
+                            <tr>
+                                <td width="20%">Tanda Tangan/ Tanggal</td>
+                                <td width="30%">
+                                    <p>
+                                        @if(isset($users->media_url_sign_user) and !empty($users->media_url_sign_user))
+                                            <img src="{{ $users->media_url_sign_user }}">
+                                        @else
+                                            {{ __('-') }}
+                                        @endif
+                                    </p>
+                                    <p>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold">Catatan:</td>
+                                <td colspan="2" class="text-bold">Admin LSP:</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4" width="50%">
+                                    {!! $query->verification_note !!}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="20%">Nama</td>
+                                <td width="30%"></td>
+                            </tr>
+                            <tr>
+                                <td width="20%">No Reg</td>
+                                <td width="30%"></td>
+                            </tr>
+                            <tr>
+                                <td width="20%">Tanda Tangan/ Tanggal</td>
+                                <td width="30%"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -246,5 +308,5 @@
 @endsection
 
 @section('js')
-{{--    <script>window.print();</script>--}}
+    <script>window.print();</script>
 @endsection

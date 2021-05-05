@@ -165,6 +165,12 @@ return [
                         'active'    => 'admin.sertifikasi.uk.*',
                     ],
                     [
+                        'title'     => 'Draft APL02',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.draft-apl02.index',
+                        'active'    => 'admin.sertifikasi.draft-apl02.*',
+                    ],
+                    [
                         'title'     => 'Sertifikasi Ke TUK',
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.tuk.index',
@@ -408,6 +414,12 @@ return [
                         'icon'      => 'fas fa-list-ul',
                         'route'     => 'admin.sertifikasi.uk.index',
                         'active'    => 'admin.sertifikasi.uk.*',
+                    ],
+                    [
+                        'title'     => 'Draft APL02',
+                        'icon'      => 'fas fa-list-ul',
+                        'route'     => 'admin.sertifikasi.draft-apl02.index',
+                        'active'    => 'admin.sertifikasi.draft-apl02.*',
                     ],
                 ],
             ],

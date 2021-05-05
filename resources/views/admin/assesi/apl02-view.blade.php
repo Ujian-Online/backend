@@ -20,8 +20,8 @@
         <div class="form-group col-md-12">
 
             @if(isset($isShow))
-                <button class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
-                    <i class="fas fa-print"></i> Cetak APL-02</a>
+                <button type="button" class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
+                    <i class="fas fa-print"></i> Cetak FR.APL.02</a>
                 </button>
             @endif
 
