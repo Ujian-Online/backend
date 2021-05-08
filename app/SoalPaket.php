@@ -19,6 +19,33 @@ class SoalPaket extends Model
         'durasi_ujian',
     ];
 
+    public function getDurasiUjianAttribute($value)
+    {
+        $date = \Carbon\Carbon::now();
+        $dateNow = $date->toDateString();
+        $dateTime = $dateNow . ' ' . $value;
+        $intMinutes = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $dateTime)
+            ->diffInMinutes($date->startOfDay());
+
+        return $intMinutes;
+    }
+
+    /**
+     * Convert Durasi Ujian
+     * Dari Init (Number) Menit ke Time Format
+     * Example 120 Minutes to 02:00:00
+     *
+     * @param $value
+     * @return $void
+     */
+    public function setDurasiUjianAttribute($value)
+    {
+        $date = \Carbon\Carbon::now()->startOfDay();
+        $dateWithMinutes = $date->addMinutes($value);
+
+        $this->attributes['durasi_ujian'] = $dateWithMinutes->toTimeString();
+    }
+
     /**
      * Relation to Table Sertifikasi
      *

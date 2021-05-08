@@ -22,9 +22,9 @@
         </div>
 
         <div class="form-group col-md-6">
-            <label for="durasi_ujian">Durasi Ujian</label>
-            <input type="time" class="form-control @error('durasi_ujian') is-invalid @enderror" name="durasi_ujian" id="durasi_ujian" placeholder="Durasi Ujian" value="{{ old('durasi_ujian') ?? $query->durasi_ujian ?? '' }}" @if(isset($isShow)) readonly @endif>
-            <p class="text-muted">Catatan: Jika Durasi Ujian 5 Jam, maka pilih 05.00</p>
+            <label for="durasi_ujian">Durasi Ujian (Dalam Menit)</label>
+            <input type="number" class="form-control @error('durasi_ujian') is-invalid @enderror" name="durasi_ujian" id="durasi_ujian" placeholder="Durasi Ujian" value="{{ old('durasi_ujian') ?? $query->durasi_ujian ?? '' }}" @if(isset($isShow)) readonly @endif>
+            <p class="text-muted">Catatan: Durasi dalam menit (contoh 2 jam isinya 120)</p>
 
             @error('durasi_ujian')
             <div class="alert alert-danger">{{ $message }}</div>
