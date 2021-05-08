@@ -62,7 +62,7 @@ class SoalPaketController extends Controller
         // validate input
         $request->validate([
             'title'             => 'required',
-            'durasi_ujian'      => 'required',
+            'durasi_ujian'      => 'required|min:1|max:1440',
             'sertifikasi_id'    => 'required',
         ]);
 
@@ -231,7 +231,7 @@ class SoalPaketController extends Controller
         // validate input
         $request->validate([
             'title'             => 'required',
-            'durasi_ujian'      => 'required',
+            'durasi_ujian'      => 'required|min:1|max:1440',
             'sertifikasi_id'    => 'required',
         ]);
 
