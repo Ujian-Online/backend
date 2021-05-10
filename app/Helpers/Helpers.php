@@ -151,3 +151,16 @@ if(!function_exists('soal_validate')) {
         }
     }
 }
+
+if(!function_exists('durasi_ujian')) {
+    function durasi_ujian($value)
+    {
+        $date = \Carbon\Carbon::now();
+        $dateNow = $date->toDateString();
+        $dateTime = $dateNow . ' ' . $value;
+        $intMinutes = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $dateTime)
+            ->diffInMinutes($date->startOfDay());
+
+        return $intMinutes;
+    }
+}
