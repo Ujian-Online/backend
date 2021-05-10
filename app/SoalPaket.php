@@ -19,17 +19,6 @@ class SoalPaket extends Model
         'durasi_ujian',
     ];
 
-    public function getDurasiUjianAttribute($value)
-    {
-        $date = \Carbon\Carbon::now();
-        $dateNow = $date->toDateString();
-        $dateTime = $dateNow . ' ' . $value;
-        $intMinutes = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $dateTime)
-            ->diffInMinutes($date->startOfDay());
-
-        return $intMinutes;
-    }
-
     /**
      * Convert Durasi Ujian
      * Dari Init (Number) Menit ke Time Format

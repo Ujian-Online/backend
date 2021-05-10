@@ -24,6 +24,9 @@ class SoalPaketDataTable extends DataTable
             ->addColumn('total_soal', function ($query) {
                 return (isset($query->soalpaketitem) and !empty($query->soalpaketitem)) ? count($query->soalpaketitem) : 0;
             })
+            ->editColumn('durasi_ujian', function ($query) {
+                return $query->durasi_ujian ? durasi_ujian($query->durasi_ujian) : null;
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
