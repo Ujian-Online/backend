@@ -1,5 +1,9 @@
 @extends('layouts.pageForm')
 
+@section('css')
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+@endsection
+
 @section('form')
     @include('layouts.alert')
 
@@ -53,6 +57,7 @@
 @endsection
 
 @section('js')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script>
         $('select').select2({
             theme: 'bootstrap4',
