@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            @error('tanggal')
+            @error('jam_mulai')
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
