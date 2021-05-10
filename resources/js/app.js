@@ -9,3 +9,4 @@ require('datatables.net-responsive-bs4');
 require('datatables.net-fixedcolumns-bs4');
 
 require('select2');
+require('tempusdominus-bootstrap-4');

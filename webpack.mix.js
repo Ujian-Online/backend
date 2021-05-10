@@ -22,7 +22,8 @@ mix.js('resources/js/app.js', 'public/js/app.js')
 		'datatables.net-buttons-bs4',
 		'datatables.net-responsive-bs4',
         'datatables.net-fixedcolumns-bs4',
-        'select2'
+        'select2',
+        'tempusdominus-bootstrap-4',
 	]);
 
 mix.scripts('resources/js/admin.js', 'public/js/admin.js');
