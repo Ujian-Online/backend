@@ -7,7 +7,7 @@
         <div class="info">
             <a href="#" class="d-block">{{ ucfirst(explode("@", Auth::user()->email)[0]) }}</a>
             @if(Auth::user()->can("isTuk"))
-                <a href="#" class="d-block" style="white-space: normal; word-wrap: break-word;">{{ ucwords(Auth::user()->tuk->tuk->title) }}</a>
+                <a href="#" class="d-block" style="white-space: normal; word-wrap: break-word;">TUK: {{ ucwords(Auth::user()->tuk->tuk->title) }}</a>
             @else
                 <a href="#" class="d-block" style="white-space: normal; word-wrap: break-word;">{{ strtoupper(Auth::user()->type) }}</a>
             @endif
