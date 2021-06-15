@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Redis;
+
 if (!function_exists('gravatar')) {
     /**
      * Generate Gravatar URL
@@ -162,5 +164,30 @@ if(!function_exists('durasi_ujian')) {
             ->diffInMinutes($date->startOfDay());
 
         return $intMinutes;
+    }
+}
+
+if(!function_exists(redis_check)) {
+    /**
+     * Check apakah redis key ditemukan atau tidak
+     *
+     * @param $key string
+     * @return bool true = send email, false = don't send email
+     */
+    function redis_check($key) {
+        // check redis data by redis key
+        $getStatus = Redis::get($key);
+
+        // if redis data not found, then set redis
+        // and sending email to asesor
+        if(!$getStatus) {
+            Redis::set($key, "ok", 'EX', (5 * 60));
+
+            // if true, can send email
+            return true;
+        } else {
+            // if false, don't send email
+            return false;
+        }
     }
 }
