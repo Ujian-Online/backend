@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\DataTables\Admin\SertifikasiUnitKompentensiDataTable;
+use App\DataTables\Asesor\UnitKompetensiDataTable;
 use App\Http\Controllers\Controller;
 use App\Sertifikasi;
 use App\SertifikasiUnitKompentensi;
@@ -25,12 +26,19 @@ class SertifikasiUnitKompetensiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SertifikasiUnitKompentensiDataTable $dataTables
-     *
      * @return mixed
      */
-    public function index(SertifikasiUnitKompentensiDataTable $dataTables)
+    public function index(Request $request)
     {
+        // get user login
+        $user = $request->user();
+
+        $dataTables = new SertifikasiUnitKompentensiDataTable();
+
+        if($user->can("isAssesor")) {
+            $dataTables = new UnitKompetensiDataTable();
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Unit Kompetensi Lists',
