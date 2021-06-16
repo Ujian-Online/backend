@@ -20,12 +20,19 @@ class SoalController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SoalDataTable $dataTables
-     *
      * @return mixed
      */
-    public function index(SoalDataTable $dataTables)
+    public function index(Request $request)
     {
+        // get user login
+        $user = $request->user();
+
+        $dataTables = new SoalDataTable();
+
+        if($user->can("isAssesor")) {
+            $dataTables = new \App\DataTables\Asesor\SoalDataTable();
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Soal Lists'

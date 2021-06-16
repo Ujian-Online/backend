@@ -63,7 +63,6 @@ Route::middleware(['auth'])
 
 
             Route::get('soal/search', 'Admin\SoalController@search')->name('soal.search');
-            Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal']);
             Route::get('soal/paket/search', 'Admin\SoalPaketController@search')->name('soal.paket.search');
             Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
 
@@ -112,6 +111,8 @@ Route::middleware(['auth'])
 
             Route::resource('asesi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'asesi']);
 
+            Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal'])->except(['index']);
+
             Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
             Route::get('ujian/asesi-waiting', 'Admin\UjianAsesiAsesorController@asesiBelumAdaAsesorIndex')->name('ujian.asesi.waiting.index');
             Route::resource('ujian/asesi', 'Admin\UjianAsesiAsesorController', ['as' => 'ujian'])->except('index');
@@ -122,7 +123,8 @@ Route::middleware(['auth'])
             Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
         });
 
-        Route::get('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController@index')->name('sertifikasi.uk.index')->middleware('can:isAdminTukAsesor');
+        Route::get('soal/daftar', 'Admin\SoalController@index')->name('soal.daftar.index')->middleware('can:isAdminAsesor');
+        Route::get('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController@index')->name('sertifikasi.uk.index')->middleware('can:isAdminAsesor');
         Route::get('sertifikasi', 'Admin\SertifikasiController@index')->name('sertifikasi.index')->middleware('can:isAdminTukAsesor');
         Route::get('sertifikasi/{id}', 'Admin\SertifikasiController@show')->name('sertifikasi.show')->middleware('can:isAdminTukAsesor');
     });
