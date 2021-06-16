@@ -167,7 +167,7 @@ if(!function_exists('durasi_ujian')) {
     }
 }
 
-if(!function_exists(redis_check)) {
+if(!function_exists("redis_check")) {
     /**
      * Check apakah redis key ditemukan atau tidak
      *
