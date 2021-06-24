@@ -191,3 +191,43 @@ if(!function_exists("redis_check")) {
         }
     }
 }
+
+if(!function_exists('re_captcha_validate')) {
+    function re_captcha_validate($key, $response) {
+        try {
+            $data = [
+                'secret' => $key,
+                'response' => $response
+            ];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // running curl
+            $result = curl_exec($ch);
+
+            // throw error
+            if (curl_errno($ch)) {
+                throw new Exception(curl_error($ch));
+            }
+
+            // stop connection
+            curl_close($ch);
+
+            // return result request
+            $response = json_decode($result);
+
+            if($response->success) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+}
