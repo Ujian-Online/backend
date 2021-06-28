@@ -472,15 +472,17 @@ class AsesiUnitKompetensiDokumenController extends Controller
             $name = $user->asesi->name;
         }
 
-        // update verification
-        AsesiUnitKompetensiDokumenVerification::where('asesi_id', $userid)
-            ->where('sertifikasi_id', $sertifikasiid)
-            ->update([
-                'asesor_id' => $whoLogin->id,
-                'recommendation' => $request->input('recommendation'),
-                'jenis_pengalaman' => $request->input('jenis_pengalaman'),
-                'asesor_verification_date' => \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('asesor_verification_date'))->format('Y-m-d'),
-            ]);
+        // update verification if update from asesor
+        if($whoLogin->type == 'assesor') {
+            AsesiUnitKompetensiDokumenVerification::where('asesi_id', $userid)
+                ->where('sertifikasi_id', $sertifikasiid)
+                ->update([
+                    'asesor_id' => $whoLogin->id,
+                    'recommendation' => $request->input('recommendation'),
+                    'jenis_pengalaman' => $request->input('jenis_pengalaman'),
+                    'asesor_verification_date' => \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('asesor_verification_date'))->format('Y-m-d'),
+                ]);
+        }
 
         // redirect
         return redirect()
