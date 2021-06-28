@@ -231,47 +231,27 @@
                                     <td colspan="2" rowspan="5">Tujuan Asesmen</td>
                                     <td width="1%" rowspan="5">:</td>
                                     <td class="text-bold">
-                                        @if($query->singleorder->tipe_sertifikasi !== 'baru')
-                                            <span style="text-decoration: line-through;">Sertifikasi</span>
-                                        @else
-                                            <span>Sertifikasi</span>
-                                        @endif
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'baru') {{__('checked')}} @endif onclick="return false;" /> Sertifikasi
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-bold">
-                                        @if($query->singleorder->tipe_sertifikasi !== 'perpanjang')
-                                            <span style="text-decoration: line-through;">Sertifikasi Ulang</span>
-                                        @else
-                                            <span>Sertifikasi Ulang</span>
-                                        @endif
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'perpanjang') {{__('checked')}} @endif onclick="return false;" /> Sertifikasi Ulang
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-bold">
-                                        @if($query->singleorder->tipe_sertifikasi !== 'pkt')
-                                            <span style="text-decoration: line-through;">Pengakuan Kompetensi Terkini (PKT)</span>
-                                        @else
-                                            <span>Pengakuan Kompetensi Terkini (PKT)</span>
-                                        @endif
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'pkt') {{__('checked')}} @endif onclick="return false;" /> Pengakuan Kompetensi Terkini (PKT)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-bold">
-                                        @if($query->singleorder->tipe_sertifikasi !== 'pkt')
-                                            <span style="text-decoration: line-through;">Rekognisi Pembelajaran Lampau</span>
-                                        @else
-                                            <span>Rekognisi Pembelajaran Lampau</span>
-                                        @endif
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'rpl') {{__('checked')}} @endif onclick="return false;" /> Rekognisi Pembelajaran Lampau
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-bold">
-                                        @if($query->singleorder->tipe_sertifikasi !== 'lainnya')
-                                            <span style="text-decoration: line-through;">Lainnya</span>
-                                        @else
-                                            <span>Lainnya</span>
-                                        @endif
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'lainnya') {{__('checked')}} @endif onclick="return false;" /> Lainnya
                                     </td>
                                 </tr>
                             </tbody>
