@@ -150,22 +150,23 @@ class UserAsesiController extends Controller
                 ->where('user_asesis.id', $id)
                 ->where('orders.id', $orderId)
                 ->firstOrFail();
+
+            // get user detail
+            $users = User::where('id', $query->user_id)->firstOrFail();
         } else {
             // query get data
             $query = $query->with([
-                    'asesicustomdata',
-                    'order',
-                    'order.sertifikasi',
-                    'order.tuk'
-                ])
+                'asesicustomdata',
+                'order',
+                'order.sertifikasi',
+                'order.tuk'
+            ])
                 ->where('id', $id)
                 ->firstOrFail();
+
+            // get user detail
+            $users = User::where('id', $query->user_id)->get();
         }
-
-//        return $query;
-
-        // get user detail
-        $users = User::where('id', $query->user_id)->firstOrFail();
 
         // return data to view
         return view($printMode ? 'admin.assesi.apl01-print' : 'admin.assesi.form', [
