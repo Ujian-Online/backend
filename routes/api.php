@@ -50,6 +50,7 @@ Route::name('api.')
 
                 Route::get('apl02', 'Api\Apl02Controller@index')->name('apl02.index');
                 Route::post('apl02', 'Api\Apl02Controller@updateElement')->name('apl02.updateElement');
+                Route::post('apl02/done', 'Api\Apl02Controller@sendEmailApl02')->name('apl02.sendEmailApl02');
                 Route::get('apl02/{id}', 'Api\Apl02Controller@show')->name('apl02.show');
                 Route::delete('apl02/{id}', 'Api\Apl02Controller@deleteElement')->name('apl02.deleteElement');
 

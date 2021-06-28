@@ -183,11 +183,11 @@
                             <tr>
                                 <td>
                                     <p>Nama Asesi:</p>
-                                    <p>{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '' }}</p>
+                                    <p>{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '-' }}</p>
                                 </td>
                                 <td>
                                     <p>Tanggal:</p>
-                                    <p>{{ now()->format('d/m/Y') }}</p>
+                                    <p>{{ $apl02_verification && $apl02_verification->asesi_verification_date ? \Carbon\Carbon::parse($apl02_verification->asesi_verification_date)->format('d/m/Y') : '-' }}</p>
                                 </td>
                                 <td>
                                     <p>Tanda Tangan Asesi:</p>
@@ -210,11 +210,11 @@
                                 </td>
                                 <td>
                                     <p>Rekomendasi:</p>
-                                    <p>{{ __('Asesmen dapat dilanjutkan/ tidak dapat dilanjutkan') }}</p>
+                                    <p>{{ $apl02_verification ? $apl02_verification->recommendation : '-' }}</p>
                                 </td>
                                 <td>
                                     <p>Tanda Tangan dan Tanggal:</p>
-                                    <p>{{ now()->format('d/m/Y') }}</p>
+                                    <p>{{ $apl02_verification && $apl02_verification->asesor_verification_date ? \Carbon\Carbon::parse($apl02_verification->asesor_verification_date)->format('d/m/Y') : '-' }}</p>
                                     <p>
                                         @if(isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor) and !empty($ujianasesiasesor->userasesor->media_url_sign_user))
                                             <img height="70px" width="70px" src="{{ (isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor)) ? $ujianasesiasesor->userasesor->media_url_sign_user : '' }}">

@@ -163,7 +163,7 @@
                                         "example": "new"
                                     },
                                     "value": {
-                                        "description": "Value ini berbeda-beda inputannya,\r\n     *                         tergantung dari custom data, jika file upload, maka berupa file ekstensi: JPG/JPEG/PNG/PDF,\r\n     *                          jika dropdown maka sesuai value dari dropdown_option, jika text, maka text biasa.",
+                                        "description": "Value ini berbeda-beda inputannya,\n     *                         tergantung dari custom data, jika file upload, maka berupa file ekstensi: JPG/JPEG/PNG/PDF,\n     *                          jika dropdown maka sesuai value dari dropdown_option, jika text, maka text biasa.",
                                         "type": "file",
                                         "example": "scan_ijazah.pdf"
                                     }
@@ -310,6 +310,43 @@
                         "description": "OK"
                     }
                 }
+            }
+        },
+        "/api/apl02/done": {
+            "post": {
+                "tags": [
+                    "APL02"
+                ],
+                "summary": "Send Email APL02",
+                "operationId": "App\\Http\\Controllers\\Api\\Apl02Controller::sendEmailApl02",
+                "requestBody": {
+                    "description": "Send Email After Input APL02",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "sertifikasi_id": {
+                                        "description": "Sertifikasi ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
             }
         },
         "/api/login": {

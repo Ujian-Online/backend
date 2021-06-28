@@ -25,7 +25,7 @@
                 </button>
             @endif
 
-            <div class="table-responsive mt-2 mb-2">
+            <div class="mt-2 mb-2">
                 <table class="table table-bordered">
                     <tbody>
                     <tr>
@@ -203,6 +203,47 @@
         @endif
 
 
+        <h2>Penilaian Assesor</h2>
+
+        <div class="form-group col-md-12">
+            <label for="recommendation">Rekomendasi</label>
+            <textarea
+                rows="3"
+                class="form-control @error('recommendation') is-invalid @enderror"
+                name="recommendation" id="recommendation" @if(isset($isShow)) readonly @endif>{{ old('recommendation') ?? $apl02_verification->recommendation ?? '' }}</textarea>
+
+            @error('recommendation')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group col-md-6">
+            <label for="jenis_pengalaman">Jenis Pengalaman</label>
+            <select name="jenis_pengalaman" id="jenis_pengalaman" class="form-control">
+                <option value="1" @if($apl02_verification && $apl02_verification->jenis_pengalaman) {{__('selected')}} @endif>Berpengalaman</option>
+                <option value="0" @if(!$apl02_verification  XOR $apl02_verification && !$apl02_verification->jenis_pengalaman) {{__('selected')}} @endif>Belum Berpengalaman</option>
+            </select>
+
+            @error('jenis_pengalaman')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group col-md-6">
+            <label for="asesor_verification_date">Tanggal Verifikasi</label>
+            <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input @error('asesor_verification_date') is-invalid @enderror"
+                       data-target="#datetimepicker2" name="asesor_verification_date" id="asesor_verification_date" placeholder="Tanggal"
+                       value="{{ isset($apl02_verification) ? \Carbon\Carbon::parse($apl02_verification->asesor_verification_date)->format('d/m/Y') : now()->format('d/m/Y') }}"
+                       @if(isset($isShow)) disabled @endif>
+                <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+
+            @error('asesor_verification_date')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
     </div>
 @endsection
 
@@ -224,6 +265,12 @@
         $('select').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
+        });
+
+        $('#datetimepicker2').datetimepicker({
+            useCurrent: false,
+            format: 'DD/MM/YYYY',
+            locale: 'id'
         });
     </script>
 @endsection

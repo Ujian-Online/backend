@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\AsesiSertifikasiUnitKompetensiElement;
 use App\AsesiUnitKompetensiDokumen;
+use App\AsesiUnitKompetensiDokumenVerification;
 use App\DataTables\Admin\AsesiUnitKompetensiDokumenDataTable;
 use App\Http\Controllers\Controller;
 use App\Order;
@@ -20,6 +21,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AsesiUnitKompetensiDokumenController extends Controller
@@ -294,21 +296,18 @@ class AsesiUnitKompetensiDokumenController extends Controller
             $name = $user->asesi->name;
         }
 
+        // get verification
+        $apl02_verification = AsesiUnitKompetensiDokumenVerification::with(['userasesor', 'userasesor.asesor'])
+            ->where('asesi_id', $userid)
+            ->where('sertifikasi_id', $sertifikasiid)
+            ->first();
+
         // print mode
         $printMode = $request->input('print') ? true : false;
-
-        // get order detail
-        $order = Order::where('asesi_id', $userid)
-            ->where('sertifikasi_id', $sertifikasiid)
-            ->orderBy('transfer_date', 'desc')
-            ->first();
-        // get tuk detail based on order
-        $tuk = (isset($order) & !empty($order)) ? $order->tuk : null;
 
         $ujianasesiasesor = UjianAsesiAsesor::with(['userasesor', 'userasesor.asesor'])
             ->where('asesi_id', $userid)
             ->where('sertifikasi_id', $sertifikasiid)
-            ->where('order_id', $order->id)
             ->firstOrFail();
 
         // return data to view
@@ -323,9 +322,8 @@ class AsesiUnitKompetensiDokumenController extends Controller
             'user'              => $user,
             'sertifikasi'       => $sertifikasi,
             'unitkompetensis'   => $unitkompetensis,
-            'order'             => $order,
-            'tuk'               => $tuk,
-            'ujianasesiasesor'  => $ujianasesiasesor,
+            'ujianasesiasesor' => $ujianasesiasesor,
+            'apl02_verification' => $apl02_verification
         ]);
     }
 
@@ -378,6 +376,11 @@ class AsesiUnitKompetensiDokumenController extends Controller
             $name = $user->asesi->name;
         }
 
+        // get verification
+        $apl02_verification = AsesiUnitKompetensiDokumenVerification::where('asesi_id', $userid)
+            ->where('sertifikasi_id', $sertifikasiid)
+            ->first();
+
         // return data to view
         return view('admin.assesi.apl02-view', [
             'title'             => 'Detail Asesi APL-02: ' . $name,
@@ -389,6 +392,7 @@ class AsesiUnitKompetensiDokumenController extends Controller
             'user'              => $user,
             'sertifikasi'       => $sertifikasi,
             'unitkompetensis'   => $unitkompetensis,
+            'apl02_verification' => $apl02_verification
         ]);
     }
 
@@ -403,7 +407,10 @@ class AsesiUnitKompetensiDokumenController extends Controller
     public function apl02ViewUpdate(Request $request, int $userid, int $sertifikasiid)
     {
         $request->validate([
-            'ukelement' => 'required|array'
+            'ukelement' => 'required|array',
+            'recommendation' => 'required',
+            'jenis_pengalaman' => 'required|boolean',
+            'asesor_verification_date' => 'required|date_format:d/m/Y'
         ]);
 
         // cek apakah yang login itu asesor atau admin
@@ -431,6 +438,9 @@ class AsesiUnitKompetensiDokumenController extends Controller
         $ukelements = $request->input('ukelement');
         // check if uk element empty or not
         if(!empty($ukelements)) {
+
+            DB::beginTransaction();
+
             // loop uk element id to get id
             foreach($ukelements['id'] as $ukelement) {
                 $uk_id = $ukelement;
@@ -448,6 +458,8 @@ class AsesiUnitKompetensiDokumenController extends Controller
                         'verification_note' => $verification_note,
                     ]);
             }
+
+            DB::commit();
         }
 
 
@@ -459,6 +471,16 @@ class AsesiUnitKompetensiDokumenController extends Controller
         if(isset($user->asesi) and !empty($user->asesi)) {
             $name = $user->asesi->name;
         }
+
+        // update verification
+        AsesiUnitKompetensiDokumenVerification::where('asesi_id', $userid)
+            ->where('sertifikasi_id', $sertifikasiid)
+            ->update([
+                'asesor_id' => $whoLogin->id,
+                'recommendation' => $request->input('recommendation'),
+                'jenis_pengalaman' => $request->input('jenis_pengalaman'),
+                'asesor_verification_date' => \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('asesor_verification_date'))->format('Y-m-d'),
+            ]);
 
         // redirect
         return redirect()

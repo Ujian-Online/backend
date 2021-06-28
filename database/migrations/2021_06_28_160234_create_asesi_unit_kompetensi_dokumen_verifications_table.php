@@ -17,6 +17,7 @@ class CreateAsesiUnitKompetensiDokumenVerificationsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('asesi_id');
             $table->bigInteger('asesor_id')->nullable();
+            $table->bigInteger('sertifikasi_id')->nullable();
             $table->text('recommendation')->nullable();
             $table->boolean('jenis_pengalaman')->default(false);
             $table->date('asesi_verification_date')->nullable();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\AsesiSertifikasiUnitKompetensiElement;
 use App\AsesiSUKElementMedia;
 use App\AsesiUnitKompetensiDokumen;
+use App\AsesiUnitKompetensiDokumenVerification;
 use App\Http\Controllers\Controller;
 use App\Mail\AsesorAPL02Notification;
 use App\Sertifikasi;
@@ -259,6 +260,24 @@ class Apl02Controller extends Controller
                 $query->save();
             }
 
+            // update verification date
+            $apl02_verification = AsesiUnitKompetensiDokumenVerification::where('user_id', $user->id)
+                ->where('sertifikasi_id', $sertifikasi_id);
+
+            // if verification not found, create new data
+            // if found, update exiting data
+            if($apl02_verification->count() === 0) {
+                AsesiUnitKompetensiDokumenVerification::create([
+                    'asesi_id' => $user->id,
+                    'sertifikasi_id' => $sertifikasi_id,
+                    'asesi_verification_date' => now()->toDateString()
+                ]);
+            } else {
+                $apl02_verification->update([
+                    'asesi_verification_date' => now()->toDateString()
+                ]);
+            }
+
             // return response update data
             return response()->json($query);
         } catch (\Exception $e) {
@@ -313,6 +332,86 @@ class Apl02Controller extends Controller
                 'code' => 200,
                 'message' => 'success'
             ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Send Email APL02
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Post(
+     *   path="/api/apl02/done",
+     *   tags={"APL02"},
+     *   summary="Send Email APL02",
+     *   security={{"passport":{}}},
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Send Email After Input APL02",
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                @OA\Property(
+     *                     property="sertifikasi_id",
+     *                     description="Sertifikasi ID",
+     *                     type="integer",
+     *                     example="1"
+     *                 ),
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     )
+     * )
+     */
+    public function sendEmailApl02(Request $request)
+    {
+        // validate input
+        $request->validate([
+            'sertifikasi_id' => 'required',
+        ]);
+
+        // get user login
+        $user = $request->user();
+
+        try {
+            // check type input
+            // create if new
+            // update just update media url
+            $type = $request->input('type');
+
+            // get sertifikasi id
+            $sertifikasi_id = $request->input('sertifikasi_id');
+
+            // get ujian status
+            $ujian = UjianAsesiAsesor::with('userasesor')
+                ->where('asesi_id', $user->id)
+                ->where('sertifikasi_id', $sertifikasi_id)
+                ->whereIn('status', [
+                    'menunggu',
+                    'paket_soal_assigned',
+                ])
+                ->firstOrFail();
+
+            // only send email if asesor found
+            if(isset($ujian->userasesor) and !empty($ujian->userasesor)) {
+                // redis key
+                $redisKey = 'notifasesor_id_' . $user->id . '_' . $ujian->userasesor->id . '_' . $sertifikasi_id;
+                // if redis data not found, then set redis
+                // and sending email to asesor
+                if(redis_check($redisKey)) {
+                    Mail::to($ujian->userasesor->email)->send(new AsesorAPL02Notification($user->id, $sertifikasi_id));
+                }
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
