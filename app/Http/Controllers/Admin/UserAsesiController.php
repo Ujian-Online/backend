@@ -128,14 +128,44 @@ class UserAsesiController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        // query get data
-        $query = UserAsesi::with('asesicustomdata')->where('id', $id)->firstOrFail();
+        $query = new UserAsesi();
+
+        // check if print mode or not
         $printMode = $request->input('print');
-        if($printMode) {
-            $users = User::where('id', $query->user_id)->firstOrFail();
+        $orderId = $request->input('order_id');
+        if($printMode && $orderId) {
+            // query get data with many relation
+            $query = $query->with([
+                    'asesicustomdata',
+                    'singleorder',
+                    'singleorder.sertifikasi',
+                    'singleorder.sertifikasi.sertifikasiunitkompentensi',
+                    'singleorder.sertifikasi.sertifikasiunitkompentensi.unitkompetensi',
+                    'singleorder.tuk'
+                ])
+                ->select([
+                    'user_asesis.*'
+                ])
+                ->join('orders', 'orders.asesi_id', '=', 'user_asesis.user_id')
+                ->where('user_asesis.id', $id)
+                ->where('orders.id', $orderId)
+                ->firstOrFail();
         } else {
-            $users = User::where('id', $query->user_id)->get();
+            // query get data
+            $query = $query->with([
+                    'asesicustomdata',
+                    'order',
+                    'order.sertifikasi',
+                    'order.tuk'
+                ])
+                ->where('id', $id)
+                ->firstOrFail();
         }
+
+//        return $query;
+
+        // get user detail
+        $users = User::where('id', $query->user_id)->firstOrFail();
 
         // return data to view
         return view($printMode ? 'admin.assesi.apl01-print' : 'admin.assesi.form', [

@@ -95,4 +95,14 @@ class UserAsesi extends Model
     {
         return $this->hasMany('App\UserAsesiCustomData', 'asesi_id', 'user_id');
     }
+
+    public function Order()
+    {
+        return $this->hasMany('App\Order', 'asesi_id', 'user_id');
+    }
+
+    public function SingleOrder()
+    {
+        return $this->hasOne('App\Order', 'asesi_id', 'user_id');
+    }
 }
