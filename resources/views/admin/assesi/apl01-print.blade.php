@@ -10,11 +10,11 @@
 @section('body')
     <div class="container">
         <div class="form-row">
-            <h3>FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h3>
+            <h2>FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h2>
 
             <div class="form-group col-md-12">
 
-                <p class="text-bold">Bagian 1 : Rincian Data Pemohon Sertifikasi</p>
+                <h2>Bagian 1 : Rincian Data Pemohon Sertifikasi</h2>
                 <p>Pada bagian ini, cantumlah data pribadi, data pendidikan formal serta data pekerjaan anda pada saat ini</p>
 
                 <p>
@@ -205,7 +205,7 @@
                 </ol>
                 </p>
 
-                <p class="text-bold">Bagian 2 : Data Sertifikasi</p>
+                <h2>Bagian 2 : Data Sertifikasi</h2>
                 <p>Tuliskan Judul dan Nomor Skema Sertifikasi yang anda ajukan berikut Daftar Unit Kompetensi sesuai kemasan pada skema sertifikasi untuk mendapatkan pengakuan sesuai dengan latar belakang pendidikan, pelatihan serta pengalaman kerja yang anda miliki.</p>
 
                 <div class="form-group col-md-12">
@@ -309,7 +309,7 @@
                 </div>
 
 
-                <p class="text-bold">Bagian 3 : Bukti Kelengkapan Pemohon</p>
+                <h2>Bagian 3 : Bukti Kelengkapan Pemohon</h2>
                 <p class="text-bold">Bukti Persyaratan Dasar Pemohon</p>
 
                 <div class="mt-2 mb-2">
@@ -420,6 +420,6 @@
     </div>
 @endsection
 
-{{--@section('js')--}}
-{{--    <script>window.print();</script>--}}
-{{--@endsection--}}
+@section('js')
+    <script>window.print();</script>
+@endsection
