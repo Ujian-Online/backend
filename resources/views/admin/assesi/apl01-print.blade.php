@@ -268,7 +268,7 @@
                                 <tr>
                                     <td class="text-bold">
                                         @if($query->singleorder->tipe_sertifikasi !== 'lainnya')
-                                            <span style="text-decoration: line-through;"></span>
+                                            <span style="text-decoration: line-through;">Lainnya</span>
                                         @else
                                             <span>Lainnya</span>
                                         @endif
