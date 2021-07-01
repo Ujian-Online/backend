@@ -368,8 +368,7 @@ class SoalController extends Controller
 
         // filter by type
         if(!empty($type)) {
-            $questionType = ($type == 'multiple_option') ? 'multiple_option' : 'essay';
-            $query = $query->where('soals.question_type', $questionType);
+            $query = $query->where('soals.question_type', $type);
         }
 
         // exclude or skip by id
@@ -389,12 +388,15 @@ class SoalController extends Controller
             foreach($query->get() as $data) {
                 $result[] = [
                     'id' => $data->id,
-                    'text' => '[' . $data->kode_unit_kompetensi . '] - ' . $data->question,
+                    'text' => '[' . $data->kode_unit_kompetensi . '] - ' . strip_tags($data->question),
                 ];
             }
         }
 
+        // only show unique data
+        $response = $result && count($result) > 0 ? array_unique($result, SORT_REGULAR) : [];
+
         // response result
-        return response()->json($result, 200);
+        return response()->json($response, 200);
     }
 }

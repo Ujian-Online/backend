@@ -165,5 +165,9 @@ return [
         'Pertanyaan Tertulis – Esai',
         'Pertanyaan Lisan',
         'Ceklis Meninjau Materi Uji Kompetensi',
+    ],
+    'jenis_ujian' => [
+        'website',
+        'wawancara'
     ]
 ];

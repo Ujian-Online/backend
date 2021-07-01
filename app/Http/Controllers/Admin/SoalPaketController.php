@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class SoalPaketController extends Controller
@@ -63,7 +64,8 @@ class SoalPaketController extends Controller
         $request->validate([
             'title'             => 'required',
             'durasi_ujian'      => 'required|min:1|max:1440',
-            'sertifikasi_id'    => 'required',
+            'sertifikasi_id'    => 'required|exists:App\Sertifikasi,id',
+            'jenis_ujian'       => 'required|in:' . implode(',', config('options.jenis_ujian')),
         ]);
 
         // get form data
@@ -71,6 +73,7 @@ class SoalPaketController extends Controller
             'title',
             'durasi_ujian',
             'sertifikasi_id',
+            'jenis_ujian'
         ]);
 
         // get user login (asesor)
@@ -86,6 +89,10 @@ class SoalPaketController extends Controller
         $soal_pilihangandas = $request->input('soal_pilihanganda_id');
         // get input soal_essay_id
         $soal_essays = $request->input('soal_essay_id');
+        // get input soal_lisan_id
+        $soal_lisans = $request->input('soal_lisan_id');
+        // get input soal_wawancara
+        $soal_wawancaras = $request->input('soal_wawancara_id');
         // variable for soal paket item
         $soal_paket_items = [];
 
@@ -115,6 +122,40 @@ class SoalPaketController extends Controller
                     $soal_paket_items[] = [
                         'soal_paket_id' => $query->id,
                         'soal_id' => $soal_essay,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+            }
+        }
+
+        // loop soal lisan
+        if(isset($soal_lisans) and !empty($soal_lisans)) {
+            foreach($soal_lisans as $soal_lisan) {
+
+                // validate soal based on sertifikasi id
+                if(soal_validate($soal_lisan, null, $dataInput['sertifikasi_id'])) {
+                    $soal_paket_items[] = [
+                        'soal_paket_id' => $query->id,
+                        'soal_id' => $soal_lisan,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+            }
+        }
+
+        // loop soal wawancara
+        if(isset($soal_wawancaras) and !empty($soal_wawancaras)) {
+            foreach($soal_wawancaras as $soal_wawancara) {
+
+                // validate soal based on sertifikasi id
+                if(soal_validate($soal_wawancara, null, $dataInput['sertifikasi_id'])) {
+                    $soal_paket_items[] = [
+                        'soal_paket_id' => $query->id,
+                        'soal_id' => $soal_wawancara,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -151,15 +192,21 @@ class SoalPaketController extends Controller
         ]) ->findOrFail($id);
         $soal_pilihangandas = [];
         $soal_essays = [];
+        $soal_lisans = [];
+        $soal_wawancaras = [];
 
-        // extract soal pilihanganda and essay from soalpaketitem if found
+        // extract soal from soalpaketitem if found
         if(isset($query->soalpaketitem) and !empty($query->soalpaketitem)) {
             foreach($query->soalpaketitem as $soalpaketitem) {
                 if(isset($soalpaketitem->soal) and !empty($soalpaketitem->soal)) {
                     if($soalpaketitem->soal->question_type == 'multiple_option') {
                         $soal_pilihangandas[] = $soalpaketitem->soal;
-                    } else {
+                    } else if($soalpaketitem->soal->question_type == 'essay') {
                         $soal_essays[] = $soalpaketitem->soal;
+                    } else if($soalpaketitem->soal->question_type == 'lisan') {
+                        $soal_lisans[] = $soalpaketitem->soal;
+                    } else if($soalpaketitem->soal->question_type == 'wawancara') {
+                        $soal_wawancaras[] = $soalpaketitem->soal;
                     }
                 }
             }
@@ -173,6 +220,8 @@ class SoalPaketController extends Controller
             'query'         => $query,
             'soal_pilihangandas'    => $soal_pilihangandas,
             'soal_essays'           => $soal_essays,
+            'soal_lisans'           => $soal_lisans,
+            'soal_wawancaras'       => $soal_wawancaras
         ]);
     }
 
@@ -193,15 +242,21 @@ class SoalPaketController extends Controller
         ]) ->findOrFail($id);
         $soal_pilihangandas = [];
         $soal_essays = [];
+        $soal_lisans = [];
+        $soal_wawancaras = [];
 
-        // extract soal pilihanganda and essay from soalpaketitem if found
+        // extract soal from soalpaketitem if found
         if(isset($query->soalpaketitem) and !empty($query->soalpaketitem)) {
             foreach($query->soalpaketitem as $soalpaketitem) {
                 if(isset($soalpaketitem->soal) and !empty($soalpaketitem->soal)) {
                     if($soalpaketitem->soal->question_type == 'multiple_option') {
                         $soal_pilihangandas[] = $soalpaketitem->soal;
-                    } else {
+                    } else if($soalpaketitem->soal->question_type == 'essay') {
                         $soal_essays[] = $soalpaketitem->soal;
+                    } else if($soalpaketitem->soal->question_type == 'lisan') {
+                        $soal_lisans[] = $soalpaketitem->soal;
+                    } else if($soalpaketitem->soal->question_type == 'wawancara') {
+                        $soal_wawancaras[] = $soalpaketitem->soal;
                     }
                 }
             }
@@ -215,6 +270,8 @@ class SoalPaketController extends Controller
             'query'         => $query,
             'soal_pilihangandas'    => $soal_pilihangandas,
             'soal_essays'           => $soal_essays,
+            'soal_lisans'           => $soal_lisans,
+            'soal_wawancaras'       => $soal_wawancaras
         ]);
     }
 
@@ -232,7 +289,8 @@ class SoalPaketController extends Controller
         $request->validate([
             'title'             => 'required',
             'durasi_ujian'      => 'required|min:1|max:1440',
-            'sertifikasi_id'    => 'required',
+            'sertifikasi_id'    => 'required|exists:App\Sertifikasi,id',
+            'jenis_ujian'       => 'required|in:' . implode(',', config('options.jenis_ujian')),
         ]);
 
         // get form data
@@ -240,6 +298,7 @@ class SoalPaketController extends Controller
             'title',
             'durasi_ujian',
             'sertifikasi_id',
+            'jenis_ujian'
         ]);
 
         // get user login (asesor)
@@ -260,6 +319,10 @@ class SoalPaketController extends Controller
         $soal_pilihangandas = $request->input('soal_pilihanganda_id');
         // get input soal_essay_id
         $soal_essays = $request->input('soal_essay_id');
+        // get input soal_lisan_id
+        $soal_lisans = $request->input('soal_lisan_id');
+        // get input soal_wawancara
+        $soal_wawancaras = $request->input('soal_wawancara_id');
         // variable for soal paket item
         $soal_paket_items = [];
 
@@ -289,6 +352,40 @@ class SoalPaketController extends Controller
                     $soal_paket_items[] = [
                         'soal_paket_id' => $query->id,
                         'soal_id' => $soal_essay,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+            }
+        }
+
+        // loop soal lisan
+        if(isset($soal_lisans) and !empty($soal_lisans)) {
+            foreach($soal_lisans as $soal_lisan) {
+
+                // validate soal based on sertifikasi id
+                if(soal_validate($soal_lisan, null, $dataInput['sertifikasi_id'])) {
+                    $soal_paket_items[] = [
+                        'soal_paket_id' => $query->id,
+                        'soal_id' => $soal_lisan,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+            }
+        }
+
+        // loop soal wawancara
+        if(isset($soal_wawancaras) and !empty($soal_wawancaras)) {
+            foreach($soal_wawancaras as $soal_wawancara) {
+
+                // validate soal based on sertifikasi id
+                if(soal_validate($soal_wawancara, null, $dataInput['sertifikasi_id'])) {
+                    $soal_paket_items[] = [
+                        'soal_paket_id' => $query->id,
+                        'soal_id' => $soal_wawancara,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];

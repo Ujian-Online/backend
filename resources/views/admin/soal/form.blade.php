@@ -8,7 +8,7 @@
             max-height: 400px !important;
         }
     </style>
-@end
+@endsection
 
 @section('form')
     @include('layouts.alert')
@@ -82,7 +82,7 @@
         </div>
 
         <div class="form-group col-md-12" id="answer_essay_element">
-            <label for="answer_essay">Jawaban Essay</label>
+            <label for="answer_essay">Jawaban</label>
             <textarea class="form-control @error('answer_essay') is-invalid @enderror" name="answer_essay" id="answer_essay" cols="30" rows="3" @if(isset($isShow)) readonly @endif>{{ old('answer_essay') ?? ($query->answer_essay ?? '') }}</textarea>
 
             @error('answer_essay')

@@ -22,6 +22,28 @@
         </div>
 
         <div class="form-group col-md-6">
+            <label for="jenis_ujian">Jenis Ujian</label>
+            <select name="jenis_ujian" id="jenis_ujian" class="form-control" @if(isset($isShow)) readonly @endif>
+                @foreach(config('options.jenis_ujian') as $jenis_ujian)
+                    <option
+                        value="{{ $jenis_ujian }}"
+                        @if(old('jenis_ujian') == $jenis_ujian)
+                            {{ __('selected') }}
+                        @elseif(isset($query->jenis_ujian) and $query->jenis_ujian == $jenis_ujian)
+                            {{ __('selected') }}
+                        @endif
+                    >
+                        {{ ucwords($jenis_ujian) }}
+                    </option>
+                @endforeach
+            </select>
+
+            @error('jenis_ujian')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group col-md-6">
             <label for="durasi_ujian">Durasi Ujian (Dalam Menit)</label>
             <input type="number" class="form-control @error('durasi_ujian') is-invalid @enderror" name="durasi_ujian" id="durasi_ujian" placeholder="Durasi Ujian" value="{{ old('durasi_ujian') ?? (isset($query) && $query->durasi_ujian ? durasi_ujian($query->durasi_ujian) : null) ?? '' }}" @if(isset($isShow)) readonly @endif>
             <p class="text-muted">Catatan: Durasi dalam menit (contoh 2 jam isinya 120)</p>
@@ -45,9 +67,16 @@
             </div>
         </div>
     </div>
-    <div class="card card-outline card-primary">
+
+    <div class="card card-outline card-primary d-none" id="soal_pilihanganda_element">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-tasks"></i> Soal Pilihan Ganda</h3>
+            <h3 class="card-title font-weight-bold">
+                <span class="fa-stack">
+                  <i class="far fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-tasks fa-stack-1x"></i>
+                </span>
+                Soal Pilihan Ganda
+            </h3>
         </div>
         <div class="card-body">
             <div class="form-row">
@@ -68,7 +97,7 @@
                                 </tr>
                             </thead>
                             <tbody id="soal-pilihanganda-result">
-                            @if(isset($isShow) OR isset($isEdit))
+                            @if(isset($isShow) && isset($soal_pilihangandas) OR isset($isEdit) && isset($soal_pilihangandas))
                                 @foreach($soal_pilihangandas as $soal_pilihanganda)
                                     <tr id="pilihanganda-{{ $soal_pilihanganda->id }}">
                                         <input type="hidden" name="soal_pilihanganda_id[]" value="{{ $soal_pilihanganda->id }}">
@@ -96,9 +125,16 @@
             </div>
         </div>
     </div>
-    <div class="card card-outline card-info">
+
+    <div class="card card-outline card-info d-none" id="soal_essay_element">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-tasks"></i> Soal Essay</h3>
+            <h3 class="card-title font-weight-bold">
+                <span class="fa-stack">
+                  <i class="far fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-pencil-alt fa-stack-1x"></i>
+                </span>
+                Soal Essay
+            </h3>
         </div>
         <div class="card-body">
             <div class="form-row">
@@ -119,7 +155,7 @@
                             </tr>
                             </thead>
                             <tbody id="soal-essay-result">
-                            @if(isset($isShow) OR isset($isEdit))
+                            @if(isset($isShow) && isset($soal_essays) OR isset($isEdit) && isset($soal_essays))
                                 @foreach($soal_essays as $soal_essay)
                                     <tr id="essay-{{ $soal_essay->id }}">
                                         <input type="hidden" name="soal_essay_id[]" value="{{ $soal_essay->id }}">
@@ -138,9 +174,131 @@
             </div>
         </div>
     </div>
+
+    <div class="card card-outline card-warning d-none" id="soal_lisan_element">
+        <div class="card-header">
+            <h3 class="card-title font-weight-bold">
+                <span class="fa-stack">
+                  <i class="far fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-microphone-alt fa-stack-1x"></i>
+                </span>
+                Soal Lisan
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <select class="form-control" id="soal_lisan_id" data-placeholder="Pilih Soal Lisan">
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr class="text-center">
+                                <th width="5%" style="vertical-align: middle;">ID</th>
+                                <th width="40%" style="vertical-align: middle;">Pertanyaan</th>
+                                <th width="40%" style="vertical-align: middle;">Jawaban</th>
+                                <th width="5%" style="vertical-align: middle;">Max Score</th>
+                                <th width="10%" style="vertical-align: middle;">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="soal-lisan-result">
+                            @if(isset($isShow) && isset($soal_essays) OR isset($isEdit) && isset($soal_essays))
+                                @foreach($soal_lisans as $soal_lisan)
+                                    <tr id="lisan-{{ $soal_lisan->id }}">
+                                        <input type="hidden" name="soal_lisan_id[]" value="{{ $soal_lisan->id }}">
+                                        <td class="text-center">{{ $soal_lisan->id }}</td>
+                                        <td>{!! $soal_lisan->question !!}</td>
+                                        <td>{{ $soal_lisan->answer_essay }}</td>
+                                        <td class="text-center">{{ $soal_lisan->max_score }}</td>
+                                        <td><button type="button" class="btn btn-danger" onclick="deltr('lisan-{{ $soal_lisan->id }}')" @if(isset($isShow)) disabled @endif >Delete</button></td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-outline card-danger d-none" id="soal_wawancara_element">
+        <div class="card-header">
+            <h3 class="card-title font-weight-bold">
+                <span class="fa-stack">
+                  <i class="far fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-user-friends fa-stack-1x"></i>
+                </span>
+                Soal Wawancara
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <select class="form-control" id="soal_wawancara_id" data-placeholder="Pilih Soal Wawancara">
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr class="text-center">
+                                <th width="5%" style="vertical-align: middle;">ID</th>
+                                <th width="40%" style="vertical-align: middle;">Pertanyaan</th>
+                                <th width="5%" style="vertical-align: middle;">Max Score</th>
+                                <th width="10%" style="vertical-align: middle;">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="soal-wawancara-result">
+                                @if(isset($isShow) && isset($soal_wawancaras) OR isset($isEdit) && isset($soal_wawancaras))
+                                    @foreach($soal_wawancaras as $soal_wawancara)
+                                        <tr id="wawancara-{{ $soal_wawancara->id }}">
+                                            <input type="hidden" name="soal_wawancara_id[]" value="{{ $soal_wawancara->id }}">
+                                            <td class="text-center">{{ $soal_wawancara->id }}</td>
+                                            <td>{!! $soal_wawancara->question !!}</td>
+                                            <td class="text-center">{{ $soal_wawancara->max_score }}</td>
+                                            <td><button type="button" class="btn btn-danger" onclick="deltr('wawancara-{{ $soal_wawancara->id }}')" @if(isset($isShow)) disabled @endif >Delete</button></td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 
 @section('js')
+    <script>
+
+        const showHide = () => {
+            const jenis_ujian = $('#jenis_ujian').val();
+            console.log(jenis_ujian)
+            if(jenis_ujian === 'wawancara') {
+                $('#soal_pilihanganda_element').addClass('d-none');
+                $('#soal_essay_element').addClass('d-none');
+                $('#soal_lisan_element').removeClass('d-none');
+                $('#soal_wawancara_element').removeClass('d-none');
+            } else {
+                $('#soal_pilihanganda_element').removeClass('d-none');
+                $('#soal_essay_element').removeClass('d-none');
+                $('#soal_lisan_element').addClass('d-none');
+                $('#soal_wawancara_element').addClass('d-none');
+            }
+        }
+
+        $('#jenis_ujian').on('change', () => {
+            showHide();
+        });
+
+        showHide();
+    </script>
     <script>
         /**
          * Select2 with Ajax Start
@@ -223,6 +381,24 @@
             return soalessay.join();
         }
 
+        // get id soallisan
+        function soallisan() {
+            const soallisan = $("input[name='soal_lisan_id[]']")
+                .map(function(){return $(this).val();}).get();
+
+            // convert array to string with comma separate
+            return soallisan.join();
+        }
+
+        // get id soalwawancara
+        function soalwawancara() {
+            const soalwawancara = $("input[name='soal_wawancara_id[]']")
+                .map(function(){return $(this).val();}).get();
+
+            // convert array to string with comma separate
+            return soalwawancara.join();
+        }
+
         function deltr(id) {
             $(`#${id}`).remove();
             $("#soal_pilihanganda_id").val('').trigger('change');
@@ -281,6 +457,58 @@
             },
         });
 
+        $('#soal_lisan_id').select2({
+            theme: 'bootstrap4',
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            allowClear: true,
+            ajax: {
+                url: '{{ route('admin.soal.search') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                minimumInputLength: 1,
+                data: function (data) {
+                    return {
+                        q: data.term,
+                        type: 'lisan',
+                        skip: soallisan(),
+                        sertifikasi_id: $('#sertifikasi_id').val(),
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
+        });
+
+        $('#soal_wawancara_id').select2({
+            theme: 'bootstrap4',
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            allowClear: true,
+            ajax: {
+                url: '{{ route('admin.soal.search') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                minimumInputLength: 1,
+                data: function (data) {
+                    return {
+                        q: data.term,
+                        type: 'wawancara',
+                        skip: soalwawancara(),
+                        sertifikasi_id: $('#sertifikasi_id').val(),
+                    }
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    }
+                }
+            },
+        });
+
         /**
          * Select2 with Ajax End
          * @type {string}
@@ -323,7 +551,7 @@
         });
     </script>
     <script>
-        // listen if soal_pilihanganda_id change
+        // listen if soal_essay_id change
         $("#soal_essay_id").on('change', async function () {
             const me = $(this)
             const value = me.val();
@@ -347,6 +575,61 @@
 
             } catch (e) {
                 alert('Gagal mengambil detail soal essay.!');
+            }
+        });
+    </script>
+    <script>
+        // listen if soal_lisan_id change
+        $("#soal_lisan_id").on('change', async function () {
+            const me = $(this)
+            const value = me.val();
+
+            try {
+                if(value) {
+                    const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
+                    const { data: response } = request;
+
+                    $("#soal-lisan-result").append(`
+                        <tr id="lisan-${response.id}">
+                            <input type="hidden" name="soal_lisan_id[]" value="${response.id}">
+                            <td class="text-center">${response.id}</td>
+                            <td>${response.question}</td>
+                            <td>${response.answer_essay}</td>
+                            <td class="text-center">${response.max_score}</td>
+                            <td><button type="button" class="btn btn-danger" onclick="deltr('lisan-${response.id}')">Delete</button></td>
+                        </tr>
+                   `);
+                }
+
+            } catch (e) {
+                alert('Gagal mengambil detail soal lisan.!');
+            }
+        });
+    </script>
+    <script>
+        // listen if soal_wawancara_id change
+        $("#soal_wawancara_id").on('change', async function () {
+            const me = $(this)
+            const value = me.val();
+
+            try {
+                if(value) {
+                    const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
+                    const { data: response } = request;
+
+                    $("#soal-wawancara-result").append(`
+                        <tr id="wawancara-${response.id}">
+                            <input type="hidden" name="soal_wawancara_id[]" value="${response.id}">
+                            <td class="text-center">${response.id}</td>
+                            <td>${response.question}</td>
+                            <td class="text-center">${response.max_score}</td>
+                            <td><button type="button" class="btn btn-danger" onclick="deltr('wawancara-${response.id}')">Delete</button></td>
+                        </tr>
+                   `);
+                }
+
+            } catch (e) {
+                alert('Gagal mengambil detail soal lisan.!');
             }
         });
     </script>
