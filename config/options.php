@@ -152,5 +152,18 @@ return [
         'B',
         'C',
         'D'
+    ],
+    'mapa_muks' => [
+        'Ceklis Observasi Untuk Aktivitas Di Tempat Kerja Atau Tempat Kerja Simulasi',
+        'Pertanyaan Untuk Mendukung Observasi',
+        'Penjelasan Singkat Proyek Terkait Pekerjaan / Kegiatan Terstruktur Lainnya',
+        'Tugas Praktik Demonstrasi',
+        'Ceklis Evaluasi Portofolio',
+        'Pertanyaan Wawancara',
+        'Formulir Bukti Pihak Ketiga',
+        'Pertanyaan Tertulis – Pilihan Ganda',
+        'Pertanyaan Tertulis – Esai',
+        'Pertanyaan Lisan',
+        'Ceklis Meninjau Materi Uji Kompetensi',
     ]
 ];

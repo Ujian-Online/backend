@@ -302,16 +302,25 @@ class AsesiUnitKompetensiDokumenController extends Controller
             ->where('sertifikasi_id', $sertifikasiid)
             ->first();
 
-        // print mode
-        $printMode = $request->input('print') ? true : false;
+
 
         $ujianasesiasesor = UjianAsesiAsesor::with(['userasesor', 'userasesor.asesor'])
             ->where('asesi_id', $userid)
             ->where('sertifikasi_id', $sertifikasiid)
             ->firstOrFail();
 
+        // print mode
+        $defaultPage = 'admin.assesi.apl02-view';
+        $printMode = $request->input('print') ? true : false;
+        $page = $request->input('page');
+        if($printMode && $page && $page == 'mapa02') {
+            $defaultPage = 'admin.assesi.mapa-02-print';
+        } else if($printMode && !$page XOR $printMode && $page && $page == 'apl02') {
+            $defaultPage = 'admin.assesi.apl02-print';
+        }
+
         // return data to view
-        return view($printMode ?  'admin.assesi.apl02-print' : 'admin.assesi.apl02-view', [
+        return view($defaultPage, [
             'title'             => 'Detail Asesi APL-02: ' . $name,
             'action'            => '#',
             'isShow'            => route('admin.asesi.apl02.viewedit', [
