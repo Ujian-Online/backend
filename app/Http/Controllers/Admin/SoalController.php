@@ -69,7 +69,7 @@ class SoalController extends Controller
             'question'      => 'required',
             'question_type' => 'required',
             'max_score'     => 'required|numeric',
-            'answer_essay'  => 'nullable|required_if:question_type,essay',
+            'answer_essay'  => 'nullable|required_if:question_type,essay,lisan',
             'answer_option' => 'nullable|required_if:question_type,multiple_option',
             'option_a'      => 'nullable|required_if:question_type,multiple_option',
             'option_b'      => 'nullable|required_if:question_type,multiple_option',
@@ -137,7 +137,7 @@ class SoalController extends Controller
         return redirect()
             ->route('admin.soal.daftar.index')
             ->with('success', trans('action.success', [
-                'name' => $query->question
+                'name' => $query->id
             ]));
     }
 

@@ -50,7 +50,7 @@ class SoalDataTable extends DataTable
                         ),
                 ]);
             })
-            ->rawColumns(['kode_uk']);
+            ->rawColumns(['question', 'kode_uk']);
     }
 
     /**
