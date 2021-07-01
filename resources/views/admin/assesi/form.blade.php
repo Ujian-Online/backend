@@ -3,11 +3,11 @@
 @section('form')
     <div class="form-row">
 
-        @if(isset($isShow))
-            <button type="button" class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
-                <i class="fas fa-print"></i> Cetak FR.APL.01</a>
-            </button>
-        @endif
+{{--        @if(isset($isShow))--}}
+{{--            <button type="button" class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">--}}
+{{--                <i class="fas fa-print"></i> Cetak FR.APL.01</a>--}}
+{{--            </button>--}}
+{{--        @endif--}}
 
         <div class="form-group col-md-12">
             <label for="user_id">User ID</label>
