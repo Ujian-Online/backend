@@ -16,6 +16,7 @@ class UnitKompetensi extends Model
         'kode_unit_kompetensi',
         'title',
         'sub_title',
+        'jenis_standar'
     ];
 
     /**
