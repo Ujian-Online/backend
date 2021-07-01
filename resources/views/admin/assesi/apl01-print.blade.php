@@ -277,9 +277,9 @@
                                     @foreach($query->singleorder->sertifikasi->sertifikasiunitkompentensi as $key_suk => $suk)
                                         <tr>
                                             <th class="text-center">{{ $key_suk+1 }}.</th>
-                                            <td>{{ $suk->unitkompetensi ? $suk->unitkompetensi->kode_unit_kompetensi : '' }}</td>
-                                            <td>{{ $suk->unitkompetensi ? $suk->unitkompetensi->title : '' }}</td>
-                                            <td></td>
+                                            <td>{{ $suk->unitkompetensi && $suk->unitkompetensi->kode_unit_kompetensi ? $suk->unitkompetensi->kode_unit_kompetensi : '' }}</td>
+                                            <td>{{ $suk->unitkompetensi && $suk->unitkompetensi->title ? $suk->unitkompetensi->title : '' }}</td>
+                                            <td>{{ $suk->unitkompetensi && $suk->unitkompetensi->jenis_standar ? $suk->unitkompetensi->jenis_standar : '' }}</td>
                                         </tr>
                                     @endforeach
                                 @endif
