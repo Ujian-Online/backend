@@ -261,7 +261,7 @@ class Apl02Controller extends Controller
             }
 
             // update verification date
-            $apl02_verification = AsesiUnitKompetensiDokumenVerification::where('user_id', $user->id)
+            $apl02_verification = AsesiUnitKompetensiDokumenVerification::where('asesi_id', $user->id)
                 ->where('sertifikasi_id', $sertifikasi_id);
 
             // if verification not found, create new data
