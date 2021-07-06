@@ -298,15 +298,8 @@ return [
             [
                 'title'     => 'Order',
                 'icon'      => 'fas fa-cart-plus',
+                'route'     => 'admin.order.index',
                 'active'    => 'admin.order.*',
-                'sub_menu'  => [
-                    [
-                        'title'     => 'List Order',
-                        'icon'      => 'fas fa-cart-plus',
-                        'route'     => 'admin.order.index',
-                        'active'    => 'admin.order.*',
-                    ],
-                ],
             ],
             [
                 'title'     => 'Akun Saya',
@@ -359,15 +352,8 @@ return [
             [
                 'title'     => 'Order',
                 'icon'      => 'fas fa-cart-plus',
+                'route'     => 'admin.order.index',
                 'active'    => 'admin.order.*',
-                'sub_menu'  => [
-                    [
-                        'title'     => 'List Order',
-                        'icon'      => 'fas fa-cart-plus',
-                        'route'     => 'admin.order.index',
-                        'active'    => 'admin.order.*',
-                    ],
-                ],
             ],
             [
                 'title'     => 'Jadwal Ujian Asesi',
