@@ -80,7 +80,7 @@
                         <td>{{ (isset($query->userasesor->asesor) and !empty($query->userasesor->asesor)) ? $query->userasesor->asesor->met : '' }}</td>
                     </tr>
                     <tr>
-                        <td rowspan="5" class="text-center text-bold"  style="vertical-align: middle;">
+                        <td rowspan="6" class="text-center text-bold"  style="vertical-align: middle;">
                             Detail Ujian
                         </td>
                     </tr>
@@ -88,6 +88,12 @@
                         <td width="15%">Paket Soal</td>
                         <td width="2%">:</td>
                         <td>{{ (isset($query->soalpaket) and !empty($query->soalpaket)) ? $query->soalpaket->title : '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="15%">Jenis Paket</td>
+                        <td width="2%">:</td>
+                        <td>{{ (isset($query->soalpaket) and !empty($query->soalpaket)) ? $query->soalpaket->jenis_ujian : '' }}
                         </td>
                     </tr>
                     <tr>
@@ -146,9 +152,15 @@
         </div>
     </div>
 
-    <div class="card card-outline card-primary">
+    <div class="card card-outline card-primary d-none" id="soal_pilihanganda_element">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-tasks"></i> Soal Pilihan Ganda</h3>
+            <h3 class="card-title font-weight-bold">
+                <span class="fa-stack">
+                  <i class="far fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-tasks fa-stack-1x"></i>
+                </span>
+                Soal Pilihan Ganda
+            </h3>
         </div>
         <div class="card-body">
             <div class="form-row">
@@ -210,9 +222,15 @@
             </div>
         </div>
     </div>
-    <div class="card card-outline card-info">
+    <div class="card card-outline card-info d-none" id="soal_essay_element">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-tasks"></i> Soal Essay</h3>
+            <h3 class="card-title font-weight-bold">
+                <span class="fa-stack">
+                  <i class="far fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-pencil-alt fa-stack-1x"></i>
+                </span>
+                Soal Essay
+            </h3>
         </div>
         <div class="card-body">
             <div class="form-row">
@@ -276,6 +294,155 @@
         </div>
     </div>
 
+    <div class="card card-outline card-warning d-none" id="soal_lisan_element">
+        <div class="card-header">
+            <h3 class="card-title font-weight-bold">
+                <span class="fa-stack">
+                  <i class="far fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-microphone-alt fa-stack-1x"></i>
+                </span>
+                Soal Lisan
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr class="text-center">
+                                <th width="5%" style="vertical-align: middle;">ID</th>
+                                <th width="40%" style="vertical-align: middle;">Pertanyaan</th>
+                                <th width="5%" style="vertical-align: middle;">Max Score</th>
+                                <th width="10%" style="vertical-align: middle;">Final Score</th>
+                                <th width="15%" style="vertical-align: middle;">Catatan Asesor</th>
+                            </tr>
+                            </thead>
+                            <tbody id="soal-lisan-result">
+                            @if(isset($isShow) && isset($soal_lisans) OR isset($isEdit) && isset($soal_lisans))
+                                @foreach($soal_lisans as $soal_lisan)
+                                    <tr id="lisan-{{ $soal_lisan->id }}">
+                                        <input type="hidden" name="soal_lisan_id[]" value="{{ $soal_lisan->id }}">
+                                        <input type="hidden" class="total-score" value="{{ $soal_lisan->max_score }}">
+                                        <td class="text-center">{{ $soal_lisan->id }}</td>
+                                        <td>
+                                            {!! $soal_lisan->question !!}
+
+                                            <hr />
+
+                                            <p class="text-bold">Jawaban Yang Benar</p>
+                                            {{ $soal_lisan->answer_essay }}
+
+                                            <hr />
+
+                                            <p class="text-bold">Jawaban Asesi</p>
+                                            @if(isset($isShow))
+                                                {{ $soal_lisan->user_answer }}
+                                            @elseif(isset($isEdit))
+                                                <textarea class="form-control" name="soal_lisan[user_answer][{{ $soal_lisan->id }}]" rows="3">{{ old('soal_lisan.user_answer.' . $soal_lisan->id, $soal_lisan->user_answer) }}</textarea>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">{{ $soal_lisan->max_score }}</td>
+                                        <td class="text-center">
+                                            @if(isset($isShow))
+                                                <input type="hidden" class="form-control total-nilai" name="soal_lisan[final_score][{{ $soal_lisan->id }}]" value="{{ $soal_lisan->final_score ?? '' }}">
+                                                {{ $soal_lisan->final_score }}
+                                            @elseif(isset($isEdit))
+                                                <input type="number" class="form-control total-nilai" name="soal_lisan[final_score][{{ $soal_lisan->id }}]" max="{{ $soal_lisan->max_score }}" value="{{ old('soal_lisan.final_score.' . $soal_lisan->id, $soal_lisan->final_score) }}">
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(isset($isShow))
+                                                {{ $soal_lisan->catatan_asesor }}
+                                            @elseif(isset($isEdit))
+                                                <textarea class="form-control" name="soal_lisan[catatan_asesor][{{ $soal_lisan->id }}]" rows="3">{{ old('soal_lisan.catatan_asesor.' . $soal_lisan->id, $soal_lisan->catatan_asesor) }}</textarea>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-outline card-danger d-none" id="soal_wawancara_element">
+        <div class="card-header">
+            <h3 class="card-title font-weight-bold">
+                <span class="fa-stack">
+                  <i class="far fa-circle fa-stack-2x"></i>
+                  <i class="fas fa-user-friends fa-stack-1x"></i>
+                </span>
+                Soal Wawancara
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <select class="form-control" id="soal_wawancara_id" data-placeholder="Pilih Soal Wawancara">
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr class="text-center">
+                                <th width="5%" style="vertical-align: middle;">ID</th>
+                                <th width="40%" style="vertical-align: middle;">Pertanyaan</th>
+                                <th width="5%" style="vertical-align: middle;">Max Score</th>
+                                <th width="10%" style="vertical-align: middle;">Final Score</th>
+                                <th width="15%" style="vertical-align: middle;">Catatan Asesor</th>
+                            </tr>
+                            </thead>
+                            <tbody id="soal-wawancara-result">
+                            @if(isset($isShow) && isset($soal_wawancaras) OR isset($isEdit) && isset($soal_wawancaras))
+                                @foreach($soal_wawancaras as $soal_wawancara)
+                                    <tr id="wawancara-{{ $soal_wawancara->id }}">
+                                        <input type="hidden" name="soal_wawancara_id[]" value="{{ $soal_wawancara->id }}">
+                                        <input type="hidden" class="total-score" value="{{ $soal_wawancara->max_score }}">
+                                        <td class="text-center">{{ $soal_wawancara->id }}</td>
+                                        <td>
+                                            {!! $soal_wawancara->question !!}
+
+                                            <hr />
+
+                                            <p class="text-bold">Jawaban Asesi</p>
+                                            @if(isset($isShow))
+                                                {{ $soal_wawancara->user_answer }}
+                                            @elseif(isset($isEdit))
+                                                <textarea class="form-control" name="soal_wawancara[user_answer][{{ $soal_wawancara->id }}]" rows="3">{{ old('soal_wawancara.user_answer.' . $soal_wawancara->id, $soal_wawancara->user_answer) }}</textarea>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">{{ $soal_wawancara->max_score }}</td>
+                                        <td class="text-center">
+                                            @if(isset($isShow))
+                                                <input type="hidden" class="form-control total-nilai" name="soal_wawancara[final_score][{{ $soal_wawancara->id }}]" value="{{ $soal_wawancara->final_score ?? '' }}">
+                                                {{ $soal_lisan->final_score }}
+                                            @elseif(isset($isEdit))
+                                                <input type="number" class="form-control total-nilai" name="soal_wawancara[final_score][{{ $soal_wawancara->id }}]" max="{{ $soal_wawancara->max_score }}" value="{{ old('soal_wawancara.final_score.' . $soal_wawancara->id, $soal_wawancara->final_score) }}">
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(isset($isShow))
+                                                {{ $soal_wawancara->catatan_asesor }}
+                                            @elseif(isset($isEdit))
+                                                <textarea class="form-control" name="soal_wawancara[catatan_asesor][{{ $soal_wawancara->id }}]" rows="3">{{ old('soal_wawancara.catatan_asesor.' . $soal_wawancara->id, $soal_wawancara->catatan_asesor) }}</textarea>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="form-row">
         <div class="table-responsive mt-2 mb-2">
             <table class="table table-bordered">
@@ -286,8 +453,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="25%">Score Ujian Hasil/Max</td>
-                    <td width="2%">:</td>
+                    <td>Score Ujian Hasil/Max</td>
+                    <td>:</td>
                     <td class="text-bold">
                         <span id="total-nilai"></span> {{ __(' / ') }}
                         <span id="total-score"></span> {{ __(' = ') }}
@@ -299,8 +466,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="25%">Kompeten</td>
-                    <td width="2%">:</td>
+                    <td>Kompeten</td>
+                    <td>:</td>
                     <td>
                         @if(isset($isShow))
                             @if(isset($query->is_kompeten) and in_array($query->is_kompeten, [0, 1]))
@@ -335,6 +502,29 @@
 @endsection
 
 @section('js')
+    <script>
+
+        const showHide = () => {
+            const jenis_ujian = '{{ (isset($query->soalpaket) and !empty($query->soalpaket)) ? $query->soalpaket->jenis_ujian : '' }}'
+            if(jenis_ujian === 'wawancara') {
+                $('#soal_pilihanganda_element').addClass('d-none');
+                $('#soal_essay_element').addClass('d-none');
+                $('#soal_lisan_element').removeClass('d-none');
+                $('#soal_wawancara_element').removeClass('d-none');
+            } else {
+                $('#soal_pilihanganda_element').removeClass('d-none');
+                $('#soal_essay_element').removeClass('d-none');
+                $('#soal_lisan_element').addClass('d-none');
+                $('#soal_wawancara_element').addClass('d-none');
+            }
+        }
+
+        $('#jenis_ujian').on('change', () => {
+            showHide();
+        });
+
+        showHide();
+    </script>
     <script>
         function sumTotal(id) {
             let sum = 0;
