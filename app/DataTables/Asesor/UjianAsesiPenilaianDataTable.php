@@ -65,6 +65,9 @@ class UjianAsesiPenilaianDataTable extends DataTable
      */
     public function query(UjianAsesiAsesor $model)
     {
+        // get user login
+        $user = request()->user();
+
         // default query
         $query = $model->select([
                 'ujian_asesi_asesors.*'
@@ -77,7 +80,8 @@ class UjianAsesiPenilaianDataTable extends DataTable
             ])
             ->join('users as uasesi', 'uasesi.id', '=', 'ujian_asesi_asesors.asesi_id')
             ->join('users as uasesor', 'uasesor.id', '=', 'ujian_asesi_asesors.asesor_id')
-            ->join('sertifikasis', 'sertifikasis.id', '=', 'ujian_asesi_asesors.sertifikasi_id');
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'ujian_asesi_asesors.sertifikasi_id')
+            ->where('asesor_id', $user->id);
 
         // get filter input
         $status = request()->input('status');
