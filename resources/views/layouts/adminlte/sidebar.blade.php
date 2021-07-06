@@ -5,12 +5,15 @@
             <img src="{{ Auth::user()->media_url ?? gravatar(Auth::user()->email) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="#" class="d-block">{{ ucfirst(explode("@", Auth::user()->email)[0]) }}</a>
+
             @if(Auth::user()->can("isTuk"))
                 <a href="#" class="d-block" style="white-space: normal; word-wrap: break-word;">TUK: {{ ucwords(Auth::user()->tuk->tuk->title) }}</a>
+            @elseif(Auth::user()->can("isAssesor"))
+                <a href="#" class="d-block" style="white-space: normal; word-wrap: break-word;">{{ ucwords(Auth::user()->asesor->name) }}</a>
             @else
-                <a href="#" class="d-block" style="white-space: normal; word-wrap: break-word;">{{ strtoupper(Auth::user()->type) }}</a>
+                <a href="#" class="d-block">{{ ucfirst(explode("@", Auth::user()->email)[0]) }}</a>
             @endif
+                <a href="#" class="d-block" style="white-space: normal; word-wrap: break-word;">{{ strtoupper(Auth::user()->type) }}</a>
         </div>
     </div>
 
