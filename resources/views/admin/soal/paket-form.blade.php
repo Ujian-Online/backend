@@ -204,7 +204,7 @@
                             </tr>
                             </thead>
                             <tbody id="soal-lisan-result">
-                            @if(isset($isShow) && isset($soal_essays) OR isset($isEdit) && isset($soal_essays))
+                            @if(isset($isShow) && isset($soal_lisan) OR isset($isEdit) && isset($soal_lisan))
                                 @foreach($soal_lisans as $soal_lisan)
                                     <tr id="lisan-{{ $soal_lisan->id }}">
                                         <input type="hidden" name="soal_lisan_id[]" value="{{ $soal_lisan->id }}">
@@ -279,7 +279,6 @@
 
         const showHide = () => {
             const jenis_ujian = $('#jenis_ujian').val();
-            console.log(jenis_ujian)
             if(jenis_ujian === 'wawancara') {
                 $('#soal_pilihanganda_element').addClass('d-none');
                 $('#soal_essay_element').addClass('d-none');
