@@ -134,6 +134,8 @@ class UjianAsesiJawabanController extends Controller
         // pisahkan soal jawaban pilihan ganda dan essay kalau ada datanya
         $soal_pilihangandas = [];
         $soal_essays = [];
+        $soal_lisans = [];
+        $soal_wawancaras = [];
         $total_nilai = 0;
         $total_max = 0;
         if(isset($query->ujianasesijawaban) and !empty($query->ujianasesijawaban)) {
@@ -154,20 +156,33 @@ class UjianAsesiJawabanController extends Controller
                     // save soal to uk
                     if($soal->question_type == 'multiple_option') {
                         $uk_soals[$uk_id]['pilihan_ganda'][] = $soal;
-                    } else {
+                    } else if($soal->question_type === 'essay') {
                         $uk_soals[$uk_id]['essay'][] = $soal;
+                    } else if($soal->question_type === 'lisan') {
+                        $uk_soals[$uk_id]['lisan'][] = $soal;
+                    } else if($soal->question_type === 'wawancara') {
+                        $uk_soals[$uk_id]['wawancara'][] = $soal;
                     }
                 }
 
-                if($soal->question_type == 'multiple_option') {
-                    // update object soal pilihan ganda
+                if($soal->question_type === 'multiple_option') {
                     $soal_pilihangandas[] = $soal;
 
                     // update nilai asesi berdasarkan maxscore
                     $total_nilai += $soal->max_score;
-                } else {
-                    // update object soal essay
+
+                } else if($soal->question_type === 'essay') {
                     $soal_essays[] = $soal;
+
+                    // update nilai asesi berdasarkan final_score
+                    $total_nilai += $soal->final_score;
+                } else if($soal->question_type === 'lisan') {
+                    $soal_lisans[] = $soal;
+
+                    // update nilai asesi berdasarkan final_score
+                    $total_nilai += $soal->final_score;
+                } else if($soal->question_type === 'wawancara') {
+                    $soal_wawancaras[] = $soal;
 
                     // update nilai asesi berdasarkan final_score
                     $total_nilai += $soal->final_score;
@@ -197,6 +212,10 @@ class UjianAsesiJawabanController extends Controller
                 $pageView = 'asesor.ujian.penilaian-print-essay-jawaban';
             } else if($page && $page == 'jawaban_asesi_essay') {
                 $pageView = 'asesor.ujian.penilaian-print-essay-jawaban-asesi';
+            } else if($page && $page == 'soal_lisan') {
+                $pageView = 'asesor.ujian.penilaian-print-lisan';
+            } else if($page && $page == 'soal_wawancara') {
+                $pageView = 'asesor.ujian.penilaian-print-wawancara';
             }
         }
 
@@ -208,6 +227,8 @@ class UjianAsesiJawabanController extends Controller
             'query'                 => $query,
             'soal_pilihangandas'    => $soal_pilihangandas,
             'soal_essays'           => $soal_essays,
+            'soal_lisans'           => $soal_lisans,
+            'soal_wawancaras'       => $soal_wawancaras,
             'total_nilai'           => $total_nilai,
             'total_max'             => $total_max,
             'uk_soals'              => $uk_soals,
