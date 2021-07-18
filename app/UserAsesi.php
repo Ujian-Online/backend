@@ -105,4 +105,9 @@ class UserAsesi extends Model
     {
         return $this->hasOne('App\Order', 'asesi_id', 'user_id');
     }
+
+    public function Admin()
+    {
+        return $this->hasOne('App\User', 'id', 'user_id_admin');
+    }
 }

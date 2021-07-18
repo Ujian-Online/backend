@@ -383,8 +383,8 @@
                                 <td width="20%">Tanda Tangan/ Tanggal</td>
                                 <td width="30%">
                                     <p>
-                                        @if(isset(Auth::user()->media_url_sign_user) and !empty(Auth::user()->media_url_sign_user))
-                                            <img src="{{ Auth::user()->media_url_sign_user }}">
+                                        @if(isset($query->admin) and isset($query->admin->media_url_sign_user) and !empty($query->admin->media_url_sign_user))
+                                            <img src="{{ $query->admin->media_url_sign_user }}">
                                         @else
                                             {{ __('-') }}
                                         @endif

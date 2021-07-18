@@ -141,7 +141,8 @@ class UserAsesiController extends Controller
                     'singleorder.sertifikasi',
                     'singleorder.sertifikasi.sertifikasiunitkompentensi',
                     'singleorder.sertifikasi.sertifikasiunitkompentensi.unitkompetensi',
-                    'singleorder.tuk'
+                    'singleorder.tuk',
+                    'admin'
                 ])
                 ->select([
                     'user_asesis.*'
@@ -159,7 +160,8 @@ class UserAsesiController extends Controller
                 'asesicustomdata',
                 'order',
                 'order.sertifikasi',
-                'order.tuk'
+                'order.tuk',
+                'admin'
             ])
                 ->where('id', $id)
                 ->firstOrFail();
