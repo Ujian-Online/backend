@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Asesor;
 
+use App\AsesiSUKElementMedia;
 use App\DataTables\Asesor\UjianAsesiPenilaianDataTable;
 use App\Http\Controllers\Controller;
 use App\UjianAsesiAsesor;
@@ -108,6 +109,25 @@ class UjianAsesiPenilaianController extends Controller
                         $uk_soals[$uk_id]['lisan'][] = $soal;
                     } else if($soal->question_type === 'wawancara') {
                         $uk_soals[$uk_id]['wawancara'][] = $soal;
+
+                        if(!isset($uk_soals[$uk_id]['apl02'])) {
+                            // get apl02 media
+                            $apl02Media = AsesiSUKElementMedia::select([
+                                    'asesi_s_u_k_element_media.*',
+                                    'asesi_unit_kompetensi_dokumens.sertifikasi_id as sertifikasi_id',
+                                    'asesi_unit_kompetensi_dokumens.unit_kompetensi_id as unit_kompetensi_id'
+                                ])
+                                ->join('asesi_sertifikasi_unit_kompetensi_elements', 'asesi_sertifikasi_unit_kompetensi_elements.id', '=', 'asesi_s_u_k_element_media.asesi_suk_element_id')
+                                ->join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
+                                ->where('asesi_unit_kompetensi_dokumens.asesi_id', '=', $query->asesi_id)
+                                ->where('asesi_sertifikasi_unit_kompetensi_elements.asesi_id', '=', $query->asesi_id)
+                                ->where('asesi_s_u_k_element_media.asesi_id', '=', $query->asesi_id)
+                                ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', '=', $query->sertifikasi_id)
+                                ->where('asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id', '=', $uk_id)
+                                ->get();
+
+                            $uk_soals[$uk_id]['apl02'] = $apl02Media;
+                        }
                     }
                 }
 
