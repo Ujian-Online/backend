@@ -7,6 +7,9 @@
 }
 
 @media print {
+    body {
+        -webkit-print-color-adjust: exact;
+    }
     .table-bordered th,
     .table-bordered td {
         border: 1px solid black !important;

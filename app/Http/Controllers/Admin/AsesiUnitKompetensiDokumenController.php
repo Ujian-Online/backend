@@ -270,7 +270,7 @@ class AsesiUnitKompetensiDokumenController extends Controller
                 },
                 'asesisertifikasiunitkompetensielement.media' => function ($query) use ($user) {
                     $query->where('asesi_id', $user->id);
-                }
+                },
             ])
             ->when($whoLogin, function($query) use ($whoLogin) {
                 if($whoLogin->type == 'assesor') {
@@ -302,9 +302,7 @@ class AsesiUnitKompetensiDokumenController extends Controller
             ->where('sertifikasi_id', $sertifikasiid)
             ->first();
 
-
-
-        $ujianasesiasesor = UjianAsesiAsesor::with(['userasesor', 'userasesor.asesor'])
+        $ujianasesiasesor = UjianAsesiAsesor::with(['userasesor', 'userasesor.asesor', 'order', 'order.tuk'])
             ->where('asesi_id', $userid)
             ->where('sertifikasi_id', $sertifikasiid)
             ->firstOrFail();
@@ -317,6 +315,8 @@ class AsesiUnitKompetensiDokumenController extends Controller
             $defaultPage = 'admin.assesi.mapa-02-print';
         } else if($printMode && !$page XOR $printMode && $page && $page == 'apl02') {
             $defaultPage = 'admin.assesi.apl02-print';
+        } else if($printMode && $page && $page == 'ak02') {
+            $defaultPage = 'admin.assesi.fr-ak-02-print';
         }
 
         // return data to view
