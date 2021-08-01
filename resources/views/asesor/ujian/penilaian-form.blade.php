@@ -6,37 +6,58 @@
     <div class="form-row">
 
         @if(isset($isShow))
-            <div class="btn-group">
-                <button type="button" class="btn bg-gradient-success disabled">
-                    <i class="fas fa-print"></i> Cetak
-                </button>
-                @if(isset($query->soalpaket) and !empty($query->soalpaket) and $query->soalpaket->jenis_ujian === 'wawancara')
-                    <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_lisan', '', 'fullscreen=yes');">
-                        FR.IA.07
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_wawancara', '', 'fullscreen=yes');">
-                        FR.IA.09
-                    </button>
-                @else
-                    <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_pilihan_ganda', '', 'fullscreen=yes');">
-                        FR.IA.05
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_pilihan_ganda', '', 'fullscreen=yes');">
-                        FR.IA.05.A
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_pilihan_ganda', '', 'fullscreen=yes');">
-                        FR.IA.05.B
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_essay', '', 'fullscreen=yes');">
-                        FR.IA.06
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_essay', '', 'fullscreen=yes');">
-                        FR.IA.06.A
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_essay', '', 'fullscreen=yes');">
-                        FR.IA.06.B
-                    </button>
-                @endif
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="btn-group">
+                        <button type="button" class="btn bg-gradient-success disabled">
+                            <i class="fas fa-print"></i> Cetak
+                        </button>
+                        @if(isset($query->soalpaket) and !empty($query->soalpaket) and $query->soalpaket->jenis_ujian === 'wawancara')
+                            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_lisan', '', 'fullscreen=yes');">
+                                FR.IA.07
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_wawancara', '', 'fullscreen=yes');">
+                                FR.IA.09
+                            </button>
+                        @else
+                            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_pilihan_ganda', '', 'fullscreen=yes');">
+                                FR.IA.05
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_pilihan_ganda', '', 'fullscreen=yes');">
+                                FR.IA.05.A
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_pilihan_ganda', '', 'fullscreen=yes');">
+                                FR.IA.05.B
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=soal_essay', '', 'fullscreen=yes');">
+                                FR.IA.06
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_essay', '', 'fullscreen=yes');">
+                                FR.IA.06.A
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=jawaban_asesi_essay', '', 'fullscreen=yes');">
+                                FR.IA.06.B
+                            </button>
+                        @endif
+                    </div>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <div class="btn-group">
+                        <button type="button" class="btn bg-gradient-success disabled">
+                            <i class="fas fa-print"></i> Cetak
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=ak05', '', 'fullscreen=yes');">
+                            FR.AK.05
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=ia08', '', 'fullscreen=yes');">
+                            FR.IA.08
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="window.open('{{ request()->url() }}?print=true&page=ia11', '', 'fullscreen=yes');">
+                            FR.IA.11
+                        </button>
+                    </div>
+                </div>
+
             </div>
         @endif
 

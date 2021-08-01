@@ -21,13 +21,13 @@
 
             @if(isset($isShow))
                 <button type="button" class="btn btn-success m-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
-                    <i class="fas fa-print"></i> Cetak FR.APL.02</a>
+                    <i class="fas fa-print"></i> Cetak FR.APL.02
                 </button>
                 <button type="button" class="btn btn-success m-2" onclick="window.open('{{ request()->url() }}?print=true&page=ak02', '', 'fullscreen=yes');">
-                    <i class="fas fa-print"></i> Cetak FR.AK.02</a>
+                    <i class="fas fa-print"></i> Cetak FR.AK.02
                 </button>
                 <button type="button" class="btn btn-success m-2" onclick="window.open('{{ request()->url() }}?print=true&page=mapa02', '', 'fullscreen=yes');">
-                    <i class="fas fa-print"></i> Cetak FR.MAPA.02</a>
+                    <i class="fas fa-print"></i> Cetak FR.MAPA.02
                 </button>
             @endif
 

@@ -236,6 +236,12 @@ class UjianAsesiJawabanController extends Controller
                 $pageView = 'asesor.ujian.penilaian-print-lisan';
             } else if($page && $page == 'soal_wawancara') {
                 $pageView = 'asesor.ujian.penilaian-print-wawancara';
+            } else if($page && $page == 'ak05') {
+                $pageView = 'asesor.ujian.fr-ak-05-print';
+            } else if($page && $page == 'ia08') {
+                $pageView = 'asesor.ujian.fr-ia-08-print';
+            } else if($page && $page == 'ia11') {
+                $pageView = 'asesor.ujian.fr-ia-11-print';
             }
         }
 
