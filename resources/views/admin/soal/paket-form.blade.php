@@ -204,7 +204,7 @@
                             </tr>
                             </thead>
                             <tbody id="soal-lisan-result">
-                            @if(isset($isShow) && isset($soal_lisan) OR isset($isEdit) && isset($soal_lisan))
+                            @if(isset($isShow) && isset($soal_lisans) OR isset($isEdit) && isset($soal_lisans))
                                 @foreach($soal_lisans as $soal_lisan)
                                     <tr id="lisan-{{ $soal_lisan->id }}">
                                         <input type="hidden" name="soal_lisan_id[]" value="{{ $soal_lisan->id }}">
