@@ -129,7 +129,7 @@
                     <tr>
                         <td width="15%">Tanggal Ujian</td>
                         <td width="2%">:</td>
-                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d/m/Y') : '' }}</td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d-m-Y') : '' }}</td>
                     </tr>
                     <tr>
                         <td width="15%">Judul Ujian</td>
@@ -503,14 +503,14 @@
                             @if(isset($query->is_kompeten) and in_array($query->is_kompeten, [0, 1]))
                                 @if($query->is_kompeten)
                                     <span>Kompeten</span>{{ __(' / ') }}
-                                    <span style="text-decoration: line-through;">Tidak Kompeten</span>
+                                    <span style="text-decoration: line-through;">Belum Kompeten</span>
                                 @else
                                     <span style="text-decoration: line-through;">Kompeten</span>{{ __(' / ') }}
-                                    <span>Tidak Kompeten</span>
+                                    <span>Belum Kompeten</span>
                                 @endif
                             @else
                                 <span>Kompeten</span>{{ __(' / ') }}
-                                <span>Tidak Kompeten</span>
+                                <span>Belum Kompeten</span>
                             @endif
                         @elseif(isset($isEdit))
                             <div class="form-check">
