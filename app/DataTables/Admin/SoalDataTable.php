@@ -50,14 +50,18 @@ class SoalDataTable extends DataTable
                         ),
                 ]);
             })
-            ->rawColumns(['question', 'kode_uk']);
+            ->rawColumns(['question', 'kode_uk'])
+            ->filterColumn('kode_uk', function($query, $keyword) {
+               $query->where('unit_kompetensis.title', 'LIKE', "%$keyword%")
+                   ->orWhere('unit_kompetensis.kode_unit_kompetensi', 'LIKE', "%$keyword%");
+            });
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Soaltest $model
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Soal $model
+     * @return Soal|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function query(Soal $model)
     {

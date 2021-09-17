@@ -27,14 +27,18 @@ class SoalDataTable extends DataTable
             ->editColumn('kode_uk', function ($query) {
                 return $query->unit_kompetensi_kode_unit_kompetensi . "<br />" . $query->unit_kompetensi_title;
             })
-            ->rawColumns(['kode_uk']);
+            ->rawColumns(['question', 'kode_uk'])
+            ->filterColumn('kode_uk', function($query, $keyword) {
+                $query->where('unit_kompetensis.title', 'LIKE', "%$keyword%")
+                    ->orWhere('unit_kompetensis.kode_unit_kompetensi', 'LIKE', "%$keyword%");
+            });
     }
 
     /**
      * Get query source of dataTable.
      *
      * @param \App\Soal $model
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Soal|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function query(Soal $model)
     {
