@@ -456,16 +456,16 @@ class SoalPaketController extends Controller
         // sertifikasi id search
         $sertifikasi_id = $request->input('sertifikasi_id');
 
-        // check if query is numeric or not
-        if(is_numeric($q)) {
-            $query = $query->where('id', 'like', "%$q%");
-        } else {
-            $query = $query->where('title', 'like', "%$q%");
-        }
-
-        if(!empty($sertifikasi_id)) {
-            $query = $query->where('sertifikasi_id', $sertifikasi_id);
-        }
+        $query->when($q, function($query) use ($q) {
+            if(is_numeric($q)) {
+                $query->where('id', 'like', "%$q%");
+            } else {
+                $query->where('title', 'like', "%$q%");
+            }
+        })
+        ->when($sertifikasi_id, function($query) use ($sertifikasi_id) {
+            $query->where('sertifikasi_id', $sertifikasi_id);
+        });
 
         // limit search soal paket by asesor id if search by assesor
         $user = $request->user();
