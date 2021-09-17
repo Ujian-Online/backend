@@ -81,10 +81,12 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <select class="form-control" id="soal_pilihanganda_ukid" data-placeholder="Pilih Unit Kompetensi">
-                    </select>
-                    <select class="form-control" id="soal_pilihanganda_id" data-placeholder="Pilih Soal Pilihan Ganda">
-                    </select>
+                    <div class="mb-2">
+                        <select class="form-control" id="soal_pilihanganda_ukid" data-placeholder="Pilih Unit Kompetensi"></select>
+                    </div>
+                    <div class="mb-2" id="soal_pilihanganda_parent_id" style="display: none;">
+                        <select class="form-control" id="soal_pilihanganda_id" data-placeholder="Pilih Soal Pilihan Ganda"></select>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -411,6 +413,26 @@
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
             allowClear: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{{ route('admin.sertifikasi.uk.search.sertifikasi') }}',
+                dataType: 'JSON',
+                delay: 100,
+                cache: false,
+                data: function (data) {
+                    return {
+                        q: data.term,
+                        sertifikasi_id: $('#sertifikasi_id').val(),
+                    }
+                },
+                processResults: function (response) {
+                    $('#soal_pilihanganda_parent_id').show();
+
+                    return {
+                        results: response
+                    }
+                }
+            },
         });
 
         // soal pilihan ganda select2 with ajax query search
@@ -429,6 +451,7 @@
                         type: 'multiple_option',
                         skip: soalpil(),
                         sertifikasi_id: $('#sertifikasi_id').val(),
+                        unit_kompetensi_id: $('#soal_pilihanganda_ukid').val(),
                     }
                 },
                 processResults: function (response) {

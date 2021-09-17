@@ -358,6 +358,7 @@ class SoalController extends Controller
         $type = $request->input('type');
         $skip = $request->input('skip');
         $sertifikasi_id = $request->input('sertifikasi_id');
+        $unit_kompetensi_id = $request->input('unit_kompetensi_id');
 
         // return empty object if query is empty
         if(!empty($q) and is_numeric($q)) {
@@ -378,17 +379,20 @@ class SoalController extends Controller
 
         // search by sertifikasi id
         if(!empty($sertifikasi_id)) {
-            $query = $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id)
-                ->where('unit_kompetensis.kode_unit_kompetensi', 'like', "%$q%");
+            $query = $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id);
+        }
 
+        if(!empty($unit_kompetensi_id)) {
+            $query = $query->where('sertifikasi_unit_kompentensis.unit_kompetensi_id', $unit_kompetensi_id);
         }
 
         // check if data found or not
         if($query->count() != 0) {
             foreach($query->get() as $data) {
+                $kompetensi_id = !empty($unit_kompetensi_id) ? null : '[' . $data->kode_unit_kompetensi . '] - ';
                 $result[] = [
                     'id' => $data->id,
-                    'text' => '[' . $data->kode_unit_kompetensi . '] - ' . strip_tags($data->question),
+                    'text' =>  $kompetensi_id . strip_tags($data->question),
                 ];
             }
         }

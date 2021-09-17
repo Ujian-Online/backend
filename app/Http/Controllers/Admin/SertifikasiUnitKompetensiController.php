@@ -357,20 +357,28 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // get input from select2 search term
         $q = $request->input('q');
+        $sertifikasi_id = $request->input('sertifikasi_id');
 
         // database query
         $query = SertifikasiUnitKompentensi::select([
-            'sertifikasi_unit_kompentensis.id',
-            'sertifikasi_unit_kompentensis.title as unit_kompetensi_title',
+            'unit_kompetensis.id',
+            'unit_kompetensis.title as unit_kompetensi_title',
+            'unit_kompetensis.kode_unit_kompetensi as unit_kompetensi_kode',
             'sertifikasis.title as sertifikasi_title',
         ])
             ->join('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
+            ->join('unit_kompetensis', 'unit_kompetensis.id', '=', 'sertifikasi_unit_kompentensis.unit_kompetensi_id')
+            ->when($sertifikasi_id, function($query) use ($sertifikasi_id) {
+                $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id);
+            })
             ->when($q, function($query) use ($q) {
                 if(is_numeric($q)) {
-                    $query->where('sertifikasi_unit_kompentensis.id', $q);
+                    $query->where('sertifikasi_unit_kompentensis.id', $q)
+                        ->orWhere('sertifikasis.id', $q);
                 } else {
-                    $query->where('sertifikasi_unit_kompentensis.title', 'like', '%' . $q . '%')
-                            ->orWhere('sertifikasis.title', 'like', '%' . $q . '%');
+                    $query->where('unit_kompetensis.title', 'like', '%' . $q . '%')
+                        ->orWhere('unit_kompetensis.kode_unit_kompetensi', 'like', '%' . $q . '%')
+                        ->orWhere('sertifikasis.title', 'like', '%' . $q . '%');
                 }
             });
 
@@ -380,9 +388,11 @@ class SertifikasiUnitKompetensiController extends Controller
         // check if data found or not
         if($query->count() != 0) {
             foreach($query->get() as $data) {
+                $sertifikasi = $sertifikasi_id ? null : $data->sertifikasi_title . ' - ';
+
                 $result[] = [
                     'id' => $data->id,
-                    'text' => $data->sertifikasi_title . ' - ' . $data->unit_kompetensi_title,
+                    'text' => $sertifikasi . $data->unit_kompetensi_title . ' [' . $data->unit_kompetensi_kode . ']',
                 ];
             }
         }
