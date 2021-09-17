@@ -12,7 +12,7 @@
         <div class="form-row">
             <h3>FR.AK.05. LAPORAN ASESMEN</h3>
 
-            <div class="table-responsive mt-2 mb-2">
+            <div class="mt-2 mb-2" style="width: 100%">
                 <table border="1px" class="table table-bordered">
                     <tbody>
                     <tr>
@@ -70,8 +70,7 @@
                             Tanggal
                         </td>
                         <td width="1%">:</td>
-                        <td>
-                        </td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d-m-Y') : '' }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -116,15 +115,21 @@
                     <tbody>
                         <tr>
                             <td width="50%">Aspek Negatif dan Positif dalam Asesemen</td>
-                            <td width="50%"></td>
+                            <td width="50%">
+                                <textarea rows="3" style="width: 100%; border: 0;"></textarea>
+                            </td>
                         </tr>
                         <tr>
                             <td width="50%">Pencatatan Penolakan Hasil Asesmen</td>
-                            <td width="50%"></td>
+                            <td width="50%">
+                                <textarea rows="3" style="width: 100%; border: 0;"></textarea>
+                            </td>
                         </tr>
                         <tr>
                             <td width="50%">Saran Perbaikan :<br />(Asesor/Personil Terkait)</td>
-                            <td width="50%"></td>
+                            <td width="50%">
+                                <textarea rows="3" style="width: 100%; border: 0;"></textarea>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -167,9 +172,17 @@
 
 
         </div>
+
+        <button id="print" class="bg-success no-print" style="position:fixed; width:60px; height:60px; bottom:40px; right:40px; border-radius:50px; text-align:center; box-shadow: 2px 2px 3px #999;">
+            <i class="fa fa-print fa-2x"></i>
+        </button>
     </div>
 @endsection
 
 @section('js')
-    <script>window.print();</script>
+    <script>
+        $("#print").on('click', function() {
+            window.print();
+        })
+    </script>
 @endsection

@@ -77,8 +77,7 @@
                             Tanggal
                         </td>
                         <td width="1%">:</td>
-                        <td>
-                        </td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d-m-Y') : '' }}</td>
                     </tr>
                     </tbody>
                 </table>

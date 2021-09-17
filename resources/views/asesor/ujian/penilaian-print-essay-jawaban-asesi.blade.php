@@ -131,7 +131,7 @@
                                     <td class="text-center" style="vertical-align: middle;">{{ $key_soal+1 }}</td>
                                     <td>{{ $soal['user_answer'] }}</td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        <input type="checkbox" @if((($soal['final_score']/$soal['max_score']) * 100) => 75) {{__('checked')}} @endif onclick="return false;" />
+                                        <input type="checkbox" @if((($soal['final_score']/$soal['max_score']) * 100) >= 75) {{__('checked')}} @endif onclick="return false;" />
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">
                                         <input type="checkbox" @if((($soal['final_score']/$soal['max_score']) * 100) <= 75) {{__('checked')}} @endif onclick="return false;" />

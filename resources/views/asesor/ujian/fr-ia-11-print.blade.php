@@ -12,7 +12,7 @@
         <div class="form-row">
             <h3>FR.IA.11. CEKLIS MENINJAU INSTRUMEN ASESSMEN</h3>
 
-            <div class="table-responsive mt-2 mb-2">
+            <div class="mt-2 mb-2" style="width: 100%;">
                 <table border="1px" class="table table-bordered">
                     <tbody>
                     <tr>
@@ -77,8 +77,7 @@
                             Tanggal
                         </td>
                         <td width="1%">:</td>
-                        <td>
-                        </td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d-m-Y') : '' }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -119,51 +118,51 @@
                     <tbody>
                     <tr>
                         <td>Instruksi perangkat asesmen dan kondisi asesmen diidentifikasi dengan jelas</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td><textarea rows="3" style="width: 100%; border: 0;"></textarea></td>
                     </tr>
                     <tr>
                         <td>Informasi tertulis dituliskan secara tepat</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td><textarea rows="3" style="width: 100%; border: 0;"></textarea></td>
                     </tr>
                     <tr>
                         <td>Kegiatan asesmen membahas persyaratan bukti untuk kompetensi atau kompetensi yang diases</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td><textarea rows="3" style="width: 100%; border: 0;"></textarea></td>
                     </tr>
                     <tr>
                         <td>Tingkat kesulitan bahasa, literasi, dan berhitung sesuai dengan tingkat unit kompetensi yang dinilai.</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td><textarea rows="3" style="width: 100%; border: 0;"></textarea></td>
                     </tr>
                     <tr>
                         <td>Tingkat kesulitan kegiatan sesuai dengan kompetensi atau kompetensi yang diases.</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td><textarea rows="3" style="width: 100%; border: 0;"></textarea></td>
                     </tr>
                     <tr>
                         <td>Contoh, benchmark dan / atau ceklis asesmen tersedia untuk digunakan dalam pengambilan keputusan asesmen.</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td><textarea rows="3" style="width: 100%; border: 0;"></textarea></td>
                     </tr>
                     <tr>
                         <td>Diperlukan modifikasi (seperti yang diidentifikasi dalam Komentar)</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td><textarea rows="3" style="width: 100%; border: 0;"></textarea></td>
                     </tr>
                     <tr>
                         <td>Tugas asesmen siap digunakan:</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td><textarea rows="3" style="width: 100%; border: 0;"></textarea></td>
                     </tr>
                     </tbody>
                 </table>
@@ -174,22 +173,33 @@
                     <tbody>
                     <tr>
                         <td width="33%">
-                            Nama Peninjau <br /><br /><br />
+                            Nama Peninjau <br /><br />
+                            <textarea rows="1" style="width: 100%; border: 0;"></textarea>
                         </td>
                         <td width="33%">
-                            Tanggal dan Tanda Tangan Peninjau <br /><br /><br />
+                            Tanggal dan Tanda Tangan Peninjau <br /><br />
+                            <textarea rows="1" style="width: 100%; border: 0;"></textarea>
                         </td>
                         <td width="33%">
-                            Komentar <br /><br /><br />
+                            Komentar <br /><br />
+                            <textarea rows="2" style="width: 100%; border: 0;"></textarea>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <button id="print" class="bg-success no-print" style="position:fixed; width:60px; height:60px; bottom:40px; right:40px; border-radius:50px; text-align:center; box-shadow: 2px 2px 3px #999;">
+            <i class="fa fa-print fa-2x"></i>
+        </button>
     </div>
 @endsection
 
 @section('js')
-        <script>window.print();</script>
+    <script>
+        $("#print").on('click', function() {
+            window.print();
+        })
+    </script>
 @endsection
