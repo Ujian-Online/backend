@@ -251,8 +251,8 @@ return [
                         'active'    => 'admin.ujian.asesi.waiting.index',
                     ],
                     [
-                        'title'     => 'Asesi Jawaban',
-                        'icon'      => 'fas fa-book-open',
+                        'title'     => 'Asesi Penilaian',
+                        'icon'      => 'fa fa-file-signature',
                         'route'     => 'admin.ujian.jawaban.index',
                         'active'    => 'admin.ujian.jawaban.*',
                     ],
