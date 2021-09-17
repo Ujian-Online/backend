@@ -81,6 +81,8 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-12">
+                    <select class="form-control" id="soal_pilihanganda_ukid" data-placeholder="Pilih Unit Kompetensi">
+                    </select>
                     <select class="form-control" id="soal_pilihanganda_id" data-placeholder="Pilih Soal Pilihan Ganda">
                     </select>
                 </div>
@@ -98,12 +100,12 @@
                             </thead>
                             <tbody id="soal-pilihanganda-result">
                             @if(isset($isShow) && isset($soal_pilihangandas) OR isset($isEdit) && isset($soal_pilihangandas))
-                                @foreach($soal_pilihangandas as $soal_pilihanganda)
+                                @foreach($soal_pilihangandas as $key_soal_pilihanganda => $soal_pilihanganda)
                                     <tr id="pilihanganda-{{ $soal_pilihanganda->id }}">
                                         <input type="hidden" name="soal_pilihanganda_id[]" value="{{ $soal_pilihanganda->id }}">
-                                        <td class="text-center">{{ $soal_pilihanganda->id }}</td>
+                                        <td class="text-center">{{ $key_soal_pilihanganda + 1 }}</td>
                                         <td>
-                                            {{ $soal_pilihanganda->question }}
+                                            {!! $soal_pilihanganda->question !!}
                                             <ol type="A">
                                                 @if(isset($soal_pilihanganda->soalpilihanganda) and !empty($soal_pilihanganda->soalpilihanganda))
                                                     @foreach($soal_pilihanganda->soalpilihanganda as $pilganda)
@@ -156,11 +158,11 @@
                             </thead>
                             <tbody id="soal-essay-result">
                             @if(isset($isShow) && isset($soal_essays) OR isset($isEdit) && isset($soal_essays))
-                                @foreach($soal_essays as $soal_essay)
+                                @foreach($soal_essays as $key_soal_essay => $soal_essay)
                                     <tr id="essay-{{ $soal_essay->id }}">
                                         <input type="hidden" name="soal_essay_id[]" value="{{ $soal_essay->id }}">
-                                        <td class="text-center">{{ $soal_essay->id }}</td>
-                                        <td>{{ $soal_essay->question }}</td>
+                                        <td class="text-center">{{ $key_soal_essay + 1 }}</td>
+                                        <td>{!! $soal_essay->question !!}</td>
                                         <td>{{ $soal_essay->answer_essay }}</td>
                                         <td class="text-center">{{ $soal_essay->max_score }}</td>
                                         <td><button type="button" class="btn btn-danger" onclick="deltr('essay-{{ $soal_essay->id }}')" @if(isset($isShow)) disabled @endif >Delete</button></td>
@@ -205,10 +207,10 @@
                             </thead>
                             <tbody id="soal-lisan-result">
                             @if(isset($isShow) && isset($soal_lisans) OR isset($isEdit) && isset($soal_lisans))
-                                @foreach($soal_lisans as $soal_lisan)
+                                @foreach($soal_lisans as $key_soal_lisan => $soal_lisan)
                                     <tr id="lisan-{{ $soal_lisan->id }}">
                                         <input type="hidden" name="soal_lisan_id[]" value="{{ $soal_lisan->id }}">
-                                        <td class="text-center">{{ $soal_lisan->id }}</td>
+                                        <td class="text-center">{{ $key_soal_lisan + 1 }}</td>
                                         <td>{!! $soal_lisan->question !!}</td>
                                         <td>{{ $soal_lisan->answer_essay }}</td>
                                         <td class="text-center">{{ $soal_lisan->max_score }}</td>
@@ -253,10 +255,10 @@
                             </thead>
                             <tbody id="soal-wawancara-result">
                                 @if(isset($isShow) && isset($soal_wawancaras) OR isset($isEdit) && isset($soal_wawancaras))
-                                    @foreach($soal_wawancaras as $soal_wawancara)
+                                    @foreach($soal_wawancaras as $key_soal_wawancara => $soal_wawancara)
                                         <tr id="wawancara-{{ $soal_wawancara->id }}">
                                             <input type="hidden" name="soal_wawancara_id[]" value="{{ $soal_wawancara->id }}">
-                                            <td class="text-center">{{ $soal_wawancara->id }}</td>
+                                            <td class="text-center">{{ $key_soal_wawancara + 1 }}</td>
                                             <td>{!! $soal_wawancara->question !!}</td>
                                             <td class="text-center">{{ $soal_wawancara->max_score }}</td>
                                             <td><button type="button" class="btn btn-danger" onclick="deltr('wawancara-{{ $soal_wawancara->id }}')" @if(isset($isShow)) disabled @endif >Delete</button></td>
@@ -404,7 +406,14 @@
             $("#soal_essay_id").val('').trigger('change');
         }
 
-        // soal select2 with ajax query search
+        // soal pilihan ganda select2 ukid with ajax query search
+        $('#soal_pilihanganda_ukid').select2({
+            theme: 'bootstrap4',
+            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+            allowClear: true,
+        });
+
+        // soal pilihan ganda select2 with ajax query search
         $('#soal_pilihanganda_id').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
