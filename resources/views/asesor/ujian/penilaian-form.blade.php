@@ -61,7 +61,7 @@
             </div>
         @endif
 
-        <div class="table-responsive mt-2 mb-2">
+        <div class="mt-2 mb-2" style="width: 100%">
             <table class="table table-bordered">
                 <tbody>
                     <tr>
@@ -213,7 +213,7 @@
                                         <input type="hidden" class="total-score" value="{{ $soal_pilihanganda->max_score }}">
                                         <td class="text-center">{{ $soal_pilihanganda->urutan }}</td>
                                         <td>
-                                            <p>{{ $soal_pilihanganda->question }}</p>
+                                            {!! $soal_pilihanganda->question !!}
 
                                             @if(isset($soal_pilihanganda->options_label) and !empty($soal_pilihanganda->options_label))
                                                 @foreach($soal_pilihanganda->options_label as $key_pil => $pilganda)
@@ -284,7 +284,7 @@
                                         <input type="hidden" class="total-score" value="{{ $soal_essay->max_score }}">
                                         <td class="text-center">{{ $soal_essay->urutan }}</td>
                                         <td>
-                                            {{ $soal_essay->question }}
+                                            {!! $soal_essay->question !!}
 
                                             <hr />
 
@@ -474,7 +474,7 @@
     </div>
 
     <div class="form-row">
-        <div class="table-responsive mt-2 mb-2">
+        <div class="mt-2 mb-2" style="width: 100%">
             <table class="table table-bordered">
                 <tbody>
                 <tr>
