@@ -143,8 +143,12 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <select class="form-control" id="soal_essay_id" data-placeholder="Pilih Soal Essay">
-                    </select>
+                    <div class="mb-2">
+                        <select class="form-control" id="soal_essay_ukid" data-placeholder="Pilih Unit Kompetensi"></select>
+                    </div>
+                    <div class="mb-2" id="soal_essay_parent_id" style="display: none;">
+                        <select class="form-control" id="soal_essay_id" data-placeholder="Pilih Soal Essay"></select>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -192,8 +196,12 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <select class="form-control" id="soal_lisan_id" data-placeholder="Pilih Soal Lisan">
-                    </select>
+                    <div class="mb-2">
+                        <select class="form-control" id="soal_lisan_ukid" data-placeholder="Pilih Unit Kompetensi"></select>
+                    </div>
+                    <div class="mb-2" id="soal_lisan_parent_id" style="display: none;">
+                        <select class="form-control" id="soal_lisan_id" data-placeholder="Pilih Soal Lisan"></select>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -241,8 +249,12 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <select class="form-control" id="soal_wawancara_id" data-placeholder="Pilih Soal Wawancara">
-                    </select>
+                    <div class="mb-2">
+                        <select class="form-control" id="soal_wawancara_ukid" data-placeholder="Pilih Unit Kompetensi"></select>
+                    </div>
+                    <div class="mb-2" id="soal_wawancara_parent_id" style="display: none;">
+                        <select class="form-control" id="soal_wawancara_id" data-placeholder="Pilih Soal Wawancara"></select>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -301,14 +313,32 @@
         });
 
         showHide();
+
+        const soalNumber = (key) => {
+            const oldKey = localStorage.getItem(key);
+            let newKey = 1;
+
+            // check old key
+            if(oldKey) {
+                newKey = parseInt(oldKey) + parseInt(newKey);
+            }
+
+            // save key
+            localStorage.setItem(key, newKey);
+            return newKey;
+        }
+
+        // clean local storage in first load
+        const cleanLocalStorage = () => {
+            localStorage.removeItem('soal_pilihanganda_id');
+            localStorage.removeItem('soal_essay_id');
+            localStorage.removeItem('soal_wawancara_id');
+            localStorage.removeItem('soal_lisan_id');
+        }
+        cleanLocalStorage();
     </script>
     <script>
-        /**
-         * Select2 with Ajax Start
-         * @type {string}
-         */
-
-            // default selected sertifikasi_id from query URL
+        // default selected sertifikasi_id from query URL
         const sertifikasi_id_default = '{{ request()->input('sertifikasi_id') ?? $query->sertifikasi_id ?? null }}'
         // trigger load data if sertifikasi_id not null
         if(sertifikasi_id_default) {
@@ -354,191 +384,95 @@
                 }
             },
         });
-
-        /**
-         * Select2 with Ajax End
-         * @type {string}
-         */
     </script>
     <script>
-        /**
-         * Select2 with Ajax Start
-         * @type {string}
-         */
-
-        // get id soalpilihanganda
-        function soalpil() {
-            const soalpil = $("input[name='soal_pilihanganda_id[]']")
-                .map(function(){return $(this).val();}).get();
-
-            // convert array to string with comma separate
-            return soalpil.join();
-        }
-
-        // get id soalessay
-        function soalessay() {
-            const soalessay = $("input[name='soal_essay_id[]']")
-                .map(function(){return $(this).val();}).get();
-
-            // convert array to string with comma separate
-            return soalessay.join();
-        }
-
-        // get id soallisan
-        function soallisan() {
-            const soallisan = $("input[name='soal_lisan_id[]']")
-                .map(function(){return $(this).val();}).get();
-
-            // convert array to string with comma separate
-            return soallisan.join();
-        }
-
-        // get id soalwawancara
-        function soalwawancara() {
-            const soalwawancara = $("input[name='soal_wawancara_id[]']")
-                .map(function(){return $(this).val();}).get();
-
-            // convert array to string with comma separate
-            return soalwawancara.join();
-        }
-
         function deltr(id) {
             $(`#${id}`).remove();
             $("#soal_pilihanganda_id").val('').trigger('change');
             $("#soal_essay_id").val('').trigger('change');
         }
 
-        // soal pilihan ganda select2 ukid with ajax query search
-        $('#soal_pilihanganda_ukid').select2({
-            theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
-            allowClear: true,
-            minimumInputLength: 0,
-            ajax: {
-                url: '{{ route('admin.sertifikasi.uk.search.sertifikasi') }}',
-                dataType: 'JSON',
-                delay: 100,
-                cache: false,
-                data: function (data) {
-                    return {
-                        q: data.term,
-                        sertifikasi_id: $('#sertifikasi_id').val(),
+        const Select2UKID = (UKId, ParentID) => {
+            $(`#${UKId}`).select2({
+                theme: 'bootstrap4',
+                disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+                allowClear: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{{ route('admin.sertifikasi.uk.search.sertifikasi') }}',
+                    dataType: 'JSON',
+                    delay: 100,
+                    cache: false,
+                    data: function (data) {
+                        return {
+                            q: data.term,
+                            sertifikasi_id: $('#sertifikasi_id').val(),
+                        }
+                    },
+                    processResults: function (response) {
+                        $(`#${ParentID}`).show();
+
+                        return {
+                            results: response
+                        }
                     }
                 },
-                processResults: function (response) {
-                    $('#soal_pilihanganda_parent_id').show();
-
-                    return {
-                        results: response
-                    }
+            })
+            .on('change', function() {
+                const sertifikasiId = $('#sertifikasi_id').val();
+                if(!sertifikasiId) {
+                    alert('Anda belum memilih Sertifikasi.!');
                 }
-            },
-        });
+            })
+        }
 
-        // soal pilihan ganda select2 with ajax query search
-        $('#soal_pilihanganda_id').select2({
-            theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
-            allowClear: true,
-            ajax: {
-                url: '{{ route('admin.soal.search') }}',
-                dataType: 'JSON',
-                delay: 100,
-                cache: false,
-                data: function (data) {
-                    return {
-                        q: data.term,
-                        type: 'multiple_option',
-                        skip: soalpil(),
-                        sertifikasi_id: $('#sertifikasi_id').val(),
-                        unit_kompetensi_id: $('#soal_pilihanganda_ukid').val(),
+        const soalCount = (id) => {
+            const count = $(`input[name='${id}[]']`)
+                .map(function(){return $(this).val();}).get();
+
+            // convert array to string with comma separate
+            return count.join();
+        }
+
+        const Select2SoalID = (UKID, Select2ID, Type) => {
+            $(`#${Select2ID}`).select2({
+                theme: 'bootstrap4',
+                disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('admin.soal.search') }}',
+                    dataType: 'JSON',
+                    delay: 100,
+                    cache: false,
+                    data: function (data) {
+                        return {
+                            q: data.term,
+                            type: Type,
+                            skip: soalCount(Select2ID),
+                            sertifikasi_id: $('#sertifikasi_id').val(),
+                            unit_kompetensi_id: $(`#${UKID}`).val(),
+                        }
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response
+                        }
                     }
                 },
-                processResults: function (response) {
-                    return {
-                        results: response
-                    }
-                }
-            },
-        });
+            });
+        }
 
-        $('#soal_essay_id').select2({
-            theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
-            allowClear: true,
-            ajax: {
-                url: '{{ route('admin.soal.search') }}',
-                dataType: 'JSON',
-                delay: 100,
-                cache: false,
-                minimumInputLength: 1,
-                data: function (data) {
-                    return {
-                        q: data.term,
-                        type: 'essay',
-                        skip: soalessay(),
-                        sertifikasi_id: $('#sertifikasi_id').val(),
-                    }
-                },
-                processResults: function (response) {
-                    return {
-                        results: response
-                    }
-                }
-            },
-        });
+        Select2UKID('soal_pilihanganda_ukid', 'soal_pilihanganda_parent_id');
+        Select2SoalID('soal_pilihanganda_ukid', 'soal_pilihanganda_id', 'multiple_option');
 
-        $('#soal_lisan_id').select2({
-            theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
-            allowClear: true,
-            ajax: {
-                url: '{{ route('admin.soal.search') }}',
-                dataType: 'JSON',
-                delay: 100,
-                cache: false,
-                minimumInputLength: 1,
-                data: function (data) {
-                    return {
-                        q: data.term,
-                        type: 'lisan',
-                        skip: soallisan(),
-                        sertifikasi_id: $('#sertifikasi_id').val(),
-                    }
-                },
-                processResults: function (response) {
-                    return {
-                        results: response
-                    }
-                }
-            },
-        });
+        Select2UKID('soal_essay_ukid', 'soal_essay_parent_id');
+        Select2SoalID('soal_essay_ukid', 'soal_essay_id', 'essay');
 
-        $('#soal_wawancara_id').select2({
-            theme: 'bootstrap4',
-            disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }},
-            allowClear: true,
-            ajax: {
-                url: '{{ route('admin.soal.search') }}',
-                dataType: 'JSON',
-                delay: 100,
-                cache: false,
-                minimumInputLength: 1,
-                data: function (data) {
-                    return {
-                        q: data.term,
-                        type: 'wawancara',
-                        skip: soalwawancara(),
-                        sertifikasi_id: $('#sertifikasi_id').val(),
-                    }
-                },
-                processResults: function (response) {
-                    return {
-                        results: response
-                    }
-                }
-            },
-        });
+        Select2UKID('soal_lisan_ukid', 'soal_lisan_parent_id');
+        Select2SoalID('soal_lisan_ukid', 'soal_lisan_id', 'lisan');
+
+        Select2UKID('soal_wawancara_ukid', 'soal_wawancara_parent_id');
+        Select2SoalID('soal_wawancara_ukid', 'soal_wawancara_id', 'wawancara');
 
         /**
          * Select2 with Ajax End
@@ -556,10 +490,12 @@
                    const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
                    const { data: response } = request;
 
+                   const soalID = soalNumber('soal_pilihanganda_id');
+
                    $("#soal-pilihanganda-result").append(`
                         <tr id="pilihanganda-${response.id}">
                             <input type="hidden" name="soal_pilihanganda_id[]" value="${response.id}">
-                            <td class="text-center">${response.id}</td>
+                            <td class="text-center">${soalID}</td>
                             <td>
                                 ${response.question}
                                 <ol type="A">
@@ -592,10 +528,12 @@
                     const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
                     const { data: response } = request;
 
+                    const soalID = soalNumber('soal_essay_id');
+
                     $("#soal-essay-result").append(`
                         <tr id="essay-${response.id}">
                             <input type="hidden" name="soal_essay_id[]" value="${response.id}">
-                            <td class="text-center">${response.id}</td>
+                            <td class="text-center">${soalID}</td>
                             <td>${response.question}</td>
                             <td>${response.answer_essay}</td>
                             <td class="text-center">${response.max_score}</td>
@@ -620,10 +558,12 @@
                     const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
                     const { data: response } = request;
 
+                    const soalID = soalNumber('soal_lisan_id');
+
                     $("#soal-lisan-result").append(`
                         <tr id="lisan-${response.id}">
                             <input type="hidden" name="soal_lisan_id[]" value="${response.id}">
-                            <td class="text-center">${response.id}</td>
+                            <td class="text-center">${soalID}</td>
                             <td>${response.question}</td>
                             <td>${response.answer_essay}</td>
                             <td class="text-center">${response.max_score}</td>
@@ -648,10 +588,12 @@
                     const request = await axios.get('{{ url('admin/soal/daftar')  }}' + `/${value}`);
                     const { data: response } = request;
 
+                    const soalID = soalNumber('soal_wawancara_id');
+
                     $("#soal-wawancara-result").append(`
                         <tr id="wawancara-${response.id}">
                             <input type="hidden" name="soal_wawancara_id[]" value="${response.id}">
-                            <td class="text-center">${response.id}</td>
+                            <td class="text-center">${soalID}</td>
                             <td>${response.question}</td>
                             <td class="text-center">${response.max_score}</td>
                             <td><button type="button" class="btn btn-danger" onclick="deltr('wawancara-${response.id}')">Delete</button></td>
