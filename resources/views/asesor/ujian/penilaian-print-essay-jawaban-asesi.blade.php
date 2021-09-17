@@ -12,7 +12,7 @@
         <div class="form-row">
             <h3>FR.IA.06.B. LEMBAR JAWABAN PERTANYAAN TERTULIS ESAI</h3>
 
-            <div class="table-responsive mt-2 mb-2">
+            <div class="mt-2 mb-2" style="width: 100%">
                 <table border="1px" class="table table-bordered">
                     <tbody>
                     <tr>
@@ -77,8 +77,7 @@
                             Tanggal
                         </td>
                         <td width="1%">:</td>
-                        <td>
-                        </td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d-m-Y') : '' }}</td>
                     </tr>
                     <tr>
                         <td colspan="2" style="vertical-align: middle;">
@@ -95,7 +94,7 @@
 
             @foreach($uk_soals as $key => $unitkompentensi)
                 @if(isset($unitkompentensi['essay']) and !empty($unitkompentensi['essay']))
-                    <div class="table-responsive">
+                    <div style="width: 100%">
                         <table class="table table-bordered">
                             <tbody>
                             <tr>
@@ -132,10 +131,10 @@
                                     <td class="text-center" style="vertical-align: middle;">{{ $key_soal+1 }}</td>
                                     <td>{{ $soal['user_answer'] }}</td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        <input type="checkbox" @if($soal['final_score'] == $soal['max_score']) {{__('checked')}} @endif onclick="return false;" />
+                                        <input type="checkbox" @if((($soal['final_score']/$soal['max_score']) * 100) => 75) {{__('checked')}} @endif onclick="return false;" />
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        <input type="checkbox" @if($soal['final_score'] != $soal['max_score']) {{__('checked')}} @endif onclick="return false;" />
+                                        <input type="checkbox" @if((($soal['final_score']/$soal['max_score']) * 100) <= 75) {{__('checked')}} @endif onclick="return false;" />
                                     </td>
                                 </tr>
                             @endforeach
