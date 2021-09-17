@@ -43,7 +43,7 @@ class UjianAsesiPenilaianDataTable extends DataTable
                 return view('layouts.pageTableAction', [
                     'title' => $query->title,
                     'url_show' => route('admin.ujian-asesi.show', $query->id),
-                    'url_edit' => ($query->status == 'penilaian') ? route('admin.ujian-asesi.edit', $query->id) : null,
+                    'url_edit' => $query->status == 'penilaian' ? route('admin.ujian-asesi.edit', $query->id) : null,
                 ]);
             })
             ->filterColumn('ujian_jadwal_title', function($query, $keyword) {
