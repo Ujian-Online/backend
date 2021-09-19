@@ -111,7 +111,7 @@
                             <tbody>
                             @foreach($unitkompentensi['essay'] as $key_soal => $soal)
                                 <tr>
-                                    <td>{{ $key_soal+1 }}. {{ $soal['question'] }}</td>
+                                    <td>{{ $key_soal+1 }}. {!! $soal['question'] !!}</td>
                                 </tr>
                             @endforeach
                             </tbody>
