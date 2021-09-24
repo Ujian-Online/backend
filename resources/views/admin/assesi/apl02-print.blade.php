@@ -5,6 +5,32 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('print.css') }}" />
+    tr {
+        counter-reset: n;
+    }
+
+            
+    n {
+        margin: 0 !important;
+        padding: 0;
+        padding-left: 20px;
+        
+    }
+    
+    n > span {
+        
+        display: inline-block;
+        position: relative;
+        line-height: 1.2;
+    }
+    
+    n > span::before {
+        counter-increment: n;
+        content: counter(n) ".";
+        left: -30px;
+        position: absolute;
+        margin-bottom: 0 !important;
+    }
 @endsection
 
 @section('body')
@@ -139,8 +165,11 @@
 
                                         <tr>
                                             <td>
-                                                <p>{!! nl2br($ukelement->desc) !!}</p>
-                                                <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                                <p>Element : <b>{!! nl2br($ukelement->desc) !!}</b></p>
+                                                
+                                                <ol>
+                                                    <p> {!! nl2br($ukelement->upload_instruction) !!}</p>
+                                                </ol>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <input type="checkbox" @if($ukelement->is_verified) {{__('checked')}} @endif onclick="return false;" />
@@ -236,4 +265,11 @@
 
 @section('js')
     <script>window.print();</script>
+    Array.prototype.slice.call(document.querySelectorAll('n'))
+    .forEach((n) => {
+        n.innerHTML =n.innerHTML.split('<br>')
+        .map((l) => `<span>${l.trim()}</span>`)
+        .join('');
+        
+    });       
 @endsection
