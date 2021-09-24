@@ -116,6 +116,7 @@
                                         {{ $unitkompentensi->asesisertifikasiunitkompetensielement ? count($unitkompentensi->asesisertifikasiunitkompetensielement) : '' }}
                                     </td>
                                     <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <!-- Text Area -->
                                     <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
                                     <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
                                     <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
