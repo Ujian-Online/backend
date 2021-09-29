@@ -80,11 +80,12 @@
                             <tr>
                                 <td class="text-center text-bold"  style="vertical-align: middle;">{{ $key+1 }}</td>
                                 <td>{{ $muk }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <!-- add Check List -->
+                                <td class="text-center"><input type="checkbox" /></td>
+                                <td class="text-center"><input type="checkbox" /></td>
+                                <td class="text-center"><input type="checkbox" /></td>
+                                <td class="text-center"><input type="checkbox" /></td>
+                                <td class="text-center"><input type="checkbox" /></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -104,10 +105,17 @@
                 </ol>
             </p>
         </div>
+        <button id="print" class="bg-success no-print" style="position:fixed; width:60px; height:60px; bottom:40px; right:40px; border-radius:50px; text-align:center; box-shadow: 2px 2px 3px #999;">
+            <i class="fa fa-print fa-2x"></i>
+        </button>
     </div>
 
 @endsection
 
 @section('js')
-    <script>window.print();</script>
+    <script>
+        $("#print").on('click', function() {
+            window.print();
+        })
+    </script>
 @endsection

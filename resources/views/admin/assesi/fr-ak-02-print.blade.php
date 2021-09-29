@@ -5,6 +5,15 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('print.css') }}" />
+    <style>
+        
+        img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        }
+        
+    </style>
 @endsection
 
 @section('body')
@@ -106,13 +115,14 @@
                                         {{ $unitkompentensi->kode_unit_kompetensi }}<br />
                                         {{ $unitkompentensi->asesisertifikasiunitkompetensielement ? count($unitkompentensi->asesisertifikasiunitkompetensielement) : '' }}
                                     </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <!-- Add Text Area -->
+                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
                                 </tr>
                             @endforeach
                             <tr>
@@ -127,23 +137,43 @@
                             <tr>
                                 <td colspan="2">
                                     Tindak lanjut yang dibutuhkan <br />
-                                    (Masukkan pekerjaan tambahan dan asesmen yang diperlukan untuk mencapai kompetensi)
+                                    <p><textarea rows="3" style="width: 100%; text-align: left; border: 0;"></textarea></p>
+                                    
                                 </td>
                                 <td colspan="7">
                                     <ul>
-                                        <li>Tidak ada</li>
-                                        <li>Tindak lanjut yang dibutuhkan :</li>
+                                        <p>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="" fontWeight = "normal"> Tidak ada</label>
+                                            </div>
+                                                                             
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="" fontWeight = "normal"> Tindak lanjut yang dibutuhkan :</label>
+                                              </div>
+                                              <textarea rows="3" style="width: 100%; text-align: left; border: 0;"></textarea>
+                                        </p>
                                     </ul>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     Komentar/ Observasi oleh asesor
+                                    <p><textarea rows="2" style="width: 100%; text-align: left; border: 0;"></textarea></p>
                                 </td>
                                 <td colspan="7">
                                     <ul>
-                                        <li>Tidak ada</li>
-                                        <li>Komentar</li>
+                                        <p>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="" fontWeight = "normal"> Tidak ada</label>
+                                            </div>
+                                                                             
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="" fontWeight = "normal"> Komentar :</label>
+                                              </div>
+                                              <textarea rows="2" style="width: 100%; text-align: left; border: 0;"></textarea>
+                                        </p>
+                                        
+                                        
                                     </ul>
                                 </td>
                             </tr>
@@ -151,25 +181,25 @@
                                 <td colspan="1">Tanda tangan asesi:</td>
                                 <td colspan="4">
                                     @if(isset($user) and !empty($user->media_url_sign_user))
-                                        <img height="70px" width="70px" src="{{ (isset($user) and !empty($user->media_url_sign_user)) ? $user->media_url_sign_user : '' }}">
+                                        <img class="center" height="70px" width="70px" src="{{ (isset($user) and !empty($user->media_url_sign_user)) ? $user->media_url_sign_user : '' }}">
                                     @else
                                         {{ __('-') }}
                                     @endif
                                 </td>
                                 <td colspan="1">Tanggal:</td>
-                                <td colspan="3"></td>
+                                <td colspan="3">{{ $ujianasesiasesor->updated_at ? \Carbon\Carbon::parse($ujianasesiasesor->updated_at)->format('d/m/Y') : '' }}</td>
                             </tr>
                             <tr>
                                 <td colspan="1">Tanda tangan asesor:</td>
                                 <td colspan="4">
                                     @if(isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor) and !empty($ujianasesiasesor->userasesor->media_url_sign_user))
-                                        <img height="70px" width="70px" src="{{ (isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor)) ? $ujianasesiasesor->userasesor->media_url_sign_user : '' }}">
+                                        <img class="center" height="70px" width="70px" src="{{ (isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor)) ? $ujianasesiasesor->userasesor->media_url_sign_user : '' }}">
                                     @else
                                         {{ __('-') }}
                                     @endif
                                 </td>
                                 <td colspan="1">Tanggal:</td>
-                                <td colspan="3"></td>
+                                <td colspan="3">{{ $ujianasesiasesor->updated_at ? \Carbon\Carbon::parse($ujianasesiasesor->updated_at)->format('d/m/Y') : '' }}</td>
                             </tr>
                         @endif
                         </tbody>
@@ -186,10 +216,18 @@
             </p>
 
         </div>
+        
+        <button id="print" class="bg-success no-print" style="position:fixed; width:60px; height:60px; bottom:40px; right:40px; border-radius:50px; text-align:center; box-shadow: 2px 2px 3px #999;">
+            <i class="fa fa-print fa-2x"></i>
+        </button>
     </div>
 
 @endsection
 
 @section('js')
-    <script>window.print();</script>
+    <script>
+        $("#print").on('click', function() {
+            window.print();
+        })
+    </script>
 @endsection
