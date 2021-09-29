@@ -128,8 +128,8 @@
                             <tr>
                                 <td colspan="2" class="bg-yellow">Rekomendasi hasil asesmen</td>
                                 <td colspan="7" class="bg-yellow">
-                                    <p><input type="radio" name="rekomendasi"> Kompeten</p>
-                                    <p><input type="radio" name="rekomendasi"> Belum Kompeten</p>
+                                    <p><input type="checkbox" class="checkboxSelect" name="rekomendasi"> Kompeten</p>
+                                    <p><input type="checkbox" class="checkboxSelect" name="rekomendasi"> Belum Kompeten</p>
                                 </td>
                             </tr>
                             <tr>
@@ -139,8 +139,8 @@
 
                                 </td>
                                 <td colspan="7">
-                                    <p><input type="radio" name="tindakan"> Tidak ada</p>
-                                    <p><input type="radio" name="tindakan"> Tindak lanjut yang dibutuhkan :</p>
+                                    <p><input type="checkbox" class="checkboxSelect" name="tindakan"> Tidak ada</p>
+                                    <p><input type="checkbox" class="checkboxSelect" name="tindakan"> Tindak lanjut yang dibutuhkan :</p>
                                     <textarea rows="3" style="width: 100%; text-align: left;"></textarea>
                                 </td>
                             </tr>
@@ -150,8 +150,8 @@
                                     <p><textarea rows="2" style="width: 100%; text-align: left; border: 0;"></textarea></p>
                                 </td>
                                 <td colspan="7">
-                                    <p><input type="radio" name="komentar"> Tidak ada</p>
-                                    <p><input type="radio" name="komentar"> Komentar :</p>
+                                    <p><input type="checkbox" class="checkboxSelect" name="komentar"> Tidak ada</p>
+                                    <p><input type="checkbox" class="checkboxSelect" name="komentar"> Komentar :</p>
                                     <textarea rows="3" style="width: 100%; text-align: left;"></textarea>
                                 </td>
                             </tr>
@@ -207,5 +207,11 @@
         $("#print").on('click', function() {
             window.print();
         })
+
+        $(".checkboxSelect").click(function(){
+            var group = "input:checkbox[name='"+$(this).prop("name")+"']";
+            $(group).prop("checked",false);
+            $(this).prop("checked",true);
+        });
     </script>
 @endsection

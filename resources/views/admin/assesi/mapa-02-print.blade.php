@@ -81,11 +81,9 @@
                                 <td class="text-center text-bold"  style="vertical-align: middle;">{{ $key+1 }}</td>
                                 <td>{{ $muk }}</td>
                                 <!-- add Check List -->
-                                <td class="text-center"><input type="checkbox" /></td>
-                                <td class="text-center"><input type="checkbox" /></td>
-                                <td class="text-center"><input type="checkbox" /></td>
-                                <td class="text-center"><input type="checkbox" /></td>
-                                <td class="text-center"><input type="checkbox" /></td>
+                                @for($i = 0; $i <5; $i++)
+                                    <td class="text-center"><input type="checkbox" class="checkboxSelect" name="checklist[{{$key}}]" /></td>
+                                @endfor
                             </tr>
                         @endforeach
                     </tbody>
@@ -117,5 +115,11 @@
         $("#print").on('click', function() {
             window.print();
         })
+
+        $(".checkboxSelect").click(function(){
+            var group = "input:checkbox[name='"+$(this).prop("name")+"']";
+            $(group).prop("checked",false);
+            $(this).prop("checked",true);
+        });
     </script>
 @endsection
