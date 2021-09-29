@@ -25,4 +25,8 @@ textarea {
     .noprint{
         display:none;
     }
+
+    textarea {
+        border: 0;
+    }
 }

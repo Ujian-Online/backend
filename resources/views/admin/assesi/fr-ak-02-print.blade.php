@@ -6,13 +6,13 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('print.css') }}" />
     <style>
-        
+
         img {
         display: block;
         margin-left: auto;
         margin-right: auto;
         }
-        
+
     </style>
 @endsection
 
@@ -97,7 +97,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Unit kompetensi (kode UK)</th>
+                                <th class="text-center">Unit kompetensi (kode UK)</th>
                                 <th>Observasi demonstrasi</th>
                                 <th>Portofolio</th>
                                 <th>Pernyataan Pihak Ketiga Pertanyaan Wawancara</th>
@@ -115,44 +115,33 @@
                                         {{ $unitkompentensi->kode_unit_kompetensi }}<br />
                                         {{ $unitkompentensi->asesisertifikasiunitkompetensielement ? count($unitkompentensi->asesisertifikasiunitkompetensielement) : '' }}
                                     </td>
-                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center;"></textarea></td>
                                     <!-- Add Text Area -->
-                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
-                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
-                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
-                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
-                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
-                                    <td><textarea rows="1" style="width: 100%; text-align: center; border: 0;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center;"></textarea></td>
+                                    <td><textarea rows="1" style="width: 100%; text-align: center;"></textarea></td>
                                 </tr>
                             @endforeach
                             <tr>
                                 <td colspan="2" class="bg-yellow">Rekomendasi hasil asesmen</td>
                                 <td colspan="7" class="bg-yellow">
-                                    <ul>
-                                        <li>Kompeten</li>
-                                        <li>Belum Kompeten</li>
-                                    </ul>
+                                    <p><input type="radio" name="rekomendasi"> Kompeten</p>
+                                    <p><input type="radio" name="rekomendasi"> Belum Kompeten</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     Tindak lanjut yang dibutuhkan <br />
-                                    <p><textarea rows="3" style="width: 100%; text-align: left; border: 0;"></textarea></p>
-                                    
+                                    <p><textarea rows="3" style="width: 100%; text-align: left;"></textarea></p>
+
                                 </td>
                                 <td colspan="7">
-                                    <ul>
-                                        <p>
-                                            <div class="checkbox">
-                                                <label><input type="checkbox" value="" fontWeight = "normal"> Tidak ada</label>
-                                            </div>
-                                                                             
-                                            <div class="checkbox">
-                                                <label><input type="checkbox" value="" fontWeight = "normal"> Tindak lanjut yang dibutuhkan :</label>
-                                              </div>
-                                              <textarea rows="3" style="width: 100%; text-align: left; border: 0;"></textarea>
-                                        </p>
-                                    </ul>
+                                    <p><input type="radio" name="tindakan"> Tidak ada</p>
+                                    <p><input type="radio" name="tindakan"> Tindak lanjut yang dibutuhkan :</p>
+                                    <textarea rows="3" style="width: 100%; text-align: left;"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -161,20 +150,9 @@
                                     <p><textarea rows="2" style="width: 100%; text-align: left; border: 0;"></textarea></p>
                                 </td>
                                 <td colspan="7">
-                                    <ul>
-                                        <p>
-                                            <div class="checkbox">
-                                                <label><input type="checkbox" value="" fontWeight = "normal"> Tidak ada</label>
-                                            </div>
-                                                                             
-                                            <div class="checkbox">
-                                                <label><input type="checkbox" value="" fontWeight = "normal"> Komentar :</label>
-                                              </div>
-                                              <textarea rows="2" style="width: 100%; text-align: left; border: 0;"></textarea>
-                                        </p>
-                                        
-                                        
-                                    </ul>
+                                    <p><input type="radio" name="komentar"> Tidak ada</p>
+                                    <p><input type="radio" name="komentar"> Komentar :</p>
+                                    <textarea rows="3" style="width: 100%; text-align: left;"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -216,7 +194,7 @@
             </p>
 
         </div>
-        
+
         <button id="print" class="bg-success no-print" style="position:fixed; width:60px; height:60px; bottom:40px; right:40px; border-radius:50px; text-align:center; box-shadow: 2px 2px 3px #999;">
             <i class="fa fa-print fa-2x"></i>
         </button>

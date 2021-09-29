@@ -116,19 +116,19 @@
                         <tr>
                             <td width="50%">Aspek Negatif dan Positif dalam Asesemen</td>
                             <td width="50%">
-                                <textarea rows="3" style="width: 100%; border: 0;"></textarea>
+                                <textarea rows="3" style="width: 100%; "></textarea>
                             </td>
                         </tr>
                         <tr>
                             <td width="50%">Pencatatan Penolakan Hasil Asesmen</td>
                             <td width="50%">
-                                <textarea rows="3" style="width: 100%; border: 0;"></textarea>
+                                <textarea rows="3" style="width: 100%; "></textarea>
                             </td>
                         </tr>
                         <tr>
                             <td width="50%">Saran Perbaikan :<br />(Asesor/Personil Terkait)</td>
                             <td width="50%">
-                                <textarea rows="3" style="width: 100%; border: 0;"></textarea>
+                                <textarea rows="3" style="width: 100%; "></textarea>
                             </td>
                         </tr>
                     </tbody>
