@@ -231,3 +231,29 @@ if(!function_exists('re_captcha_validate')) {
         }
     }
 }
+
+if(!function_exists('apl02_uk_medias')) {
+    /**
+     * @param int $asesiId
+     * @param int $sertifikasiId
+     * @param null|int $ukId
+     * @return \App\AsesiSUKElementMedia[]|array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     */
+    function apl02_uk_medias(int $asesiId, int $sertifikasiId, int $ukId = null) {
+        return \App\AsesiSUKElementMedia::select([
+                'asesi_s_u_k_element_media.*',
+                'asesi_unit_kompetensi_dokumens.sertifikasi_id as sertifikasi_id',
+                'asesi_unit_kompetensi_dokumens.unit_kompetensi_id as unit_kompetensi_id'
+            ])
+            ->join('asesi_sertifikasi_unit_kompetensi_elements', 'asesi_sertifikasi_unit_kompetensi_elements.id', '=', 'asesi_s_u_k_element_media.asesi_suk_element_id')
+            ->join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
+            ->where('asesi_unit_kompetensi_dokumens.asesi_id', '=', $asesiId)
+            ->where('asesi_sertifikasi_unit_kompetensi_elements.asesi_id', '=', $asesiId)
+            ->where('asesi_s_u_k_element_media.asesi_id', '=', $asesiId)
+            ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', '=', $sertifikasiId)
+            ->when($ukId, function ($query, $ukId){
+                return $query->where('asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id', '=', $ukId);
+            })
+            ->get();
+    }
+}

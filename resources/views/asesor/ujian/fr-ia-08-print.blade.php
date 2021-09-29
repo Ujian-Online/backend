@@ -12,7 +12,7 @@
         <div class="form-row">
             <h3>FR.IA.08. CEKLIS VERIFIKASI PORTOFOLIO</h3>
 
-            <div class="table-responsive mt-2 mb-2">
+            <div class="mt-2 mb-2" style="width: 100%">
                 <table border="1px" class="table table-bordered">
                     <tbody>
                     <tr>
@@ -127,51 +127,34 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>(yang memenuhi kriteria VATM yang diinput ke dalam dokumen portofolio)</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>(yang memenuhi kriteria VATM yang diinput ke dalam dokumen portofolio)</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>(yang memenuhi kriteria VATM yang diinput ke dalam dokumen portofolio)</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+
+                        @foreach($uk_soals as $uk)
+                            @foreach($uk['apl02'] as $aplKey => $apl02dokumen)
+                            <tr class="text-center">
+                                <td class="text-left">{{$apl02dokumen['description']}}</td>
+                                <td><input type="checkbox" class="checkboxSelect" name="valid[{{$aplKey}}]"></td>
+                                <td><input type="checkbox" class="checkboxSelect" name="valid[{{$aplKey}}]"></td>
+                                <td><input type="checkbox" class="checkboxSelect" name="asli[{{$aplKey}}]"></td>
+                                <td><input type="checkbox" class="checkboxSelect" name="asli[{{$aplKey}}]"></td>
+                                <td><input type="checkbox" class="checkboxSelect" name="terkini[{{$aplKey}}]"></td>
+                                <td><input type="checkbox" class="checkboxSelect" name="terkini[{{$aplKey}}]"></td>
+                                <td><input type="checkbox" class="checkboxSelect" name="memadai[{{$aplKey}}]"></td>
+                                <td><input type="checkbox" class="checkboxSelect" name="memadai[{{$aplKey}}]"></td>
+                            </tr>
+                            @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>
 
 
             @foreach($uk_soals as $key => $unitkompentensi)
-                @if(isset($unitkompentensi['essay']) and !empty($unitkompentensi['essay']))
+                @if(isset($unitkompentensi['apl02']) and !empty($unitkompentensi['essay']))
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <tbody>
                             <tr>
-                                <td rowspan="2" width="15%" style="vertical-align: middle;">Unit Kompetensi</td>
+                                <td rowspan="2" width="15%" style="vertical-align: middle;">Unit Kompetensi {{$key+1}}</td>
                                 <td width="10%">Kode Unit</td>
                                 <td width="1px">:</td>
                                 <td>{{ $unitkompentensi['kode_unit_kompetensi'] }}</td>
@@ -207,61 +190,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td rowspan="3" class="text-center">1.</td>
-                                    <td>
-                                        Berdasarkan Bukti No : …………………., menetapkan metode dan perangkat analisis jabatan dalam bentuk dokumen tertulis <br />
-                                        (TS, TMS, CMS, JRES,TRS).
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        Berdasarkan Bukti No : …………………., mengidentifikasi Informasi pekerjaan dari setiap jabatan dari berbagai nara sumber di dalam organisasi.<br />
-                                        (TS, TMS, CMS, JRES,TRS).
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        Berdasarkan Bukti No : …………………., menganalisa data dan informasi jabatan berdasarkan metode dan perangkat analisis jabatan yang ditetapkan<br />
-                                        (TS, TMS, CMS, JRES,TRS).
-                                    </td>
-                                </tr>
+                                @foreach($unitkompentensi['apl02'] as $keyApl02 => $apl02)
+                                    <tr>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                        <td class="text-center">{{ $keyApl02+1 }}.</td>
+                                        <td>
+                                            Berdasarkan Bukti No : <span class="text-bold">{{$apl02['description']}}</span>, menetapkan metode dan perangkat analisis jabatan dalam bentuk dokumen tertulis <br />
+                                            (TS, TMS, CMS, JRES,TRS).
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
-
-{{--                    <div class="table-responsive">--}}
-{{--                        <table class="table table-bordered">--}}
-{{--                            <thead>--}}
-{{--                            <tr>--}}
-{{--                                <th rowspan="2" width="5%" class="text-center" style="vertical-align: middle;">No.</th>--}}
-{{--                                <th rowspan="2" class="text-center" style="vertical-align: middle;">Jawaban</th>--}}
-{{--                                <th colspan="2" width="10%" class="text-center" style="vertical-align: middle;">Rekomendasi</th>--}}
-{{--                            </tr>--}}
-{{--                            <tr class="text-center" style="vertical-align: middle;">--}}
-{{--                                <th width="5%">K</th>--}}
-{{--                                <th width="5%">BK</th>--}}
-{{--                            </tr>--}}
-{{--                            </thead>--}}
-{{--                            <tbody>--}}
-{{--                            @foreach($unitkompentensi['essay'] as $key_soal => $soal)--}}
-{{--                                <tr>--}}
-{{--                                    <td class="text-center" style="vertical-align: middle;">{{ $key_soal+1 }}</td>--}}
-{{--                                    <td>{{ $soal['user_answer'] }}</td>--}}
-{{--                                    <td class="text-center" style="vertical-align: middle;">--}}
-{{--                                        <input type="checkbox" @if($soal['final_score'] == $soal['max_score']) {{__('checked')}} @endif onclick="return false;" />--}}
-{{--                                    </td>--}}
-{{--                                    <td class="text-center" style="vertical-align: middle;">--}}
-{{--                                        <input type="checkbox" @if($soal['final_score'] != $soal['max_score']) {{__('checked')}} @endif onclick="return false;" />--}}
-{{--                                    </td>--}}
-{{--                                </tr>--}}
-{{--                            @endforeach--}}
-{{--                            </tbody>--}}
-{{--                        </table>--}}
-{{--                    </div>--}}
                 @endif
             @endforeach
 
@@ -280,9 +221,12 @@
                         <tr>
                             <td>
                                 Asesi belum memenuhi pencapaian seluruh kriteria unjuk kerja, direkomendasikan uji demonstrasi pada: <br />
-                                Unit….. <br />
-                                Elemen: ….. <br />
-                                KUK: ……. <br />
+                                Unit: <br />
+                                <textarea rows="3" style="width: 100%; "></textarea>
+                                Elemen: <br />
+                                <textarea rows="3" style="width: 100%; "></textarea>
+                                KUK: <br />
+                                <textarea rows="3" style="width: 100%; "></textarea>
                             </td>
                         </tr>
                     </tbody>
@@ -330,9 +274,23 @@
                 </table>
             </div>
         </div>
+
+        <button id="print" class="bg-success no-print" style="position:fixed; width:60px; height:60px; bottom:40px; right:40px; border-radius:50px; text-align:center; box-shadow: 2px 2px 3px #999;">
+            <i class="fa fa-print fa-2x"></i>
+        </button>
     </div>
 @endsection
 
 @section('js')
-    <script>window.print();</script>
+    <script>
+        $("#print").on('click', function() {
+            window.print();
+        })
+
+        $(".checkboxSelect").click(function(){
+            var group = "input:checkbox[name='"+$(this).prop("name")+"']";
+            $(group).prop("checked",false);
+            $(this).prop("checked",true);
+        });
+    </script>
 @endsection
