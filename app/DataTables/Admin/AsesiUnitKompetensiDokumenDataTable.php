@@ -58,6 +58,9 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
 
                 return $name_asesi;
             })
+            ->editColumn('created_at', function($query) {
+                return \Carbon\Carbon::parse($query->created_at)->toDateString();
+            })
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => (isset($query['user']) and !empty($query['user'])
@@ -95,6 +98,7 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
         $query = $model::with(['user', 'user.asesi', 'sertifikasi'])
             ->select([
                 'asesi_unit_kompetensi_dokumens.asesi_id as asesi_id',
+                'asesi_unit_kompetensi_dokumens.created_at as created_at',
                 'sertifikasis.id as sertifikasi_id',
                 'sertifikasis.title as sertifikasi_title'
             ])
@@ -108,7 +112,8 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                     ->where('ujian_asesi_asesors.asesor_id', $user->id);
                 }
             })
-            ->groupBy( 'asesi_id', 'sertifikasi_id', 'sertifikasi_title')
+            ->groupBy( 'asesi_id', 'created_at', 'sertifikasi_id', 'sertifikasi_title')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         // variable untuk simpan data
@@ -162,7 +167,7 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(0, 'asc')
+                    ->orderBy(3, 'desc')
                     ->buttons(
                         // Button::make('export'),
                         // Button::make('print'),
@@ -183,10 +188,14 @@ class AsesiUnitKompetensiDokumenDataTable extends DataTable
                 ->width('30%'),
             Column::computed('sertifikasi_title')
                 ->title('Sertifikasi')
-                ->width('40%'),
+                ->width('30%'),
             Column::computed('status')
                 ->title('Status')
                 ->width('15%'),
+            Column::make('created_at')
+                ->data('created_at')
+                ->title('Tanggal')
+                ->width('10%'),
             Column::computed('action')
                 ->orderable(false)
                 ->exportable(false)
