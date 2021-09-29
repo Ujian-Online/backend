@@ -14,27 +14,68 @@
             counter-reset: n;
         }
 
-                
+
         n {
             margin: 0 !important;
             padding: 0;
             padding-left: 20px;
-            
+
         }
-        
+
         n > span {
-            
+
             display: inline-block;
             position: relative;
             line-height: 1.2;
         }
-        
+
         n > span::before {
             counter-increment: n;
             content: counter(n) ".";
             left: -30px;
             position: absolute;
             margin-bottom: 0 !important;
+        }
+
+
+        /*Reset OL Number in Parent*/
+        tbody {
+            counter-reset: item;
+        }
+
+        /*Dont Reset OL Number in have multiple*/
+        ol {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /*Only Reset OL Number in Child*/
+        ol > li > ol {
+            list-style-type: none;
+            counter-reset: item;
+            margin: 0;
+            padding: 0;
+        }
+
+        ol > li {
+            display: table;
+            counter-increment: item;
+            margin-bottom: 0.6em;
+        }
+
+        ol > li:before {
+            content: counters(item, ".") ". ";
+            display: table-cell;
+            padding-right: 0.6em;
+        }
+
+        li ol > li {
+            margin: 0;
+        }
+
+        li ol > li:before {
+            content: counters(item, ".") " ";
         }
     </style>
 @endsection
@@ -153,8 +194,7 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th width="5%" class="text-center" style="vertical-align: middle;">No.</th>
-                                <th width="35%" class="text-center" style="vertical-align: middle;">@if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) {{ $unitkompentensi->sub_title }} @endif</th>
+                                <th width="40%" class="text-center" style="vertical-align: middle;">@if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) {{ $unitkompentensi->sub_title }} @endif</th>
                                 <td width="5%" class="text-center">K</td>
                                 <td width="5%" class="text-center">BK</td>
                                 <th width="25%" class="text-center" style="vertical-align: middle;">Bukti yang relevan</th>
@@ -173,11 +213,16 @@
                                 <input type="hidden" name="ukelement[id][]" value="{{ $ukelement->id }}">
 
                                 <tr>
-                                    <td>{{ $key + 1 }}.</td>
                                     <td>
-                                        <p>Element : <b> {!! nl2br($ukelement->desc) !!} </b></p>
                                         <ol>
-                                            <p> {!! nl2br($ukelement->upload_instruction) !!}</p>
+                                            <li>Element: <span class="text-bold">{!! nl2br($ukelement->desc) !!}</span> <br />
+                                                Kriteria Unjuk Kerja:
+                                                <ol>
+                                                    @foreach(explode("\n", $ukelement->upload_instruction) as $keyUI => $upload_instruction)
+                                                        <li value="{{ $keyUI+1 }}">{{ $upload_instruction }}</li>
+                                                    @endforeach
+                                                </ol>
+                                            </li>
                                         </ol>
                                     </td>
                                     <td class="text-center">
@@ -307,14 +352,14 @@
             format: 'DD/MM/YYYY',
             locale: 'id'
         });
-    
+
     Array.prototype.slice.call(document.querySelectorAll('n'))
     .forEach((n) => {
         n.innerHTML =n.innerHTML.split('<br>')
         .map((l) => `<span>${l.trim()}</span>`)
         .join('');
-        
-    });                                                 
+
+    });
 </script>
 
 

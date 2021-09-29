@@ -5,32 +5,74 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('print.css') }}" />
-    tr {
-        counter-reset: n;
-    }
+    <style>
+        tr {
+            counter-reset: n;
+        }
 
-            
-    n {
-        margin: 0 !important;
-        padding: 0;
-        padding-left: 20px;
-        
-    }
-    
-    n > span {
-        
-        display: inline-block;
-        position: relative;
-        line-height: 1.2;
-    }
-    
-    n > span::before {
-        counter-increment: n;
-        content: counter(n) ".";
-        left: -30px;
-        position: absolute;
-        margin-bottom: 0 !important;
-    }
+
+        n {
+            margin: 0 !important;
+            padding: 0;
+            padding-left: 20px;
+
+        }
+
+        n > span {
+
+            display: inline-block;
+            position: relative;
+            line-height: 1.2;
+        }
+
+        n > span::before {
+            counter-increment: n;
+            content: counter(n) ".";
+            left: -30px;
+            position: absolute;
+            margin-bottom: 0 !important;
+        }
+
+        /*Reset OL Number in Parent*/
+        tbody {
+            counter-reset: item;
+        }
+
+        /*Dont Reset OL Number in have multiple*/
+        ol {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /*Only Reset OL Number in Child*/
+        ol > li > ol {
+            list-style-type: none;
+            counter-reset: item;
+            margin: 0;
+            padding: 0;
+        }
+
+        ol > li {
+            display: table;
+            counter-increment: item;
+            margin-bottom: 0.6em;
+        }
+
+        ol > li:before {
+            content: counters(item, ".") ". ";
+            display: table-cell;
+            padding-right: 0.6em;
+        }
+
+        li ol > li {
+            margin: 0;
+        }
+
+        li ol > li:before {
+            content: counters(item, ".") " ";
+        }
+    </style>
 @endsection
 
 @section('body')
@@ -165,10 +207,15 @@
 
                                         <tr>
                                             <td>
-                                                <p>Element : <b>{!! nl2br($ukelement->desc) !!}</b></p>
-                                                
                                                 <ol>
-                                                    <p> {!! nl2br($ukelement->upload_instruction) !!}</p>
+                                                    <li>Element: <span class="text-bold">{!! nl2br($ukelement->desc) !!}</span> <br />
+                                                        Kriteria Unjuk Kerja:
+                                                        <ol>
+                                                            @foreach(explode("\n", $ukelement->upload_instruction) as $keyUI => $upload_instruction)
+                                                                <li value="{{ $keyUI+1 }}">{{ $upload_instruction }}</li>
+                                                            @endforeach
+                                                        </ol>
+                                                    </li>
                                                 </ol>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
@@ -270,6 +317,6 @@
         n.innerHTML =n.innerHTML.split('<br>')
         .map((l) => `<span>${l.trim()}</span>`)
         .join('');
-        
-    });       
+
+    });
 @endsection
