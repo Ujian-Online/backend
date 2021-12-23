@@ -80,6 +80,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'kode_unit_kompetensi',
             'title',
             'sub_title',
+            'jenis_standar',
         ]);
 
         // save to database
@@ -200,6 +201,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'kode_unit_kompetensi',
             'title',
             'sub_title',
+            'jenis_standar',
         ]);
 
         // find by id and update
@@ -365,6 +367,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'unit_kompetensis.title as unit_kompetensi_title',
             'unit_kompetensis.kode_unit_kompetensi as unit_kompetensi_kode',
             'sertifikasis.title as sertifikasi_title',
+            'sertifikasis.jenis_standar as jenis_standar',
         ])
             ->join('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
             ->join('unit_kompetensis', 'unit_kompetensis.id', '=', 'sertifikasi_unit_kompentensis.unit_kompetensi_id')
