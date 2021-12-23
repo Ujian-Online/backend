@@ -32,6 +32,7 @@
             @enderror
         </div>
         
+        {{-- add Input jenis standar--}}
         <div class="form-group col-md-6">
             <label for="jenis_standar">Jenis Standar</label>
             <input type="text" class="form-control @error('jenis_standar') is-invalid @enderror" name="jenis_standar" id="jenis_standar" placeholder="Jenis Standar" value="{{ old('jenis_standar') ?? $query->jenis_standar ?? '' }}" @if(isset($isShow)) readonly @endif>

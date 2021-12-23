@@ -75,7 +75,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'title'                 => 'required',
         ]);
 
-        // get form data
+        // get form data  ( add input jenis standar)
         $dataInput = $request->only([
             'kode_unit_kompetensi',
             'title',
