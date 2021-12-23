@@ -80,6 +80,7 @@
                             <tr>
                                 <td class="text-center text-bold"  style="vertical-align: middle;">{{ $key+1 }}</td>
                                 <td>{{ $muk }}</td>
+                                <!-- add Check List -->
                                 <td class="text-center"><input type="checkbox" /></td>
                                 <td class="text-center"><input type="checkbox" /></td>
                                 <td class="text-center"><input type="checkbox" /></td>

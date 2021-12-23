@@ -93,7 +93,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr class="text-center">
-                                    <th width="5%" style="vertical-align: middle;">ID</th>
+                                    <th width="5%" style="vertical-align: middle;">No</th>
                                     <th width="75%" style="vertical-align: middle;">Pertanyaan</th>
                                     <th width="5%" style="vertical-align: middle;">Jawaban</th>
                                     <th width="5%" style="vertical-align: middle;">Max Score</th>

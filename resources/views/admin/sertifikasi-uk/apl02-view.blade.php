@@ -1,13 +1,42 @@
 @extends('layouts.pageForm')
 
+
 @section('css')
     <style>
+        
         td {
             border: 1px solid black !important;
         }
 
         th {
             border: 1px solid black !important;
+        }
+        
+        tr {
+            counter-reset: n;
+        }
+
+                
+        n {
+            margin: 0 !important;
+            padding: 0;
+            padding-left: 20px;
+            
+        }
+        
+        n > span {
+            
+            display: inline-block;
+            position: relative;
+            line-height: 1.2;
+        }
+        
+        n > span::before {
+            counter-increment: n;
+            content: counter(n) ".";
+            left: -30px;
+            position: absolute;
+            margin-bottom: 0 !important;
         }
     </style>
 @endsection
@@ -56,6 +85,7 @@
                                 <td width="5%">
                                     Unit Kompetensi Nomor:<br/>
                                     {{ $key+1 }}
+                                    
                                 </td>
                                 <td width="95%" colspan="3">
                                     {{ $suk->unitkompetensi->kode_unit_kompetensi }}<br/>
@@ -74,15 +104,23 @@
                                     // untuk buat nomor media id
                                     $mediaKeyID = 0;
                                 @endphp
+                                
+                                                             
+                                @foreach($suk->unitkompetensi->ukelement as $keyelemet => $ukelement)
 
-                                @foreach($suk->unitkompetensi->ukelement as $key => $ukelement)
+
                                     {{-- Hidden Input ID Element--}}
                                     <input type="hidden" name="ukelement[id][]" value="{{ $ukelement->id }}">
 
                                     <tr>
                                         <td>
-                                            <p>{!! nl2br($ukelement->desc) !!}</p>
-                                            <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                            {{-- <td class="text-center">{{ $key_soal_pilihanganda + 1 }}</td> --}}
+                                            <p>{{ $keyelemet + 1 }}. Element : <b>{!! nl2br($ukelement->desc) !!}</b></p>
+                                             <ul><li> Kriteria Unjuk Kerja:</li></ul>
+                                             <ol>
+                                             <p> {!! nl2br($ukelement->upload_instruction) !!}</p>
+                                                                                               
+                                            </ol>
                                         </td>
                                         <td class="text-center" style="vertical-align: middle;">
                                             <input type="checkbox" onclick="return false;" />
@@ -103,3 +141,16 @@
         @endif
     </div>
 @endsection
+
+@section('js')
+    <script>
+        Array.prototype.slice.call(document.querySelectorAll('n'))
+        .forEach((n) => {
+            n.innerHTML =n.innerHTML.split('<br>')
+            .map((l) => `<span>${l.trim()}</span>`)
+            .join('');
+            
+        });                                                 
+  </script>
+
+  @endsection

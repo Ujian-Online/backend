@@ -29,7 +29,7 @@
         <div class="form-group col-md-12">
             <label for="question">Pertanyaan</label>
             <textarea class="form-control @error('question') is-invalid @enderror" name="question" id="question" cols="30" rows="3" @if(isset($isShow)) readonly @endif>{{ old('question') ?? ($query->question ?? '') }}</textarea>
-
+            
             @error('question')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
@@ -84,6 +84,7 @@
         <div class="form-group col-md-12" id="answer_essay_element">
             <label for="answer_essay">Jawaban</label>
             <textarea class="form-control @error('answer_essay') is-invalid @enderror" name="answer_essay" id="answer_essay" cols="30" rows="3" @if(isset($isShow)) readonly @endif>{{ old('answer_essay') ?? ($query->answer_essay ?? '') }}</textarea>
+            
 
             @error('answer_essay')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -149,6 +150,14 @@
                 console.error( error );
             } );
 
+            ClassicEditor
+            .create( document.querySelector( '#answer_essay' ))
+            .then( editor => {
+                editor.isReadOnly = {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
 
         $('#question_type').select2({
             theme: 'bootstrap4',

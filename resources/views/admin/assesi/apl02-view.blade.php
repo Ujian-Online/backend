@@ -9,6 +9,33 @@
         th {
             border: 1px solid black !important;
         }
+
+        tr {
+            counter-reset: n;
+        }
+
+                
+        n {
+            margin: 0 !important;
+            padding: 0;
+            padding-left: 20px;
+            
+        }
+        
+        n > span {
+            
+            display: inline-block;
+            position: relative;
+            line-height: 1.2;
+        }
+        
+        n > span::before {
+            counter-increment: n;
+            content: counter(n) ".";
+            left: -30px;
+            position: absolute;
+            margin-bottom: 0 !important;
+        }
     </style>
 @endsection
 
@@ -148,8 +175,10 @@
                                 <tr>
                                     <td>{{ $key + 1 }}.</td>
                                     <td>
-                                        <p class="text-bold">{!! nl2br($ukelement->desc) !!}</p>
-                                        <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                        <p>Element : <b> {!! nl2br($ukelement->desc) !!} </b></p>
+                                        <ol>
+                                            <p> {!! nl2br($ukelement->upload_instruction) !!}</p>
+                                        </ol>
                                     </td>
                                     <td class="text-center">
                                         @if(isset($isShow))
@@ -278,5 +307,15 @@
             format: 'DD/MM/YYYY',
             locale: 'id'
         });
-    </script>
+    
+    Array.prototype.slice.call(document.querySelectorAll('n'))
+    .forEach((n) => {
+        n.innerHTML =n.innerHTML.split('<br>')
+        .map((l) => `<span>${l.trim()}</span>`)
+        .join('');
+        
+    });                                                 
+</script>
+
+
 @endsection

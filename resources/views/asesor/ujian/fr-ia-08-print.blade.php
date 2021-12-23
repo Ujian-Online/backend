@@ -129,14 +129,14 @@
                     <tbody>
                         <tr>
                             <td>(yang memenuhi kriteria VATM yang diinput ke dalam dokumen portofolio)</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="text-center"><input type="checkbox" /></td>
+                            <td class="text-center"><input type="checkbox" /></td>
+                            <td class="text-center"><input type="checkbox" /></td>
+                            <td class="text-center"><input type="checkbox" /></td>
+                            <td class="text-center"><input type="checkbox" /></td>
+                            <td class="text-center"><input type="checkbox" /></td>
+                            <td class="text-center"><input type="checkbox" /></td>
+                            <td class="text-center"><input type="checkbox" /></td>
                         </tr>
                         <tr>
                             <td>(yang memenuhi kriteria VATM yang diinput ke dalam dokumen portofolio)</td>
