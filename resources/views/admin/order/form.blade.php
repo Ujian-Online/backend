@@ -45,13 +45,13 @@
             <select class="form-control select2" name="tipe_sertifikasi" id="tipe_sertifikasi">
                 <option value="" readonly>Pilih Tipe Sertifikasi</option>
 
-                @foreach(config('options.orders_tipe_sertifikasi') as $tipe_sertifikasi)
+                @foreach(config('options.orders_tipe_sertifikasi_desc') as $keyOrder => $tipe_sertifikasi)
                     <option
-                        value="{{ $tipe_sertifikasi }}"
+                        value="{{ $keyOrder }}"
 
-                        @if(old('tipe_sertifikasi') == $tipe_sertifikasi)
+                        @if(old('tipe_sertifikasi') == $keyOrder)
                             {{ __('selected') }}
-                        @elseif(isset($query->tipe_sertifikasi) and !empty($query->tipe_sertifikasi) and $query->tipe_sertifikasi == $tipe_sertifikasi)
+                        @elseif(isset($query->tipe_sertifikasi) and !empty($query->tipe_sertifikasi) and $query->tipe_sertifikasi == $keyOrder)
                             {{ __('selected') }}
                         @endif
                     >

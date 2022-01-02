@@ -10,11 +10,11 @@
 @section('body')
     <div class="container">
         <div class="form-row">
-            <h3>FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h3>
+            <h2>FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h2>
 
             <div class="form-group col-md-12">
 
-                <p class="text-bold">Bagian 1 : Rincian Data Pemohon Sertifikasi</p>
+                <h2>Bagian 1 : Rincian Data Pemohon Sertifikasi</h2>
                 <p>Pada bagian ini, cantumlah data pribadi, data pendidikan formal serta data pekerjaan anda pada saat ini</p>
 
                 <p>
@@ -205,7 +205,91 @@
                 </ol>
                 </p>
 
-                <p class="text-bold">Bagian 2 : Bukti Kelengkapan Pemohon</p>
+                <h2>Bagian 2 : Data Sertifikasi</h2>
+                <p>Tuliskan Judul dan Nomor Skema Sertifikasi yang anda ajukan berikut Daftar Unit Kompetensi sesuai kemasan pada skema sertifikasi untuk mendapatkan pengakuan sesuai dengan latar belakang pendidikan, pelatihan serta pengalaman kerja yang anda miliki.</p>
+
+                <div class="form-group col-md-12">
+                    <div class="mt-2 mb-2">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td rowspan="3" class="text-center text-bold"  style="vertical-align: middle;" width="20%">
+                                        Skema Sertifikasi<br/>(KKNI/Okupasi/Klaster)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Judul</td>
+                                    <td width="1%">:</td>
+                                    <td class="text-bold">{{ (isset($query->singleorder->sertifikasi) and !empty($query->singleorder->sertifikasi->title)) ? $query->singleorder->sertifikasi->title : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Nomor</td>
+                                    <td width="1%">:</td>
+                                    <td class="text-bold">{{ (isset($query->singleorder->sertifikasi) and !empty($query->singleorder->sertifikasi->title)) ? $query->singleorder->sertifikasi->nomor_skema : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" rowspan="5">Tujuan Asesmen</td>
+                                    <td width="1%" rowspan="5">:</td>
+                                    <td class="text-bold">
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'baru') {{__('checked')}} @endif onclick="return false;" /> Sertifikasi
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-bold">
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'perpanjang') {{__('checked')}} @endif onclick="return false;" /> Sertifikasi Ulang
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-bold">
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'pkt') {{__('checked')}} @endif onclick="return false;" /> Pengakuan Kompetensi Terkini (PKT)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-bold">
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'rpl') {{__('checked')}} @endif onclick="return false;" /> Rekognisi Pembelajaran Lampau
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-bold">
+                                        <input type="checkbox" @if($query->singleorder->tipe_sertifikasi === 'lainnya') {{__('checked')}} @endif onclick="return false;" /> Lainnya
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <p class="text-bold">Daftar Unit Kompetensi sesuai kemasan:</p>
+
+                <div class="form-group col-md-12">
+                    <div class="mt-2 mb-2">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="5%" class="text-center" style="vertical-align: middle;">No.</th>
+                                <th width="25%" class="text-center" style="vertical-align: middle;">Kode Unit</th>
+                                <th width="50%" class="text-center" style="vertical-align: middle;">Judul Unit</th>
+                                <th width="20%" class="text-center" style="vertical-align: middle;">Jenis Standar (Standar Khusus/Standar Internasional/SKKNI)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($query->singleorder->sertifikasi->sertifikasiunitkompentensi) and !empty($query->singleorder->sertifikasi->sertifikasiunitkompentensi))
+                                    @foreach($query->singleorder->sertifikasi->sertifikasiunitkompentensi as $key_suk => $suk)
+                                        <tr>
+                                            <th class="text-center">{{ $key_suk+1 }}.</th>
+                                            <td>{{ $suk->unitkompetensi && $suk->unitkompetensi->kode_unit_kompetensi ? $suk->unitkompetensi->kode_unit_kompetensi : '' }}</td>
+                                            <td>{{ $suk->unitkompetensi && $suk->unitkompetensi->title ? $suk->unitkompetensi->title : '' }}</td>
+                                            <td>{{ $suk->unitkompetensi && $suk->unitkompetensi->jenis_standar ? $suk->unitkompetensi->jenis_standar : '' }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <h2>Bagian 3 : Bukti Kelengkapan Pemohon</h2>
                 <p class="text-bold">Bukti Persyaratan Dasar Pemohon</p>
 
                 <div class="mt-2 mb-2">
@@ -275,7 +359,7 @@
                                             {{ __('-') }}
                                         @endif
                                     </p>
-                                    <p>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
+                                    <p>{{ $query->singleorder->created_at->format('d/m/Y') }}</p>
                                 </td>
                             </tr>
                             <tr>
@@ -297,7 +381,16 @@
                             </tr>
                             <tr>
                                 <td width="20%">Tanda Tangan/ Tanggal</td>
-                                <td width="30%"></td>
+                                <td width="30%">
+                                    <p>
+                                        @if(isset($query->admin) and isset($query->admin->media_url_sign_user) and !empty($query->admin->media_url_sign_user))
+                                            <img src="{{ $query->admin->media_url_sign_user }}">
+                                        @else
+                                            {{ __('-') }}
+                                        @endif
+                                    </p>
+                                    <p>{{ $query->singleorder->updated_at->format('d/m/Y') }}</p>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

@@ -22,24 +22,6 @@ class UjianAsesiJawabanDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('name_asesi', function($query) {
-                $name_asesi = $query->userasesi->email;
-
-                if(isset($query->userasesi->asesi) and !empty($query->userasesi->asesi) and isset($query->userasesi->asesi->name) and !empty($query->userasesi->asesi->name)) {
-                    $name_asesi = $query->userasesi->asesi->name;
-                }
-
-                return $name_asesi;
-            })
-            ->addColumn('name_asesor', function($query) {
-                $name_asesor = $query->userasesor->email;
-
-                if(isset($query->userasesor->asesor) and !empty($query->userasesor->asesor) and isset($query->userasesor->asesor->name) and !empty($query->userasesor->asesor->name)) {
-                    $name_asesor = $query->userasesor->asesor->name;
-                }
-
-                return $name_asesor;
-            })
             ->editColumn('status', function($query) {
                 $status = $query->status ? ucwords(str_replace('_', ' ', $query->status)) : '';
 
@@ -63,6 +45,25 @@ class UjianAsesiJawabanDataTable extends DataTable
                     'title' => $query->id,
                     'url_show' => route('admin.ujian.jawaban.show', $query->id),
                 ]);
+            })
+            ->filterColumn('ujian_jadwal_title', function($query, $keyword) {
+                $query->where('ujian_jadwals.title', 'LIKE', "%$keyword%");
+            })
+            ->filterColumn('ujian_jadwal_tanggal', function($query, $keyword) {
+                $query->where('ujian_jadwals.tanggal', 'LIKE', "%$keyword%");
+            })
+            ->filterColumn('asesi_name', function($query, $keyword) {
+                $query->where('user_asesis.name', 'LIKE', "%$keyword%");
+            })
+            ->filterColumn('asesor_name', function($query, $keyword) {
+                $query->where('user_asesors.name', 'LIKE', "%$keyword%");
+            })
+            ->filterColumn('is_kompeten', function($query, $keyword) {
+                $kompeten = $keyword === 'Kompeten';
+                $query->where('ujian_asesi_asesors.is_kompeten', $kompeten);
+            })
+            ->orderColumn('ujian_jadwal_tanggal', function ($query, $order) {
+                $query->orderBy('ujian_jadwals.tanggal', $order);
             });
     }
 
@@ -76,17 +77,19 @@ class UjianAsesiJawabanDataTable extends DataTable
     {
         // default query
         $query = $model->select([
-            'ujian_asesi_asesors.*'
-        ])
-            ->with([
-                'userasesi',
-                'userasesi.asesi',
-                'ujianjadwal',
-                'sertifikasi'
+                'ujian_asesi_asesors.*',
+                'ujian_jadwals.title as ujian_jadwal_title',
+                'ujian_jadwals.tanggal as ujian_jadwal_tanggal',
+                'user_asesis.name as asesi_name',
+                'user_asesors.name as asesor_name',
+                'sertifikasis.title as sertifikasi_title'
             ])
             ->join('users as uasesi', 'uasesi.id', '=', 'ujian_asesi_asesors.asesi_id')
+            ->join('user_asesis', 'user_asesis.user_id', '=', 'uasesi.id')
             ->join('users as uasesor', 'uasesor.id', '=', 'ujian_asesi_asesors.asesor_id')
-            ->join('sertifikasis', 'sertifikasis.id', '=', 'ujian_asesi_asesors.sertifikasi_id');
+            ->join('user_asesors', 'user_asesors.user_id', '=', 'uasesor.id')
+            ->join('sertifikasis', 'sertifikasis.id', '=', 'ujian_asesi_asesors.sertifikasi_id')
+            ->join('ujian_jadwals', 'ujian_jadwals.id', '=', 'ujian_asesi_asesors.ujian_jadwal_id');
 
         // get filter input
         $status = request()->input('status');
@@ -125,7 +128,7 @@ class UjianAsesiJawabanDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(1)
+                    ->orderBy(1, 'desc')
                     ->buttons(
                         // Button::make('export'),
                         // Button::make('print'),
@@ -141,24 +144,25 @@ class UjianAsesiJawabanDataTable extends DataTable
     protected function getColumns()
     {
         return [
-
-            Column::computed('jadwal')
+            Column::make('ujian_jadwal_title')
+                ->data('ujian_jadwal_title')
                 ->title('Jadwal Ujian')
-                ->data('ujianjadwal.title')
                 ->width('20%'),
-            Column::computed('tanggal')
+            Column::make('ujian_jadwal_tanggal')
+                ->data('ujian_jadwal_tanggal')
                 ->title('Tgl Ujian')
-                ->data('ujianjadwal.tanggal')
                 ->width('10%'),
-            Column::computed('name_asesi')
+            Column::make('asesi_name')
+                ->data('asesi_name')
                 ->title('Asesi Name')
                 ->width('15%'),
-            Column::computed('name_asesor')
+            Column::make('asesor_name')
+                ->data('asesor_name')
                 ->title('Asesor')
                 ->width('10%'),
-            Column::computed('sertifikasi')
+            Column::make('sertifikasi_title')
+                ->data('sertifikasi_title')
                 ->title('Sertifikasi')
-                ->data('sertifikasi.title')
                 ->width('15%'),
             Column::make('status')
                 ->width('10%'),

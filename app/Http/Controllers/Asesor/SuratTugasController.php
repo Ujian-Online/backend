@@ -130,12 +130,6 @@ class SuratTugasController extends Controller
                 'soal_paket_id' => 'required'
             ]);
 
-            // update data
-            $updateData = [
-                'soal_paket_id' => $request->input('soal_paket_id'),
-                'status' => 'paket_soal_assigned'
-            ];
-
             // get soal from soalpaket for snapshot
             $soal_pakets = SoalPaket::with([
                     'soalpaketitem',
@@ -145,6 +139,12 @@ class SuratTugasController extends Controller
                 ->where('id', $request->input('soal_paket_id'))
                 ->where('sertifikasi_id', $query->sertifikasi_id)
                 ->firstOrFail();
+
+            // update data
+            $updateData = [
+                'soal_paket_id' => $request->input('soal_paket_id'),
+                'status' => $soal_pakets->jenis_ujian === 'wawancara' ? 'penilaian' : 'paket_soal_assigned'
+            ];
 
             // check if soal found
             if(isset($soal_pakets->soalpaketitem) and !empty($soal_pakets->soalpaketitem)) {

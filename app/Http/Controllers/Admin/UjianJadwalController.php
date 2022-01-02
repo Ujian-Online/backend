@@ -57,7 +57,7 @@ class UjianJadwalController extends Controller
     {
         // validate input
         $request->validate([
-            'tanggal'       => 'required|date',
+            'tanggal'       => 'required|date_format:d/m/Y',
             'jam_mulai'     => 'required',
             'jam_berakhir'  => 'required',
             'title'         => 'required',
@@ -72,6 +72,9 @@ class UjianJadwalController extends Controller
             'title',
             'description',
         ]);
+
+        // change format tanggal
+        $dataInput['tanggal'] = \Carbon\Carbon::createFromFormat('d/m/Y', $dataInput['tanggal'])->format('Y-m-d');
 
         // save to database
         $query = UjianJadwal::create($dataInput);
@@ -138,7 +141,7 @@ class UjianJadwalController extends Controller
     {
         // validate input
         $request->validate([
-            'tanggal'       => 'required|date',
+            'tanggal'       => 'required|date_format:d/m/Y',
             'jam_mulai'     => 'required',
             'jam_berakhir'  => 'required',
             'title'         => 'required',
@@ -153,6 +156,9 @@ class UjianJadwalController extends Controller
             'title',
             'description',
         ]);
+
+        // change format tanggal
+        $dataInput['tanggal'] = \Carbon\Carbon::createFromFormat('d/m/Y', $dataInput['tanggal'])->format('Y-m-d');
 
         // find by id and update
         $query = UjianJadwal::findOrFail($id);

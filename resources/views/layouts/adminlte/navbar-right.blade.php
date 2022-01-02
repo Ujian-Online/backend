@@ -6,7 +6,7 @@
     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
       {{-- User image --}}
       <li class="user-header">
-        <img src="{{ gravatar(Auth::user()->email) }}" class="img-circle elevation-2" alt="User Image">
+        <img src="{{ Auth::user()->media_url ?? gravatar(Auth::user()->email) }}" class="img-circle elevation-2" alt="User Image">
 
         <p>
           {{ strtolower(Auth::user()->email) }}
@@ -16,7 +16,7 @@
 
       {{-- Menu Footer --}}
       <li class="user-footer">
-        <a href="#" class="btn btn-default btn-flat">Profile</a>
+        <a href="{{ route('admin.akun-saya.show') }}" class="btn btn-default btn-flat">Profile</a>
         <a href="{{ route('logout') }}" class="btn btn-danger btn-flat float-right" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
           <i class="fas fa-sign-out-alt"></i>
           {{ trans('theme.logout') }}

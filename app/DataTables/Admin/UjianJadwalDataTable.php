@@ -73,7 +73,7 @@ class UjianJadwalDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
-                    ->orderBy(3, 'desc')
+                    ->orderBy(1, 'desc')
                     ->buttons(
                         // Button::make('export'),
                         // Button::make('print'),

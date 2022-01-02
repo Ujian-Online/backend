@@ -128,12 +128,45 @@ class UserAsesiController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        // query get data
-        $query = UserAsesi::with('asesicustomdata')->where('id', $id)->firstOrFail();
+        $query = new UserAsesi();
+
+        // check if print mode or not
         $printMode = $request->input('print');
-        if($printMode) {
+        $orderId = $request->input('order_id');
+        if($printMode && $orderId) {
+            // query get data with many relation
+            $query = $query->with([
+                    'asesicustomdata',
+                    'singleorder',
+                    'singleorder.sertifikasi',
+                    'singleorder.sertifikasi.sertifikasiunitkompentensi',
+                    'singleorder.sertifikasi.sertifikasiunitkompentensi.unitkompetensi',
+                    'singleorder.tuk',
+                    'admin'
+                ])
+                ->select([
+                    'user_asesis.*'
+                ])
+                ->join('orders', 'orders.asesi_id', '=', 'user_asesis.user_id')
+                ->where('user_asesis.id', $id)
+                ->where('orders.id', $orderId)
+                ->firstOrFail();
+
+            // get user detail
             $users = User::where('id', $query->user_id)->firstOrFail();
         } else {
+            // query get data
+            $query = $query->with([
+                'asesicustomdata',
+                'order',
+                'order.sertifikasi',
+                'order.tuk',
+                'admin'
+            ])
+                ->where('id', $id)
+                ->firstOrFail();
+
+            // get user detail
             $users = User::where('id', $query->user_id)->get();
         }
 

@@ -32,6 +32,15 @@
             @enderror
         </div>
 
+        <div class="form-group col-md-6">
+            <label for="jenis_standar">Jenis Standar</label>
+            <input type="text" class="form-control @error('jenis_standar') is-invalid @enderror" name="jenis_standar" id="jenis_standar" placeholder="Jenius Standar" value="{{ old('jenis_standar') ?? $query->jenis_standar ?? '' }}" @if(isset($isShow)) readonly @endif>
+
+            @error('jenis_standar')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
 {{--        <div class="form-group col-md-6">--}}
 {{--            <label for="order">Urutan</label>--}}
 {{--            <input type="number" class="form-control @error('order') is-invalid @enderror" name="order" id="order" placeholder="Order" value="{{ old('order') ?? $query->order ?? '' }}" @if(isset($isShow)) readonly @endif>--}}

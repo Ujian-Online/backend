@@ -66,6 +66,8 @@ return [
     'soals_question_type' => [
         'essay',
         'multiple_option',
+        'lisan',
+        'wawancara'
     ],
     'soals_answer_option' => [
         'A',
@@ -92,6 +94,8 @@ return [
     'ujian_asesi_jawabans_question_type' => [
         'essay',
         'multiple_option',
+        'lisan',
+        'wawancara'
     ],
     'ujian_asesi_jawabans_answer_option' => [
         'A',
@@ -108,6 +112,16 @@ return [
     'orders_tipe_sertifikasi' => [
         'baru',
         'perpanjang',
+        'pkt',
+        'rpl',
+        'lainnya'
+    ],
+    'orders_tipe_sertifikasi_desc' => [
+        'baru' => 'Sertifikasi',
+        'perpanjang' => 'Sertifikasi Ulang',
+        'pkt' => 'Pengakuan Kompetensi Terkini (PKT)',
+        'rpl' => 'Rekognisi Pembelajaran Lampau',
+        'lainnya' => 'Lainnya'
     ],
     // status menjadi complete kalau udah di assign asesor
     'orders_status' => [
@@ -125,12 +139,35 @@ return [
     ],
     'question_type' => [
         'essay',
-        'multiple_option'
+        'multiple_option',
+        'lisan',
+        'wawancara'
+    ],
+    'question_type_berpengalaman' => [
+        'lisan',
+        'wawancara'
     ],
     'answer_option' => [
         'A',
         'B',
         'C',
         'D'
+    ],
+    'mapa_muks' => [
+        'Ceklis Observasi Untuk Aktivitas Di Tempat Kerja Atau Tempat Kerja Simulasi',
+        'Pertanyaan Untuk Mendukung Observasi',
+        'Penjelasan Singkat Proyek Terkait Pekerjaan / Kegiatan Terstruktur Lainnya',
+        'Tugas Praktik Demonstrasi',
+        'Ceklis Evaluasi Portofolio',
+        'Pertanyaan Wawancara',
+        'Formulir Bukti Pihak Ketiga',
+        'Pertanyaan Tertulis – Pilihan Ganda',
+        'Pertanyaan Tertulis – Esai',
+        'Pertanyaan Lisan',
+        'Ceklis Meninjau Materi Uji Kompetensi',
+    ],
+    'jenis_ujian' => [
+        'website',
+        'wawancara'
     ]
 ];

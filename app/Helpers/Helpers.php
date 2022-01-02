@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Redis;
+
 if (!function_exists('gravatar')) {
     /**
      * Generate Gravatar URL
@@ -162,5 +164,96 @@ if(!function_exists('durasi_ujian')) {
             ->diffInMinutes($date->startOfDay());
 
         return $intMinutes;
+    }
+}
+
+if(!function_exists("redis_check")) {
+    /**
+     * Check apakah redis key ditemukan atau tidak
+     *
+     * @param $key string
+     * @return bool true = send email, false = don't send email
+     */
+    function redis_check($key) {
+        // check redis data by redis key
+        $getStatus = Redis::get($key);
+
+        // if redis data not found, then set redis
+        // and sending email to asesor
+        if(!$getStatus) {
+            Redis::set($key, "ok", 'EX', (5 * 60));
+
+            // if true, can send email
+            return true;
+        } else {
+            // if false, don't send email
+            return false;
+        }
+    }
+}
+
+if(!function_exists('re_captcha_validate')) {
+    function re_captcha_validate($key, $response) {
+        try {
+            $data = [
+                'secret' => $key,
+                'response' => $response
+            ];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // running curl
+            $result = curl_exec($ch);
+
+            // throw error
+            if (curl_errno($ch)) {
+                throw new Exception(curl_error($ch));
+            }
+
+            // stop connection
+            curl_close($ch);
+
+            // return result request
+            $response = json_decode($result);
+
+            if($response->success) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+}
+
+if(!function_exists('apl02_uk_medias')) {
+    /**
+     * @param int $asesiId
+     * @param int $sertifikasiId
+     * @param null|int $ukId
+     * @return \App\AsesiSUKElementMedia[]|array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     */
+    function apl02_uk_medias(int $asesiId, int $sertifikasiId, int $ukId = null) {
+        return \App\AsesiSUKElementMedia::select([
+                'asesi_s_u_k_element_media.*',
+                'asesi_unit_kompetensi_dokumens.sertifikasi_id as sertifikasi_id',
+                'asesi_unit_kompetensi_dokumens.unit_kompetensi_id as unit_kompetensi_id'
+            ])
+            ->join('asesi_sertifikasi_unit_kompetensi_elements', 'asesi_sertifikasi_unit_kompetensi_elements.id', '=', 'asesi_s_u_k_element_media.asesi_suk_element_id')
+            ->join('asesi_unit_kompetensi_dokumens', 'asesi_unit_kompetensi_dokumens.unit_kompetensi_id', '=', 'asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id')
+            ->where('asesi_unit_kompetensi_dokumens.asesi_id', '=', $asesiId)
+            ->where('asesi_sertifikasi_unit_kompetensi_elements.asesi_id', '=', $asesiId)
+            ->where('asesi_s_u_k_element_media.asesi_id', '=', $asesiId)
+            ->where('asesi_unit_kompetensi_dokumens.sertifikasi_id', '=', $sertifikasiId)
+            ->when($ukId, function ($query, $ukId){
+                return $query->where('asesi_sertifikasi_unit_kompetensi_elements.unit_kompetensi_id', '=', $ukId);
+            })
+            ->get();
     }
 }

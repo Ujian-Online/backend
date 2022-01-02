@@ -5,6 +5,74 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('print.css') }}" />
+    <style>
+        tr {
+            counter-reset: n;
+        }
+
+
+        n {
+            margin: 0 !important;
+            padding: 0;
+            padding-left: 20px;
+
+        }
+
+        n > span {
+
+            display: inline-block;
+            position: relative;
+            line-height: 1.2;
+        }
+
+        n > span::before {
+            counter-increment: n;
+            content: counter(n) ".";
+            left: -30px;
+            position: absolute;
+            margin-bottom: 0 !important;
+        }
+
+        /*Reset OL Number in Parent*/
+        tbody {
+            counter-reset: item;
+        }
+
+        /*Dont Reset OL Number in have multiple*/
+        ol {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /*Only Reset OL Number in Child*/
+        ol > li > ol {
+            list-style-type: none;
+            counter-reset: item;
+            margin: 0;
+            padding: 0;
+        }
+
+        ol > li {
+            display: table;
+            counter-increment: item;
+            margin-bottom: 0.6em;
+        }
+
+        ol > li:before {
+            content: counters(item, ".") ". ";
+            display: table-cell;
+            padding-right: 0.6em;
+        }
+
+        li ol > li {
+            margin: 0;
+        }
+
+        li ol > li:before {
+            content: counters(item, ".") " ";
+        }
+    </style>
 @endsection
 
 @section('body')
@@ -85,7 +153,7 @@
                     <table class="table table-bordered">
                         <tbody>
                         <tr>
-                            <td class="bg-orange text-bold">
+                            <td class="text-bold" style="background-color: #fd7e14!important">
                                 PANDUAN ASESMEN MANDIRI
                             </td>
                         </tr>
@@ -139,8 +207,16 @@
 
                                         <tr>
                                             <td>
-                                                <p>{!! nl2br($ukelement->desc) !!}</p>
-                                                <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                                <ol>
+                                                    <li>Element: <span class="text-bold">{!! nl2br($ukelement->desc) !!}</span> <br />
+                                                        Kriteria Unjuk Kerja:
+                                                        <ol>
+                                                            @foreach(explode("\n", $ukelement->upload_instruction) as $keyUI => $upload_instruction)
+                                                                <li value="{{ $keyUI+1 }}">{{ $upload_instruction }}</li>
+                                                            @endforeach
+                                                        </ol>
+                                                    </li>
+                                                </ol>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <input type="checkbox" @if($ukelement->is_verified) {{__('checked')}} @endif onclick="return false;" />
@@ -183,11 +259,11 @@
                             <tr>
                                 <td>
                                     <p>Nama Asesi:</p>
-                                    <p>{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '' }}</p>
+                                    <p>{{ (isset($user) and !empty($user->asesi)) ? $user->asesi->name : '-' }}</p>
                                 </td>
                                 <td>
                                     <p>Tanggal:</p>
-                                    <p>{{ now()->format('d/m/Y') }}</p>
+                                    <p>{{ $apl02_verification && $apl02_verification->asesi_verification_date ? \Carbon\Carbon::parse($apl02_verification->asesi_verification_date)->format('d/m/Y') : '-' }}</p>
                                 </td>
                                 <td>
                                     <p>Tanda Tangan Asesi:</p>
@@ -200,7 +276,7 @@
                                     </p>
                                 </td>
                             </tr>
-                            <tr class="bg-orange text-bold">
+                            <tr class="text-bold" style="background-color: #fd7e14!important">
                                 <td colspan="3">Ditinjau oleh Asesor:</td>
                             </tr>
                             <tr>
@@ -210,11 +286,11 @@
                                 </td>
                                 <td>
                                     <p>Rekomendasi:</p>
-                                    <p>{{ __('Asesmen dapat dilanjutkan/ tidak dapat dilanjutkan') }}</p>
+                                    <p>{{ $apl02_verification ? $apl02_verification->recommendation : '-' }}</p>
                                 </td>
                                 <td>
                                     <p>Tanda Tangan dan Tanggal:</p>
-                                    <p>{{ now()->format('d/m/Y') }}</p>
+                                    <p>{{ $apl02_verification && $apl02_verification->asesor_verification_date ? \Carbon\Carbon::parse($apl02_verification->asesor_verification_date)->format('d/m/Y') : '-' }}</p>
                                     <p>
                                         @if(isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor) and !empty($ujianasesiasesor->userasesor->media_url_sign_user))
                                             <img height="70px" width="70px" src="{{ (isset($ujianasesiasesor) and !empty($ujianasesiasesor->userasesor)) ? $ujianasesiasesor->userasesor->media_url_sign_user : '' }}">
@@ -236,4 +312,11 @@
 
 @section('js')
     <script>window.print();</script>
+    Array.prototype.slice.call(document.querySelectorAll('n'))
+    .forEach((n) => {
+        n.innerHTML =n.innerHTML.split('<br>')
+        .map((l) => `<span>${l.trim()}</span>`)
+        .join('');
+
+    });
 @endsection

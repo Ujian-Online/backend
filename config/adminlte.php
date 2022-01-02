@@ -191,7 +191,7 @@ return [
                 'sub_menu'  => [
 
                     [
-                        'title'     => 'APL-01',
+                        'title'     => 'Data Pribadi',
                         'icon'      => 'fas fa-user',
                         'url'       => '/admin/asesi/apl01?is_verified=0',
                         'active'    => 'admin.asesi.apl01.*',
@@ -215,7 +215,7 @@ return [
                     //     'active'    => 'admin.asesi.ukelement.*',
                     // ],
                     [
-                        'title'     => 'Custom Data (APL-01)',
+                        'title'     => 'Custom Data Pribadi',
                         'icon'      => 'fas fa-list-ol',
                         'route'     => 'admin.asesi.customdata.index',
                         'active'    => 'admin.asesi.customdata.*',
@@ -251,8 +251,8 @@ return [
                         'active'    => 'admin.ujian.asesi.waiting.index',
                     ],
                     [
-                        'title'     => 'Asesi Jawaban',
-                        'icon'      => 'fas fa-book-open',
+                        'title'     => 'Asesi Penilaian',
+                        'icon'      => 'fa fa-file-signature',
                         'route'     => 'admin.ujian.jawaban.index',
                         'active'    => 'admin.ujian.jawaban.*',
                     ],
@@ -298,15 +298,8 @@ return [
             [
                 'title'     => 'Order',
                 'icon'      => 'fas fa-cart-plus',
+                'route'     => 'admin.order.index',
                 'active'    => 'admin.order.*',
-                'sub_menu'  => [
-                    [
-                        'title'     => 'List Order',
-                        'icon'      => 'fas fa-cart-plus',
-                        'route'     => 'admin.order.index',
-                        'active'    => 'admin.order.*',
-                    ],
-                ],
             ],
             [
                 'title'     => 'Akun Saya',
@@ -359,15 +352,8 @@ return [
             [
                 'title'     => 'Order',
                 'icon'      => 'fas fa-cart-plus',
+                'route'     => 'admin.order.index',
                 'active'    => 'admin.order.*',
-                'sub_menu'  => [
-                    [
-                        'title'     => 'List Order',
-                        'icon'      => 'fas fa-cart-plus',
-                        'route'     => 'admin.order.index',
-                        'active'    => 'admin.order.*',
-                    ],
-                ],
             ],
             [
                 'title'     => 'Jadwal Ujian Asesi',

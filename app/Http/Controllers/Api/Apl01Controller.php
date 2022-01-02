@@ -258,8 +258,12 @@ class Apl01Controller extends Controller
             $queryData = UserAsesi::create($dataInput);
         }
 
-        // Kirim Email ke Admin
-        APL01AdminNotification::dispatch($user->id);
+        // set redis key
+        $redisKey = 'notif_apl01_id' . $user->id;
+        if(redis_check($redisKey)) {
+            // Kirim Email ke Admin
+            APL01AdminNotification::dispatch($user->id);
+        }
 
         // return json response
         return response()->json($queryData);
@@ -380,13 +384,18 @@ class Apl01Controller extends Controller
             ]);
         }
 
+        // set redis key
+        $redisKey = 'notif_apl01_id' . $user->id;
+
         // update jika ada customdata
         if($type == 'update') {
             $customdata->value = $value;
             $customdata->save();
 
-            // Kirim Email ke Admin
-            APL01AdminNotification::dispatch($user->id, $customdata->id);
+            if(redis_check($redisKey)) {
+                // Kirim Email ke Admin
+                APL01AdminNotification::dispatch($user->id, $customdata->id);
+            }
         } else {
             // buat baru jika tidak ada customdata
             $save = UserAsesiCustomData::create([
@@ -397,8 +406,10 @@ class Apl01Controller extends Controller
                 'is_verified' => false,
             ]);
 
-            // Kirim Email ke Admin
-            APL01AdminNotification::dispatch($user->id, $save->id);
+            if(redis_check($redisKey)) {
+                // Kirim Email ke Admin
+                APL01AdminNotification::dispatch($user->id, $save->id);
+            }
         }
 
         return response()->json([

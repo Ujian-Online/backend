@@ -9,6 +9,46 @@
         th {
             border: 1px solid black !important;
         }
+
+        /*Reset OL Number in Parent*/
+        tbody {
+            counter-reset: item;
+        }
+
+        /*Dont Reset OL Number in have multiple*/
+        ol {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /*Only Reset OL Number in Child*/
+        ol > li > ol {
+            list-style-type: none;
+            counter-reset: item;
+            margin: 0;
+            padding: 0;
+        }
+
+        ol > li {
+            display: table;
+            counter-increment: item;
+            margin-bottom: 0.6em;
+        }
+
+        ol > li:before {
+            content: counters(item, ".") ". ";
+            display: table-cell;
+            padding-right: 0.6em;
+        }
+
+        li ol > li {
+            margin: 0;
+        }
+
+        li ol > li:before {
+            content: counters(item, ".") " ";
+        }
     </style>
 @endsection
 
@@ -17,7 +57,6 @@
 
     <div class="form-row">
         <div class="form-group col-md-12">
-
             <button type="button" class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
                 <i class="fas fa-print"></i> Cetak Draft FR.APL.02</a>
             </button>
@@ -52,6 +91,7 @@
                     <div class="mt-2 mb-2">
                         <table class="table table-bordered">
                             <tbody>
+
                             <tr class="text-bold">
                                 <td width="5%">
                                     Unit Kompetensi Nomor:<br/>
@@ -75,24 +115,33 @@
                                     $mediaKeyID = 0;
                                 @endphp
 
-                                @foreach($suk->unitkompetensi->ukelement as $key => $ukelement)
-                                    {{-- Hidden Input ID Element--}}
-                                    <input type="hidden" name="ukelement[id][]" value="{{ $ukelement->id }}">
+                                    @foreach($suk->unitkompetensi->ukelement as $key => $ukelement)
 
-                                    <tr>
-                                        <td>
-                                            <p>{!! nl2br($ukelement->desc) !!}</p>
-                                            <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
-                                        </td>
-                                        <td class="text-center" style="vertical-align: middle;">
-                                            <input type="checkbox" onclick="return false;" />
-                                        </td>
-                                        <td class="text-center" style="vertical-align: middle;">
-                                            <input type="checkbox" onclick="return false;" />
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                @endforeach
+                                        {{-- Hidden Input ID Element--}}
+                                        <input type="hidden" name="ukelement[id][]" value="{{ $ukelement->id }}">
+                                        <tr>
+                                            <td>
+                                                <ol>
+                                                    <li>Element: <span class="text-bold">{!! nl2br($ukelement->desc) !!}</span> <br />
+                                                        Kriteria Unjuk Kerja:
+                                                        <ol>
+                                                            @foreach(explode("\n", $ukelement->upload_instruction) as $keyUI => $upload_instruction)
+                                                                <li value="{{ $keyUI+1 }}">{{ $upload_instruction }}</li>
+                                                            @endforeach
+                                                        </ol>
+                                                    </li>
+                                                </ol>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <input type="checkbox" onclick="return false;" />
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <input type="checkbox" onclick="return false;" />
+                                            </td>
+                                            <td></td>
+                                        </tr>
+
+                                    @endforeach
                             @endif
                             </tbody>
                         </table>

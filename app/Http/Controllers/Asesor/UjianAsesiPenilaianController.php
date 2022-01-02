@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Asesor;
 
+use App\AsesiSUKElementMedia;
 use App\DataTables\Asesor\UjianAsesiPenilaianDataTable;
 use App\Http\Controllers\Controller;
 use App\UjianAsesiAsesor;
@@ -80,6 +81,8 @@ class UjianAsesiPenilaianController extends Controller
         // pisahkan soal jawaban pilihan ganda dan essay kalau ada datanya
         $soal_pilihangandas = [];
         $soal_essays = [];
+        $soal_lisans = [];
+        $soal_wawancaras = [];
         $total_nilai = 0;
         $total_max = 0;
         if(isset($query->ujianasesijawaban) and !empty($query->ujianasesijawaban)) {
@@ -100,20 +103,37 @@ class UjianAsesiPenilaianController extends Controller
                     // save soal to uk
                     if($soal->question_type == 'multiple_option') {
                         $uk_soals[$uk_id]['pilihan_ganda'][] = $soal;
-                    } else {
+                    } else if($soal->question_type === 'essay') {
                         $uk_soals[$uk_id]['essay'][] = $soal;
+                    } else if($soal->question_type === 'lisan') {
+                        $uk_soals[$uk_id]['lisan'][] = $soal;
+                    } else if($soal->question_type === 'wawancara') {
+                        $uk_soals[$uk_id]['wawancara'][] = $soal;
+                    }
+
+                    if(!isset($uk_soals[$uk_id]['apl02'])) {
+                        $uk_soals[$uk_id]['apl02'] = apl02_uk_medias($query->asesi_id, $query->sertifikasi_id, $uk_id);
                     }
                 }
 
-                if($soal->question_type == 'multiple_option') {
-                    // update object soal pilihan ganda
+                if($soal->question_type === 'multiple_option') {
                     $soal_pilihangandas[] = $soal;
 
                     // update nilai asesi berdasarkan maxscore
                     $total_nilai += $soal->max_score;
-                } else {
-                    // update object soal essay
+
+                } else if($soal->question_type === 'essay') {
                     $soal_essays[] = $soal;
+
+                    // update nilai asesi berdasarkan final_score
+                    $total_nilai += $soal->final_score;
+                } else if($soal->question_type === 'lisan') {
+                    $soal_lisans[] = $soal;
+
+                    // update nilai asesi berdasarkan final_score
+                    $total_nilai += $soal->final_score;
+                } else if($soal->question_type === 'wawancara') {
+                    $soal_wawancaras[] = $soal;
 
                     // update nilai asesi berdasarkan final_score
                     $total_nilai += $soal->final_score;
@@ -143,6 +163,12 @@ class UjianAsesiPenilaianController extends Controller
                 $pageView = 'asesor.ujian.penilaian-print-essay-jawaban';
             } else if($page && $page == 'jawaban_asesi_essay') {
                 $pageView = 'asesor.ujian.penilaian-print-essay-jawaban-asesi';
+            } else if($page && $page == 'ak05') {
+                $pageView = 'asesor.ujian.fr-ak-05-print';
+            } else if($page && $page == 'ia08') {
+                $pageView = 'asesor.ujian.fr-ia-08-print';
+            } else if($page && $page == 'ia11') {
+                $pageView = 'asesor.ujian.fr-ia-11-print';
             }
         }
 
@@ -154,6 +180,8 @@ class UjianAsesiPenilaianController extends Controller
             'query'                 => $query,
             'soal_pilihangandas'    => $soal_pilihangandas,
             'soal_essays'           => $soal_essays,
+            'soal_lisans'           => $soal_lisans,
+            'soal_wawancaras'       => $soal_wawancaras,
             'total_nilai'           => $total_nilai,
             'total_max'             => $total_max,
             'uk_soals'              => $uk_soals,
@@ -166,8 +194,11 @@ class UjianAsesiPenilaianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
+        // get user login
+        $user = $request->user();
+
         // Find Data by ID
         $query = UjianAsesiAsesor::with([
             'userasesi',
@@ -180,7 +211,9 @@ class UjianAsesiPenilaianController extends Controller
             'soalpaket',
             'order',
             'order.tuk'
-        ])->findOrFail($id);
+        ])->where('id', $id)
+        ->where('asesor_id', $user->id)
+        ->firstOrFail();
 
         // hanya bisa update jika status penilaian
         if($query->status != 'penilaian') {
@@ -190,12 +223,18 @@ class UjianAsesiPenilaianController extends Controller
         // pisahkan soal jawaban pilihan ganda dan essay kalau ada datanya
         $soal_pilihangandas = [];
         $soal_essays = [];
+        $soal_lisans = [];
+        $soal_wawancaras = [];
         if(isset($query->ujianasesijawaban) and !empty($query->ujianasesijawaban)) {
             foreach($query->ujianasesijawaban as $soal) {
                 if($soal->question_type == 'multiple_option') {
                     $soal_pilihangandas[] = $soal;
-                } else {
+                } else if($soal->question_type === 'essay') {
                     $soal_essays[] = $soal;
+                } else if($soal->question_type === 'lisan') {
+                    $soal_lisans[] = $soal;
+                } else if($soal->question_type === 'wawancara') {
+                    $soal_wawancaras[] = $soal;
                 }
             }
         }
@@ -208,6 +247,8 @@ class UjianAsesiPenilaianController extends Controller
             'query'                 => $query,
             'soal_pilihangandas'    => $soal_pilihangandas,
             'soal_essays'           => $soal_essays,
+            'soal_lisans'           => $soal_lisans,
+            'soal_wawancaras'       => $soal_wawancaras,
         ]);
     }
 
@@ -228,36 +269,100 @@ class UjianAsesiPenilaianController extends Controller
         $user = $request->user();
 
         // Find Data by ID
-        $query = UjianAsesiAsesor::with('ujianasesijawaban')
-                ->where('asesor_id', $user->id)->where('id', $id)->firstOrFail();
+        $query = UjianAsesiAsesor::with([
+                    'ujianasesijawaban',
+                    'soalpaket',
+                ])
+                ->where('asesor_id', $user->id)
+                ->where('id', $id)
+                ->firstOrFail();
 
         // hanya bisa update jika status penilaian
         if($query->status != 'penilaian') {
             return redirect()->back()->withErrors('Data tidak bisa di ubah lagi.!');
         }
 
+        $jenisUjian = (isset($query->soalpaket) and !empty($query->soalpaket)) ? $query->soalpaket->jenis_ujian : '';
+
         // get input soal_essay
         $soal_essay_id = $request->input('soal_essay_id');
         $soal_essay = $request->input('soal_essay');
+        $soal_lisan_id = $request->input('soal_lisan_id');
+        $soal_lisan = $request->input('soal_lisan');
+        $soal_wawancara_id = $request->input('soal_wawancara_id');
+        $soal_wawancara = $request->input('soal_wawancara');
 
-        // loop essay id for update fields
-        foreach($soal_essay_id as $essay) {
+        if($jenisUjian === 'wawancara') {
 
-            // run update query based on id ujian_asesi_asesor and asesi_id
-            // prevent from hijack id in html
-            $ujianjawaban = UjianAsesiJawaban::where('ujian_asesi_asesor_id', $id)
-                ->where('asesi_id', $query->asesi_id)
-                ->where('id', $essay)
-                ->first();
+            if(isset($soal_lisan_id) and !empty($soal_lisan_id) and isset($soal_lisan) and !empty($soal_lisan)) {
+                // loop lisan id for update fields
+                foreach($soal_lisan_id as $lisan) {
 
-            // only run update if data found
-            if($ujianjawaban) {
-                $ujianjawaban_update = [
-                    'final_score' => $soal_essay['final_score'][$essay] ?? null,
-                    'catatan_asesor' => $soal_essay['catatan_asesor'][$essay] ?? null,
-                ];
+                    // run update query based on id ujian_asesi_asesor and asesi_id
+                    // prevent from hijack id in html
+                    $ujianjawabanLisan = UjianAsesiJawaban::where('ujian_asesi_asesor_id', $id)
+                        ->where('asesi_id', $query->asesi_id)
+                        ->where('id', $lisan)
+                        ->first();
 
-                $ujianjawaban->update($ujianjawaban_update);
+                    // only run update if data found
+                    if($ujianjawabanLisan) {
+                        $ujianjawabanLisan_update = [
+                            'user_answer' => $soal_lisan['user_answer'][$lisan] ?? null,
+                            'final_score' => $soal_lisan['final_score'][$lisan] ?? null,
+                            'catatan_asesor' => $soal_lisan['catatan_asesor'][$lisan] ?? null,
+                        ];
+
+                        $ujianjawabanLisan->update($ujianjawabanLisan_update);
+                    }
+                }
+            }
+
+            if(isset($soal_wawancara_id) and !empty($soal_wawancara_id) and isset($soal_wawancara) and !empty($soal_wawancara)) {
+                // loop lisan id for update fields
+                foreach($soal_wawancara_id as $wawancara) {
+
+                    // run update query based on id ujian_asesi_asesor and asesi_id
+                    // prevent from hijack id in html
+                    $ujianjawabanWawancara = UjianAsesiJawaban::where('ujian_asesi_asesor_id', $id)
+                        ->where('asesi_id', $query->asesi_id)
+                        ->where('id', $wawancara)
+                        ->first();
+
+                    // only run update if data found
+                    if($ujianjawabanWawancara) {
+                        $ujianjawabanWawancara_update = [
+                            'user_answer' => $soal_wawancara['user_answer'][$wawancara] ?? null,
+                            'final_score' => $soal_wawancara['final_score'][$wawancara] ?? null,
+                            'catatan_asesor' => $soal_wawancara['catatan_asesor'][$wawancara] ?? null,
+                        ];
+
+                        $ujianjawabanWawancara->update($ujianjawabanWawancara_update);
+                    }
+                }
+            }
+
+
+        } else {
+            // loop essay id for update fields
+            foreach($soal_essay_id as $essay) {
+
+                // run update query based on id ujian_asesi_asesor and asesi_id
+                // prevent from hijack id in html
+                $ujianjawaban = UjianAsesiJawaban::where('ujian_asesi_asesor_id', $id)
+                    ->where('asesi_id', $query->asesi_id)
+                    ->where('id', $essay)
+                    ->first();
+
+                // only run update if data found
+                if($ujianjawaban) {
+                    $ujianjawaban_update = [
+                        'final_score' => $soal_essay['final_score'][$essay] ?? null,
+                        'catatan_asesor' => $soal_essay['catatan_asesor'][$essay] ?? null,
+                    ];
+
+                    $ujianjawaban->update($ujianjawaban_update);
+                }
             }
         }
 

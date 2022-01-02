@@ -38,7 +38,7 @@ class UserAsesiDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return view('layouts.pageTableAction', [
                     'title' => $query->name,
-                    'url_print' => route('admin.asesi.apl01.show', $query->id) . '?print=true',
+                    // 'url_print' => route('admin.asesi.apl01.show', $query->id) . '?print=true',
                     'url_show' => route('admin.asesi.apl01.show', $query->id),
                     'url_edit' => route('admin.asesi.apl01.edit', $query->id),
                     'url_destroy' => route('admin.asesi.apl01.destroy', $query->id),

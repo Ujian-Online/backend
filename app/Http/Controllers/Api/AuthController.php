@@ -144,10 +144,20 @@ class AuthController extends Controller
         $request->validate([
             'email'             => 'required|string|email|unique:users|max:255',
             'password'          => 'required|string|max:255',
+            'g-recaptcha-response' => 'required|string'
         ]);
 
         // get data form input
-        $getInput = $request->only(['email', 'password']);
+        $getInput = $request->only(['email', 'password', 'g-recaptcha-response']);
+
+        // validate re-captcha
+        $validateCaptcha = re_captcha_validate(env('GOOGLE_RECAPTCHA'), $getInput['g-recaptcha-response']);
+        if(!$validateCaptcha) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Human Verification Failed. Are you Human?'
+            ], 403);
+        }
 
         // save user to database
         $user = User::create([

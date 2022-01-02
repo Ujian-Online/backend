@@ -3,11 +3,11 @@
 @section('form')
     <div class="form-row">
 
-        @if(isset($isShow))
-            <button type="button" class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
-                <i class="fas fa-print"></i> Cetak FR.APL.01</a>
-            </button>
-        @endif
+{{--        @if(isset($isShow))--}}
+{{--            <button type="button" class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">--}}
+{{--                <i class="fas fa-print"></i> Cetak FR.APL.01</a>--}}
+{{--            </button>--}}
+{{--        @endif--}}
 
         <div class="form-group col-md-12">
             <label for="user_id">User ID</label>
@@ -287,6 +287,48 @@
                                 </tr>
                             @endforeach
 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <h3>Asesi Order History</h3>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Sertifikasi</th>
+                                <th>TUK</th>
+                                <th>Status</th>
+                                <th>Update</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($query->order) and !empty($query->order))
+                                @foreach($query->order as $order)
+
+                                    <tr id="order-{{ $order->id }}">
+                                        <th scope="row">{{ $order->id }}</th>
+                                        <td>{{ $order->sertifikasi->title ?? '' }}</td>
+                                        <td>{{ $order->tuk->title ?? '' }}</td>
+                                        <td>{{ $order->status ? ucwords(str_replace('_', ' ', $order->status))  : '' }}</td>
+                                        <td>{{ $order->updated_at->toDateTimeString() ?? '' }}</td>
+                                        <td>
+                                            <a href="{{ route('admin.order.show', $order->id)  }}" class="btn btn-primary btn-sm mb-2 btn-show" title="Detail Order: {{ $order->id }}">
+                                                <i class="far fa-eye"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-warning btn-sm mb-2" onclick="window.open('{{ request()->url() }}?print=true&order_id={{ $order->id }}', '', 'fullscreen=yes');" title="Print Dokumen Order: {{ $order->id }}">
+                                                <i class="fas fa-print"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>

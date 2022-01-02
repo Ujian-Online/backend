@@ -1,5 +1,15 @@
 @extends('layouts.pageForm')
 
+@section('css')
+    <style>
+        .ck-editor__editable
+        {
+            min-height: 150px !important;
+            max-height: 400px !important;
+        }
+    </style>
+@endsection
+
 @section('form')
     @include('layouts.alert')
 
@@ -72,7 +82,7 @@
         </div>
 
         <div class="form-group col-md-12" id="answer_essay_element">
-            <label for="answer_essay">Jawaban Essay</label>
+            <label for="answer_essay">Jawaban</label>
             <textarea class="form-control @error('answer_essay') is-invalid @enderror" name="answer_essay" id="answer_essay" cols="30" rows="3" @if(isset($isShow)) readonly @endif>{{ old('answer_essay') ?? ($query->answer_essay ?? '') }}</textarea>
 
             @error('answer_essay')
@@ -80,7 +90,7 @@
             @enderror
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6" id="max_score_element">
             <label for="max_score">Max Score</label>
             <input type="number" class="form-control @error('max_score') is-invalid @enderror" name="max_score" id="max_score" placeholder="Score" value="{{ old('max_score') ?? ($query->max_score ?? '') }}" @if(isset($isShow)) readonly @endif>
 
@@ -128,7 +138,18 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
     <script>
+        ClassicEditor
+            .create( document.querySelector( '#question' ))
+            .then( editor => {
+                editor.isReadOnly = {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+
+
         $('#question_type').select2({
             theme: 'bootstrap4',
             disabled: {{ (isset($isCreated) and !empty($isCreated)) ? 'false' : 'true' }}
@@ -144,13 +165,39 @@
             let answerEssayEl = $('#answer_essay_element')
             let answerOption = $('#answer_option')
             let answerEssay = $('#answer_essay')
-            const pilihanGanda = $("#pilihan-ganda");
+            let maxScopeEl = $('#max_score_element')
+            const pilihanGanda = $('#pilihan-ganda');
+            const questionType = $('#question_type').val();
+            const maxScoreInput = $('#max_score');
 
-            if($('#question_type').val() == 'essay') {
+            if(questionType === 'essay') {
                 answerOptionEl.addClass('d-none')
                 answerOption.attr('name', 'none')
                 answerEssayEl.removeClass('d-none')
                 answerEssay.attr('name', 'answer_essay')
+
+                // hide pilihan ganda option
+                pilihanGanda.hide();
+            } else if(questionType === 'lisan') {
+                answerOptionEl.addClass('d-none')
+                answerOption.attr('name', 'none')
+                answerEssayEl.removeClass('d-none')
+                answerEssay.attr('name', 'answer_essay')
+
+                // default max score input
+                maxScopeEl.addClass('d-none')
+                maxScoreInput.val(1);
+
+                // hide pilihan ganda option
+                pilihanGanda.hide();
+            } else if(questionType === 'wawancara') {
+                answerOptionEl.addClass('d-none')
+                answerOption.attr('name', 'none')
+                answerEssayEl.addClass('d-none')
+
+                // default max score input
+                maxScopeEl.addClass('d-none')
+                maxScoreInput.val(1);
 
                 // hide pilihan ganda option
                 pilihanGanda.hide();

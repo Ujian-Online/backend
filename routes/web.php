@@ -57,13 +57,12 @@ Route::middleware(['auth'])
         Route::middleware('can:isAdminAsesor')->group(function () {
             Route::get('sertifikasi/uk/search', 'Admin\SertifikasiUnitKompetensiController@search')->name('sertifikasi.uk.search');
             Route::get('sertifikasi/uk/search/sertifikasi', 'Admin\SertifikasiUnitKompetensiController@searchWithSertifikasi')->name('sertifikasi.uk.search.sertifikasi');
-            Route::resource('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController', ['as' => 'sertifikasi']);
+
             Route::get('sertifikasi/ukelement/rawform', 'Admin\SertifikasiUnitKompetensiElementController@rawForm')->name('ukelement.rawform');
             Route::resource('sertifikasi/ukelement', 'Admin\SertifikasiUnitKompetensiElementController', ['as' => 'sertifikasi']);
 
 
             Route::get('soal/search', 'Admin\SoalController@search')->name('soal.search');
-            Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal']);
             Route::get('soal/paket/search', 'Admin\SoalPaketController@search')->name('soal.paket.search');
             Route::resource('soal/paket', 'Admin\SoalPaketController', ['as' => 'soal']);
 
@@ -102,6 +101,7 @@ Route::middleware(['auth'])
             Route::get('tuk/search', 'Admin\TukController@search')->name('tuk.search');
             Route::resource('tuk', 'Admin\TukController');
 
+            Route::resource('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController', ['as' => 'sertifikasi'])->except(["index"]);
             Route::delete('sertifikasi/tuk/{id}', 'Admin\SertifikasiTukController@destroy')->name('sertifikasi.tuk.destroy');
             Route::resource('sertifikasi', 'Admin\SertifikasiController')->except(['show','index']);
 
@@ -110,6 +110,8 @@ Route::middleware(['auth'])
             Route::resource('asesi/apl01customdata', 'Admin\UserAsesiCustomDataController', ['as' => 'asesi']);
 
             Route::resource('asesi/ukelement', 'Admin\AsesiSertifikasiUnitKompetensiElementController', ['as' => 'asesi']);
+
+            Route::resource('soal/daftar', 'Admin\SoalController', ['as' => 'soal'])->except(['index', 'show']);
 
             Route::resource('ujian/jadwal', 'Admin\UjianJadwalController', ['as' => 'ujian']);
             Route::get('ujian/asesi-waiting', 'Admin\UjianAsesiAsesorController@asesiBelumAdaAsesorIndex')->name('ujian.asesi.waiting.index');
@@ -121,6 +123,9 @@ Route::middleware(['auth'])
             Route::resource('soal/unitkompetensi', 'Admin\SoalUnitKompetensiController', ['as' => 'soal']);
         });
 
+        Route::get('soal/daftar', 'Admin\SoalController@index')->name('soal.daftar.index')->middleware('can:isAdminAsesor');
+        Route::get('soal/daftar/{id}', 'Admin\SoalController@show')->name('soal.daftar.show')->middleware('can:isAdminAsesor');
+        Route::get('sertifikasi/uk', 'Admin\SertifikasiUnitKompetensiController@index')->name('sertifikasi.uk.index')->middleware('can:isAdminAsesor');
         Route::get('sertifikasi', 'Admin\SertifikasiController@index')->name('sertifikasi.index')->middleware('can:isAdminTukAsesor');
         Route::get('sertifikasi/{id}', 'Admin\SertifikasiController@show')->name('sertifikasi.show')->middleware('can:isAdminTukAsesor');
     });

@@ -81,6 +81,7 @@ namespace App{
  * @property string $kode_unit_kompetensi
  * @property string $title
  * @property string|null $sub_title
+ * @property string|null $jenis_standar
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\AsesiSertifikasiUnitKompetensiElement[] $AsesiSertifikasiUnitKompetensiElement
@@ -92,6 +93,29 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumen query()
  */
 	class AsesiUnitKompetensiDokumen extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\AsesiUnitKompetensiDokumenVerification
+ *
+ * @property int $id
+ * @property int $asesi_id
+ * @property int|null $asesor_id
+ * @property int|null $sertifikasi_id
+ * @property string|null $recommendation
+ * @property bool $jenis_pengalaman
+ * @property string|null $asesi_verification_date
+ * @property string|null $asesor_verification_date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\User|null $UserAsesi
+ * @property-read \App\User|null $UserAsesor
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumenVerification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumenVerification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AsesiUnitKompetensiDokumenVerification query()
+ */
+	class AsesiUnitKompetensiDokumenVerification extends \Eloquent {}
 }
 
 namespace App{
@@ -208,6 +232,12 @@ namespace App{
 /**
  * App\SertifikasiUnitKompetensiElement
  *
+ * @property int $id
+ * @property int $unit_kompetensi_id
+ * @property string $desc
+ * @property string $upload_instruction
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\SertifikasiUnitKompentensi|null $UnitKompetensi
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SertifikasiUnitKompetensiElement newQuery()
@@ -247,6 +277,7 @@ namespace App{
  * @property int $id
  * @property string $title
  * @property string $durasi_ujian
+ * @property string|null $jenis_ujian
  * @property int $sertifikasi_id
  * @property int|null $asesor_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -440,7 +471,8 @@ namespace App{
  * @property int $id
  * @property string $kode_unit_kompetensi
  * @property string $title
- * @property string|null $sub_title
+ * @property string $sub_title
+ * @property string|null $jenis_standar
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Sertifikasi|null $Sertifikasi
@@ -529,6 +561,9 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\UserAsesiCustomData[] $AsesiCustomData
  * @property-read int|null $asesi_custom_data_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $Order
+ * @property-read int|null $order_count
+ * @property-read \App\Order|null $SingleOrder
  * @property-read \App\User|null $User
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAsesi newQuery()

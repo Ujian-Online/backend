@@ -9,6 +9,74 @@
         th {
             border: 1px solid black !important;
         }
+
+        tr {
+            counter-reset: n;
+        }
+
+
+        n {
+            margin: 0 !important;
+            padding: 0;
+            padding-left: 20px;
+
+        }
+
+        n > span {
+
+            display: inline-block;
+            position: relative;
+            line-height: 1.2;
+        }
+
+        n > span::before {
+            counter-increment: n;
+            content: counter(n) ".";
+            left: -30px;
+            position: absolute;
+            margin-bottom: 0 !important;
+        }
+
+
+        /*Reset OL Number in Parent*/
+        tbody {
+            counter-reset: item;
+        }
+
+        /*Dont Reset OL Number in have multiple*/
+        ol {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /*Only Reset OL Number in Child*/
+        ol > li > ol {
+            list-style-type: none;
+            counter-reset: item;
+            margin: 0;
+            padding: 0;
+        }
+
+        ol > li {
+            display: table;
+            counter-increment: item;
+            margin-bottom: 0.6em;
+        }
+
+        ol > li:before {
+            content: counters(item, ".") ". ";
+            display: table-cell;
+            padding-right: 0.6em;
+        }
+
+        li ol > li {
+            margin: 0;
+        }
+
+        li ol > li:before {
+            content: counters(item, ".") " ";
+        }
     </style>
 @endsection
 
@@ -20,12 +88,18 @@
         <div class="form-group col-md-12">
 
             @if(isset($isShow))
-                <button type="button" class="btn btn-success mb-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
-                    <i class="fas fa-print"></i> Cetak FR.APL.02</a>
+                <button type="button" class="btn btn-success m-2" onclick="window.open('{{ request()->url() }}?print=true', '', 'fullscreen=yes');">
+                    <i class="fas fa-print"></i> Cetak FR.APL.02
+                </button>
+                <button type="button" class="btn btn-success m-2" onclick="window.open('{{ request()->url() }}?print=true&page=ak02', '', 'fullscreen=yes');">
+                    <i class="fas fa-print"></i> Cetak FR.AK.02
+                </button>
+                <button type="button" class="btn btn-success m-2" onclick="window.open('{{ request()->url() }}?print=true&page=mapa02', '', 'fullscreen=yes');">
+                    <i class="fas fa-print"></i> Cetak FR.MAPA.02
                 </button>
             @endif
 
-            <div class="table-responsive mt-2 mb-2">
+            <div class="mt-2 mb-2">
                 <table class="table table-bordered">
                     <tbody>
                     <tr>
@@ -120,8 +194,7 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th width="5%" class="text-center" style="vertical-align: middle;">No.</th>
-                                <th width="35%" class="text-center" style="vertical-align: middle;">@if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) {{ $unitkompentensi->sub_title }} @endif</th>
+                                <th width="40%" class="text-center" style="vertical-align: middle;">@if(isset($unitkompentensi->sub_title) and !empty($unitkompentensi->sub_title)) {{ $unitkompentensi->sub_title }} @endif</th>
                                 <td width="5%" class="text-center">K</td>
                                 <td width="5%" class="text-center">BK</td>
                                 <th width="25%" class="text-center" style="vertical-align: middle;">Bukti yang relevan</th>
@@ -140,10 +213,17 @@
                                 <input type="hidden" name="ukelement[id][]" value="{{ $ukelement->id }}">
 
                                 <tr>
-                                    <td>{{ $key + 1 }}.</td>
                                     <td>
-                                        <p class="text-bold">{!! nl2br($ukelement->desc) !!}</p>
-                                        <p>{!! nl2br($ukelement->upload_instruction) !!}</p>
+                                        <ol>
+                                            <li>Element: <span class="text-bold">{!! nl2br($ukelement->desc) !!}</span> <br />
+                                                Kriteria Unjuk Kerja:
+                                                <ol>
+                                                    @foreach(explode("\n", $ukelement->upload_instruction) as $keyUI => $upload_instruction)
+                                                        <li value="{{ $keyUI+1 }}">{{ $upload_instruction }}</li>
+                                                    @endforeach
+                                                </ol>
+                                            </li>
+                                        </ol>
                                     </td>
                                     <td class="text-center">
                                         @if(isset($isShow))
@@ -203,6 +283,47 @@
         @endif
 
 
+        <h2>Penilaian Assesor</h2>
+
+        <div class="form-group col-md-12">
+            <label for="recommendation">Rekomendasi</label>
+            <textarea
+                rows="3"
+                class="form-control @error('recommendation') is-invalid @enderror"
+                name="recommendation" id="recommendation" @if(isset($isShow)) readonly @endif>{{ old('recommendation') ?? $apl02_verification->recommendation ?? '' }}</textarea>
+
+            @error('recommendation')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group col-md-6">
+            <label for="jenis_pengalaman">Jenis Pengalaman</label>
+            <select name="jenis_pengalaman" id="jenis_pengalaman" class="form-control">
+                <option value="1" @if($apl02_verification && $apl02_verification->jenis_pengalaman) {{__('selected')}} @endif>Berpengalaman</option>
+                <option value="0" @if(!$apl02_verification  XOR $apl02_verification && !$apl02_verification->jenis_pengalaman) {{__('selected')}} @endif>Belum Berpengalaman</option>
+            </select>
+
+            @error('jenis_pengalaman')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group col-md-6">
+            <label for="asesor_verification_date">Tanggal Verifikasi</label>
+            <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input @error('asesor_verification_date') is-invalid @enderror"
+                       data-target="#datetimepicker2" name="asesor_verification_date" id="asesor_verification_date" placeholder="Tanggal"
+                       value="{{ isset($apl02_verification) ? \Carbon\Carbon::parse($apl02_verification->asesor_verification_date)->format('d/m/Y') : now()->format('d/m/Y') }}"
+                       @if(isset($isShow)) disabled @endif>
+                <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+
+            @error('asesor_verification_date')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
     </div>
 @endsection
 
@@ -225,5 +346,21 @@
             theme: 'bootstrap4',
             disabled: {{ (isset($isShow) and !empty($isShow)) ? 'true' : 'false' }}
         });
-    </script>
+
+        $('#datetimepicker2').datetimepicker({
+            useCurrent: false,
+            format: 'DD/MM/YYYY',
+            locale: 'id'
+        });
+
+    Array.prototype.slice.call(document.querySelectorAll('n'))
+    .forEach((n) => {
+        n.innerHTML =n.innerHTML.split('<br>')
+        .map((l) => `<span>${l.trim()}</span>`)
+        .join('');
+
+    });
+</script>
+
+
 @endsection

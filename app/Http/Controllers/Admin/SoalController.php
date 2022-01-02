@@ -20,12 +20,19 @@ class SoalController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SoalDataTable $dataTables
-     *
      * @return mixed
      */
-    public function index(SoalDataTable $dataTables)
+    public function index(Request $request)
     {
+        // get user login
+        $user = $request->user();
+
+        $dataTables = new SoalDataTable();
+
+        if($user->can("isAssesor")) {
+            $dataTables = new \App\DataTables\Asesor\SoalDataTable();
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Soal Lists'
@@ -62,7 +69,7 @@ class SoalController extends Controller
             'question'      => 'required',
             'question_type' => 'required',
             'max_score'     => 'required|numeric',
-            'answer_essay'  => 'nullable|required_if:question_type,essay',
+            'answer_essay'  => 'nullable|required_if:question_type,essay,lisan',
             'answer_option' => 'nullable|required_if:question_type,multiple_option',
             'option_a'      => 'nullable|required_if:question_type,multiple_option',
             'option_b'      => 'nullable|required_if:question_type,multiple_option',
@@ -130,7 +137,7 @@ class SoalController extends Controller
         return redirect()
             ->route('admin.soal.daftar.index')
             ->with('success', trans('action.success', [
-                'name' => $query->question
+                'name' => $query->id
             ]));
     }
 
@@ -351,6 +358,7 @@ class SoalController extends Controller
         $type = $request->input('type');
         $skip = $request->input('skip');
         $sertifikasi_id = $request->input('sertifikasi_id');
+        $unit_kompetensi_id = $request->input('unit_kompetensi_id');
 
         // return empty object if query is empty
         if(!empty($q) and is_numeric($q)) {
@@ -361,8 +369,7 @@ class SoalController extends Controller
 
         // filter by type
         if(!empty($type)) {
-            $questionType = ($type == 'multiple_option') ? 'multiple_option' : 'essay';
-            $query = $query->where('soals.question_type', $questionType);
+            $query = $query->where('soals.question_type', $type);
         }
 
         // exclude or skip by id
@@ -372,22 +379,28 @@ class SoalController extends Controller
 
         // search by sertifikasi id
         if(!empty($sertifikasi_id)) {
-            $query = $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id)
-                ->where('unit_kompetensis.kode_unit_kompetensi', 'like', "%$q%");
+            $query = $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id);
+        }
 
+        if(!empty($unit_kompetensi_id)) {
+            $query = $query->where('sertifikasi_unit_kompentensis.unit_kompetensi_id', $unit_kompetensi_id);
         }
 
         // check if data found or not
         if($query->count() != 0) {
             foreach($query->get() as $data) {
+                $kompetensi_id = !empty($unit_kompetensi_id) ? null : '[' . $data->kode_unit_kompetensi . '] - ';
                 $result[] = [
                     'id' => $data->id,
-                    'text' => '[' . $data->kode_unit_kompetensi . '] - ' . $data->question,
+                    'text' =>  $kompetensi_id . strip_tags($data->question),
                 ];
             }
         }
 
+        // only show unique data
+        $response = $result && count($result) > 0 ? array_unique($result, SORT_REGULAR) : [];
+
         // response result
-        return response()->json($result, 200);
+        return response()->json($response, 200);
     }
 }

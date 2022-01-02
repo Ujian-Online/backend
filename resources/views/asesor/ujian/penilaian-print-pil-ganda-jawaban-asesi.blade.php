@@ -12,7 +12,7 @@
         <div class="form-row">
             <h3>FR.IA.05.B. LEMBAR JAWABAN PERTANYAAN TERTULIS PILIHAN GANDA</h3>
 
-            <div class="table-responsive mt-2 mb-2">
+            <div class="mt-2 mb-2" style="width: 100%">
                 <table border="1px" class="table table-bordered">
                     <tbody>
                     <tr>
@@ -77,8 +77,7 @@
                             Tanggal
                         </td>
                         <td width="1%">:</td>
-                        <td>
-                        </td>
+                        <td>{{ (isset($query->ujianjadwal) and !empty($query->ujianjadwal)) ? \Carbon\Carbon::parse($query->ujianjadwal->tanggal)->format('d-m-Y') : '' }}</td>
                     </tr>
                     <tr>
                         <td colspan="2" style="vertical-align: middle;">
@@ -86,6 +85,10 @@
                         </td>
                         <td width="1%">:</td>
                         <td>
+                            {{
+                                \Carbon\Carbon::parse($query->ujianjadwal->jam_mulai)
+                                    ->diffInHours($query->ujianjadwal->jam_berakhir)
+                            }} Jam
                         </td>
                     </tr>
                     </tbody>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\DataTables\Admin\SertifikasiUnitKompentensiDataTable;
+use App\DataTables\Asesor\UnitKompetensiDataTable;
 use App\Http\Controllers\Controller;
 use App\Sertifikasi;
 use App\SertifikasiUnitKompentensi;
@@ -25,12 +26,19 @@ class SertifikasiUnitKompetensiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SertifikasiUnitKompentensiDataTable $dataTables
-     *
      * @return mixed
      */
-    public function index(SertifikasiUnitKompentensiDataTable $dataTables)
+    public function index(Request $request)
     {
+        // get user login
+        $user = $request->user();
+
+        $dataTables = new SertifikasiUnitKompentensiDataTable();
+
+        if($user->can("isAssesor")) {
+            $dataTables = new UnitKompetensiDataTable();
+        }
+
         // return index data with datatables services
         return $dataTables->render('layouts.pageTable', [
             'title' => 'Unit Kompetensi Lists',
@@ -64,6 +72,7 @@ class SertifikasiUnitKompetensiController extends Controller
         // validate input
         $request->validate([
             'kode_unit_kompetensi'  => 'required',
+            'jenis_standar'         => 'required',
             'title'                 => 'required',
         ]);
 
@@ -72,6 +81,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'kode_unit_kompetensi',
             'title',
             'sub_title',
+            'jenis_standar',
         ]);
 
         // save to database
@@ -184,6 +194,7 @@ class SertifikasiUnitKompetensiController extends Controller
         // validate input
         $request->validate([
             'kode_unit_kompetensi'  => 'required',
+            'jenis_standar'         => 'required',
             'title'                 => 'required',
         ]);
 
@@ -192,6 +203,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'kode_unit_kompetensi',
             'title',
             'sub_title',
+            'jenis_standar',
         ]);
 
         // find by id and update
@@ -349,20 +361,28 @@ class SertifikasiUnitKompetensiController extends Controller
     {
         // get input from select2 search term
         $q = $request->input('q');
+        $sertifikasi_id = $request->input('sertifikasi_id');
 
         // database query
         $query = SertifikasiUnitKompentensi::select([
-            'sertifikasi_unit_kompentensis.id',
-            'sertifikasi_unit_kompentensis.title as unit_kompetensi_title',
+            'unit_kompetensis.id',
+            'unit_kompetensis.title as unit_kompetensi_title',
+            'unit_kompetensis.kode_unit_kompetensi as unit_kompetensi_kode',
             'sertifikasis.title as sertifikasi_title',
         ])
             ->join('sertifikasis', 'sertifikasis.id', '=', 'sertifikasi_unit_kompentensis.sertifikasi_id')
+            ->join('unit_kompetensis', 'unit_kompetensis.id', '=', 'sertifikasi_unit_kompentensis.unit_kompetensi_id')
+            ->when($sertifikasi_id, function($query) use ($sertifikasi_id) {
+                $query->where('sertifikasi_unit_kompentensis.sertifikasi_id', $sertifikasi_id);
+            })
             ->when($q, function($query) use ($q) {
                 if(is_numeric($q)) {
-                    $query->where('sertifikasi_unit_kompentensis.id', $q);
+                    $query->where('sertifikasi_unit_kompentensis.id', $q)
+                        ->orWhere('sertifikasis.id', $q);
                 } else {
-                    $query->where('sertifikasi_unit_kompentensis.title', 'like', '%' . $q . '%')
-                            ->orWhere('sertifikasis.title', 'like', '%' . $q . '%');
+                    $query->where('unit_kompetensis.title', 'like', '%' . $q . '%')
+                        ->orWhere('unit_kompetensis.kode_unit_kompetensi', 'like', '%' . $q . '%')
+                        ->orWhere('sertifikasis.title', 'like', '%' . $q . '%');
                 }
             });
 
@@ -372,9 +392,11 @@ class SertifikasiUnitKompetensiController extends Controller
         // check if data found or not
         if($query->count() != 0) {
             foreach($query->get() as $data) {
+                $sertifikasi = $sertifikasi_id ? null : $data->sertifikasi_title . ' - ';
+
                 $result[] = [
                     'id' => $data->id,
-                    'text' => $data->sertifikasi_title . ' - ' . $data->unit_kompetensi_title,
+                    'text' => $sertifikasi . $data->unit_kompetensi_title . ' [' . $data->unit_kompetensi_kode . ']',
                 ];
             }
         }

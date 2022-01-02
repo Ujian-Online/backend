@@ -36,7 +36,7 @@ class OrderDataTable extends DataTable
                 return $name_asesi;
             })
             ->editColumn('tipe_sertifikasi', function($query) {
-                return ucwords($query->tipe_sertifikasi);
+                return ucwords(config('options.orders_tipe_sertifikasi_desc')[$query->tipe_sertifikasi]);
             })
             ->editColumn('status', function($query) {
                 $statusRaw = $query->status;
