@@ -126,8 +126,8 @@
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="2" class="bg-yellow">Rekomendasi hasil asesmen</td>
-                                <td colspan="7" class="bg-yellow">
+                                <td colspan="2" style="background-color: #ffc107!important">Rekomendasi hasil asesmen</td>
+                                <td colspan="7" style="background-color: #ffc107!important">
                                     <p><input type="checkbox" class="checkboxSelect" name="rekomendasi"> Kompeten</p>
                                     <p><input type="checkbox" class="checkboxSelect" name="rekomendasi"> Belum Kompeten</p>
                                 </td>

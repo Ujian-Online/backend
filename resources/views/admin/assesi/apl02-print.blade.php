@@ -153,7 +153,7 @@
                     <table class="table table-bordered">
                         <tbody>
                         <tr>
-                            <td class="bg-orange text-bold">
+                            <td class="text-bold" style="background-color: #fd7e14!important">
                                 PANDUAN ASESMEN MANDIRI
                             </td>
                         </tr>
@@ -276,7 +276,7 @@
                                     </p>
                                 </td>
                             </tr>
-                            <tr class="bg-orange text-bold">
+                            <tr class="text-bold" style="background-color: #fd7e14!important">
                                 <td colspan="3">Ditinjau oleh Asesor:</td>
                             </tr>
                             <tr>
