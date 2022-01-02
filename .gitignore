@@ -14,3 +14,4 @@ yarn-error.log
 .password
 .idea
 .vscode
+/storage/api-docs/
