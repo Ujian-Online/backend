@@ -72,6 +72,7 @@ class SertifikasiUnitKompetensiController extends Controller
         // validate input
         $request->validate([
             'kode_unit_kompetensi'  => 'required',
+            'jenis_standar'         => 'required',
             'title'                 => 'required',
         ]);
 
@@ -80,6 +81,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'kode_unit_kompetensi',
             'title',
             'sub_title',
+            'jenis_standar',
         ]);
 
         // save to database
@@ -192,6 +194,7 @@ class SertifikasiUnitKompetensiController extends Controller
         // validate input
         $request->validate([
             'kode_unit_kompetensi'  => 'required',
+            'jenis_standar'         => 'required',
             'title'                 => 'required',
         ]);
 
@@ -200,6 +203,7 @@ class SertifikasiUnitKompetensiController extends Controller
             'kode_unit_kompetensi',
             'title',
             'sub_title',
+            'jenis_standar',
         ]);
 
         // find by id and update
